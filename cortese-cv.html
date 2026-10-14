@@ -315,6 +315,30 @@ section.block > .wrap { display: grid; grid-template-columns: 210px minmax(0, 1f
 .tool.feature .tag { color: var(--accent); }
 .credit { font-family: var(--f-mono); font-size: 0.75rem; color: var(--ink); margin-top: 6px; }
 
+@media (max-width: 1180px) {
+  .menu-btn { display: inline-block; }
+  .top .wrap { flex-wrap: wrap; }
+  .top nav { display: none; flex-basis: 100%; flex-direction: column; gap: 2px; padding-top: 8px; }
+  .top nav.open { display: flex; }
+  .top nav a { font-size: 0.9rem; padding: 10px 12px; }
+}
+
+/* ---------- Privat ---------- */
+.private { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.priv-card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 20px; display: grid; gap: 6px; align-content: start; transition: transform .25s, border-color .25s; }
+.priv-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+.priv-card.feature { grid-column: 1 / -1; grid-template-columns: 130px minmax(0, 1fr); gap: 20px; align-items: center; background: var(--accent-soft); border-color: var(--accent); }
+.priv-card.feature > div { display: grid; gap: 6px; }
+.priv-art { width: 100%; height: auto; }
+.priv-card .tag { font: 500 .7rem var(--f-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--accent); }
+.priv-card h3 { font-size: 1.4rem; font-weight: 600; }
+.priv-card p { color: var(--muted); font-size: .97rem; line-height: 1.55; }
+@media (max-width: 640px) {
+  .private { grid-template-columns: 1fr; }
+  .priv-card.feature { grid-template-columns: 1fr; }
+  .priv-art { max-width: 110px; }
+}
+
 /* ---------- Kontakt ---------- */
 .contact-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; background: var(--band); color: var(--band-ink); border-radius: 6px; padding: 32px; }
 .contact-card h3 { font-size: var(--step-3); font-weight: 600; color: var(--band-head); }
@@ -445,6 +469,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
       <a href="#ausbildung">Ausbildung</a>
       <a href="#zeugnisse">Zeugnisse</a>
       <a href="#werkzeuge">Werkzeuge</a>
+      <a href="#privat">Privat</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
   </div>
@@ -919,6 +944,46 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
           <article class="tool"><span class="tag">Altlasten</span><h3>Initialaufwand EBBE</h3><p>Aufwandschätzung für Projekte mit belasteten Standorten.</p></article>
           <article class="tool"><span class="tag">Rohranlagen</span><h3>Füllrate-Rechner</h3><p>Berechnet die Belegung von Rohren und Rohrblöcken.</p></article>
           <article class="tool"><span class="tag">Verhandlung</span><h3>Preisanalyse Kanton</h3><p>Datenbasis für Preisverhandlungen mit der öffentlichen Hand.</p></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="privat" data-fold="open" data-teaser="Apps für meine Kinder, Familie, Joggen und Wandern">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Privat</h2>
+        <span class="ref">Pos. 750</span>
+        <p>Was ich beruflich mit KI baue, nutze ich auch zuhause.</p>
+      </div>
+      <div class="content">
+        <div class="private">
+          <article class="priv-card feature">
+            <svg viewBox="0 0 120 90" aria-hidden="true" class="priv-art">
+              <rect class="il-s" x="34" y="6" width="52" height="80" rx="8"/>
+              <path class="il-m" d="M52 12h16"/>
+              <rect class="il-f" x="41" y="20" width="16" height="16" rx="3"/><rect class="il-f" x="63" y="20" width="16" height="16" rx="3"/>
+              <rect class="il-f" x="41" y="42" width="16" height="16" rx="3"/><rect class="il-f" x="63" y="42" width="16" height="16" rx="3"/>
+              <path class="il-a" d="M45 28l3 3 5-6M67 50l3 3 5-6"/>
+              <circle class="il-d" cx="71" cy="28" r="3"/><circle class="il-d" cx="49" cy="50" r="3"/>
+              <path class="il-o" d="M48 70h24"/>
+            </svg>
+            <div>
+              <span class="tag">Mit KI entwickelt</span>
+              <h3>Apps für meine Kinder</h3>
+              <p>Für meine beiden Kinder entwickle ich eigene Apps, mit denselben KI-Methoden wie meine Werkzeuge im Beruf. Zuhause zeigt sich schnell, ob eine Anwendung wirklich einfach zu bedienen ist: Kinder sind die ehrlichsten Tester.</p>
+            </div>
+          </article>
+          <article class="priv-card">
+            <span class="tag">Ausgleich</span>
+            <h3>Familie, Joggen, Wandern</h3>
+            <p>Zeit mit der Familie und Bewegung draussen, am liebsten in den Bündner Bergen.</p>
+          </article>
+          <article class="priv-card">
+            <span class="tag">Nachwuchs</span>
+            <h3>Prüfungsexperte seit 2000</h3>
+            <p>Ich begleite angehende Bauzeichnerinnen und Bauzeichner bis zum Abschluss. Wissen weitergeben ist mir wichtig, im Beruf wie zuhause.</p>
+          </article>
         </div>
       </div>
     </div>

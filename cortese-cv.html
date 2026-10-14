@@ -72,19 +72,71 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--signal); outlin
   letter-spacing: 0.12em; color: var(--muted);
 }
 
-/* ---------- Kopf ---------- */
+/* ---------- Kopf / Navigation ---------- */
+html { scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 .top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
 }
 .top .wrap {
   display: flex; justify-content: space-between; align-items: center; gap: 16px;
-  padding-block: 14px; flex-wrap: wrap;
+  padding-block: 12px;
 }
-.top nav { display: flex; gap: 20px; flex-wrap: wrap; }
-.top nav a { color: var(--muted); text-decoration: none; font-family: var(--f-mono); font-size: 0.8rem; }
-.top nav a:hover { color: var(--accent); }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); min-width: 0; }
+.brand .mono-ac {
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: var(--accent); color: var(--surface); font: 600 0.95rem var(--f-display); letter-spacing: 0.04em;
+}
+.brand span { font: 600 1.15rem var(--f-display); text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
+.top nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.top nav a {
+  color: var(--muted); text-decoration: none; font-family: var(--f-mono); font-size: 0.78rem;
+  padding: 6px 10px; border-radius: 3px;
+}
+.top nav a:hover { color: var(--ink); background: var(--surface); }
+.top nav a.active { color: var(--accent); background: var(--accent-soft); }
+.menu-btn {
+  display: none; background: none; border: 1px solid var(--line); border-radius: 3px; color: var(--ink);
+  font: 500 0.8rem var(--f-mono); padding: 7px 12px; cursor: pointer;
+}
 .plan-id { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); }
 .plan-id b { color: var(--ink); font-weight: 500; }
+.to-top {
+  position: fixed; z-index: 15;
+  right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); font: 500 1.1rem var(--f-mono); cursor: pointer;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.12);
+}
+
+/* Porträt */
+.hero-id { display: flex; align-items: center; gap: 20px; }
+.portrait {
+  width: 104px; height: 104px; border-radius: 50%; flex: none; overflow: hidden;
+  border: 3px solid var(--accent); background: var(--accent-soft);
+  display: grid; place-items: center; color: var(--accent);
+  font: 700 2.2rem var(--f-display); letter-spacing: 0.04em;
+}
+.portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Projektfotos */
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.shot { margin: 0; display: grid; gap: 10px; align-content: start; }
+.shot .ph {
+  aspect-ratio: 4 / 3; max-width: 100%; border-radius: 4px; border: 1px solid var(--line); overflow: hidden;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 10px, var(--line) 10px 11px),
+    var(--surface);
+  display: grid; place-items: center; color: var(--muted); font-family: var(--f-mono); font-size: 0.75rem;
+}
+.shot .ph span { background: var(--surface); padding: 4px 10px; border: 1px solid var(--line); border-radius: 3px; }
+.shot .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.shot figcaption { display: grid; gap: 2px; }
+.shot figcaption b { font: 600 1.2rem var(--f-display); }
+.shot figcaption span { color: var(--muted); font-size: 0.9rem; }
 
 /* ---------- Hero ---------- */
 .hero .wrap {
@@ -232,7 +284,17 @@ footer .wrap {
   .contact-card { grid-template-columns: 1fr; padding: 20px; }
   .copied { text-align: left; }
   .facts { grid-template-columns: repeat(2, auto); }
-  .top nav { display: none; }
+  .portrait { width: 80px; height: 80px; font-size: 1.7rem; }
+  .hero-id { gap: 14px; }
+}
+@media (max-width: 860px) {
+  .menu-btn { display: inline-block; }
+  .top .wrap { flex-wrap: wrap; }
+  .top nav {
+    display: none; flex-basis: 100%; flex-direction: column; gap: 2px; padding-top: 8px;
+  }
+  .top nav.open { display: flex; }
+  .top nav a { font-size: 0.9rem; padding: 10px 12px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -243,23 +305,29 @@ footer .wrap {
 
 <header class="top">
   <div class="wrap">
-    <div class="plan-id">Plan-Nr. <b>AC-2000/2026</b> · Massstab 1:1</div>
-    <nav aria-label="Seitennavigation">
+    <a class="brand" href="#start" aria-label="Zum Seitenanfang"><span class="mono-ac">AC</span><span>A. Cortese</span></a>
+    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
+    <nav id="site-nav" aria-label="Seitennavigation">
       <a href="#profil">Profil</a>
       <a href="#kompetenzen">Kompetenzen</a>
       <a href="#werdegang">Werdegang</a>
+      <a href="#projekte">Projekte</a>
       <a href="#werkzeuge">Werkzeuge</a>
+      <a href="#sprachen">Sprachen</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <section class="hero">
+  <section class="hero" id="start">
     <div class="wrap">
       <div class="hero-text">
-        <div class="eyebrow">Tiefbau · Netzbau · Vergabe · Chur GR</div>
-        <h1>Alessandro <span>Cortese</span></h1>
+        <div class="eyebrow">Plan-Nr. AC-2000/2026 · Tiefbau · Netzbau · Chur GR</div>
+        <div class="hero-id">
+          <div class="portrait" aria-label="Porträt Alessandro Cortese">AC</div>
+          <h1>Alessandro <span>Cortese</span></h1>
+        </div>
         <p class="role">Bauherrenvertreter Tiefbau &amp; Access Project Manager
           <small>Swisscom AG, Wireline East · Chur</small></p>
         <p class="lead">Über 30 Jahre im Schweizer Tiefbau. Ich begleite Leitungs- und FTTH-Projekte von der Ausschreibung über die Bauleitung bis zur letzten Abrechnungsposition und baue die Werkzeuge, die diese Arbeit schneller und sicherer machen.</p>
@@ -501,6 +569,44 @@ footer .wrap {
     </div>
   </section>
 
+  <section class="block" id="projekte">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Projekte</h2>
+        <span class="ref">Pos. 350</span>
+      </div>
+      <div class="content">
+        <p>Eine Auswahl von Bauwerken und Strecken, die ich projektiert, geleitet oder als Bauherrenvertreter begleitet habe.</p>
+        <div class="gallery">
+          <figure class="shot">
+            <div class="ph"><span>Foto folgt</span></div>
+            <figcaption><b>FTTH-Ausbau Ostschweiz</b><span>Swisscom · Bauherrenvertretung · seit 2025</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="ph"><span>Foto folgt</span></div>
+            <figcaption><b>Instandsetzung Plessurbrücke</b><span>Tiefbauamt GR · Örtliche Bauleitung</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="ph"><span>Foto folgt</span></div>
+            <figcaption><b>Instandsetzung Calfreisentobelbrücke</b><span>Tiefbauamt GR · Örtliche Bauleitung</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="ph"><span>Foto folgt</span></div>
+            <figcaption><b>Anschluss Chur Süd</b><span>Casutt Wyrsch Zwicky AG · Stv. Projektleitung</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="ph"><span>Foto folgt</span></div>
+            <figcaption><b>Galerien Mattstock / Churfirsten</b><span>Casutt Wyrsch Zwicky AG · Instandsetzung</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="ph"><span>Foto folgt</span></div>
+            <figcaption><b>Verbauung Val da Cavegn, Flond</b><span>ARX · Projekt- und Bauleitung</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="block" id="werkzeuge">
     <div class="wrap">
       <div class="margin">
@@ -616,7 +722,43 @@ footer .wrap {
   </div>
 </footer>
 
+<button class="to-top" id="to-top" type="button" aria-label="Nach oben" hidden>↑</button>
+
 <script>
+  // Mobile Menü
+  var menuBtn = document.getElementById('menu-btn');
+  var nav = document.getElementById('site-nav');
+  menuBtn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuBtn.textContent = open ? 'Schliessen' : 'Menü';
+  });
+  nav.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A' && nav.classList.contains('open')) menuBtn.click();
+  });
+
+  // Aktiven Abschnitt markieren
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        links.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id);
+        });
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    links.forEach(function (a) {
+      var sec = document.querySelector(a.getAttribute('href'));
+      if (sec) io.observe(sec);
+    });
+  }
+
+  // Nach oben
+  var toTop = document.getElementById('to-top');
+  window.addEventListener('scroll', function () { toTop.hidden = window.scrollY < 600; }, { passive: true });
+  toTop.addEventListener('click', function () { window.scrollTo({ top: 0 }); });
+
   document.getElementById('copy-btn').addEventListener('click', function () {
     var el = document.getElementById('mail');
     var msg = document.getElementById('copy-msg');

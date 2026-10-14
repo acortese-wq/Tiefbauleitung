@@ -122,6 +122,35 @@ html { scroll-padding-top: 72px; }
 }
 .portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
+/* Referenzprojekte */
+.refs { display: grid; gap: 28px; }
+.ref-group h3 { font-size: var(--step-1); font-weight: 600; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.ref-group h3 small { font: 400 0.8rem var(--f-mono); color: var(--accent); }
+.ref-list { list-style: none; margin: 10px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.ref-list li {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px;
+  padding: 8px 0; border-bottom: 1px solid var(--line);
+}
+.ref-list b { font-weight: 600; }
+.ref-list span { color: var(--muted); font-size: 0.93rem; }
+
+/* Ausbildung */
+.edu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.edu h3 { font-size: var(--step-1); font-weight: 600; margin-bottom: 8px; }
+.edu dl { margin: 0; display: grid; border-top: 1px solid var(--line); }
+.edu dl div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.edu dt { font-family: var(--f-mono); font-size: 0.78rem; color: var(--accent); padding-top: 3px; font-variant-numeric: tabular-nums; }
+.edu dd { margin: 0; }
+.edu dd small { display: block; color: var(--muted); font-size: 0.88rem; }
+
+/* Zeugnisse */
+.quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.quote { margin: 0; padding: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; display: grid; gap: 12px; align-content: space-between; }
+.quote blockquote { margin: 0; font-size: 1.08rem; line-height: 1.5; }
+.quote blockquote::before { content: "«"; color: var(--accent); font: 700 1.6rem/0 var(--f-display); margin-right: 2px; }
+.quote blockquote::after { content: "»"; color: var(--accent); font: 700 1.6rem/0 var(--f-display); margin-left: 2px; }
+.quote figcaption { font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); }
+
 /* Projektfotos */
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
 .shot { margin: 0; display: grid; gap: 10px; align-content: start; }
@@ -276,6 +305,8 @@ footer .wrap {
 @media (max-width: 600px) {
   .skills { grid-template-columns: 1fr; }
   .skill, .skill:nth-child(2n) { padding: 18px 0; border-left: 0; }
+  .ref-list li { grid-template-columns: 1fr; gap: 0; }
+  .edu, .quotes { grid-template-columns: 1fr; }
   .timeline > li { grid-template-columns: 1fr; gap: 4px; }
   .timeline .when br { display: none; }
   .side-roles { grid-template-columns: 1fr; }
@@ -312,8 +343,9 @@ footer .wrap {
       <a href="#kompetenzen">Kompetenzen</a>
       <a href="#werdegang">Werdegang</a>
       <a href="#projekte">Projekte</a>
+      <a href="#ausbildung">Ausbildung</a>
+      <a href="#zeugnisse">Zeugnisse</a>
       <a href="#werkzeuge">Werkzeuge</a>
-      <a href="#sprachen">Sprachen</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
   </div>
@@ -323,9 +355,9 @@ footer .wrap {
   <section class="hero" id="start">
     <div class="wrap">
       <div class="hero-text">
-        <div class="eyebrow">Plan-Nr. AC-2000/2026 · Tiefbau · Netzbau · Chur GR</div>
+        <div class="eyebrow">Plan-Nr. AC-1994/2026 · Tiefbau · Netzbau · Chur GR</div>
         <div class="hero-id">
-          <div class="portrait" aria-label="Porträt Alessandro Cortese">AC</div>
+          <div class="portrait"><img src="data:image/jpeg;base64,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" alt="Porträt Alessandro Cortese" width="320" height="320"></div>
           <h1>Alessandro <span>Cortese</span></h1>
         </div>
         <p class="role">Bauherrenvertreter Tiefbau &amp; Access Project Manager
@@ -333,7 +365,7 @@ footer .wrap {
         <p class="lead">Über 30 Jahre im Schweizer Tiefbau. Ich begleite Leitungs- und FTTH-Projekte von der Ausschreibung über die Bauleitung bis zur letzten Abrechnungsposition und baue die Werkzeuge, die diese Arbeit schneller und sicherer machen.</p>
         <div class="facts" aria-label="Kennzahlen">
           <div><b>30+</b><span>Jahre Tiefbau</span></div>
-          <div><b>12</b><span>Jahre Tiefbauamt GR</span></div>
+          <div><b>17</b><span>Jahre Tiefbauamt GR</span></div>
           <div><b>4</b><span>Sprachen</span></div>
         </div>
       </div>
@@ -419,7 +451,7 @@ footer .wrap {
       </div>
       <div class="content">
         <p>Seit über drei Jahrzehnten arbeite ich im Schweizer Tiefbau. In dieser Zeit habe ich so ziemlich alles gesehen, was der Leitungsbau und der FTTH-Ausbau zu bieten haben: von der Ausschreibung über die Bauleitung bis zum letzten Nachtrag.</p>
-        <p>Mein Weg führte vom Zeichner und Konstrukteur über Projekt- und Bauleitungen im Strassen-, Bahn- und Siedlungswasserbau bis zur Leitung des Teams Projektierung und Bau im Tiefbauamt Graubünden, Bezirk 1 Chur. Ich kenne die Bauherrenseite der öffentlichen Hand ebenso wie die Ingenieurbüros von innen.</p>
+        <p>Angefangen hat alles 1994 mit der Lehre als Tiefbauzeichner. Mein Weg führte vom Zeichner und Konstrukteur über Projekt- und Bauleitungen im Strassen-, Bahn- und Siedlungswasserbau bis zur Leitung des Teams Projektierung und Bau im Tiefbauamt Graubünden, Bezirk 1 Chur. Ich kenne die Bauherrenseite der öffentlichen Hand ebenso wie die Ingenieurbüros von innen.</p>
         <p>Seit April 2025 begleite ich als Bauherrenvertreter Tiefbau und Access Project Manager bei Swisscom FTTH- und Netzbauprojekte von der Ausschreibung bis zur Bauabnahme. Mein Anspruch: Es wird gebaut, was vereinbart wurde, in Qualität, Kosten und Terminen. Dabei arbeite ich täglich mit SIA 118 und SIA 103, NPK, KBOB-Empfehlungen sowie IVöB und BöB.</p>
         <p>Seit dem Jahr 2000 bin ich Prüfungsexperte für angehende Zeichnerinnen und Zeichner EFZ Fachrichtung Ingenieurbau. Nachwuchsförderung liegt mir am Herzen. Nach meiner Weiterbildung zum HSO KI-Professional entwickle ich eigene KI- und Excel-Werkzeuge, die Kolleginnen, Kollegen und mir Routinearbeit abnehmen.</p>
       </div>
@@ -505,9 +537,9 @@ footer .wrap {
             </div>
           </li>
           <li>
-            <div class="when">März 2013 –<br>Apr. 2025</div>
+            <div class="when">März 2013 –<br>Sept. 2021</div>
             <div class="what">
-              <h3>Projektierung / Bauleitung</h3>
+              <h3>Projektleiter / Bauleiter</h3>
               <span class="org">Tiefbauamt Graubünden · Chur</span>
               <ul>
                 <li>Örtliche Bauleitung von Strassen-, Brücken- und Instandsetzungsprojekten, u. a. Jeninserstrasse, Fläscherstrasse, Instandsetzung Calfreisentobel- und Plessurbrücke</li>
@@ -532,7 +564,7 @@ footer .wrap {
             <div class="when">Jan. 2006 –<br>Dez. 2008</div>
             <div class="what">
               <h3>Projektleiter / Konstrukteur / Bauleiter</h3>
-              <span class="org">ARX | smart minds · Chur / Ilanz</span>
+              <span class="org">Straub AG, Ingenieure + Geoinformatiker (heute ARX | smart minds) · Chur / Ilanz</span>
               <ul>
                 <li>Projektierung, Submission und Bauleitung in Tiefbau und Siedlungswasserbau: Strassen, Wasserversorgungen, Siedlungsentwässerungen, Meliorationen</li>
                 <li>U. a. Verbauung Val da Cavegn (Flond), Quartiererschliessungen Ilanz/Degen, Gesamtmelioration St. Martin</li>
@@ -549,6 +581,7 @@ footer .wrap {
                 <li>Projektierung von Hauptstrassenprojekten mit AutoCAD, von der Studie bis zum Auflageprojekt</li>
                 <li>Prüfung von Plänen privater Ingenieurbüros, Bauwerksdokumentation</li>
                 <li>Unterstützung der Projektleiter bei der Kostenüberwachung</li>
+                <li>Betreuung und Ausbildung der Lernenden</li>
               </ul>
             </div>
           </li>
@@ -573,34 +606,118 @@ footer .wrap {
     <div class="wrap">
       <div class="margin">
         <h2>Projekte</h2>
-        <span class="ref">Pos. 350</span>
+        <span class="ref">Pos. 400</span>
       </div>
       <div class="content">
-        <p>Eine Auswahl von Bauwerken und Strecken, die ich projektiert, geleitet oder als Bauherrenvertreter begleitet habe.</p>
-        <div class="gallery">
-          <figure class="shot">
-            <div class="ph"><span>Foto folgt</span></div>
-            <figcaption><b>FTTH-Ausbau Ostschweiz</b><span>Swisscom · Bauherrenvertretung · seit 2025</span></figcaption>
+        <p>Eine Auswahl von Bauwerken und Strecken, die ich projektiert, ausgeschrieben oder geleitet habe.</p>
+        <div class="refs">
+          <div class="ref-group">
+            <h3>Tiefbauamt Graubünden, Bezirk 1 Chur <small>2013 – 2025</small></h3>
+            <ul class="ref-list">
+              <li><b>Instandsetzung Calfreisentobelbrücke</b><span>Strassenprojekt, Submission, Bauleitung</span></li>
+              <li><b>Instandsetzung Plessurbrücke Litzirüti</b><span>Ausführungsprojekt, Submission, Bauleitung</span></li>
+              <li><b>Rheinbrücke Fläsch, Kolksicherung Pfeiler</b><span>Submission, Bauleitung</span></li>
+              <li><b>Lehnenbrücke Ricaldei</b><span>Submissionsprojekt, Bauleitung</span></li>
+              <li><b>Jeninserstrasse (Jenins innerorts)</b><span>Auflage-, Ausführungsprojekt, Submission, Bauleitung</span></li>
+              <li><b>Fläscherstrasse (Rheinbrücke bis Fläsch)</b><span>Auflage-, Ausführungsprojekt, Submission, Bauleitung</span></li>
+              <li><b>Maladers Platz – Sax</b><span>Auflage-, Ausführungsprojekt, Submission, Bauleitung</span></li>
+              <li><b>Brücke Versam – ARA Versam</b><span>Ingenieurausschreibung, Auflage-, Ausführungsprojekt</span></li>
+              <li><b>Safienstrasse, Treuschtobelbrücke</b><span>Ingenieurausschreibung, Auflageprojekt</span></li>
+              <li><b>Instandsetzung Rastplatz Heidiland</b><span>Ausführungsprojekt, Submission, Bauleitung</span></li>
+            </ul>
+          </div>
+          <div class="ref-group">
+            <h3>Casutt Wyrsch Zwicky AG <small>2009 – 2013</small></h3>
+            <ul class="ref-list">
+              <li><b>N13 Anschluss Chur Süd</b><span>Sachbearbeiter, Gesamtbauleitung vorgezogene Arbeiten 2011/12</span></li>
+              <li><b>Instandsetzung Galerien Mattstock und Churfirsten</b><span>Neue Trassierung, Sachbearbeiter Trasse</span></li>
+              <li><b>H3a Julierstrasse, Stettli – Parpan und Spinatobel</b><span>Auflage- und Ausführungsprojekt</span></li>
+              <li><b>Hinterrheinbrücke Plattis, Fahrbahnübergang Felsberg</b><span>Projektsachbearbeiter, Bauleitung</span></li>
+              <li><b>RhB Gleisverlegung Carrerabachbrücke</b><span>Projektsachbearbeiter, Gesamtbauleitung</span></li>
+              <li><b>Kreisel Felsenau, Chur</b><span>Projektsachbearbeiter, örtliche Bauleitung</span></li>
+            </ul>
+          </div>
+          <div class="ref-group">
+            <h3>Straub AG <small>2006 – 2008</small></h3>
+            <ul class="ref-list">
+              <li><b>Verbauung Val da Cavegn, Flond</b><span>Projekt- und Bauleitung</span></li>
+              <li><b>Quartiererschliessungen Quinclas (Ilanz) und Rumein (Degen)</b><span>Projekt- und Bauleitung</span></li>
+              <li><b>Quellschutzmassnahmen Heimberg, Parpan</b><span>Projekt- und Bauleitung</span></li>
+              <li><b>Gesamtmelioration St. Martin</b><span>Projekt- und Bauleitung</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="ausbildung">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Ausbildung</h2>
+        <span class="ref">Pos. 500</span>
+      </div>
+      <div class="content">
+        <div class="edu">
+          <div>
+            <h3>Berufliche Ausbildung</h3>
+            <dl>
+              <div><dt>1994 – 1998</dt><dd>Lehre als Tiefbauzeichner</dd></div>
+              <div><dt>1998 – 1999</dt><dd>Technische Berufsmatura</dd></div>
+              <div><dt>2000 – 2001</dt><dd>Grundlagen TS Informatik</dd></div>
+              <div><dt>2002 – 2005</dt><dd>Bauingenieurstudium HTW Chur<small>Bau und Gestaltung, Vertiefung Ingenieurbau, berufsbegleitend, ohne Abschluss</small></dd></div>
+            </dl>
+            <h3 style="margin-top: 24px;">EDV</h3>
+            <dl>
+              <div><dt>Office</dt><dd>MS Office, Power User</dd></div>
+              <div><dt>Devisierung</dt><dd>Sehr gute Anwenderkenntnisse</dd></div>
+              <div><dt>CAD</dt><dd>AutoCAD</dd></div>
+              <div><dt>KI</dt><dd>Copilot Studio, eigene Agenten und Assistenten</dd></div>
+            </dl>
+          </div>
+          <div>
+            <h3>Weiterbildung</h3>
+            <dl>
+              <div><dt>2008</dt><dd>Lehrmeisterkurs DBK</dd></div>
+              <div><dt>2010</dt><dd>Diverse Devisierungskurse</dd></div>
+              <div><dt>2013 – heute</dt><dd>Bauleiterausbildungen, Bauplus, PA-Kurse</dd></div>
+              <div><dt>2014</dt><dd>Öffentliches Beschaffungswesen</dd></div>
+              <div><dt>2016</dt><dd>Arbeitstechnik und Zeitmanagement</dd></div>
+              <div><dt>2022</dt><dd>Beschaffung nach IVöB</dd></div>
+              <div><dt>2022 – 2023</dt><dd>Mitarbeiterführung Basis und Aufbau</dd></div>
+              <div><dt>2022 – 2024</dt><dd>Führungscoaching</dd></div>
+              <div><dt>neu</dt><dd>HSO KI-Professional</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="zeugnisse">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Zeugnisse</h2>
+        <span class="ref">Pos. 600</span>
+      </div>
+      <div class="content">
+        <p>Auszüge aus Arbeits- und Zwischenzeugnissen. Vollständige Zeugnisse auf Anfrage.</p>
+        <div class="quotes">
+          <figure class="quote">
+            <blockquote>Zusammengefasst erbringt Alessandro Cortese jederzeit gute Leistungen und erledigt die Aufgaben stets zu unserer vollsten Zufriedenheit.</blockquote>
+            <figcaption>Tiefbauamt Graubünden, Bezirk 1 Chur · Zwischenzeugnis 2022</figcaption>
           </figure>
-          <figure class="shot">
-            <div class="ph"><span>Foto folgt</span></div>
-            <figcaption><b>Instandsetzung Plessurbrücke</b><span>Tiefbauamt GR · Örtliche Bauleitung</span></figcaption>
+          <figure class="quote">
+            <blockquote>Er bleibt auch in schwierigen Situationen sachlich und kooperativ. Darüber hinaus versucht er Lösungen zu finden, welche möglichst die Interessen aller Beteiligten berücksichtigen.</blockquote>
+            <figcaption>Tiefbauamt Graubünden, Bezirk 1 Chur · Zwischenzeugnis 2022</figcaption>
           </figure>
-          <figure class="shot">
-            <div class="ph"><span>Foto folgt</span></div>
-            <figcaption><b>Instandsetzung Calfreisentobelbrücke</b><span>Tiefbauamt GR · Örtliche Bauleitung</span></figcaption>
+          <figure class="quote">
+            <blockquote>Wir würden Alessandro Cortese jederzeit wieder bei der CWZ AG herzlich willkommen heissen!</blockquote>
+            <figcaption>Casutt Wyrsch Zwicky AG · Arbeitszeugnis 2013</figcaption>
           </figure>
-          <figure class="shot">
-            <div class="ph"><span>Foto folgt</span></div>
-            <figcaption><b>Anschluss Chur Süd</b><span>Casutt Wyrsch Zwicky AG · Stv. Projektleitung</span></figcaption>
-          </figure>
-          <figure class="shot">
-            <div class="ph"><span>Foto folgt</span></div>
-            <figcaption><b>Galerien Mattstock / Churfirsten</b><span>Casutt Wyrsch Zwicky AG · Instandsetzung</span></figcaption>
-          </figure>
-          <figure class="shot">
-            <div class="ph"><span>Foto folgt</span></div>
-            <figcaption><b>Verbauung Val da Cavegn, Flond</b><span>ARX · Projekt- und Bauleitung</span></figcaption>
+          <figure class="quote">
+            <blockquote>Seine Arbeitsweise ist sehr gewissenhaft, pflichtbewusst, genau und führte zu sehr guten Leistungen.</blockquote>
+            <figcaption>Straub AG · Arbeitszeugnis 2008</figcaption>
           </figure>
         </div>
       </div>
@@ -611,7 +728,7 @@ footer .wrap {
     <div class="wrap">
       <div class="margin">
         <h2>Eigene Werkzeuge</h2>
-        <span class="ref">Pos. 400</span>
+        <span class="ref">Pos. 700</span>
       </div>
       <div class="content">
         <p>Wo Standardsoftware aufhört, baue ich selbst: in Excel, HTML und Copilot Studio. Jedes Werkzeug entstand aus einem konkreten Problem im Projektalltag.</p>
@@ -676,13 +793,13 @@ footer .wrap {
     <div class="wrap">
       <div class="margin">
         <h2>Sprachen</h2>
-        <span class="ref">Pos. 500</span>
+        <span class="ref">Pos. 800</span>
       </div>
       <div class="content">
         <div class="langs">
           <div class="lang"><b>Deutsch</b><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><span class="lvl">Muttersprache</span></div>
           <div class="lang"><b>Italienisch</b><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><span class="lvl">fliessend</span></div>
-          <div class="lang"><b>Englisch</b><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div><span class="lvl">gut</span></div>
+          <div class="lang"><b>Englisch</b><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div><span class="lvl">gut (FCE)</span></div>
           <div class="lang"><b>Französisch</b><div class="bar" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div><span class="lvl">Grundkenntnisse</span></div>
         </div>
       </div>
@@ -693,7 +810,7 @@ footer .wrap {
     <div class="wrap">
       <div class="margin">
         <h2>Kontakt</h2>
-        <span class="ref">Pos. 600</span>
+        <span class="ref">Pos. 900</span>
       </div>
       <div class="content">
         <div class="contact-card">
@@ -701,7 +818,6 @@ footer .wrap {
             <h3>Projekt im Tiefbau? Reden wir darüber.</h3>
             <dl class="contact-list">
               <div><dt>Ort</dt><dd>Chur, Graubünden</dd></div>
-              <div><dt>E-Mail</dt><dd id="mail" class="todo">[E-Mail-Adresse ergänzen]</dd></div>
               <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/alessandro-cortese-1846b5bb" target="_blank" rel="noopener">linkedin.com/in/alessandro-cortese-1846b5bb</a></dd></div>
             </dl>
           </div>

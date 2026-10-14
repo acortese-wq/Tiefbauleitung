@@ -327,6 +327,51 @@ section.block > .wrap { display: grid; grid-template-columns: 210px minmax(0, 1f
 footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); }
 .to-top { position: fixed; z-index: 15; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 500 1.1rem var(--f-mono); cursor: pointer; box-shadow: 0 4px 14px rgb(0 0 0 / 0.12); }
 
+/* ---------- Einklappen ---------- */
+.fold-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .45s cubic-bezier(.2,.7,.2,1); }
+.fold-inner { min-height: 0; overflow: hidden; display: grid; gap: 24px; }
+.is-folded .fold-body { grid-template-rows: 0fr; }
+.is-folded .fold-inner { visibility: hidden; transition: visibility 0s .45s; }
+.fold-teaser {
+  display: none; width: 100%; text-align: left; cursor: pointer;
+  background: var(--surface); border: 1px dashed var(--line); border-radius: 6px; padding: 16px 18px;
+  color: var(--ink); font: inherit; align-items: center; justify-content: space-between; gap: 16px;
+  transition: border-color .2s, background .2s;
+}
+.fold-teaser:hover { border-color: var(--accent); }
+.fold-teaser span { color: var(--muted); }
+.fold-teaser b { font: 500 .8rem var(--f-mono); color: var(--accent); white-space: nowrap; }
+.is-folded .fold-teaser { display: flex; }
+.fold-btn {
+  justify-self: start; margin-top: 8px; background: none; border: 1px solid var(--line); border-radius: 3px;
+  color: var(--muted); font: 500 .74rem var(--f-mono); padding: 5px 10px; cursor: pointer;
+}
+.fold-btn:hover { color: var(--accent); border-color: var(--accent); }
+.ki-band .fold-btn { color: var(--band-ink); border-color: color-mix(in srgb, var(--band-ink) 30%, transparent); }
+.ki-band .fold-teaser { background: transparent; color: var(--band-head); border-color: color-mix(in srgb, var(--band-ink) 30%, transparent); }
+.ki-band .fold-teaser span { color: var(--band-ink); }
+.ki-band .fold-teaser b { color: var(--glow); }
+.all-btn { background: none; border: 1px solid var(--line); border-radius: 3px; color: var(--ink); font: 500 .74rem var(--f-mono); padding: 6px 10px; cursor: pointer; white-space: nowrap; }
+.all-btn:hover { border-color: var(--accent); color: var(--accent); }
+.top-right { display: flex; gap: 8px; align-items: center; }
+
+/* ---------- Illustrationen ---------- */
+.ki-canvas { width: 100%; height: 230px; display: block; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--band-ink) 18%, transparent); background: color-mix(in srgb, var(--band-ink) 4%, transparent); }
+.canvas-cap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 500 .72rem var(--f-mono); color: color-mix(in srgb, var(--band-ink) 70%, transparent); margin-top: -14px; }
+.panel-art { border-radius: 4px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+.panel-art svg { width: 100%; height: auto; display: block; max-height: 150px; }
+.il-s { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.il-m { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-linecap: round; }
+.il-a { fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.il-o { fill: none; stroke: var(--signal); stroke-width: 1.8; stroke-linecap: round; }
+.il-f { fill: var(--accent-soft); stroke: none; }
+.il-g { fill: var(--line); stroke: none; }
+.il-d { fill: var(--accent); stroke: none; }
+.il-t { fill: var(--muted); font-family: var(--f-mono); font-size: 9px; }
+@media (prefers-reduced-motion: no-preference) {
+  .il-flow { stroke-dasharray: 5 7; animation: flow 1.4s linear infinite; }
+}
+
 /* ---------- Bewegung ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .b { animation: buildIn .6s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, 0s); }
@@ -387,7 +432,10 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#start" aria-label="Zum Seitenanfang"><span class="mono-ac">AC</span><span>A. Cortese</span></a>
-    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
+    <div class="top-right">
+      <button class="all-btn" id="all-btn" type="button">Alles aufklappen</button>
+      <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
+    </div>
     <nav id="site-nav" aria-label="Seitennavigation">
       <a href="#profil">Profil</a>
       <a href="#kompetenzen">Kompetenzen</a>
@@ -505,7 +553,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
     </div>
   </div>
 
-  <section class="block" id="profil">
+  <section class="block" id="profil" data-fold="open" data-teaser="Über 30 Jahre Tiefbau von der Lehre bis zur Bauherrenvertretung">
     <div class="wrap">
       <div class="margin">
         <h2>Profil</h2>
@@ -540,7 +588,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
     </div>
   </section>
 
-  <section class="block ki-band" id="ki">
+  <section class="block ki-band" id="ki" data-fold="open" data-teaser="Warum Tiefbauwissen und KI zusammen mehr bringen, was ich mit KI umsetze und wo ich Potenzial sehe">
     <div class="wrap">
       <div class="margin">
         <h2>KI × Tiefbau</h2>
@@ -549,6 +597,8 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
       </div>
       <div class="content">
         <p class="power">Tiefbau<sup>KI</sup></p>
+        <canvas class="ki-canvas" id="ki-canvas" role="img" aria-label="Animierte Illustration: Ein Leitungsnetz mit Schächten geht in ein neuronales Netz über. Lichtimpulse laufen von den Leitungen durch das KI-Netz."></canvas>
+        <div class="canvas-cap"><span>← Leitungsnetz: Erfahrung, Daten, Normen</span><span>KI-Agent: Prüfen, Erkennen, Entscheiden helfen →</span></div>
         <p class="ki-lead">Ein Sprachmodell kennt weder Ausmassregeln noch die Tücken einer Nachtragsofferte. Ein erfahrener Bauleiter hat keine Zeit, 400 Offertpositionen von Hand zu vergleichen. <b>Wer beides beherrscht, baut KI-Werkzeuge, die im Projektalltag wirklich tragen.</b> Genau diese Verbindung bringe ich mit: drei Jahrzehnte Tiefbau und eine Ausbildung zum KI-Professional mit Fokus auf KI-Agenten.</p>
 
         <div class="ki-eq" aria-label="Fachwissen mal KI-Kompetenz ergibt Wirkung">
@@ -559,7 +609,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
           <div class="term res"><small>Wirkung</small><b>Werkzeuge mit Fachverstand</b><span>Schneller prüfen, sicherer entscheiden, Wissen im ganzen Team verfügbar machen</span></div>
         </div>
 
-        <p class="ki-sub">Warum die Kombination wirkt</p>
+        <p class="ki-sub" data-fold-start>Warum die Kombination wirkt</p>
         <div class="ki-grid">
           <article class="ki-card"><span class="tag">Die richtigen Fragen</span><h3>Ich weiss, wo es klemmt</h3><p>Spekulationspreise, Ausmassfehler, Nachtragsrisiken, Kostenteiler: Ich setze die KI dort an, wo im Projekt wirklich Geld und Zeit verloren gehen.</p></article>
           <article class="ki-card"><span class="tag">Prüfbare Ergebnisse</span><h3>Ich erkenne Fehler der KI</h3><p>Eine KI-Antwort ist nur so gut wie ihre Kontrolle. Ich sehe sofort, ob ein Ergebnis fachlich stimmt. Der Entscheid bleibt beim Menschen.</p></article>
@@ -607,7 +657,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
     </div>
   </section>
 
-  <section class="block" id="projekte">
+  <section class="block" id="projekte" data-fold="closed" data-teaser="33 Referenzprojekte seit 2006: Brücken, Galerien, Kantons- und Nationalstrassen, RhB, Wasser, Netzbau">
     <div class="wrap">
       <div class="margin">
         <h2>Projekte</h2>
@@ -656,7 +706,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
     </div>
   </section>
 
-  <section class="block" id="werdegang">
+  <section class="block" id="werdegang" data-fold="closed" data-teaser="Von der Lehre 1994 über Tiefbauamt GR, Straub AG und Casutt Wyrsch Zwicky bis Swisscom">
     <div class="wrap">
       <div class="margin">
         <h2>Werdegang</h2>
@@ -765,7 +815,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
     </div>
   </section>
 
-  <section class="block" id="ausbildung">
+  <section class="block" id="ausbildung" data-fold="closed" data-teaser="Lehre, Berufsmatura, HTW Chur, neun Weiterbildungen, Sprachen und EDV">
     <div class="wrap">
       <div class="margin">
         <h2>Ausbildung</h2>
@@ -815,7 +865,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
     </div>
   </section>
 
-  <section class="block" id="zeugnisse">
+  <section class="block" id="zeugnisse" data-fold="closed" data-teaser="Vier wörtliche Auszüge aus Zeugnissen von Kanton und Ingenieurbüros">
     <div class="wrap">
       <div class="margin">
         <h2>Zeugnisse</h2>
@@ -845,7 +895,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
     </div>
   </section>
 
-  <section class="block" id="werkzeuge">
+  <section class="block" id="werkzeuge" data-fold="closed" data-teaser="Zehn eigene Werkzeuge, darunter Schachtassistent v4.6, OffertIQ und CO-quit">
     <div class="wrap">
       <div class="margin">
         <h2>Eigene Werkzeuge</h2>
@@ -957,6 +1007,19 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
   ];
   var byId = {}; FIELDS.forEach(function (f) { byId[f.id] = f; });
 
+  /* ---------- Illustrationen je Fachgebiet ---------- */
+  var ART = {
+    netz: '<rect class="il-g" x="0" y="40" width="240" height="70" opacity=".45"/><path class="il-s" d="M0 40H80l8 62h64l8-62h80"/><rect class="il-f" x="100" y="70" width="40" height="28" rx="2"/><circle class="il-a" cx="110" cy="78" r="5"/><circle class="il-a" cx="130" cy="78" r="5"/><circle class="il-a" cx="110" cy="91" r="5"/><circle class="il-a" cx="130" cy="91" r="5"/><path class="il-a il-flow" d="M140 84C182 84 186 40 200 40V26"/><path class="il-s" d="M186 40V24l14-12 14 12v16"/><path class="il-o" d="M96 56h48"/><text class="il-t" x="6" y="34">Normprofil · Rohrblock · Hausanschluss</text>',
+    strasse: '<path class="il-s" d="M40 108L104 12M168 108L120 12"/><path class="il-o il-flow" d="M104 108L112 12"/><path class="il-m" d="M196 108L150 12M222 108L166 12"/><path class="il-m" d="M190 98h34M184 84h30M178 70h27M172 56h23M166 42h20M160 28h17"/><path class="il-s" d="M0 108h240"/><text class="il-t" x="6" y="20">Strasse</text><text class="il-t" x="196" y="20">RhB</text>',
+    beton: '<path class="il-m" d="M0 100q10-5 20 0t20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0"/><path class="il-s" d="M8 38H232M8 46H232"/><path class="il-a" d="M36 100Q120 18 204 100"/><path class="il-s" d="M76 46v54M164 46v54"/><path class="il-o" d="M70 100h12M158 100h12"/><g class="il-d"><circle cx="24" cy="42" r="1.8"/><circle cx="44" cy="42" r="1.8"/><circle cx="64" cy="42" r="1.8"/><circle cx="84" cy="42" r="1.8"/><circle cx="104" cy="42" r="1.8"/><circle cx="124" cy="42" r="1.8"/><circle cx="144" cy="42" r="1.8"/><circle cx="164" cy="42" r="1.8"/><circle cx="184" cy="42" r="1.8"/><circle cx="204" cy="42" r="1.8"/><circle cx="224" cy="42" r="1.8"/></g><text class="il-t" x="8" y="28">Instandsetzung · Bewehrung · Kolkschutz</text>',
+    wasser: '<path class="il-s" d="M0 56H240M0 76H240"/><path class="il-a il-flow" d="M0 66H240"/><rect class="il-s" x="104" y="8" width="32" height="48" rx="2"/><path class="il-m" d="M110 18h20M110 28h20M110 38h20M110 48h20"/><path class="il-f" d="M200 16q12 16 0 26q-12-10 0-26z"/><path class="il-a" d="M200 16q12 16 0 26q-12-10 0-26z"/><path class="il-m" d="M0 100q15-8 30 0t30 0 30 0 30 0"/><text class="il-t" x="6" y="20">Schacht · Leitung · Gewässer</text>',
+    vergabe: '<path class="il-s" d="M74 6h72l20 20v78H74z"/><path class="il-s" d="M146 6v20h20"/><path class="il-m" d="M86 40h50M86 54h64M86 68h58M86 82h40"/><path class="il-a" d="M152 52l5 5 9-11M152 80l5 5 9-11"/><text x="34" y="70" style="font: 700 44px var(--f-display); fill: var(--accent);">§</text><text class="il-t" x="176" y="100">IVöB · SIA 118</text>',
+    kosten: '<rect class="il-f" x="40" y="62" width="22" height="30"/><rect class="il-f" x="74" y="46" width="22" height="46"/><rect class="il-f" x="108" y="54" width="22" height="38"/><rect class="il-f" x="142" y="30" width="22" height="62"/><path class="il-o" d="M44 58L84 40 118 48 152 22 196 14"/><path class="il-s" d="M20 92H220"/><path class="il-m" d="M20 92v8M40 92v5M60 92v5M80 92v8M100 92v5M120 92v5M140 92v8M160 92v5M180 92v5M200 92v8"/><text class="il-t" x="6" y="16">Ausmass · Nachträge · Teuerung</text>',
+    fuehrung: '<g class="il-m"><circle cx="40" cy="52" r="10"/><path d="M22 92q18-26 36 0"/><circle cx="80" cy="56" r="10"/><path d="M62 96q18-26 36 0"/><circle cx="160" cy="56" r="10"/><path d="M142 96q18-26 36 0"/><circle cx="200" cy="52" r="10"/><path d="M182 92q18-26 36 0"/></g><circle class="il-a" cx="120" cy="40" r="13"/><path class="il-a" d="M96 90q24-34 48 0"/><path class="il-o" d="M104 32q16-12 32 0"/><text class="il-t" x="6" y="16">Team · Lernende · Prüfungen</text>',
+    ki: '<rect class="il-s" x="84" y="22" width="72" height="66" rx="6"/><path class="il-m" d="M96 22v-10M110 22v-10M124 22v-10M138 22v-10M96 88v10M110 88v10M124 88v10M138 88v10M84 40H72M84 55H72M84 70H72M156 40h12M156 55h12M156 70h12"/><g class="il-a"><path d="M100 40l20 15-20 15M140 40l-20 15 20 15M100 40h40M100 70h40"/></g><g class="il-d"><circle cx="100" cy="40" r="3"/><circle cx="140" cy="40" r="3"/><circle cx="120" cy="55" r="3.5"/><circle cx="100" cy="70" r="3"/><circle cx="140" cy="70" r="3"/></g><path class="il-a il-flow" d="M0 55H72M168 55H240"/><text class="il-t" x="6" y="16">Fachwissen → Agent → Prüfbericht</text>'
+  };
+  function art(id) { return '<svg viewBox="0 0 240 110" role="img" aria-label="Illustration ' + esc(byId[id].label) + '">' + ART[id] + '</svg>'; }
+
   var svg = document.getElementById('net-svg');
   var NS = 'http://www.w3.org/2000/svg';
   var cx = 320, cy = 285, rx = 214, ry = 232;
@@ -1030,7 +1093,7 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
     });
     crossEls.forEach(function (c) { c.el.classList.toggle('on', c.a === id || c.b === id); });
     var proj = f.filter ? tagged(f.filter) : [];
-    var html = '<div class="panel-head"><span class="since">' + esc(f.since) + '</span><h3>' + esc(f.label) + '</h3></div>' +
+    var html = '<div class="panel-art">' + art(id) + '</div><div class="panel-head"><span class="since">' + esc(f.since) + '</span><h3>' + esc(f.label) + '</h3></div>' +
       '<p>' + esc(f.lead) + '</p>' +
       '<h4>Normen und Grundlagen</h4><div class="chips">' + f.norms.map(function (n) { return '<span class="chip">' + esc(n) + '</span>'; }).join('') + '</div>' +
       '<h4>Kernleistungen</h4><ul>' + f.tasks.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' +
@@ -1072,6 +1135,132 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
   }
   setFilter('alle', false);
 
+  /* ---------- Einklappbare Abschnitte ---------- */
+  var folds = Array.prototype.slice.call(document.querySelectorAll('section[data-fold]'));
+  var allBtn = document.getElementById('all-btn');
+  folds.forEach(function (sec) {
+    var content = sec.querySelector('.content'), margin = sec.querySelector('.margin');
+    var kids = Array.prototype.slice.call(content.children);
+    var start = content.querySelector('[data-fold-start]');
+    var idx = start ? kids.indexOf(start) : 0;
+    var body = document.createElement('div'); body.className = 'fold-body';
+    var inner = document.createElement('div'); inner.className = 'fold-inner';
+    body.id = sec.id + '-inhalt';
+    body.appendChild(inner);
+    kids.slice(idx).forEach(function (k) { inner.appendChild(k); });
+    var teaser = document.createElement('button');
+    teaser.type = 'button'; teaser.className = 'fold-teaser';
+    teaser.setAttribute('aria-controls', body.id);
+    teaser.innerHTML = '<span>' + esc(sec.getAttribute('data-teaser')) + '</span><b>Aufklappen ↓</b>';
+    content.appendChild(teaser); content.appendChild(body);
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'fold-btn'; btn.setAttribute('aria-controls', body.id);
+    margin.appendChild(btn);
+    sec.setOpen = function (open) {
+      sec.classList.toggle('is-folded', !open);
+      btn.textContent = open ? 'Einklappen ↑' : 'Aufklappen ↓';
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      teaser.setAttribute('aria-expanded', open ? 'true' : 'false');
+      updateAll();
+    };
+    teaser.addEventListener('click', function () { sec.setOpen(true); });
+    btn.addEventListener('click', function () {
+      var open = sec.classList.contains('is-folded');
+      sec.setOpen(open);
+      if (!open) sec.scrollIntoView({ block: 'start' });
+    });
+    sec.setOpen(sec.getAttribute('data-fold') !== 'closed');
+  });
+  function updateAll() {
+    var anyClosed = folds.some(function (s) { return s.classList.contains('is-folded'); });
+    allBtn.textContent = anyClosed ? 'Alles aufklappen' : 'Alles einklappen';
+  }
+  updateAll();
+  allBtn.addEventListener('click', function () {
+    var anyClosed = folds.some(function (s) { return s.classList.contains('is-folded'); });
+    folds.forEach(function (s) { s.setOpen(anyClosed); });
+  });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var sec = document.getElementById(a.getAttribute('href').slice(1));
+    if (sec && sec.setOpen && sec.classList.contains('is-folded')) sec.setOpen(true);
+  });
+
+  /* ---------- Bild: Leitungsnetz wird KI-Netz ---------- */
+  (function () {
+    var cv = document.getElementById('ki-canvas');
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, layers = [], pipes = [], pulses = [], visible = true, last = 0;
+    function col(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#3ddc97'; }
+    function layout() {
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      pipes = [];
+      var n = 5;
+      for (var i = 0; i < n; i++) pipes.push(H * (0.18 + i * 0.16));
+      var counts = W < 500 ? [4, 5, 3] : [5, 7, 7, 3];
+      var x0 = W * 0.56, x1 = W * 0.94;
+      layers = counts.map(function (c, li) {
+        var x = x0 + (x1 - x0) * (li / (counts.length - 1));
+        var nodes = [];
+        for (var k = 0; k < c; k++) nodes.push({ x: x, y: H * (0.5 + (k - (c - 1) / 2) * (0.78 / Math.max(c - 1, 1))) });
+        return nodes;
+      });
+    }
+    function route() {
+      var y = pipes[Math.floor(Math.random() * pipes.length)];
+      var pts = [{ x: 0, y: y }, { x: W * 0.4, y: y }];
+      layers.forEach(function (L) { pts.push(L[Math.floor(Math.random() * L.length)]); });
+      var len = 0, seg = [];
+      for (var i = 1; i < pts.length; i++) { var d = Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y); seg.push(d); len += d; }
+      return { pts: pts, seg: seg, len: len, s: 0, v: 90 + Math.random() * 70 };
+    }
+    function pos(p) {
+      var s = p.s;
+      for (var i = 0; i < p.seg.length; i++) {
+        if (s <= p.seg[i]) { var k = s / p.seg[i]; return { x: p.pts[i].x + (p.pts[i + 1].x - p.pts[i].x) * k, y: p.pts[i].y + (p.pts[i + 1].y - p.pts[i].y) * k }; }
+        s -= p.seg[i];
+      }
+      return p.pts[p.pts.length - 1];
+    }
+    function draw(dt) {
+      var ink = col('--band-ink'), glow = col('--glow'), sig = col('--signal');
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 1.4; ctx.strokeStyle = ink; ctx.globalAlpha = 0.28;
+      pipes.forEach(function (y, i) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W * 0.4, y); ctx.stroke();
+        for (var x = W * 0.08 + i * 14; x < W * 0.4; x += W * 0.11) { ctx.strokeRect(x - 5, y - 5, 10, 10); }
+      });
+      ctx.beginPath(); ctx.moveTo(W * 0.12, pipes[0]); ctx.lineTo(W * 0.12, pipes[pipes.length - 1]); ctx.moveTo(W * 0.3, pipes[1]); ctx.lineTo(W * 0.3, pipes[pipes.length - 2]); ctx.stroke();
+      ctx.globalAlpha = 0.16;
+      pipes.forEach(function (y) { layers[0].forEach(function (n) { ctx.beginPath(); ctx.moveTo(W * 0.4, y); ctx.bezierCurveTo(W * 0.48, y, W * 0.5, n.y, n.x, n.y); ctx.stroke(); }); });
+      for (var l = 1; l < layers.length; l++) layers[l - 1].forEach(function (a) { layers[l].forEach(function (b) { ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }); });
+      ctx.globalAlpha = 1;
+      layers.forEach(function (L, li) { L.forEach(function (n) {
+        ctx.beginPath(); ctx.arc(n.x, n.y, li === layers.length - 1 ? 6 : 4.5, 0, 6.283);
+        ctx.fillStyle = li === layers.length - 1 ? sig : ink; ctx.globalAlpha = li === layers.length - 1 ? 0.95 : 0.55; ctx.fill();
+      }); });
+      ctx.globalAlpha = 1; ctx.fillStyle = glow; ctx.shadowColor = glow; ctx.shadowBlur = 12;
+      pulses.forEach(function (p) { p.s += p.v * dt; var q = pos(p); ctx.beginPath(); ctx.arc(q.x, q.y, 2.8, 0, 6.283); ctx.fill(); });
+      ctx.shadowBlur = 0;
+      pulses = pulses.filter(function (p) { return p.s < p.len; });
+    }
+    layout();
+    for (var i = 0; i < 14; i++) { var p = route(); p.s = Math.random() * p.len; pulses.push(p); }
+    window.addEventListener('resize', layout);
+    if (reduce) { draw(0); return; }
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(cv);
+    var spawn = 0;
+    function frame(t) {
+      var dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t;
+      if (visible) { spawn += dt; if (spawn > 0.22 && pulses.length < 34) { spawn = 0; pulses.push(route()); } draw(dt); }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+
   /* ---------- Navigation ---------- */
   var menuBtn = document.getElementById('menu-btn');
   var nav = document.getElementById('site-nav');
@@ -1102,8 +1291,8 @@ footer .wrap { border-top: 1px solid var(--line); padding-block: 22px 32px; disp
     prog.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, window.scrollY / h) : 0) + ')';
     toTop.hidden = window.scrollY < 600;
     var r = tl.getBoundingClientRect(), mid = window.innerHeight * 0.6, len = r.height - 12;
-    var p = Math.max(0, Math.min(1, (mid - r.top) / len));
-    tlFill.style.height = (p * len) + 'px';
+    var p = len > 0 ? Math.max(0, Math.min(1, (mid - r.top) / len)) : 0;
+    tlFill.style.height = (p * Math.max(len, 0)) + 'px';
     ticking = false;
   }
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });

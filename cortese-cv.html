@@ -154,14 +154,20 @@ section.block > .wrap {
 
 /* Werdegang */
 .timeline { list-style: none; margin: 0; padding: 0; display: grid; }
-.timeline li {
-  display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 24px; padding: 18px 0;
+.timeline > li {
+  display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px; padding: 20px 0;
   border-bottom: 1px dashed var(--line);
 }
-.timeline li:first-child { padding-top: 0; }
-.when { font-family: var(--f-mono); font-size: 0.85rem; color: var(--accent); font-variant-numeric: tabular-nums; padding-top: 3px; }
-.what h3 { font-size: var(--step-1); font-weight: 600; }
-.what p { color: var(--muted); max-width: 60ch; }
+.timeline > li:first-child { padding-top: 0; }
+.when { font-family: var(--f-mono); font-size: 0.8rem; line-height: 1.45; color: var(--accent); font-variant-numeric: tabular-nums; padding-top: 4px; }
+.what { display: grid; gap: 4px; min-width: 0; }
+.what h3, .side-roles h3 { font-size: var(--step-1); font-weight: 600; }
+.org { font-size: 0.95rem; font-weight: 600; color: var(--muted); }
+.what ul { margin: 6px 0 0; padding-left: 1.1em; color: var(--muted); font-size: 0.97rem; max-width: 64ch; display: grid; gap: 3px; }
+.what ul li::marker { color: var(--accent); }
+.side-roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.side-roles > div { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 16px 18px; display: grid; gap: 4px; align-content: start; }
+.side-roles .org { font-weight: 400; }
 
 /* Werkzeuge */
 .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
@@ -218,7 +224,9 @@ footer .wrap {
 @media (max-width: 600px) {
   .skills { grid-template-columns: 1fr; }
   .skill, .skill:nth-child(2n) { padding: 18px 0; border-left: 0; }
-  .timeline li { grid-template-columns: 1fr; gap: 4px; }
+  .timeline > li { grid-template-columns: 1fr; gap: 4px; }
+  .timeline .when br { display: none; }
+  .side-roles { grid-template-columns: 1fr; }
   .lang { grid-template-columns: 90px minmax(0, 1fr); }
   .lang .lvl { grid-column: 2; text-align: left; margin-top: -10px; }
   .contact-card { grid-template-columns: 1fr; padding: 20px; }
@@ -235,7 +243,7 @@ footer .wrap {
 
 <header class="top">
   <div class="wrap">
-    <div class="plan-id">Plan-Nr. <b>AC-1994/2026</b> · Massstab 1:1</div>
+    <div class="plan-id">Plan-Nr. <b>AC-2000/2026</b> · Massstab 1:1</div>
     <nav aria-label="Seitennavigation">
       <a href="#profil">Profil</a>
       <a href="#kompetenzen">Kompetenzen</a>
@@ -257,7 +265,7 @@ footer .wrap {
         <p class="lead">Über 30 Jahre im Schweizer Tiefbau. Ich begleite Leitungs- und FTTH-Projekte von der Ausschreibung über die Bauleitung bis zur letzten Abrechnungsposition und baue die Werkzeuge, die diese Arbeit schneller und sicherer machen.</p>
         <div class="facts" aria-label="Kennzahlen">
           <div><b>30+</b><span>Jahre Tiefbau</span></div>
-          <div><b>2000</b><span>Prüfungsexperte seit</span></div>
+          <div><b>12</b><span>Jahre Tiefbauamt GR</span></div>
           <div><b>4</b><span>Sprachen</span></div>
         </div>
       </div>
@@ -343,7 +351,8 @@ footer .wrap {
       </div>
       <div class="content">
         <p>Seit über drei Jahrzehnten arbeite ich im Schweizer Tiefbau. In dieser Zeit habe ich so ziemlich alles gesehen, was der Leitungsbau und der FTTH-Ausbau zu bieten haben: von der Ausschreibung über die Bauleitung bis zum letzten Nachtrag.</p>
-        <p>Heute vertrete ich als Bauherrenvertreter Tiefbau und Access Project Manager die Interessen der Swisscom AG in der Region Wireline East. Mein Alltag: Ausschreibungen prüfen, Offerten und Einheitspreise analysieren, Nachträge verhandeln und Abrechnungen kontrollieren. Dabei bewege ich mich täglich im Rahmen von SIA 118 und SIA 103, NPK, KBOB-Empfehlungen sowie IVöB und BöB.</p>
+        <p>Mein Weg führte vom Zeichner und Konstrukteur über Projekt- und Bauleitungen im Strassen-, Bahn- und Siedlungswasserbau bis zur Leitung des Teams Projektierung und Bau im Tiefbauamt Graubünden, Bezirk 1 Chur. Ich kenne die Bauherrenseite der öffentlichen Hand ebenso wie die Ingenieurbüros von innen.</p>
+        <p>Seit April 2025 begleite ich als Bauherrenvertreter Tiefbau und Access Project Manager bei Swisscom FTTH- und Netzbauprojekte von der Ausschreibung bis zur Bauabnahme. Mein Anspruch: Es wird gebaut, was vereinbart wurde, in Qualität, Kosten und Terminen. Dabei arbeite ich täglich mit SIA 118 und SIA 103, NPK, KBOB-Empfehlungen sowie IVöB und BöB.</p>
         <p>Seit dem Jahr 2000 bin ich Prüfungsexperte für angehende Zeichnerinnen und Zeichner EFZ Fachrichtung Ingenieurbau. Nachwuchsförderung liegt mir am Herzen. Nach meiner Weiterbildung zum HSO KI-Professional entwickle ich eigene KI- und Excel-Werkzeuge, die Kolleginnen, Kollegen und mir Routinearbeit abnehmen.</p>
       </div>
     </div>
@@ -401,34 +410,93 @@ footer .wrap {
       <div class="content">
         <ol class="timeline">
           <li>
-            <div class="when">heute</div>
+            <div class="when">Apr. 2025 –<br>heute</div>
             <div class="what">
-              <h3>Bauherrenvertreter Tiefbau &amp; Access Project Manager</h3>
-              <p>Swisscom AG, Wireline East, Chur. Verantwortung für Tiefbau im Netzausbau: Ausschreibung, Vergabe, Nachträge und Abrechnung.</p>
+              <h3>Access Project Manager / Bauherrenvertreter Tiefbau</h3>
+              <span class="org">Swisscom AG · Wireline East · Ostschweiz</span>
+              <ul>
+                <li>Projektsteuerung und Bauüberwachung im Glasfaserausbau (FTTH) mit Generalunternehmer und weiteren Anspruchsgruppen</li>
+                <li>Vergabe-, Vertrags- und Nachtragsmanagement auf Basis SIA 118, NPK und Vergaberecht (IVöB/BöB)</li>
+                <li>Baukostencontrolling, Rechnungs- und Abrechnungsprüfung inkl. Prüfberichten</li>
+                <li>Kostenaufteilungen und Schnittstellen zwischen Swisscom, GU und kantonalen/kommunalen Werkeigentümern</li>
+                <li>Entwicklung eigener KI-Agenten, etwa zur automatisierten Prüfung von Bauabrechnungen</li>
+              </ul>
             </div>
           </li>
           <li>
-            <div class="when">Weiterbildung</div>
+            <div class="when">Okt. 2021 –<br>Apr. 2025</div>
             <div class="what">
-              <h3>HSO KI-Professional</h3>
-              <p>Seither Entwicklung eigener KI-Assistenten und Automatisierungen für die Praxis im Tiefbau.</p>
+              <h3>Leiter Projektierung / Bau</h3>
+              <span class="org">Tiefbauamt Graubünden · Bezirk 1 Chur</span>
+              <ul>
+                <li>Fachliche und personelle Führung des Teams Projektierung und Bau mit vier Bauleitern</li>
+                <li>Projektierung und Realisierung des baulichen Unterhalts der Kantonsstrassen sowie von Neu- und Ausbauprojekten auf Verbindungsstrassen</li>
+                <li>Bauherrenvertretung für Fach-, Kosten-, Qualitäts-, Termin- und Sicherheitsvorgaben</li>
+                <li>Unterstützung des Bezirkschefs, Pikettdienst als Einsatzleiter</li>
+              </ul>
             </div>
           </li>
           <li>
-            <div class="when">seit 2000</div>
+            <div class="when">März 2013 –<br>Apr. 2025</div>
             <div class="what">
-              <h3>Prüfungsexperte Zeichner/in EFZ Ingenieurbau</h3>
-              <p>Abnahme von Qualifikationsverfahren und Förderung des Berufsnachwuchses.</p>
+              <h3>Projektierung / Bauleitung</h3>
+              <span class="org">Tiefbauamt Graubünden · Chur</span>
+              <ul>
+                <li>Örtliche Bauleitung von Strassen-, Brücken- und Instandsetzungsprojekten, u. a. Jeninserstrasse, Fläscherstrasse, Instandsetzung Calfreisentobel- und Plessurbrücke</li>
+                <li>Submissionsunterlagen erstellen und Offerten auswerten</li>
+                <li>Ausmass aufnehmen und Bauabrechnungen prüfen</li>
+              </ul>
             </div>
           </li>
           <li>
-            <div class="when">30+ Jahre</div>
+            <div class="when">Jan. 2009 –<br>Feb. 2013</div>
             <div class="what">
-              <h3>Tiefbau und Leitungsbau in der Schweiz</h3>
-              <p>Stationen von der Ausschreibung über die Bauleitung bis zur Schlussabrechnung, mit Schwerpunkt Leitungs- und Netzbau.</p>
+              <h3>Projektleiter / Bauleiter</h3>
+              <span class="org">Casutt Wyrsch Zwicky AG · Chur</span>
+              <ul>
+                <li>Verkehrswegebau (Strassen- und Bahnbau) für Tiefbauamt GR, ASTRA und Rhätische Bahn</li>
+                <li>Stv. Projektleitung, u. a. Anschluss Chur Süd, Instandsetzung Galerien Mattstock/Churfirsten, Kreisel Felsenau, RhB-Gleisverlegung Carrerabachbrücke</li>
+                <li>Trassierung, Auflage- und Ausführungsprojekte, örtliche Bauleitung</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="when">Jan. 2006 –<br>Dez. 2008</div>
+            <div class="what">
+              <h3>Projektleiter / Konstrukteur / Bauleiter</h3>
+              <span class="org">ARX | smart minds · Chur / Ilanz</span>
+              <ul>
+                <li>Projektierung, Submission und Bauleitung in Tiefbau und Siedlungswasserbau: Strassen, Wasserversorgungen, Siedlungsentwässerungen, Meliorationen</li>
+                <li>U. a. Verbauung Val da Cavegn (Flond), Quartiererschliessungen Ilanz/Degen, Gesamtmelioration St. Martin</li>
+                <li>Zeitweise Führung der Tiefbauabteilung am Standort Ilanz</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="when">Nov. 2000 –<br>Dez. 2005</div>
+            <div class="what">
+              <h3>Zeichner / Konstrukteur</h3>
+              <span class="org">Tiefbauamt Graubünden</span>
+              <ul>
+                <li>Projektierung von Hauptstrassenprojekten mit AutoCAD, von der Studie bis zum Auflageprojekt</li>
+                <li>Prüfung von Plänen privater Ingenieurbüros, Bauwerksdokumentation</li>
+                <li>Unterstützung der Projektleiter bei der Kostenüberwachung</li>
+              </ul>
             </div>
           </li>
         </ol>
+        <div class="side-roles">
+          <div>
+            <span class="when">Juni 2000 – heute</span>
+            <h3>Prüfungsexperte Bauzeichner Ingenieurbau</h3>
+            <span class="org">Kanton Graubünden · freiberuflich</span>
+          </div>
+          <div>
+            <span class="when">Weiterbildung</span>
+            <h3>HSO KI-Professional</h3>
+            <span class="org">Seither eigene KI-Agenten und Assistenten für den Tiefbau</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>

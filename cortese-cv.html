@@ -822,8 +822,7 @@ footer .wrap {
             </dl>
           </div>
           <div>
-            <button class="btn" id="copy-btn" type="button">E-Mail kopieren</button>
-            <div class="copied" id="copy-msg" aria-live="polite"></div>
+            <a class="btn" href="https://www.linkedin.com/in/alessandro-cortese-1846b5bb" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;">Auf LinkedIn kontaktieren</a>
           </div>
         </div>
       </div>
@@ -875,18 +874,4 @@ footer .wrap {
   window.addEventListener('scroll', function () { toTop.hidden = window.scrollY < 600; }, { passive: true });
   toTop.addEventListener('click', function () { window.scrollTo({ top: 0 }); });
 
-  document.getElementById('copy-btn').addEventListener('click', function () {
-    var el = document.getElementById('mail');
-    var msg = document.getElementById('copy-msg');
-    var text = el.textContent.trim();
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function () {
-        msg.textContent = 'Kopiert';
-      }).catch(function () { selectText(el); msg.textContent = 'Markiert – mit Ctrl+C kopieren'; });
-    } else { selectText(el); msg.textContent = 'Markiert – mit Ctrl+C kopieren'; }
-  });
-  function selectText(el) {
-    var r = document.createRange(); r.selectNodeContents(el);
-    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-  }
 </script>

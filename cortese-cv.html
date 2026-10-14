@@ -1,0 +1,566 @@
+<title>Alessandro Cortese</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Alessandro Cortese – Bauherrenvertreter Tiefbau und Access Project Manager, Chur. Über 30 Jahre Erfahrung im Schweizer Leitungs- und Netzbau.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Querprofil eines Leitungsgrabens als Leitmotiv; Inhalt läuft wie ein Bauprotokoll in einer schmalen Spalte mit Randvermerken (Koten, Normen) links. */
+:root {
+  --bg: #eef1f2;          /* Planpapier, leicht kühl */
+  --surface: #ffffff;
+  --ink: #17232e;         /* Planschwarz mit Blaustich */
+  --muted: #56636d;
+  --line: #c9d1d5;
+  --accent: #1d7a50;      /* SIA 405: Telekommunikation = grün */
+  --accent-soft: #d8ece2;
+  --signal: #d9771f;      /* Absteckpflock / Baustellenorange, sparsam */
+  --soil: #b9a88f;
+  --soil-dot: #8f7c62;
+  --gravel: #c8c3b8;
+  --asphalt: #3a3f44;
+  --fill: #ddd3c2;
+  --concrete: #a9b0b4;
+
+  --f-display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: 1.6rem;
+  --step-3: 2.4rem;
+  --step-4: clamp(2.8rem, 7vw, 4.6rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12191f; --surface: #19232b; --ink: #e4eaed; --muted: #9aa8b1; --line: #2c3a44;
+    --accent: #4cc08a; --accent-soft: #1b3a2d; --signal: #f0954a;
+    --soil: #5b4f40; --soil-dot: #7d6d58; --gravel: #4a4842; --asphalt: #0b0e10; --fill: #3e3830; --concrete: #66707a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12191f; --surface: #19232b; --ink: #e4eaed; --muted: #9aa8b1; --line: #2c3a44;
+  --accent: #4cc08a; --accent-soft: #1b3a2d; --signal: #f0954a;
+  --soil: #5b4f40; --soil-dot: #7d6d58; --gravel: #4a4842; --asphalt: #0b0e10; --fill: #3e3830; --concrete: #66707a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; line-height: 1.05; margin: 0; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.mono { font-family: var(--f-mono); font-size: 0.8rem; letter-spacing: 0.02em; }
+.eyebrow {
+  font-family: var(--f-mono); font-size: 0.75rem; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--muted);
+}
+
+/* ---------- Kopf ---------- */
+.top {
+  border-bottom: 1px solid var(--line);
+}
+.top .wrap {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  padding-block: 14px; flex-wrap: wrap;
+}
+.top nav { display: flex; gap: 20px; flex-wrap: wrap; }
+.top nav a { color: var(--muted); text-decoration: none; font-family: var(--f-mono); font-size: 0.8rem; }
+.top nav a:hover { color: var(--accent); }
+.plan-id { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); }
+.plan-id b { color: var(--ink); font-weight: 500; }
+
+/* ---------- Hero ---------- */
+.hero .wrap {
+  display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center;
+  padding-block: 56px 40px;
+}
+.hero-text { display: grid; gap: 20px; min-width: 0; }
+.hero h1 {
+  font-size: var(--step-4); font-weight: 700; letter-spacing: -0.01em; text-transform: uppercase;
+}
+.hero h1 span { display: block; color: var(--accent); }
+.role { font-size: var(--step-1); font-weight: 600; line-height: 1.35; }
+.role small { display: block; font-weight: 400; color: var(--muted); font-size: var(--step-0); }
+.lead { color: var(--muted); max-width: 52ch; }
+.facts {
+  display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 8px 32px;
+  padding-top: 8px; border-top: 1px solid var(--line);
+}
+.facts div { display: grid; }
+.facts b { font-family: var(--f-display); font-size: var(--step-3); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.facts span { font-size: 0.85rem; color: var(--muted); }
+
+figure.profile { margin: 0; min-width: 0; }
+figure.profile svg { width: 100%; height: auto; display: block; }
+figure.profile figcaption { margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
+
+/* SVG-Klassen (Farben aus Tokens) */
+.s-soil { fill: var(--soil); }
+.s-soil-dot { fill: var(--soil-dot); }
+.s-asphalt { fill: var(--asphalt); }
+.s-gravel { fill: var(--gravel); }
+.s-gravel-dot { fill: var(--soil-dot); }
+.s-fill { fill: var(--fill); }
+.s-concrete { fill: var(--concrete); }
+.s-pipe { fill: var(--surface); stroke: var(--accent); stroke-width: 2.2; }
+.s-pipe-core { fill: var(--accent); }
+.s-tape { fill: var(--accent); }
+.s-edge { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+.s-lead { fill: none; stroke: var(--muted); stroke-width: 1; }
+.s-lab { fill: var(--ink); font-family: var(--f-mono); font-size: 11px; }
+.s-lab-m { fill: var(--muted); font-family: var(--f-mono); font-size: 10px; }
+.s-kote { fill: var(--signal); }
+.s-dim { stroke: var(--signal); stroke-width: 1.2; fill: none; }
+
+/* ---------- Abschnitte ---------- */
+section.block { border-top: 1px solid var(--line); }
+section.block > .wrap {
+  display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; padding-block: 56px;
+}
+.margin { display: grid; align-content: start; gap: 6px; }
+.margin h2 { font-size: var(--step-3); font-weight: 600; text-transform: uppercase; }
+.margin .ref { font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); }
+.content { min-width: 0; display: grid; gap: 24px; }
+.content > p { max-width: 65ch; }
+
+/* Kompetenzen */
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.skill { padding: 20px 20px 20px 0; border-bottom: 1px solid var(--line); display: grid; gap: 6px; align-content: start; }
+.skill:nth-child(2n) { padding-left: 20px; padding-right: 0; border-left: 1px solid var(--line); }
+.skill h3 { font-size: var(--step-1); font-weight: 600; }
+.skill p { color: var(--muted); font-size: 0.98rem; }
+.norms { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.norm {
+  font-family: var(--f-mono); font-size: 0.72rem; padding: 2px 7px; border: 1px solid var(--line);
+  border-radius: 3px; color: var(--ink); background: var(--surface);
+}
+
+/* Werdegang */
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; }
+.timeline li {
+  display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 24px; padding: 18px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.timeline li:first-child { padding-top: 0; }
+.when { font-family: var(--f-mono); font-size: 0.85rem; color: var(--accent); font-variant-numeric: tabular-nums; padding-top: 3px; }
+.what h3 { font-size: var(--step-1); font-weight: 600; }
+.what p { color: var(--muted); max-width: 60ch; }
+
+/* Werkzeuge */
+.tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.tool {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 18px;
+  display: grid; grid-template-rows: auto auto 1fr; gap: 6px;
+}
+.tool .tag { font-family: var(--f-mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.tool h3 { font-size: 1.35rem; font-weight: 600; }
+.tool p { color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+.tool.feature { grid-column: span 2; border-color: var(--accent); background: var(--accent-soft); }
+.tool.feature .tag { color: var(--accent); }
+.credit { font-family: var(--f-mono); font-size: 0.75rem; color: var(--ink); margin-top: 6px; }
+
+/* Sprachen */
+.langs { display: grid; gap: 14px; max-width: 560px; }
+.lang { display: grid; grid-template-columns: 110px minmax(0, 1fr) 120px; gap: 16px; align-items: center; }
+.lang b { font-weight: 600; }
+.lang .lvl { font-size: 0.9rem; color: var(--muted); text-align: right; }
+.bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; }
+.bar i { height: 8px; background: var(--line); border-radius: 1px; }
+.bar i.on { background: var(--accent); }
+
+/* Kontakt */
+.contact-card {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 28px;
+}
+.contact-card h3 { font-size: var(--step-2); font-weight: 600; }
+.contact-list { display: grid; gap: 4px; margin-top: 12px; }
+.contact-list div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; }
+.contact-list dt { font-family: var(--f-mono); font-size: 0.78rem; color: var(--muted); padding-top: 3px; }
+.contact-list dd { margin: 0; overflow-wrap: anywhere; }
+.todo { color: var(--signal); font-style: italic; }
+.btn {
+  font: 600 0.95rem var(--f-body); background: var(--accent); color: var(--surface);
+  border: 0; border-radius: 3px; padding: 11px 18px; cursor: pointer; white-space: nowrap;
+}
+.btn:hover { filter: brightness(1.08); }
+.copied { font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); min-height: 1.2em; text-align: right; }
+
+footer .wrap {
+  border-top: 1px solid var(--line); padding-block: 22px 32px;
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted);
+}
+
+/* Responsiv */
+@media (max-width: 860px) {
+  .hero .wrap { grid-template-columns: 1fr; gap: 32px; padding-block: 36px 28px; }
+  section.block > .wrap { grid-template-columns: 1fr; gap: 20px; padding-block: 40px; }
+  .tool.feature { grid-column: auto; }
+}
+@media (max-width: 600px) {
+  .skills { grid-template-columns: 1fr; }
+  .skill, .skill:nth-child(2n) { padding: 18px 0; border-left: 0; }
+  .timeline li { grid-template-columns: 1fr; gap: 4px; }
+  .lang { grid-template-columns: 90px minmax(0, 1fr); }
+  .lang .lvl { grid-column: 2; text-align: left; margin-top: -10px; }
+  .contact-card { grid-template-columns: 1fr; padding: 20px; }
+  .copied { text-align: left; }
+  .facts { grid-template-columns: repeat(2, auto); }
+  .top nav { display: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tape-anim { animation: tape 1.2s ease-out 0.3s both; transform-origin: 50% 50%; }
+  @keyframes tape { from { transform: scaleX(0.2); } to { transform: scaleX(1); } }
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="plan-id">Plan-Nr. <b>AC-1994/2026</b> · Massstab 1:1</div>
+    <nav aria-label="Seitennavigation">
+      <a href="#profil">Profil</a>
+      <a href="#kompetenzen">Kompetenzen</a>
+      <a href="#werdegang">Werdegang</a>
+      <a href="#werkzeuge">Werkzeuge</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-text">
+        <div class="eyebrow">Tiefbau · Netzbau · Vergabe · Chur GR</div>
+        <h1>Alessandro <span>Cortese</span></h1>
+        <p class="role">Bauherrenvertreter Tiefbau &amp; Access Project Manager
+          <small>Swisscom AG, Wireline East · Chur</small></p>
+        <p class="lead">Über 30 Jahre im Schweizer Tiefbau. Ich begleite Leitungs- und FTTH-Projekte von der Ausschreibung über die Bauleitung bis zur letzten Abrechnungsposition und baue die Werkzeuge, die diese Arbeit schneller und sicherer machen.</p>
+        <div class="facts" aria-label="Kennzahlen">
+          <div><b>30+</b><span>Jahre Tiefbau</span></div>
+          <div><b>2000</b><span>Prüfungsexperte seit</span></div>
+          <div><b>4</b><span>Sprachen</span></div>
+        </div>
+      </div>
+
+      <figure class="profile">
+        <svg viewBox="0 0 520 340" role="img" aria-labelledby="qp-title">
+          <title id="qp-title">Querprofil eines Leitungsgrabens mit Belag, Fundationsschicht, Grabenauffüllung, Warnband und FTTH-Rohrblock</title>
+          <defs>
+            <pattern id="p-soil" width="14" height="14" patternUnits="userSpaceOnUse">
+              <rect width="14" height="14" class="s-soil"/>
+              <circle cx="3" cy="4" r="1.1" class="s-soil-dot"/>
+              <circle cx="10" cy="10" r="0.9" class="s-soil-dot"/>
+            </pattern>
+            <pattern id="p-gravel" width="10" height="10" patternUnits="userSpaceOnUse">
+              <rect width="10" height="10" class="s-gravel"/>
+              <circle cx="2.5" cy="3" r="1.6" class="s-gravel-dot"/>
+              <circle cx="7.5" cy="7.5" r="1.3" class="s-gravel-dot"/>
+            </pattern>
+          </defs>
+
+          <!-- gewachsener Boden -->
+          <rect x="0" y="50" width="400" height="290" fill="url(#p-soil)"/>
+          <!-- Belag + Fundation ausserhalb Graben -->
+          <rect x="0" y="50" width="400" height="14" class="s-asphalt"/>
+          <rect x="0" y="64" width="400" height="34" fill="url(#p-gravel)"/>
+          <!-- Graben (leicht geböscht) -->
+          <polygon points="130,50 270,50 258,290 142,290" class="s-fill"/>
+          <rect x="130" y="50" width="140" height="14" class="s-asphalt"/>
+          <polygon points="130,64 270,64 268.6,98 131.4,98" fill="url(#p-gravel)"/>
+          <polyline points="130,50 142,290 258,290 270,50" class="s-edge"/>
+          <!-- Warnband -->
+          <rect class="s-tape tape-anim" x="160" y="168" width="80" height="5"/>
+          <!-- Rohrblock -->
+          <rect x="155" y="212" width="90" height="66" rx="2" class="s-concrete"/>
+          <g>
+            <circle cx="178" cy="234" r="11" class="s-pipe"/><circle cx="178" cy="234" r="2.5" class="s-pipe-core"/>
+            <circle cx="200" cy="234" r="11" class="s-pipe"/><circle cx="200" cy="234" r="2.5" class="s-pipe-core"/>
+            <circle cx="222" cy="234" r="11" class="s-pipe"/><circle cx="222" cy="234" r="2.5" class="s-pipe-core"/>
+            <circle cx="178" cy="258" r="11" class="s-pipe"/><circle cx="178" cy="258" r="2.5" class="s-pipe-core"/>
+            <circle cx="200" cy="258" r="11" class="s-pipe"/><circle cx="200" cy="258" r="2.5" class="s-pipe-core"/>
+            <circle cx="222" cy="258" r="11" class="s-pipe"/><circle cx="222" cy="258" r="2.5" class="s-pipe-core"/>
+          </g>
+
+          <!-- Höhenkote OK Terrain -->
+          <polygon points="70,34 78,46 62,46" class="s-kote"/>
+          <text x="84" y="44" class="s-lab">± 0.00</text>
+          <!-- Masslinie Grabentiefe -->
+          <line x1="110" y1="50" x2="110" y2="290" class="s-dim"/>
+          <line x1="104" y1="50" x2="116" y2="50" class="s-dim"/>
+          <line x1="104" y1="290" x2="116" y2="290" class="s-dim"/>
+          <text x="58" y="174" class="s-lab">−1.20 m</text>
+
+          <!-- Beschriftungen rechts -->
+          <polyline points="262,57 300,57 410,57" class="s-lead"/>
+          <text x="414" y="54" class="s-lab">Belag AC 11</text>
+          <text x="414" y="66" class="s-lab-m">Deckschicht</text>
+          <polyline points="266,82 300,82 410,92" class="s-lead"/>
+          <text x="414" y="95" class="s-lab">Fundation</text>
+          <text x="414" y="107" class="s-lab-m">Kiessand 0/45</text>
+          <polyline points="240,140 300,140 410,136" class="s-lead"/>
+          <text x="414" y="139" class="s-lab">Auffüllung</text>
+          <text x="414" y="151" class="s-lab-m">lagenweise verdichtet</text>
+          <polyline points="240,170 300,170 410,180" class="s-lead"/>
+          <text x="414" y="183" class="s-lab">Warnband</text>
+          <text x="414" y="195" class="s-lab-m">«Swisscom»</text>
+          <polyline points="245,246 300,246 410,236" class="s-lead"/>
+          <text x="414" y="239" class="s-lab">Rohrblock</text>
+          <text x="414" y="251" class="s-lab-m">6 × KRo Ø 120</text>
+          <text x="414" y="263" class="s-lab-m">Beton C20/25</text>
+
+          <text x="142" y="312" class="s-lab-m">Grabensohle · Normprofil Netzbau (schematisch)</text>
+        </svg>
+        <figcaption>Querprofil Leitungsgraben, schematisch. Hier fängt jedes Projekt an, und hier entscheidet sich, ob die Abrechnung am Ende stimmt.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="block" id="profil">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Profil</h2>
+        <span class="ref">Pos. 100</span>
+      </div>
+      <div class="content">
+        <p>Seit über drei Jahrzehnten arbeite ich im Schweizer Tiefbau. In dieser Zeit habe ich so ziemlich alles gesehen, was der Leitungsbau und der FTTH-Ausbau zu bieten haben: von der Ausschreibung über die Bauleitung bis zum letzten Nachtrag.</p>
+        <p>Heute vertrete ich als Bauherrenvertreter Tiefbau und Access Project Manager die Interessen der Swisscom AG in der Region Wireline East. Mein Alltag: Ausschreibungen prüfen, Offerten und Einheitspreise analysieren, Nachträge verhandeln und Abrechnungen kontrollieren. Dabei bewege ich mich täglich im Rahmen von SIA 118 und SIA 103, NPK, KBOB-Empfehlungen sowie IVöB und BöB.</p>
+        <p>Seit dem Jahr 2000 bin ich Prüfungsexperte für angehende Zeichnerinnen und Zeichner EFZ Fachrichtung Ingenieurbau. Nachwuchsförderung liegt mir am Herzen. Nach meiner Weiterbildung zum HSO KI-Professional entwickle ich eigene KI- und Excel-Werkzeuge, die Kolleginnen, Kollegen und mir Routinearbeit abnehmen.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="kompetenzen">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Kompetenzen</h2>
+        <span class="ref">Pos. 200</span>
+      </div>
+      <div class="content">
+        <div class="skills">
+          <div class="skill">
+            <h3>Ausschreibung &amp; Vergabe</h3>
+            <p>Ausschreibungsunterlagen erstellen und prüfen, Verfahren nach öffentlichem Beschaffungsrecht begleiten, Zuschlagskriterien sauber begründen.</p>
+            <div class="norms"><span class="norm">IVöB</span><span class="norm">BöB</span><span class="norm">KBOB</span></div>
+          </div>
+          <div class="skill">
+            <h3>Offertprüfung &amp; Preisanalyse</h3>
+            <p>Einheitspreise vergleichen, Spekulationspositionen erkennen, Preisbasis für Verhandlungen mit Unternehmern und öffentlicher Hand aufbereiten.</p>
+            <div class="norms"><span class="norm">NPK</span><span class="norm">Preisspiegel</span></div>
+          </div>
+          <div class="skill">
+            <h3>Nachtragsmanagement</h3>
+            <p>Nachträge auf Grundlage und Höhe prüfen, Mehr- und Minderleistungen abgrenzen, faire Einigungen verhandeln.</p>
+            <div class="norms"><span class="norm">SIA 118</span><span class="norm">Art. 84 ff.</span></div>
+          </div>
+          <div class="skill">
+            <h3>Abrechnung &amp; Projektabschluss</h3>
+            <p>Ausmass und Abrechnung kontrollieren, Schlussabrechnungen freigeben, Projekte vollständig dokumentiert abschliessen.</p>
+            <div class="norms"><span class="norm">SIA 118</span><span class="norm">Ausmass</span></div>
+          </div>
+          <div class="skill">
+            <h3>Bauherrenvertretung Netzbau</h3>
+            <p>FTTH- und Leitungsbauprojekte steuern, Schnittstellen zu Gemeinden, Kanton und Werken koordinieren, Baustellen begleiten.</p>
+            <div class="norms"><span class="norm">FTTH</span><span class="norm">Werkleitungen</span></div>
+          </div>
+          <div class="skill">
+            <h3>Honorare &amp; Planerleistungen</h3>
+            <p>Planerofferten und Honorare plausibilisieren, Leistungsphasen und Aufwände nachvollziehbar abbilden.</p>
+            <div class="norms"><span class="norm">SIA 103</span><span class="norm">SIA 112</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="werdegang">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Werdegang</h2>
+        <span class="ref">Pos. 300</span>
+      </div>
+      <div class="content">
+        <ol class="timeline">
+          <li>
+            <div class="when">heute</div>
+            <div class="what">
+              <h3>Bauherrenvertreter Tiefbau &amp; Access Project Manager</h3>
+              <p>Swisscom AG, Wireline East, Chur. Verantwortung für Tiefbau im Netzausbau: Ausschreibung, Vergabe, Nachträge und Abrechnung.</p>
+            </div>
+          </li>
+          <li>
+            <div class="when">Weiterbildung</div>
+            <div class="what">
+              <h3>HSO KI-Professional</h3>
+              <p>Seither Entwicklung eigener KI-Assistenten und Automatisierungen für die Praxis im Tiefbau.</p>
+            </div>
+          </li>
+          <li>
+            <div class="when">seit 2000</div>
+            <div class="what">
+              <h3>Prüfungsexperte Zeichner/in EFZ Ingenieurbau</h3>
+              <p>Abnahme von Qualifikationsverfahren und Förderung des Berufsnachwuchses.</p>
+            </div>
+          </li>
+          <li>
+            <div class="when">30+ Jahre</div>
+            <div class="what">
+              <h3>Tiefbau und Leitungsbau in der Schweiz</h3>
+              <p>Stationen von der Ausschreibung über die Bauleitung bis zur Schlussabrechnung, mit Schwerpunkt Leitungs- und Netzbau.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="werkzeuge">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Eigene Werkzeuge</h2>
+        <span class="ref">Pos. 400</span>
+      </div>
+      <div class="content">
+        <p>Wo Standardsoftware aufhört, baue ich selbst: in Excel, HTML und Copilot Studio. Jedes Werkzeug entstand aus einem konkreten Problem im Projektalltag.</p>
+        <div class="tools">
+          <article class="tool feature">
+            <span class="tag">Assistent · v4.6 · mehrsprachig</span>
+            <h3>Schachtassistent</h3>
+            <p>Unterstützt bei Planung und Bemessung von Schächten im Netzbau, in mehreren Sprachen verfügbar.</p>
+            <span class="credit">Urheber: Alessandro Cortese</span>
+          </article>
+          <article class="tool">
+            <span class="tag">Offertprüfung</span>
+            <h3>OffertIQ</h3>
+            <p>Strukturierte Prüfung von Unternehmerofferten mit Auffälligkeiten auf einen Blick.</p>
+          </article>
+          <article class="tool">
+            <span class="tag">Kostenschätzung</span>
+            <h3>CO-quit</h3>
+            <p>Schnelle, nachvollziehbare Kostenschätzungen für Tiefbauvorhaben.</p>
+          </article>
+          <article class="tool">
+            <span class="tag">Excel · NPK</span>
+            <h3>NPK_WISP_TB-KoPa</h3>
+            <p>Kostenpositionen nach NPK übersichtlich erfassen und auswerten.</p>
+          </article>
+          <article class="tool">
+            <span class="tag">Honorare</span>
+            <h3>SIA-103 Honorar-Assistent</h3>
+            <p>Plausibilisierung von Ingenieurhonoraren nach SIA 103.</p>
+          </article>
+          <article class="tool">
+            <span class="tag">DE · IT · FR</span>
+            <h3>DLV-Entschädigungsrechner</h3>
+            <p>Dreisprachiger Rechner für Entschädigungen aus Durchleitungsverträgen.</p>
+          </article>
+          <article class="tool">
+            <span class="tag">Projektabschluss</span>
+            <h3>Prüf-Agent Projektabschluss</h3>
+            <p>KI-gestützte Kontrolle der Abschlussunterlagen vor der Freigabe.</p>
+          </article>
+          <article class="tool">
+            <span class="tag">Altlasten</span>
+            <h3>Initialaufwand EBBE</h3>
+            <p>Aufwandschätzung für Projekte mit belasteten Standorten.</p>
+          </article>
+          <article class="tool">
+            <span class="tag">Rohranlagen</span>
+            <h3>Füllrate-Rechner</h3>
+            <p>Berechnet die Belegung von Rohren und Rohrblöcken.</p>
+          </article>
+          <article class="tool">
+            <span class="tag">Verhandlung</span>
+            <h3>Preisanalyse Kanton</h3>
+            <p>Datenbasis für Preisverhandlungen mit der öffentlichen Hand.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="sprachen">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Sprachen</h2>
+        <span class="ref">Pos. 500</span>
+      </div>
+      <div class="content">
+        <div class="langs">
+          <div class="lang"><b>Deutsch</b><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><span class="lvl">Muttersprache</span></div>
+          <div class="lang"><b>Italienisch</b><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><span class="lvl">fliessend</span></div>
+          <div class="lang"><b>Englisch</b><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div><span class="lvl">gut</span></div>
+          <div class="lang"><b>Französisch</b><div class="bar" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div><span class="lvl">Grundkenntnisse</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="kontakt">
+    <div class="wrap">
+      <div class="margin">
+        <h2>Kontakt</h2>
+        <span class="ref">Pos. 600</span>
+      </div>
+      <div class="content">
+        <div class="contact-card">
+          <div>
+            <h3>Projekt im Tiefbau? Reden wir darüber.</h3>
+            <dl class="contact-list">
+              <div><dt>Ort</dt><dd>Chur, Graubünden</dd></div>
+              <div><dt>E-Mail</dt><dd id="mail" class="todo">[E-Mail-Adresse ergänzen]</dd></div>
+              <div><dt>LinkedIn</dt><dd class="todo">[Profil-Link ergänzen]</dd></div>
+            </dl>
+          </div>
+          <div>
+            <button class="btn" id="copy-btn" type="button">E-Mail kopieren</button>
+            <div class="copied" id="copy-msg" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Alessandro Cortese · Chur</span>
+    <span>Querprofil schematisch · Farbcode nach SIA 405 (Telekommunikation)</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    var el = document.getElementById('mail');
+    var msg = document.getElementById('copy-msg');
+    var text = el.textContent.trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        msg.textContent = 'Kopiert';
+      }).catch(function () { selectText(el); msg.textContent = 'Markiert – mit Ctrl+C kopieren'; });
+    } else { selectText(el); msg.textContent = 'Markiert – mit Ctrl+C kopieren'; }
+  });
+  function selectText(el) {
+    var r = document.createRange(); r.selectNodeContents(el);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+</script>

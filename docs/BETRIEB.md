@@ -29,6 +29,30 @@ Vorlage: [`.env.example`](../.env.example). Nie echte Werte ins Repository.
 
 Fehlt beim aktiven Formular eine Angabe, bleibt das Formular automatisch aus.
 
+## Deployment auf GitHub Pages (aktuell gewählt)
+
+Statische Variante ohne Server. Quellcode bleibt im privaten Repository `Tiefbauleitung`, das öffentliche Repository
+`acortese-wq.github.io` enthält nur das Build-Ergebnis. Adresse: https://acortese-wq.github.io
+
+**Einmalig:**
+1. Auf https://github.com/new ein Repository mit dem Namen `acortese-wq.github.io` anlegen: **Public**, ohne README.
+2. Falls die Claude-GitHub-App nur für ausgewählte Repositories freigegeben ist: das neue Repository dort ergänzen.
+3. Unter *Settings → Pages* prüfen, dass als Quelle «Deploy from a branch», Branch `main`, Ordner `/ (root)` gewählt ist.
+
+**Jede Veröffentlichung:**
+```bash
+npm run test:pages     # statischen Build erzeugen und prüfen
+npm run deploy:pages   # Build ins öffentliche Repository pushen
+```
+
+**Unterschiede zu Infomaniak:**
+- Kein Kontaktformular möglich (kein Server). Kontakt über LinkedIn.
+- Keine eigenen HTTP-Header. Die Content Security Policy wirkt über das `meta`-Element jeder Seite;
+  `frame-ancestors`, `X-Frame-Options` und `Permissions-Policy` fehlen. HTTPS und HSTS stellt GitHub.
+- Hosting in den USA (GitHub, Inc.). Die Datenschutzerklärung beschreibt das im Pages-Build automatisch.
+- Interne Platzhalter und Prüfhinweise sind im Pages-Build ausgeblendet (`DEPLOY_ZIEL=github-pages`).
+- Eigene Domain später möglich: Datei `public/CNAME` mit der Domain anlegen und `SITE_URL` setzen.
+
 ## Deployment auf Infomaniak (Node.js)
 
 1. **Domain** bei Infomaniak registrieren oder übertragen. DNS auf das Hosting zeigen lassen.

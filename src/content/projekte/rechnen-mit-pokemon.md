@@ -34,4 +34,4 @@ Die App ist mit Claude Code als HTML-Anwendung entstanden. Eigene Figuren wie Pl
 
 ## Erkenntnisse und Grenzen
 
-Spielmechanik motiviert, darf aber das Rechnen nicht verdrängen. Die App ist ein privates Projekt und nicht öffentlich verfügbar.
+Spielmechanik motiviert, darf aber das Rechnen nicht verdrängen. Die App ist ein privates Projekt.

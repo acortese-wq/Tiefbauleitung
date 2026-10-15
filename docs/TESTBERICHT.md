@@ -10,8 +10,9 @@ Stand: 15. Oktober 2026. Alle Werte stammen aus tatsächlich ausgeführten Läuf
 | Typprüfung | `astro check` (47 Dateien) | 0 Fehler, 0 Warnungen |
 | Produktions-Build | `astro build` + Pagefind | erfolgreich, 17 Seiten + Kontakt (SSR), 7 Seiten im Suchindex |
 | Unit-Tests | Vitest | **28 bestanden** |
-| End-to-End | Playwright, Desktop Chrome + Pixel 7 | **125 bestanden**, 1 übersprungen (Skip-Link nur Desktop) |
-| End-to-End Varianten | Formular aktiv, Entwürfe sichtbar | **7 bestanden** |
+| End-to-End | Playwright, Desktop Chrome + Pixel 7 | **123 bestanden**, 1 übersprungen (Skip-Link nur Desktop) |
+| End-to-End Varianten | Formular aktiv, Entwürfe sichtbar, CSRF | **8 bestanden** |
+| GitHub-Pages-Build | Playwright gegen statischen Dateiserver, Desktop + Mobil: Status, Konsole, axe, keine Platzhalter, Suche, Canonical, robots | **40 bestanden** |
 | Barrierefreiheit | axe-core, Tags WCAG 2.0/2.1/2.2 A und AA, alle 16 Seiten, Desktop und Mobil | 0 Verstösse (nach Korrektur von 2 Kontrastfehlern) |
 | Abhängigkeiten | `npm audit` | 0 bekannte Schwachstellen |
 | Lighthouse Startseite (mobil, simuliert) | Lighthouse 12.8.2 | Leistung 97, Barrierefreiheit 100, Best Practices 100, SEO 100* |
@@ -33,8 +34,8 @@ Core Web Vitals (Lighthouse, simuliertes mobiles Netz, lokaler Server): LCP 2,1 
 - Volltextsuche mit Treffern und leerem Ergebnis
 - 404-Seite mit Status 404
 - Sicherheits-Header, CSP ohne `unsafe-inline`, Pfad-Traversal abgewiesen
-- CSRF: POST mit fremder Herkunft → 403
-- Formular deaktiviert: Hinweis auf LinkedIn, POST → 503
+- Formular deaktiviert: Kontaktseite statisch, POST wird nicht verarbeitet
+- CSRF (Formular aktiv): POST mit fremder Herkunft → 403
 - Formular aktiv: Barrierefreiheit, Fehlermeldungen mit erhaltenen Eingaben, Versandfehler (502) bei nicht
   erreichbarem Mailserver, Honeypot still verworfen, Ratenbegrenzung → 429
 - Entwürfe: sichtbar nur in der Vorschau, mit Hinweis und `noindex`; Kategorie- und Schlagwortseiten

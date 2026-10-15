@@ -1,5 +1,5 @@
 ---
-// Serverseitig gerendert: Formular-Token und Verarbeitung brauchen den Server.
+// Wird in astro.config.mjs (Hook astro:route:setup) überschrieben: vorgerendert, solange das Formular aus ist.
 export const prerender = false;
 
 import Basis from '../layouts/Basis.astro';
@@ -167,10 +167,10 @@ const fehlerIds = Object.keys(fehler);
         ) : zustand !== 'gesendet' && (
           <div class="karte">
             <span class="label">Kontaktformular</span>
-            <h2 class="form-titel">Derzeit über LinkedIn</h2>
+            <h2 class="form-titel">Kontakt über LinkedIn</h2>
             <p>
-              Ein Kontaktformular ist vorbereitet und wird aktiviert, sobald eine geschäftliche E-Mail-Adresse eingerichtet ist.
-              Bis dahin erreichen Sie mich direkt über LinkedIn. So werden auf dieser Webseite keine Kontaktdaten gespeichert.
+              Sie erreichen mich direkt über LinkedIn. Diese Webseite hat bewusst kein Kontaktformular und speichert keine
+              Kontaktdaten.
             </p>
           </div>
         )}

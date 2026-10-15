@@ -34,4 +34,4 @@ Ich habe die App mit Claude Code als HTML-Anwendung entwickelt und im Alltag mit
 
 ## Erkenntnisse und Grenzen
 
-Kinder sind die ehrlichsten Tester: Was nicht sofort verständlich ist, wird nicht benutzt. Die Hochrechnung ist eine Orientierung und keine Prognose mit Garantie. Die App ist ein privates Projekt und nicht öffentlich verfügbar.
+Kinder sind die ehrlichsten Tester: Was nicht sofort verständlich ist, wird nicht benutzt. Die Hochrechnung ist eine Orientierung und keine Prognose mit Garantie. Die App ist ein privates Projekt.

@@ -2,7 +2,7 @@
 
 ## Bekannte Einschränkungen
 
-1. **Domain fehlt.** Platzhalter `www.example.ch`; Indexierung ist bis zur echten Domain gesperrt.
+1. **Eigene Domain fehlt.** Veröffentlichung vorerst unter https://acortese-wq.github.io (GitHub Pages).
 2. **Kontaktformular aus.** Kontakt nur über LinkedIn, bis eine geschäftliche E-Mail und SMTP bestehen.
 3. **Rechtstexte unvollständig.** Postanschrift, Log-Aufbewahrung und Stand fehlen. Juristische Prüfung ausstehend.
 4. **Fachbeiträge sind Entwürfe.** Sie müssen inhaltlich geprüft und freigegeben werden.

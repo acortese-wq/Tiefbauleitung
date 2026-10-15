@@ -29,6 +29,15 @@
 - [ ] ⚠ Datenschutzerklärung durch Fachperson prüfen lassen, Stand-Datum setzen
 - [ ] ⚠ Nebenbeschäftigung und Inhalte mit dem Arbeitgeber abklären (Webseite, Werkzeuge, Fachbeiträge)
 
+## Zusätzlich bei GitHub Pages
+
+- [ ] ⚠ Bekanntgabe in die USA (GitHub, Inc.): in der Datenschutzerklärung beschrieben; Zulässigkeit nach Art. 16 DSG
+  (z. B. Swiss-US Data Privacy Framework, Zertifizierung von GitHub) juristisch prüfen
+- [ ] ⚠ Ohne eigene HTTP-Header fehlen `frame-ancestors`/`X-Frame-Options` (Clickjacking-Schutz). Risiko gering, da
+  keine Formulare oder Aktionen vorhanden
+- [x] Öffentliches Repository enthält nur das Build-Ergebnis, keinen Quellcode und keine frühere Historie
+- [x] Keine internen Platzhalter im öffentlichen Build (automatisch geprüft)
+
 ## Weitere Rechtsfragen
 
 - ⚠ **Markenrecht «Pokémon»:** Der App-Name «Rechnen mit Pokémon» verwendet eine geschützte Marke. Für eine private,

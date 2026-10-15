@@ -56,23 +56,17 @@ test('Kontaktseite verweist auf LinkedIn, solange das Formular deaktiviert ist',
   await page.goto('/kontakt/');
   await expect(page.getByRole('link', { name: /Nachricht auf LinkedIn/ })).toHaveAttribute('href', /linkedin\.com\/in\//);
   await expect(page.locator('form.formular')).toHaveCount(0);
-  await expect(page.getByText('Derzeit über LinkedIn')).toBeVisible();
+  await expect(page.getByText('Kontakt über LinkedIn')).toBeVisible();
 });
 
-test('POST an deaktiviertes Formular wird abgelehnt', async ({ request, baseURL }) => {
+test('Bei deaktiviertem Formular ist die Kontaktseite statisch und verarbeitet keine Eingaben', async ({ request, baseURL }) => {
   const r = await request.post('/kontakt/', {
     form: { name: 'Test', email: 'test@example.ch', anliegen: 'Anderes', nachricht: 'x'.repeat(30), einwilligung: 'ja' },
     headers: { origin: baseURL! },
   });
-  expect(r.status()).toBe(503);
-});
-
-test('POST von fremder Herkunft wird blockiert (CSRF-Schutz)', async ({ request }) => {
-  const r = await request.post('/kontakt/', {
-    form: { name: 'Test' },
-    headers: { origin: 'https://angreifer.example' },
-  });
-  expect(r.status()).toBe(403);
+  const html = await r.text();
+  expect(html).not.toContain('Vielen Dank');
+  expect(html).not.toContain('name="token"');
 });
 
 test('Suche findet Inhalte', async ({ page }) => {

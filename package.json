@@ -19,7 +19,10 @@
     "test:e2e": "playwright test",
     "test:varianten": "PUBLIC_CONTACT_FORM=true SHOW_DRAFTS=true astro build && pagefind --site dist/client && playwright test -c playwright.varianten.config.ts; npm run build:fast",
     "test:alle": "npm run test && npm run build && npm run test:e2e && npm run test:varianten",
-    "audit": "npm audit"
+    "audit": "npm audit",
+    "build:pages": "DEPLOY_ZIEL=github-pages astro build && pagefind --site dist && touch dist/.nojekyll",
+    "deploy:pages": "bash scripts/deploy-github-pages.sh",
+    "test:pages": "npm run build:pages && playwright test -c playwright.pages.config.ts"
   },
   "dependencies": {
     "@astrojs/node": "11.1.6",

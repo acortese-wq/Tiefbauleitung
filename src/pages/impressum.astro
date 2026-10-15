@@ -2,29 +2,32 @@
 import Basis from '../layouts/Basis.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
 import { person } from '../data/person';
+import { offenePunkteZeigen } from '../lib/einstellungen';
 ---
 <Basis title="Impressum" description="Impressum und Anbieterkennzeichnung der persönlichen Webseite von Alessandro Cortese.">
   <Seitenkopf titel="Impressum" krumen={[{ name: 'Impressum' }]} />
   <section class="abschnitt recht">
     <div class="wrap prosa">
-      <p class="hinweis">
-        <strong>Offene Angaben:</strong> Die vollständige Postanschrift fehlt noch. Ob für diese persönliche Webseite eine
-        Impressumspflicht besteht, hängt vom Angebot ab (zum Beispiel bei kommerziellen Dienstleistungen gemäss Art. 3 Abs. 1
-        lit. s UWG). Bitte vor der Veröffentlichung rechtlich klären.
-      </p>
+      {offenePunkteZeigen && (
+        <p class="hinweis">
+          <strong>Offene Angaben:</strong> Die vollständige Postanschrift fehlt noch. Ob für diese persönliche Webseite eine
+          Impressumspflicht besteht, hängt vom Angebot ab (zum Beispiel bei kommerziellen Dienstleistungen gemäss Art. 3 Abs. 1
+          lit. s UWG). Bitte vor der Veröffentlichung rechtlich klären.
+        </p>
+      )}
 
       <h2>Verantwortlich für den Inhalt</h2>
       <p>
         {person.name}<br />
-        <em class="offen">Strasse und Hausnummer ergänzen</em><br />
-        <em class="offen">PLZ</em> {person.ort}<br />
+        {offenePunkteZeigen && <><em class="offen">Strasse und Hausnummer ergänzen</em><br /><em class="offen">PLZ</em> </>}
+        {person.ort}, {person.region}<br />
         Schweiz
       </p>
 
       <h2>Kontakt</h2>
       <p>
-        Über LinkedIn: <a href={person.linkedin} rel="noopener" target="_blank">{person.linkedinLabel}</a><br />
-        <em class="offen">Geschäftliche E-Mail-Adresse ergänzen, falls erforderlich</em>
+        Über LinkedIn: <a href={person.linkedin} rel="noopener" target="_blank">{person.linkedinLabel}</a>
+        {offenePunkteZeigen && <><br /><em class="offen">Geschäftliche E-Mail-Adresse ergänzen, falls erforderlich</em></>}
       </p>
 
       <h2>Hinweis zum Arbeitgeber</h2>

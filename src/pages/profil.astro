@@ -3,6 +3,7 @@ import Basis from '../layouts/Basis.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
 import { person, werdegang, ausbildung, weiterbildung, sprachen, nebenamt, zeugnisse } from '../data/person';
 import { personJsonLd, breadcrumbJsonLd } from '../lib/seo';
+import { offenePunkteZeigen } from '../lib/einstellungen';
 
 const site = Astro.site!;
 const werte = [
@@ -118,7 +119,7 @@ const werte = [
           <h3 class="liste-titel">Weiterbildung</h3>
           <dl class="tabelle">
             {weiterbildung.map((w) => (
-              <div><dt>{w.offen ? <em class="offen">Jahr offen</em> : w.zeit}</dt><dd>{w.titel}</dd></div>
+              <div><dt>{w.offen ? (offenePunkteZeigen ? <em class="offen">Jahr offen</em> : 'kürzlich') : w.zeit}</dt><dd>{w.titel}</dd></div>
             ))}
           </dl>
         </div>

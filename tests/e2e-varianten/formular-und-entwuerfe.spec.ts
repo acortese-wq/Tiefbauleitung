@@ -50,6 +50,11 @@ test('Ausgefülltes Honeypot-Feld wird still verworfen', async ({ request, baseU
   expect(await r.text()).toContain('Vielen Dank');
 });
 
+test('POST von fremder Herkunft wird blockiert (CSRF-Schutz)', async ({ request }) => {
+  const r = await request.post('/kontakt/', { form: { name: 'Test' }, headers: { origin: 'https://angreifer.example' } });
+  expect(r.status()).toBe(403);
+});
+
 test('Ratenbegrenzung greift nach fünf Absendungen', async ({ request, baseURL }) => {
   let letzter = 0;
   for (let i = 0; i < 6; i++) {

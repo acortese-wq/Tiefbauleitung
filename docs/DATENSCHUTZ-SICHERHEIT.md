@@ -35,7 +35,7 @@
   (z. B. Swiss-US Data Privacy Framework, Zertifizierung von GitHub) juristisch prüfen
 - [ ] ⚠ Ohne eigene HTTP-Header fehlen `frame-ancestors`/`X-Frame-Options` (Clickjacking-Schutz). Risiko gering, da
   keine Formulare oder Aktionen vorhanden
-- [ ] ⚠ Bei öffentlichem Repository ist die ganze Git-Historie sichtbar, inkl. früherer Version mit privater E-Mail (Commit `96dc315`). Vor dem Umstellen bereinigen oder bewusst akzeptieren
+- [x] Git-Historie bereinigt (15.10.2026): keine private E-Mail-Adresse mehr in Inhalt oder Autor-Angaben
 - [x] Keine internen Platzhalter im öffentlichen Build (automatisch geprüft)
 
 ## Weitere Rechtsfragen

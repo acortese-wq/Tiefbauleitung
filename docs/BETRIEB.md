@@ -55,10 +55,10 @@ wenn alles grün ist. Manuell: *Actions → GitHub Pages → Run workflow*.
 - Interne Platzhalter und Prüfhinweise sind im Pages-Build ausgeblendet.
 - Eigene Domain später: `public/CNAME` anlegen, `SITE_URL` setzen und `BASE_PATH=/` im Workflow ergänzen.
 
-**Git-Historie vor dem Veröffentlichen:** Ältere Commits enthalten die frühere Einseiten-Version mit Porträt und in
-einem Stand (Commit `96dc315`) eine private E-Mail-Adresse. Bei einem öffentlichen Repository ist die ganze Historie
-sichtbar. Wer das vermeiden will, bereinigt die Historie vorher (z. B. mit `git filter-repo`) oder startet ein neues
-Repository ohne Historie.
+**Git-Historie:** Am 15.10.2026 bereinigt. Die private E-Mail-Adresse wurde aus allen Commits (Inhalt und
+Autor-Angaben) entfernt; der erste Commit trägt jetzt die GitHub-Noreply-Adresse. Die Historie enthält weiterhin die
+frühere Einseiten-Version mit Porträt. Alte Commit-Kennungen können bei GitHub noch eine Zeit lang direkt abrufbar
+sein; für eine sofortige vollständige Entfernung ist der GitHub-Support zuständig.
 
 ## Deployment auf Infomaniak (Node.js)
 

@@ -14,8 +14,7 @@ npm run dev            # Entwicklungsserver auf http://localhost:4321
 npm run admin          # Entwicklungsserver mit Admin-Oberfläche unter /keystatic
 npm run build          # Typprüfung, Produktions-Build, Suchindex
 npm start              # Produktionsserver (nach dem Build), Port über PORT
-npm run build:pages    # statischer Build für GitHub Pages (Ordner dist/)
-npm run deploy:pages   # nach acortese-wq.github.io veröffentlichen
+npm run build:pages    # statischer Build für GitHub Pages (Ordner dist/, Unterordner /Tiefbauleitung)
 ```
 
 ## Tests
@@ -27,6 +26,11 @@ npm run test:varianten # Kontaktformular aktiv und Entwurfsvorschau
 npm run test:pages     # statischer GitHub-Pages-Build
 npm run test:alle      # alles nacheinander (Server-Variante)
 ```
+
+## Veröffentlichung
+
+GitHub Pages über `.github/workflows/pages.yml` bei jedem Push auf `main`:
+https://acortese-wq.github.io/Tiefbauleitung/ (Einrichtung siehe docs/BETRIEB.md).
 
 ## Projektstruktur
 

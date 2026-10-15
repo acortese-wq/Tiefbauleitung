@@ -31,27 +31,34 @@ Fehlt beim aktiven Formular eine Angabe, bleibt das Formular automatisch aus.
 
 ## Deployment auf GitHub Pages (aktuell gewählt)
 
-Statische Variante ohne Server. Quellcode bleibt im privaten Repository `Tiefbauleitung`, das öffentliche Repository
-`acortese-wq.github.io` enthält nur das Build-Ergebnis. Adresse: https://acortese-wq.github.io
+Statische Variante ohne Server, direkt aus diesem Repository. Adresse:
+**https://acortese-wq.github.io/Tiefbauleitung/**
 
-**Einmalig:**
-1. Auf https://github.com/new ein Repository mit dem Namen `acortese-wq.github.io` anlegen: **Public**, ohne README.
-2. Falls die Claude-GitHub-App nur für ausgewählte Repositories freigegeben ist: das neue Repository dort ergänzen.
-3. Unter *Settings → Pages* prüfen, dass als Quelle «Deploy from a branch», Branch `main`, Ordner `/ (root)` gewählt ist.
+**Einmalig in GitHub einstellen:**
+1. GitHub Pages braucht ein **öffentliches Repository** (oder GitHub Pro für private Repositories):
+   *Settings → General → Danger Zone → Change visibility*. Vorher die Git-Historie prüfen (siehe unten).
+2. *Settings → Pages → Build and deployment → Source:* **GitHub Actions**.
 
-**Jede Veröffentlichung:**
-```bash
-npm run test:pages     # statischen Build erzeugen und prüfen
-npm run deploy:pages   # Build ins öffentliche Repository pushen
-```
+**Danach automatisch:** Jeder Push auf `main` startet `.github/workflows/pages.yml`. Der Workflow prüft
+Abhängigkeiten, Typen, Unit-Tests und den statischen Build im Unterordner (Playwright) und veröffentlicht nur,
+wenn alles grün ist. Manuell: *Actions → GitHub Pages → Run workflow*.
 
-**Unterschiede zu Infomaniak:**
-- Kein Kontaktformular möglich (kein Server). Kontakt über LinkedIn.
+**Lokal prüfen:** `npm run test:pages`
+
+**Technische Besonderheiten:**
+- Unterordner `/Tiefbauleitung`: Astro setzt `base`, eine Build-Erweiterung in `astro.config.mjs` ergänzt den
+  Unterordner in allen internen Links, Sitemap, Canonical- und Open-Graph-Adressen. Die Suche erhält `baseUrl`.
+- Kein Kontaktformular (kein Server). Kontakt über LinkedIn.
 - Keine eigenen HTTP-Header. Die Content Security Policy wirkt über das `meta`-Element jeder Seite;
   `frame-ancestors`, `X-Frame-Options` und `Permissions-Policy` fehlen. HTTPS und HSTS stellt GitHub.
 - Hosting in den USA (GitHub, Inc.). Die Datenschutzerklärung beschreibt das im Pages-Build automatisch.
-- Interne Platzhalter und Prüfhinweise sind im Pages-Build ausgeblendet (`DEPLOY_ZIEL=github-pages`).
-- Eigene Domain später möglich: Datei `public/CNAME` mit der Domain anlegen und `SITE_URL` setzen.
+- Interne Platzhalter und Prüfhinweise sind im Pages-Build ausgeblendet.
+- Eigene Domain später: `public/CNAME` anlegen, `SITE_URL` setzen und `BASE_PATH=/` im Workflow ergänzen.
+
+**Git-Historie vor dem Veröffentlichen:** Ältere Commits enthalten die frühere Einseiten-Version mit Porträt und in
+einem Stand (Commit `96dc315`) eine private E-Mail-Adresse. Bei einem öffentlichen Repository ist die ganze Historie
+sichtbar. Wer das vermeiden will, bereinigt die Historie vorher (z. B. mit `git filter-repo`) oder startet ein neues
+Repository ohne Historie.
 
 ## Deployment auf Infomaniak (Node.js)
 

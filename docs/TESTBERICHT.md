@@ -12,7 +12,7 @@ Stand: 15. Oktober 2026. Alle Werte stammen aus tatsächlich ausgeführten Läuf
 | Unit-Tests | Vitest | **28 bestanden** |
 | End-to-End | Playwright, Desktop Chrome + Pixel 7 | **123 bestanden**, 1 übersprungen (Skip-Link nur Desktop) |
 | End-to-End Varianten | Formular aktiv, Entwürfe sichtbar, CSRF | **8 bestanden** |
-| GitHub-Pages-Build | Playwright gegen statischen Dateiserver, Desktop + Mobil: Status, Konsole, axe, keine Platzhalter, Suche, Canonical, robots | **40 bestanden** |
+| GitHub-Pages-Build | Playwright gegen statischen Dateiserver im Unterordner /Tiefbauleitung/, Desktop + Mobil: Status, Konsole, axe, keine Platzhalter, alle Links im Unterordner, Suche, Navigation, Canonical, Sitemap, robots | **42 bestanden** |
 | Barrierefreiheit | axe-core, Tags WCAG 2.0/2.1/2.2 A und AA, alle 16 Seiten, Desktop und Mobil | 0 Verstösse (nach Korrektur von 2 Kontrastfehlern) |
 | Abhängigkeiten | `npm audit` | 0 bekannte Schwachstellen |
 | Lighthouse Startseite (mobil, simuliert) | Lighthouse 12.8.2 | Leistung 97, Barrierefreiheit 100, Best Practices 100, SEO 100* |

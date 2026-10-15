@@ -21,7 +21,6 @@
     "test:alle": "npm run test && npm run build && npm run test:e2e && npm run test:varianten",
     "audit": "npm audit",
     "build:pages": "DEPLOY_ZIEL=github-pages astro build && pagefind --site dist && touch dist/.nojekyll",
-    "deploy:pages": "bash scripts/deploy-github-pages.sh",
     "test:pages": "npm run build:pages && playwright test -c playwright.pages.config.ts"
   },
   "dependencies": {

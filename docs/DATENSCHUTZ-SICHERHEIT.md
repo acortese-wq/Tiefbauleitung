@@ -35,7 +35,7 @@
   (z. B. Swiss-US Data Privacy Framework, Zertifizierung von GitHub) juristisch prüfen
 - [ ] ⚠ Ohne eigene HTTP-Header fehlen `frame-ancestors`/`X-Frame-Options` (Clickjacking-Schutz). Risiko gering, da
   keine Formulare oder Aktionen vorhanden
-- [x] Öffentliches Repository enthält nur das Build-Ergebnis, keinen Quellcode und keine frühere Historie
+- [ ] ⚠ Bei öffentlichem Repository ist die ganze Git-Historie sichtbar, inkl. früherer Version mit privater E-Mail (Commit `96dc315`). Vor dem Umstellen bereinigen oder bewusst akzeptieren
 - [x] Keine internen Platzhalter im öffentlichen Build (automatisch geprüft)
 
 ## Weitere Rechtsfragen

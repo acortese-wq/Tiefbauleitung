@@ -21,7 +21,11 @@ import Seitenkopf from '../components/Seitenkopf.astro';
 
 <script>
   type PagefindErgebnis = { data: () => Promise<{ url: string; excerpt: string; meta: { title?: string } }> };
-  type Pagefind = { search: (q: string) => Promise<{ results: PagefindErgebnis[] }>; init?: () => Promise<void> };
+  type Pagefind = {
+    search: (q: string) => Promise<{ results: PagefindErgebnis[] }>;
+    init?: () => Promise<void>;
+    options?: (o: { baseUrl: string }) => Promise<void>;
+  };
 
   const form = document.querySelector<HTMLFormElement>('[data-suche]');
   const feld = document.querySelector<HTMLInputElement>('#suchbegriff');
@@ -32,8 +36,10 @@ import Seitenkopf from '../components/Seitenkopf.astro';
   async function laden(): Promise<Pagefind | null> {
     if (pagefind) return pagefind;
     try {
-      const pfad = '/pagefind/pagefind.js';
+      const basis = import.meta.env.BASE_URL.replace(/\/$/, '');
+      const pfad = `${basis}/pagefind/pagefind.js`;
       pagefind = (await import(/* @vite-ignore */ pfad)) as Pagefind;
+      await pagefind.options?.({ baseUrl: `${basis}/` });
       await pagefind.init?.();
       return pagefind;
     } catch {

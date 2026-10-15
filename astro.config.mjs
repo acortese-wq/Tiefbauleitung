@@ -2,6 +2,9 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Die Admin-Oberfläche (Keystatic) läuft nur lokal mit `npm run admin`.
 // Im Produktions-Build ist sie nicht enthalten und damit nicht angreifbar.
@@ -10,6 +13,44 @@ const enableAdmin = process.env.KEYSTATIC === 'true';
 const githubPages = process.env.DEPLOY_ZIEL === 'github-pages';
 const formular = process.env.PUBLIC_CONTACT_FORM === 'true' && !githubPages;
 const site = process.env.SITE_URL || (githubPages ? 'https://acortese-wq.github.io' : 'https://www.example.ch');
+// GitHub Pages aus dem Repository «Tiefbauleitung» liegt im Unterordner /Tiefbauleitung.
+const base = githubPages ? process.env.BASE_PATH || '/Tiefbauleitung' : undefined;
+
+/**
+ * Ergänzt im fertigen Build den Unterordner in allen internen Links und absoluten Adressen.
+ * So bleiben Komponenten und Markdown-Inhalte einfach (Links beginnen mit «/»).
+ * @param {string} unterordner z. B. «/Tiefbauleitung»
+ * @param {string} seite z. B. «https://acortese-wq.github.io»
+ * @returns {import('astro').AstroIntegration}
+ */
+function unterordnerLinks(unterordner, seite) {
+  const ohne = unterordner.replace(/^\//, '');
+  const intern = new RegExp(`((?:href|src|srcset|action)=")/(?!/|${ohne}/)`, 'g');
+  const absolut = new RegExp(`${seite.replace(/[.]/g, '\\.')}/(?!${ohne}/)`, 'g');
+  /**
+   * @param {string} ordner
+   * @returns {AsyncGenerator<string>}
+   */
+  async function* dateien(ordner) {
+    for (const e of await readdir(ordner, { withFileTypes: true })) {
+      const pfad = join(ordner, e.name);
+      if (e.isDirectory()) yield* dateien(pfad);
+      else if (/\.(html|xml|txt)$/.test(e.name)) yield pfad;
+    }
+  }
+  return {
+    name: 'unterordner-links',
+    hooks: {
+      'astro:build:done': async ({ dir }) => {
+        for await (const datei of dateien(fileURLToPath(dir))) {
+          const alt = await readFile(datei, 'utf8');
+          const neu = alt.replace(intern, `$1${unterordner}/`).replace(absolut, `${seite}${unterordner}/`);
+          if (neu !== alt) await writeFile(datei, neu);
+        }
+      },
+    },
+  };
+}
 
 /** @type {import('astro').AstroIntegration[]} */
 const integrations = [
@@ -29,6 +70,8 @@ const integrations = [
   }),
 ];
 
+if (base) integrations.push(unterordnerLinks(base, site));
+
 if (enableAdmin) {
   const react = (await import('@astrojs/react')).default;
   const keystatic = (await import('@keystatic/astro')).default;
@@ -38,6 +81,7 @@ if (enableAdmin) {
 export default defineConfig({
   // Platzhalter, bis die Domain feststeht. Über SITE_URL beim Build setzen.
   site,
+  base,
   output: 'static',
   adapter: githubPages ? undefined : node({ mode: 'standalone', bodySizeLimit: 32 * 1024 }),
   trailingSlash: 'ignore',

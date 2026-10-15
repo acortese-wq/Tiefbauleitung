@@ -1,0 +1,177 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { person, werdegang, ausbildung, weiterbildung, sprachen, nebenamt, zeugnisse } from '../data/person';
+import { personJsonLd, breadcrumbJsonLd } from '../lib/seo';
+
+const site = Astro.site!;
+const werte = [
+  { titel: 'Belegen statt behaupten', text: 'Ob Nachtrag, Abrechnung oder KI-Ergebnis: Jede Aussage braucht eine nachvollziehbare Grundlage.' },
+  { titel: 'Beide Seiten verstehen', text: 'Ich habe im Ingenieurbüro, beim Kanton und beim Netzbetreiber gearbeitet. Das hilft, Interessen auszugleichen.' },
+  { titel: 'Einfach vor gross', text: 'Ein Werkzeug, das täglich genutzt wird, bringt mehr als eine grosse Lösung, die niemand öffnet.' },
+  { titel: 'Wissen weitergeben', text: 'Seit 2000 Prüfungsexperte, früher Lehrlingsbetreuer: Nachwuchs und Team sollen von Erfahrung profitieren.' },
+];
+---
+<Basis
+  title="Profil"
+  description="Werdegang, Arbeitsweise und Weiterbildungen von Alessandro Cortese: über 30 Jahre Tiefbau, Bauherrenvertretung und KI-Agenten."
+  typ="profile"
+  jsonLd={[personJsonLd(site), breadcrumbJsonLd([{ name: 'Start', url: site.href }, { name: 'Profil', url: new URL('/profil/', site).href }])]}
+>
+  <Seitenkopf
+    titel="Profil"
+    pos="Pos. 100"
+    lead="Über 30 Jahre Tiefbau aus drei Blickwinkeln: Ingenieurbüro, Kanton und Netzbetreiber. Heute verbinde ich diese Erfahrung mit digitalen Werkzeugen und KI-Agenten."
+    krumen={[{ name: 'Profil' }]}
+  />
+
+  <section class="abschnitt">
+    <div class="wrap profil-intro">
+      <picture>
+        <source srcset="/bilder/portrait.webp" type="image/webp" />
+        <img src="/bilder/portrait.jpg" alt="Porträt von Alessandro Cortese" width="320" height="320" decoding="async" />
+      </picture>
+      <div class="prosa">
+        <p>
+          Ich bin {person.rolle} bei der {person.arbeitgeber} und lebe in {person.ort}. Mein Weg begann 1994 mit der
+          Lehre als Tiefbauzeichner. Es folgten die Projektierung von Hauptstrassen beim Tiefbauamt Graubünden,
+          Projekt- und Bauleitungen im Strassen-, Bahn- und Siedlungswasserbau bei zwei Ingenieurbüros und ab 2013
+          wieder der Kanton: zuerst als Bauleiter, ab 2021 als Leiter Projektierung und Bau im Bezirk 1 Chur.
+        </p>
+        <p>
+          Seit April 2025 begleite ich FTTH- und Netzbauprojekte als Bauherrenvertreter, von der Ausschreibung bis
+          zur Bauabnahme. Mein Anspruch: Es wird gebaut, was vereinbart wurde, in Qualität, Kosten und Terminen.
+        </p>
+        <p>
+          Parallel habe ich mich zum KI-Professional an der HSO weitergebildet, mit Schwerpunkt KI-Agenten. Seither
+          entwickle ich Werkzeuge, die Prüf- und Rechenarbeit im Tiefbau beschleunigen, und privat Lern-Apps für meine Kinder.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt band-hell" aria-labelledby="werte-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Arbeitsweise</span>
+        <h2 id="werte-titel">Wie ich arbeite</h2>
+      </div>
+      <div class="raster-4">
+        {werte.map((w) => (
+          <article class="karte"><h3>{w.titel}</h3><p>{w.text}</p></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt" aria-labelledby="werdegang-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Werdegang</span>
+        <h2 id="werdegang-titel">Berufliche Stationen</h2>
+        <p>Angaben gemäss Lebenslauf, Arbeitszeugnissen und LinkedIn-Profil.</p>
+      </div>
+      <ol class="zeitachse">
+        {werdegang.map((s) => (
+          <li>
+            <span class="zeit">{s.von} – {s.bis}</span>
+            <div>
+              <h3>{s.titel}</h3>
+              <p class="org">{s.organisation}</p>
+              <ul>{s.punkte.map((p) => <li>{p}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+        <li>
+          <span class="zeit">1994 – 1999</span>
+          <div><h3>Lehre als Tiefbauzeichner</h3><p class="org">Anschliessend Technische Berufsmatura</p></div>
+        </li>
+      </ol>
+      <aside class="karte nebenamt">
+        <span class="label label-eis">Nebenamtlich seit {nebenamt.seit}</span>
+        <h3>{nebenamt.titel}</h3>
+        <p>Abnahme von Qualifikationsverfahren und Förderung des Berufsnachwuchses.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="abschnitt band-hell" aria-labelledby="bildung-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Aus- und Weiterbildung</span>
+        <h2 id="bildung-titel">Nachweisbare Aus- und Weiterbildungen</h2>
+      </div>
+      <div class="raster-2">
+        <div>
+          <h3 class="liste-titel">Ausbildung</h3>
+          <dl class="tabelle">
+            {ausbildung.map((a) => (
+              <div><dt>{a.zeit}</dt><dd>{a.titel}{a.hinweis && <small>{a.hinweis}</small>}</dd></div>
+            ))}
+          </dl>
+          <h3 class="liste-titel">Sprachen</h3>
+          <dl class="tabelle">
+            {sprachen.map((s) => <div><dt>{s.sprache}</dt><dd>{s.niveau}</dd></div>)}
+          </dl>
+        </div>
+        <div>
+          <h3 class="liste-titel">Weiterbildung</h3>
+          <dl class="tabelle">
+            {weiterbildung.map((w) => (
+              <div><dt>{w.offen ? <em class="offen">Jahr offen</em> : w.zeit}</dt><dd>{w.titel}</dd></div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt" aria-labelledby="zeugnis-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Zeugnisse</span>
+        <h2 id="zeugnis-titel">Wörtliche Auszüge aus Arbeitszeugnissen</h2>
+        <p>Vollständige Zeugnisse auf Anfrage.</p>
+      </div>
+      <div class="raster-2">
+        {zeugnisse.map((z) => (
+          <figure class="karte zeugnis">
+            <blockquote><p>«{z.text}»</p></blockquote>
+            <figcaption>{z.quelle} · {z.art}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .profil-intro { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .profil-intro img { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--linie-hell); display: block; }
+  .zeitachse { list-style: none; margin: 0; padding: 0 0 0 28px; position: relative; display: grid; gap: 34px; }
+  .zeitachse::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; background: var(--linie-hell); }
+  .zeitachse > li { position: relative; display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 24px; }
+  .zeitachse > li::before { content: ''; position: absolute; left: -28px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--nacht); border: 2px solid var(--eis); }
+  .zeitachse > li:first-child::before { background: var(--eis); }
+  .zeit { font-family: var(--f-mono); font-size: 0.82rem; color: var(--eis); padding-top: 3px; }
+  .zeitachse h3 { font-size: 1.5rem; }
+  .org { color: var(--text-ruhig); font-weight: 600; margin-top: 4px; }
+  .zeitachse ul { margin: 10px 0 0; padding-left: 1.1em; color: var(--text-ruhig); display: grid; gap: 4px; max-width: 70ch; }
+  .zeitachse ul li::marker { color: var(--eis); }
+  .nebenamt { margin-top: 36px; max-width: 620px; }
+  .liste-titel { font-size: 1.4rem; margin: 0 0 10px; }
+  .liste-titel:not(:first-child) { margin-top: 28px; }
+  .tabelle { margin: 0; border-top: 1px solid var(--papier-linie); }
+  .tabelle div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--papier-linie); }
+  .tabelle dt { font-family: var(--f-mono); font-size: 0.8rem; color: var(--papier-akzent); padding-top: 2px; }
+  .tabelle dd { margin: 0; }
+  .tabelle small { display: block; color: var(--papier-ruhig); font-size: 0.9rem; }
+  .zeugnis { margin: 0; }
+  .zeugnis blockquote { margin: 0; font-size: 1.12rem; line-height: 1.5; }
+  .zeugnis figcaption { font-family: var(--f-mono); font-size: 0.76rem; color: var(--text-ruhig); }
+  @media (max-width: 760px) {
+    .profil-intro { grid-template-columns: 1fr; }
+    .profil-intro picture { max-width: 180px; }
+    .zeitachse > li { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

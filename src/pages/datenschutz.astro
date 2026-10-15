@@ -1,0 +1,82 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { person } from '../data/person';
+const formularAktiv = import.meta.env.PUBLIC_CONTACT_FORM === 'true';
+---
+<Basis title="Datenschutzerklärung" description="Datenschutzerklärung der persönlichen Webseite von Alessandro Cortese nach dem Schweizer Datenschutzgesetz (DSG).">
+  <Seitenkopf titel="Datenschutz" lead="Welche Daten diese Webseite bearbeitet, wozu und wie lange." krumen={[{ name: 'Datenschutz' }]} />
+  <section class="abschnitt recht">
+    <div class="wrap prosa">
+      <p class="hinweis">
+        <strong>Entwurf, juristisch zu prüfen.</strong> Diese Erklärung beschreibt den technischen Stand der Webseite.
+        Sie wurde nicht von einer Fachperson für Datenschutzrecht geprüft. Offene Punkte sind markiert.
+      </p>
+
+      <h2>Verantwortliche Person</h2>
+      <p>
+        {person.name}, {person.ort}, Schweiz. Kontakt über <a href={person.linkedin} rel="noopener" target="_blank">LinkedIn</a>.
+        <em class="offen">Postanschrift und E-Mail für Datenschutzanfragen ergänzen</em>
+      </p>
+
+      <h2>Grundsatz</h2>
+      <p>
+        Diese Webseite bearbeitet so wenige Personendaten wie möglich. Es gibt keine Benutzerkonten, keine Cookies,
+        keine Analyse- oder Trackingwerkzeuge und keine eingebetteten Inhalte von Drittanbietern. Schriften und Bilder
+        werden vom eigenen Server ausgeliefert.
+      </p>
+
+      <h2>Hosting und Server-Protokolle</h2>
+      <p>
+        Die Webseite wird bei der Infomaniak Network SA (Genf) mit Rechenzentren in der Schweiz betrieben. Beim Aufruf jeder Seite verarbeitet der
+        Server technisch notwendige Angaben wie IP-Adresse, Zeitpunkt, aufgerufene Adresse und Browserkennung. Diese
+        Angaben dienen dem sicheren Betrieb und der Fehlersuche.
+        <em class="offen">Aufbewahrungsdauer der Protokolle gemäss Hostingvertrag prüfen und hier eintragen.</em>
+      </p>
+
+      <h2 id="kontaktformular">Kontaktformular</h2>
+      {formularAktiv ? (
+        <p>
+          Wenn Sie das Kontaktformular nutzen, bearbeite ich Name, E-Mail-Adresse, optional Ihr Unternehmen, das gewählte
+          Anliegen und Ihre Nachricht. Die Angaben werden per E-Mail an mich übermittelt und nur zur Beantwortung Ihrer
+          Anfrage verwendet. Die Webseite speichert sie nicht in einer Datenbank. Zum Schutz vor Missbrauch wird Ihre
+          IP-Adresse bis zu einer Stunde im Arbeitsspeicher gehalten und danach verworfen.
+          <em class="offen">E-Mail-Anbieter, Speicherort und Löschfrist der E-Mails ergänzen.</em>
+        </p>
+      ) : (
+        <p>
+          Das Kontaktformular ist derzeit nicht aktiv. Über die Webseite werden keine Kontaktdaten erhoben. Für die
+          Kontaktaufnahme verweise ich auf LinkedIn.
+        </p>
+      )}
+
+      <h2>Externe Links</h2>
+      <p>
+        Links zu LinkedIn und anderen Webseiten öffnen Angebote Dritter. Erst wenn Sie einem solchen Link folgen,
+        bearbeitet der jeweilige Anbieter Daten nach seinen eigenen Bestimmungen. LinkedIn kann Daten auch ausserhalb der
+        Schweiz bearbeiten.
+      </p>
+
+      <h2>Bekanntgabe ins Ausland</h2>
+      <p>
+        Über diese Webseite selbst werden keine Personendaten ins Ausland bekanntgegeben, solange Hosting und
+        gegebenenfalls E-Mail-Versand in der Schweiz erfolgen. <em class="offen">Nach Wahl des E-Mail-Anbieters bestätigen.</em>
+      </p>
+
+      <h2>Ihre Rechte</h2>
+      <p>
+        Sie haben nach dem Datenschutzgesetz (DSG) insbesondere das Recht auf Auskunft, Berichtigung und Löschung Ihrer
+        Personendaten. Wenden Sie sich dafür an die oben genannte Kontaktmöglichkeit. Zudem können Sie sich an den
+        Eidgenössischen Datenschutz- und Öffentlichkeitsbeauftragten (EDÖB) wenden.
+      </p>
+
+      <h2>Änderungen</h2>
+      <p>Diese Erklärung wird angepasst, wenn sich die Webseite oder die rechtlichen Anforderungen ändern.</p>
+      <p><em class="offen">Stand ergänzen, sobald die Erklärung geprüft ist.</em></p>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .recht { border-top: 0; padding-top: 8px; }
+</style>

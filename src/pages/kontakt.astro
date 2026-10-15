@@ -1,0 +1,216 @@
+---
+// Serverseitig gerendert: Formular-Token und Verarbeitung brauchen den Server.
+export const prerender = false;
+
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { person } from '../data/person';
+import { ANLIEGEN, validiereKontakt, type Validierung } from '../lib/kontakt';
+import { erstelleToken, pruefeToken, istHoneypotGefuellt } from '../lib/spamschutz';
+import { kontaktLimiter } from '../lib/kontakt-server';
+import { leseVersandKonfig, sendeKontakt } from '../lib/versand';
+
+const secret = process.env.CONTACT_SECRET ?? '';
+const versand = leseVersandKonfig(process.env);
+const formularAktiv = import.meta.env.PUBLIC_CONTACT_FORM === 'true' && secret.length >= 32 && versand !== null;
+
+type Zustand = 'neu' | 'gesendet' | 'fehler' | 'gesperrt' | 'deaktiviert' | 'technisch';
+let zustand: Zustand = 'neu';
+let fehler: Extract<Validierung, { ok: false }>['fehler'] = {};
+let werte: Record<string, string> = {};
+
+Astro.response.headers.set('Cache-Control', 'no-store');
+
+if (Astro.request.method === 'POST') {
+  if (!formularAktiv) {
+    zustand = 'deaktiviert';
+    Astro.response.status = 503;
+  } else {
+    const ip = Astro.clientAddress ?? 'unbekannt';
+    const limit = kontaktLimiter.pruefe(ip);
+    const form = await Astro.request.formData().catch(() => new FormData());
+    werte = Object.fromEntries(['name', 'email', 'firma', 'anliegen', 'nachricht'].map((k) => [k, String(form.get(k) ?? '')]));
+
+    if (!limit.erlaubt) {
+      zustand = 'gesperrt';
+      Astro.response.status = 429;
+      Astro.response.headers.set('Retry-After', String(Math.ceil((limit.reset - Date.now()) / 1000)));
+    } else if (istHoneypotGefuellt(form.get('website')) || !pruefeToken(String(form.get('token') ?? ''), secret).ok) {
+      // Bots erhalten dieselbe Antwort wie Menschen, damit sie nichts lernen.
+      zustand = 'gesendet';
+    } else {
+      const v = validiereKontakt(form);
+      if (!v.ok) {
+        zustand = 'fehler';
+        fehler = v.fehler;
+        Astro.response.status = 422;
+      } else {
+        try {
+          await sendeKontakt(versand!, v.daten);
+          zustand = 'gesendet';
+          werte = {};
+        } catch {
+          // Keine Personendaten ins Protokoll schreiben.
+          console.error('Kontaktformular: Versand fehlgeschlagen');
+          zustand = 'technisch';
+          Astro.response.status = 502;
+        }
+      }
+    }
+  }
+}
+
+const token = formularAktiv ? erstelleToken(secret) : '';
+const fehlerIds = Object.keys(fehler);
+---
+<Basis
+  title="Kontakt"
+  description="Kontakt zu Alessandro Cortese für fachlichen Austausch zu Tiefbau, Netzinfrastruktur und dem praktischen Einsatz von KI-Agenten."
+>
+  <Seitenkopf
+    titel="Kontakt"
+    pos="Pos. 600"
+    lead="Für fachlichen Austausch zu Tiefbau, Netzinfrastruktur und KI. Ich antworte persönlich."
+    krumen={[{ name: 'Kontakt' }]}
+  />
+
+  <section class="abschnitt kontakt-abschnitt">
+    <div class="wrap kontakt-raster">
+      <div class="karte kontakt-direkt">
+        <span class="label label-eis">Direkter Kontakt</span>
+        <h2>Am schnellsten über LinkedIn</h2>
+        <p>Schreiben Sie mir eine Nachricht oder senden Sie eine Kontaktanfrage. So sehen Sie auch meinen beruflichen Hintergrund.</p>
+        <a class="btn" href={person.linkedin} rel="noopener me" target="_blank">
+          Nachricht auf LinkedIn <span class="pfeil" aria-hidden="true">→</span><span class="visually-hidden"> (öffnet in neuem Fenster)</span>
+        </a>
+        <p class="kontakt-url">{person.linkedinLabel}</p>
+        <dl class="kontakt-fakten">
+          <div><dt>Ort</dt><dd>{person.ort}, {person.region}</dd></div>
+          <div><dt>Sprachen</dt><dd>Deutsch, Italienisch, Englisch</dd></div>
+          <div><dt>Themen</dt><dd>{ANLIEGEN.slice(0, 4).join(' · ')}</dd></div>
+        </dl>
+      </div>
+
+      <div class="kontakt-formular">
+        {zustand === 'gesendet' && (
+          <div class="meldung meldung-ok" role="status">
+            <h2>Vielen Dank für Ihre Nachricht</h2>
+            <p>Ihre Anfrage ist eingegangen. Ich melde mich in der Regel innert weniger Arbeitstage.</p>
+          </div>
+        )}
+        {zustand === 'gesperrt' && (
+          <div class="meldung meldung-fehler" role="alert">
+            <h2>Zu viele Anfragen</h2>
+            <p>Bitte versuchen Sie es in einigen Minuten erneut oder schreiben Sie mir über LinkedIn.</p>
+          </div>
+        )}
+        {zustand === 'technisch' && (
+          <div class="meldung meldung-fehler" role="alert">
+            <h2>Die Nachricht konnte nicht gesendet werden</h2>
+            <p>Ein technischer Fehler ist aufgetreten. Ihre Eingaben sind unten erhalten. Bitte versuchen Sie es später erneut oder nutzen Sie LinkedIn.</p>
+          </div>
+        )}
+        {zustand === 'fehler' && (
+          <div class="meldung meldung-fehler" role="alert" tabindex="-1" id="fehlerliste">
+            <h2>Bitte prüfen Sie Ihre Angaben</h2>
+            <ul>{fehlerIds.map((f) => <li><a href={`#feld-${f}`}>{fehler[f as keyof typeof fehler]}</a></li>)}</ul>
+          </div>
+        )}
+
+        {formularAktiv && zustand !== 'gesendet' ? (
+          <form method="post" action="/kontakt/" novalidate class="formular">
+            <h2 class="form-titel">Kontaktformular</h2>
+            <input type="hidden" name="token" value={token} />
+            <div class="honig" aria-hidden="true">
+              <label for="feld-website">Webseite (bitte leer lassen)</label>
+              <input id="feld-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <div class="feld">
+              <label for="feld-anliegen">Anliegen <span aria-hidden="true">*</span></label>
+              <select id="feld-anliegen" name="anliegen" required aria-invalid={fehler.anliegen ? 'true' : undefined} aria-describedby={fehler.anliegen ? 'f-anliegen' : undefined}>
+                <option value="">Bitte wählen</option>
+                {ANLIEGEN.map((a) => <option value={a} selected={werte.anliegen === a}>{a}</option>)}
+              </select>
+              {fehler.anliegen && <p class="feld-fehler" id="f-anliegen">{fehler.anliegen}</p>}
+            </div>
+            <div class="feld">
+              <label for="feld-name">Name <span aria-hidden="true">*</span></label>
+              <input id="feld-name" name="name" type="text" required maxlength="100" autocomplete="name" value={werte.name} aria-invalid={fehler.name ? 'true' : undefined} aria-describedby={fehler.name ? 'f-name' : undefined} />
+              {fehler.name && <p class="feld-fehler" id="f-name">{fehler.name}</p>}
+            </div>
+            <div class="feld">
+              <label for="feld-email">Geschäftliche E-Mail <span aria-hidden="true">*</span></label>
+              <input id="feld-email" name="email" type="email" required maxlength="200" autocomplete="email" value={werte.email} aria-invalid={fehler.email ? 'true' : undefined} aria-describedby={fehler.email ? 'f-email' : undefined} />
+              {fehler.email && <p class="feld-fehler" id="f-email">{fehler.email}</p>}
+            </div>
+            <div class="feld">
+              <label for="feld-firma">Unternehmen <span class="optional">(optional)</span></label>
+              <input id="feld-firma" name="firma" type="text" maxlength="120" autocomplete="organization" value={werte.firma} aria-invalid={fehler.firma ? 'true' : undefined} />
+              {fehler.firma && <p class="feld-fehler">{fehler.firma}</p>}
+            </div>
+            <div class="feld">
+              <label for="feld-nachricht">Nachricht <span aria-hidden="true">*</span></label>
+              <textarea id="feld-nachricht" name="nachricht" required minlength="20" maxlength="4000" rows="7" aria-invalid={fehler.nachricht ? 'true' : undefined} aria-describedby={fehler.nachricht ? 'f-nachricht' : undefined}>{werte.nachricht}</textarea>
+              {fehler.nachricht && <p class="feld-fehler" id="f-nachricht">{fehler.nachricht}</p>}
+            </div>
+            <div class="feld feld-check">
+              <input id="feld-einwilligung" name="einwilligung" type="checkbox" value="ja" required aria-invalid={fehler.einwilligung ? 'true' : undefined} />
+              <label for="feld-einwilligung">
+                Ich habe die <a href="/datenschutz/#kontaktformular">Datenschutzhinweise</a> gelesen. Meine Angaben werden nur zur Beantwortung der Anfrage verwendet.
+              </label>
+              {fehler.einwilligung && <p class="feld-fehler">{fehler.einwilligung}</p>}
+            </div>
+            <button class="btn" type="submit">Nachricht senden</button>
+            <p class="pflicht">* Pflichtfeld</p>
+          </form>
+        ) : zustand !== 'gesendet' && (
+          <div class="karte">
+            <span class="label">Kontaktformular</span>
+            <h2 class="form-titel">Derzeit über LinkedIn</h2>
+            <p>
+              Ein Kontaktformular ist vorbereitet und wird aktiviert, sobald eine geschäftliche E-Mail-Adresse eingerichtet ist.
+              Bis dahin erreichen Sie mich direkt über LinkedIn. So werden auf dieser Webseite keine Kontaktdaten gespeichert.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .kontakt-abschnitt { border-top: 0; padding-top: 8px; }
+  .kontakt-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 24px; align-items: start; }
+  .kontakt-direkt h2, .form-titel { font-size: var(--s-2); }
+  .kontakt-url { font-family: var(--f-mono); font-size: 0.78rem; color: var(--text-ruhig); overflow-wrap: anywhere; }
+  .kontakt-fakten { margin: 8px 0 0; border-top: 1px solid var(--linie); }
+  .kontakt-fakten div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--linie); }
+  .kontakt-fakten dt { font-family: var(--f-mono); font-size: 0.75rem; color: var(--text-ruhig); padding-top: 2px; }
+  .kontakt-fakten dd { margin: 0; }
+  .formular { display: grid; gap: 18px; padding: 24px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); }
+  .feld { display: grid; gap: 6px; }
+  .feld label { font-weight: 600; }
+  .optional { font-weight: 400; color: var(--text-ruhig); }
+  .feld input, .feld select, .feld textarea {
+    font: inherit; color: var(--text); background: var(--nacht); border: 1px solid var(--linie-hell);
+    border-radius: var(--radius); padding: 10px 12px; min-height: 46px; width: 100%;
+  }
+  .feld textarea { resize: vertical; }
+  .feld input:focus, .feld select:focus, .feld textarea:focus { border-color: var(--eis); outline: 2px solid var(--eis); outline-offset: 1px; }
+  .feld [aria-invalid='true'] { border-color: #ff9b8f; }
+  .feld-fehler { color: #ffb3a9; font-size: 0.92rem; }
+  .feld-check { grid-template-columns: 22px minmax(0, 1fr); align-items: start; column-gap: 10px; }
+  .feld-check input { width: 20px; height: 20px; min-height: 0; margin-top: 3px; accent-color: var(--eis); }
+  .feld-check label { font-weight: 400; color: var(--text-ruhig); }
+  .feld-check .feld-fehler { grid-column: 2; }
+  .honig { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .pflicht { font-size: 0.85rem; color: var(--text-ruhig); }
+  .meldung { padding: 18px 20px; border-radius: var(--radius); margin-bottom: 18px; display: grid; gap: 8px; }
+  .meldung h2 { font-size: 1.4rem; }
+  .meldung-ok { border: 1px solid #8fe0a8; background: rgb(143 224 168 / 0.08); }
+  .meldung-fehler { border: 1px solid #ff9b8f; background: rgb(255 155 143 / 0.08); }
+  .meldung ul { margin: 0; padding-left: 1.1em; }
+  .meldung a { color: #ffd0c9; }
+  @media (max-width: 860px) { .kontakt-raster { grid-template-columns: 1fr; } }
+</style>

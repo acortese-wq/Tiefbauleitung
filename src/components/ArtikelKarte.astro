@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDatum, lesezeit } from '../lib/content';
+interface Props { artikel: CollectionEntry<'artikel'>; }
+const { artikel } = Astro.props;
+const d = artikel.data;
+---
+<a class="karte artikel-karte" href={`/wissen/${artikel.id}/`}>
+  <span class="label label-eis">{d.kategorie}</span>
+  <h3>{d.title}</h3>
+  <p>{d.description}</p>
+  <span class="meta">
+    <time datetime={d.datum.toISOString().slice(0, 10)}>{formatDatum(d.datum)}</time> · {lesezeit(artikel.body ?? '')} Min. Lesezeit
+  </span>
+  {d.status === 'entwurf' && <span class="badge badge-entwurf">Entwurf</span>}
+</a>

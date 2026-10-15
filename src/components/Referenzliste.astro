@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import { fachgebietLabels } from '../data/person';
+
+interface Props { filter?: string; kompakt?: boolean; }
+const { filter, kompakt = false } = Astro.props;
+
+const alle = (await getCollection('referenzen')).map((r) => r.data);
+const filterWerte = filter ? filter.split(',').map((f) => f.trim()) : [];
+const liste = filterWerte.length ? alle.filter((r) => r.fachgebiete.some((g) => filterWerte.includes(g))) : alle;
+const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser'].filter((g) => liste.some((r) => r.fachgebiete.includes(g as never)));
+---
+<div class="referenzen" data-referenzen>
+  {!kompakt && (
+    <div class="ref-filter" role="group" aria-label="Referenzprojekte nach Fachgebiet filtern" hidden data-filterleiste>
+      <button type="button" aria-pressed="true" data-wert="alle">Alle <span>{liste.length}</span></button>
+      {gebiete.map((g) => (
+        <button type="button" aria-pressed="false" data-wert={g}>
+          {fachgebietLabels[g]} <span>{liste.filter((r) => r.fachgebiete.includes(g as never)).length}</span>
+        </button>
+      ))}
+    </div>
+  )}
+  <p class="ref-zaehler" aria-live="polite" data-zaehler>{liste.length} Referenzprojekte</p>
+  <ul class="ref-liste">
+    {liste.map((r) => (
+      <li data-gebiete={r.fachgebiete.join(' ')}>
+        <span class="ref-zeit">{r.zeitraum}</span>
+        <span class="ref-name">
+          <strong>{r.name}</strong>
+          <span>{r.arbeitgeber}{r.bauherr ? ` · Bauherr: ${r.bauherr}` : ''}</span>
+        </span>
+        <span class="ref-rolle">{r.rolle}</span>
+        <span class="ref-tags">{r.fachgebiete.map((g) => <span class="chip">{fachgebietLabels[g]}</span>)}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<script>
+  for (const wurzel of document.querySelectorAll<HTMLElement>('[data-referenzen]')) {
+    const leiste = wurzel.querySelector<HTMLElement>('[data-filterleiste]');
+    const zaehler = wurzel.querySelector<HTMLElement>('[data-zaehler]');
+    const eintraege = Array.from(wurzel.querySelectorAll<HTMLElement>('li[data-gebiete]'));
+    if (!leiste || !zaehler) continue;
+    leiste.hidden = false;
+    leiste.addEventListener('click', (e) => {
+      const knopf = (e.target as HTMLElement).closest('button');
+      if (!knopf) return;
+      const wert = knopf.dataset.wert ?? 'alle';
+      let sichtbar = 0;
+      for (const li of eintraege) {
+        const passt = wert === 'alle' || (li.dataset.gebiete ?? '').split(' ').includes(wert);
+        li.hidden = !passt;
+        if (passt) sichtbar++;
+      }
+      for (const b of leiste.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b === knopf));
+      zaehler.textContent = `${sichtbar} von ${eintraege.length} Referenzprojekten`;
+    });
+  }
+</script>
+
+<style>
+  .ref-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .ref-filter[hidden] { display: none; }
+  .ref-filter button {
+    font: 500 0.82rem var(--f-mono); min-height: 40px; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--linie-hell); background: var(--tiefe); color: var(--text);
+  }
+  .ref-filter button span { color: var(--text-ruhig); margin-left: 6px; }
+  .ref-filter button[aria-pressed='true'] { background: var(--eis); border-color: var(--eis); color: var(--nacht); }
+  .ref-filter button[aria-pressed='true'] span { color: var(--nacht); }
+  .ref-zaehler { font-family: var(--f-mono); font-size: 0.78rem; color: var(--text-ruhig); margin-bottom: 8px; }
+  .ref-liste { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linie); }
+  .ref-liste li {
+    display: grid; grid-template-columns: 96px minmax(0, 1.4fr) minmax(0, 1fr) 150px; gap: 16px;
+    align-items: baseline; padding: 12px 4px; border-bottom: 1px solid var(--linie);
+  }
+  .ref-liste li[hidden] { display: none; }
+  .ref-zeit { font-family: var(--f-mono); font-size: 0.78rem; color: var(--eis); font-variant-numeric: tabular-nums; }
+  .ref-name strong { display: block; font-weight: 600; }
+  .ref-name span { font-size: 0.86rem; color: var(--text-ruhig); }
+  .ref-rolle { font-size: 0.93rem; color: var(--text-ruhig); }
+  .ref-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+  @media (max-width: 860px) {
+    .ref-liste li { grid-template-columns: 80px minmax(0, 1fr); gap: 4px 12px; }
+    .ref-rolle, .ref-tags { grid-column: 2; justify-content: flex-start; }
+  }
+</style>

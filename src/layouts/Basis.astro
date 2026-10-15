@@ -1,0 +1,63 @@
+---
+import '@fontsource/barlow-condensed/latin-500.css';
+import '@fontsource/barlow-condensed/latin-600.css';
+import '@fontsource/barlow-condensed/latin-700.css';
+import '@fontsource/source-sans-3/latin-400.css';
+import '@fontsource/source-sans-3/latin-600.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { jsonFuerScript } from '../lib/seo';
+import { person } from '../data/person';
+
+interface Props {
+  title: string;
+  description: string;
+  typ?: 'website' | 'article' | 'profile';
+  jsonLd?: unknown[];
+  noindex?: boolean;
+  bild?: string;
+}
+
+const { title, description, typ = 'website', jsonLd = [], noindex = false, bild = '/og-bild.png' } = Astro.props;
+const seitenTitel = title === person.name ? `${person.name} – Tiefbau, Netzinfrastruktur und KI` : `${title} | ${person.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogBild = new URL(bild, Astro.site);
+---
+<!doctype html>
+<html lang="de-CH">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{seitenTitel}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#0a0f14" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={typ} />
+    <meta property="og:locale" content="de_CH" />
+    <meta property="og:site_name" content={person.name} />
+    <meta property="og:title" content={seitenTitel} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogBild.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {jsonLd.map((d) => <script type="application/ld+json" is:inline set:html={jsonFuerScript(d)} />)}
+  </head>
+  <body>
+    <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+    <Header />
+    <main id="inhalt" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

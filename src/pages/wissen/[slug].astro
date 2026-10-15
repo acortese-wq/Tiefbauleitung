@@ -1,0 +1,87 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import ArtikelKarte from '../../components/ArtikelKarte.astro';
+import { sichtbareArtikel, formatDatum, lesezeit, slugify } from '../../lib/content';
+import { artikelJsonLd, breadcrumbJsonLd } from '../../lib/seo';
+import { person } from '../../data/person';
+
+export async function getStaticPaths() {
+  const artikel = await sichtbareArtikel();
+  return artikel.map((a) => ({ params: { slug: a.id }, props: { eintrag: a, alle: artikel } }));
+}
+
+interface Props { eintrag: CollectionEntry<'artikel'>; alle: CollectionEntry<'artikel'>[]; }
+const { eintrag, alle } = Astro.props;
+const { Content } = await render(eintrag);
+const d = eintrag.data;
+const site = Astro.site!;
+const url = new URL(`/wissen/${eintrag.id}/`, site).href;
+
+// Verwandte Beiträge: gleiche Kategorie oder gemeinsame Schlagwörter
+const verwandt = alle
+  .filter((a) => a.id !== eintrag.id)
+  .map((a) => ({
+    a,
+    punkte: (a.data.kategorie === d.kategorie ? 2 : 0) + a.data.schlagwoerter.filter((s) => d.schlagwoerter.includes(s)).length,
+  }))
+  .filter((x) => x.punkte > 0)
+  .sort((x, y) => y.punkte - x.punkte)
+  .slice(0, 3)
+  .map((x) => x.a);
+---
+<Basis
+  title={d.title}
+  description={d.description}
+  typ="article"
+  noindex={d.status === 'entwurf'}
+  jsonLd={[
+    artikelJsonLd({ title: d.title, description: d.description, datum: d.datum, aktualisiert: d.aktualisiert, url }),
+    breadcrumbJsonLd([
+      { name: 'Start', url: site.href },
+      { name: 'Wissen', url: new URL('/wissen/', site).href },
+      { name: d.title, url },
+    ]),
+  ]}
+>
+  <Seitenkopf titel={d.title} lead={d.description} krumen={[{ name: 'Wissen', href: '/wissen/' }, { name: d.kategorie, href: `/wissen/kategorie/${slugify(d.kategorie)}/` }]}>
+    <p class="artikel-meta">
+      <a href={`/wissen/kategorie/${slugify(d.kategorie)}/`}>{d.kategorie}</a> ·
+      <time datetime={d.datum.toISOString().slice(0, 10)}>{formatDatum(d.datum)}</time> ·
+      {lesezeit(eintrag.body ?? '')} Min. Lesezeit · {person.name}
+    </p>
+    {d.status === 'entwurf' && (
+      <p class="hinweis"><strong>Entwurf.</strong> Dieser Beitrag ist noch nicht freigegeben und wird in der Produktion nicht angezeigt.</p>
+    )}
+  </Seitenkopf>
+
+  <section class="abschnitt artikel-abschnitt">
+    <div class="wrap">
+      <article class="prosa" data-pagefind-body data-pagefind-meta={`kategorie:${d.kategorie}`}>
+        <Content />
+      </article>
+      {d.schlagwoerter.length > 0 && (
+        <div class="chips artikel-tags" aria-label="Schlagwörter">
+          {d.schlagwoerter.map((s) => <a class="chip" href={`/wissen/schlagwort/${slugify(s)}/`}>#{s}</a>)}
+        </div>
+      )}
+    </div>
+  </section>
+
+  {verwandt.length > 0 && (
+    <section class="abschnitt band-hell" aria-labelledby="verwandt-titel">
+      <div class="wrap">
+        <div class="abschnitt-kopf"><span class="pos">Weiterlesen</span><h2 id="verwandt-titel">Verwandte Beiträge</h2></div>
+        <div class="raster-3">{verwandt.map((a) => <ArtikelKarte artikel={a} />)}</div>
+      </div>
+    </section>
+  )}
+</Basis>
+
+<style>
+  .artikel-meta { font-family: var(--f-mono); font-size: 0.8rem; color: var(--text-ruhig); }
+  .artikel-meta a { color: var(--eis); }
+  .artikel-abschnitt { border-top: 0; padding-top: 16px; }
+  .artikel-tags { margin-top: 40px; max-width: var(--text-max); }
+</style>

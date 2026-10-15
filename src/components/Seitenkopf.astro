@@ -1,0 +1,27 @@
+---
+interface Props {
+  titel: string;
+  lead?: string;
+  pos?: string;
+  krumen?: { name: string; href?: string }[];
+}
+const { titel, lead, pos, krumen = [] } = Astro.props;
+---
+<section class="seitenkopf">
+  <div class="wrap">
+    {krumen.length > 0 && (
+      <nav class="brotkrumen" aria-label="Brotkrumen">
+        <ol>
+          <li><a href="/">Start</a></li>
+          {krumen.map((k) => (
+            <li>{k.href ? <a href={k.href}>{k.name}</a> : <span aria-current="page">{k.name}</span>}</li>
+          ))}
+        </ol>
+      </nav>
+    )}
+    {pos && <span class="pos">{pos}</span>}
+    <h1 class="einblenden">{titel}</h1>
+    {lead && <p class="lead einblenden einblenden-2">{lead}</p>}
+    <slot />
+  </div>
+</section>

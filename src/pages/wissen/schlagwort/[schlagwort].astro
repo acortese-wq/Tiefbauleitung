@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Basis from '../../../layouts/Basis.astro';
+import Seitenkopf from '../../../components/Seitenkopf.astro';
+import ArtikelKarte from '../../../components/ArtikelKarte.astro';
+import { sichtbareArtikel, slugify } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const artikel = await sichtbareArtikel();
+  const woerter = [...new Set(artikel.flatMap((a) => a.data.schlagwoerter))];
+  return woerter.map((w) => ({
+    params: { schlagwort: slugify(w) },
+    props: { name: w, liste: artikel.filter((a) => a.data.schlagwoerter.includes(w)) },
+  }));
+}
+
+interface Props { name: string; liste: CollectionEntry<'artikel'>[]; }
+const { name, liste } = Astro.props;
+---
+<Basis title={`Schlagwort ${name}`} description={`Fachbeiträge von Alessandro Cortese zum Schlagwort ${name}.`}>
+  <Seitenkopf titel={`#${name}`} pos="Schlagwort" krumen={[{ name: 'Wissen', href: '/wissen/' }, { name }]} />
+  <section class="abschnitt">
+    <div class="wrap raster-3">{liste.map((a) => <ArtikelKarte artikel={a} />)}</div>
+  </section>
+</Basis>

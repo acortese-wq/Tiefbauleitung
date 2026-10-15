@@ -1,0 +1,112 @@
+---
+// Leitmotiv: Querprofil eines Leitungsgrabens als Planzeichnung. Die Glasfaser
+// führt vom Rohrblock zum Hausanschluss und weiter in ein Datennetz über Terrain.
+// Infrastruktur unten, digitale Intelligenz oben – verbunden durch eine Leitung.
+const knoten = [
+  [70, 70], [150, 34], [250, 78], [350, 30], [450, 64], [520, 128], [170, 138], [330, 128],
+];
+const kanten = [
+  [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [0, 6], [6, 2], [2, 7], [7, 4], [7, 5], [1, 3], [6, 7],
+];
+---
+<figure class="leitmotiv">
+  <svg viewBox="0 0 560 430" role="img" aria-labelledby="lm-titel lm-text">
+    <title id="lm-titel">Leitmotiv: Infrastruktur trifft Intelligenz</title>
+    <desc id="lm-text">Querprofil eines Leitungsgrabens mit Belag, Fundation, Warnband und Rohrblock. Eine Glasfaser führt vom Rohrblock zum Hausanschluss und verbindet sich über dem Terrain mit einem Datennetz.</desc>
+    <defs>
+      <pattern id="lm-boden" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="10" class="lm-schraffur" />
+      </pattern>
+      <pattern id="lm-kies" width="12" height="12" patternUnits="userSpaceOnUse">
+        <circle cx="3" cy="4" r="1.3" class="lm-korn" /><circle cx="9" cy="9" r="1" class="lm-korn" />
+      </pattern>
+    </defs>
+
+    <!-- Datennetz über Terrain -->
+    <g class="lm-netz">
+      {kanten.map(([a, b]) => (
+        <line x1={knoten[a][0]} y1={knoten[a][1]} x2={knoten[b][0]} y2={knoten[b][1]} class="lm-kante" />
+      ))}
+      {knoten.map(([x, y], i) => (
+        <circle cx={x} cy={y} r={i === 4 ? 6 : 3.6} class={i === 4 ? 'lm-knoten lm-knoten-agent' : 'lm-knoten'} />
+      ))}
+      <text x="462" y="52" class="lm-text lm-text-eis">KI-Agent</text>
+      <text x="16" y="22" class="lm-text">Daten · Normen · Erfahrung</text>
+    </g>
+
+    <!-- Terrain und Aufbau -->
+    <g class="lm-plan">
+      <rect x="0" y="182" width="560" height="248" fill="url(#lm-boden)" />
+      <rect x="0" y="182" width="560" height="34" fill="url(#lm-kies)" />
+      <line x1="0" y1="170" x2="560" y2="170" class="lm-terrain" />
+      <line x1="0" y1="182" x2="560" y2="182" class="lm-schicht" />
+      <line x1="0" y1="216" x2="560" y2="216" class="lm-schicht" />
+      <polygon points="190,170 330,170 318,392 202,392" class="lm-graben" />
+      <polyline points="190,170 202,392 318,392 330,170" class="lm-kontur" />
+      <rect x="218" y="324" width="84" height="60" rx="2" class="lm-rohrblock" />
+      {[0, 1, 2].map((c) => [0, 1].map((r) => (
+        <circle cx={238 + c * 22} cy={342 + r * 24} r="9" class="lm-rohr" />
+      )))}
+      <line x1="222" y1="292" x2="298" y2="292" class="lm-warnband" />
+    </g>
+
+    <!-- Glasfaser: Rohrblock → Hausanschluss → Netz -->
+    <path d="M282 342 C 360 342, 392 300, 410 250 L 410 196 M 410 160 L 450 64" class="lm-faser" />
+    <path d="M394 196 h32 v-26 h-32 z" class="lm-haus" />
+    <path d="M390 172 l20 -16 l20 16" class="lm-haus" />
+
+    <!-- Koten und Beschriftung -->
+    <g class="lm-mass">
+      <polygon points="60,156 68,168 52,168" class="lm-kote" />
+      <text x="74" y="166" class="lm-text">± 0.00</text>
+      <line x1="160" y1="170" x2="160" y2="392" class="lm-masslinie" />
+      <line x1="153" y1="170" x2="167" y2="170" class="lm-masslinie" />
+      <line x1="153" y1="392" x2="167" y2="392" class="lm-masslinie" />
+      <text x="96" y="286" class="lm-text">−1.20 m</text>
+      <text x="446" y="200" class="lm-text">Hausanschluss</text>
+      <line x1="330" y1="176" x2="440" y2="232" class="lm-hinweislinie" />
+      <text x="444" y="236" class="lm-text">Belag · Fundation</text>
+      <line x1="298" y1="292" x2="440" y2="292" class="lm-hinweislinie" />
+      <text x="444" y="296" class="lm-text">Warnband</text>
+      <line x1="302" y1="372" x2="440" y2="372" class="lm-hinweislinie" />
+      <text x="444" y="368" class="lm-text">Rohrblock</text>
+      <text x="444" y="382" class="lm-text lm-klein">6 × Ø 120</text>
+      <text x="200" y="414" class="lm-text lm-klein">Querprofil Leitungsgraben, schematisch</text>
+    </g>
+  </svg>
+</figure>
+
+<style>
+  .leitmotiv { margin: 0; }
+  .leitmotiv svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .lm-schraffur { stroke: var(--linie); stroke-width: 1; }
+  .lm-korn { fill: var(--linie-hell); }
+  .lm-terrain { stroke: var(--text-ruhig); stroke-width: 1.6; }
+  .lm-schicht { stroke: var(--linie-hell); stroke-width: 1; }
+  .lm-graben { fill: var(--nacht); }
+  .lm-kontur { fill: none; stroke: var(--text-ruhig); stroke-width: 1.4; }
+  .lm-rohrblock { fill: var(--panel); stroke: var(--linie-hell); }
+  .lm-rohr { fill: var(--nacht); stroke: var(--eis); stroke-width: 1.8; }
+  .lm-warnband { stroke: var(--eis); stroke-width: 4; }
+  .lm-kante { stroke: var(--eis); stroke-opacity: .28; stroke-width: 1.2; }
+  .lm-knoten { fill: var(--eis); fill-opacity: .7; }
+  .lm-knoten-agent { fill: var(--eis); fill-opacity: 1; stroke: var(--eis-stark); stroke-width: 2; }
+  .lm-faser { fill: none; stroke: var(--eis); stroke-width: 2.4; stroke-linecap: round; }
+  .lm-haus { fill: none; stroke: var(--text); stroke-width: 1.5; stroke-linejoin: round; }
+  .lm-kote { fill: var(--signal); }
+  .lm-masslinie { stroke: var(--signal); stroke-width: 1.1; }
+  .lm-hinweislinie { stroke: var(--text-ruhig); stroke-width: .8; stroke-opacity: .7; }
+  .lm-text { fill: var(--text-ruhig); font-family: var(--f-mono); font-size: 11px; }
+  .lm-text-eis { fill: var(--eis); }
+  .lm-klein { font-size: 9.5px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lm-faser { stroke-dasharray: 520; stroke-dashoffset: 520; animation: lm-zeichnen 2.2s cubic-bezier(.4,0,.2,1) .6s forwards; }
+    .lm-kante { stroke-dasharray: 240; stroke-dashoffset: 240; animation: lm-zeichnen 1.6s ease-out 1.6s forwards; }
+    .lm-knoten { opacity: 0; animation: lm-auftauchen .5s ease-out 2.2s forwards; }
+    .lm-knoten-agent { animation: lm-auftauchen .5s ease-out 2.4s forwards, lm-puls 2.4s ease-in-out 3s 3; }
+    @keyframes lm-zeichnen { to { stroke-dashoffset: 0; } }
+    @keyframes lm-auftauchen { to { opacity: 1; } }
+    @keyframes lm-puls { 50% { stroke-width: 6; stroke-opacity: .4; } }
+  }
+</style>

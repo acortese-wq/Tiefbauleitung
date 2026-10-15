@@ -1,0 +1,73 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import { alleKompetenzen } from '../../lib/content';
+import { breadcrumbJsonLd } from '../../lib/seo';
+
+const kompetenzen = await alleKompetenzen();
+const site = Astro.site!;
+---
+<Basis
+  title="Kompetenzen"
+  description="Vier Kompetenzfelder: Tiefbau und Infrastruktur, Netzinfrastruktur und Leitungsbau, Digitalisierung technischer Prozesse sowie KI-Agenten."
+  jsonLd={[breadcrumbJsonLd([{ name: 'Start', url: site.href }, { name: 'Kompetenzen', url: new URL('/kompetenzen/', site).href }])]}
+>
+  <Seitenkopf
+    titel="Kompetenzen"
+    pos="Pos. 200"
+    lead="Vier Felder, die im Projektalltag zusammengehören. Jedes Feld beschreibt Herausforderungen, Vorgehen, Nutzen und belegte Erfahrung."
+    krumen={[{ name: 'Kompetenzen' }]}
+  />
+  <section class="abschnitt">
+    <div class="wrap">
+      <figure class="netz">
+        <svg viewBox="0 0 720 300" role="img" aria-labelledby="netz-titel">
+          <title id="netz-titel">Kompetenzfelder: Infrastruktur bildet die Grundlage, Digitalisierung und KI bauen darauf auf.</title>
+          <line x1="120" y1="230" x2="360" y2="150" class="n-linie" />
+          <line x1="300" y1="230" x2="360" y2="150" class="n-linie" />
+          <line x1="360" y1="150" x2="600" y2="70" class="n-linie n-linie-eis" />
+          <line x1="120" y1="230" x2="300" y2="230" class="n-linie" />
+          <circle cx="120" cy="230" r="10" class="n-punkt" />
+          <circle cx="300" cy="230" r="10" class="n-punkt" />
+          <circle cx="360" cy="150" r="10" class="n-punkt" />
+          <circle cx="600" cy="70" r="12" class="n-punkt n-punkt-eis" />
+          <text x="120" y="268" text-anchor="middle" class="n-text">Tiefbau</text>
+          <text x="300" y="268" text-anchor="middle" class="n-text">Netzinfrastruktur</text>
+          <text x="380" y="140" class="n-text">Digitalisierung</text>
+          <text x="600" y="44" text-anchor="middle" class="n-text n-text-eis">KI-Agenten</text>
+          <line x1="20" y1="250" x2="700" y2="250" class="n-terrain" />
+          <text x="20" y="290" class="n-klein">Infrastruktur als Fundament · darauf Werkzeuge · darauf Agenten</text>
+        </svg>
+      </figure>
+      <div class="raster-2 kompetenz-raster">
+        {kompetenzen.map((k, i) => (
+          <a class="karte" href={`/kompetenzen/${k.id}/`}>
+            <span class="pos">0{i + 1} · {k.data.bereich}</span>
+            <h2 class="k-titel">{k.data.title}</h2>
+            <p>{k.data.kurz}</p>
+            <div class="chips">{k.data.grundlagen.slice(0, 4).map((g) => <span class="chip">{g}</span>)}</div>
+            <span class="mehr">Kompetenzfeld ansehen →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .netz { margin: 0 0 32px; padding: 16px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); }
+  .netz svg { width: 100%; height: auto; display: block; }
+  .n-linie { stroke: var(--linie-hell); stroke-width: 1.6; }
+  .n-linie-eis { stroke: var(--eis); stroke-dasharray: 6 6; }
+  .n-terrain { stroke: var(--text-ruhig); stroke-width: 1; stroke-dasharray: 2 4; }
+  .n-punkt { fill: var(--nacht); stroke: var(--text-ruhig); stroke-width: 2; }
+  .n-punkt-eis { stroke: var(--eis); fill: var(--eis-flaeche); }
+  .n-text { fill: var(--text); font-family: var(--f-display); font-size: 20px; font-weight: 600; }
+  .n-text-eis { fill: var(--eis); }
+  .n-klein { fill: var(--text-ruhig); font-family: var(--f-mono); font-size: 12px; }
+  .k-titel { font-size: 1.7rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    .n-linie-eis { animation: n-fluss 1.4s linear 4; }
+    @keyframes n-fluss { to { stroke-dashoffset: -24; } }
+  }
+</style>

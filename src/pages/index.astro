@@ -1,0 +1,277 @@
+---
+import { getCollection } from 'astro:content';
+import Basis from '../layouts/Basis.astro';
+import Leitmotiv from '../components/Leitmotiv.astro';
+import ProjektKarte from '../components/ProjektKarte.astro';
+import ArtikelKarte from '../components/ArtikelKarte.astro';
+import { person, kennzahlen, zeugnisse } from '../data/person';
+import { sichtbareArtikel, sichtbareProjekte } from '../lib/content';
+import { personJsonLd } from '../lib/seo';
+
+const projekte = (await sichtbareProjekte()).slice(0, 3);
+const artikel = (await sichtbareArtikel()).slice(0, 3);
+const anzahlReferenzen = (await getCollection('referenzen')).length;
+
+const bereiche = [
+  {
+    nr: '01',
+    titel: 'Infrastruktur',
+    text: 'Strassen, Brücken, Werkleitungen und Glasfaser. Von der Submission bis zur Schlussabrechnung, aus Sicht von Ingenieurbüro und Bauherr.',
+    links: [
+      { href: '/kompetenzen/tiefbau-infrastruktur/', label: 'Tiefbau und Infrastruktur' },
+      { href: '/kompetenzen/netzinfrastruktur-leitungsbau/', label: 'Netzinfrastruktur und Leitungsbau' },
+    ],
+  },
+  {
+    nr: '02',
+    titel: 'Digitalisierung',
+    text: 'Wiederkehrende Prüf- und Rechenarbeit in schlanke Werkzeuge übersetzen, die im Projektalltag tatsächlich genutzt werden.',
+    links: [{ href: '/kompetenzen/digitalisierung-prozesse/', label: 'Digitalisierung technischer Prozesse' }],
+  },
+  {
+    nr: '03',
+    titel: 'Künstliche Intelligenz',
+    text: 'KI-Agenten mit klarer Aufgabe, nachvollziehbaren Belegen und einer Fachperson, die entscheidet.',
+    links: [{ href: '/kompetenzen/ki-agenten/', label: 'KI-Agenten und praktische KI' }],
+  },
+];
+
+const probleme = [
+  {
+    frage: 'Hunderte Offertpositionen, wenig Zeit',
+    ansatz: 'Positionen strukturiert nebeneinanderstellen und Ausreisser markieren. Die Beurteilung bleibt bei der Fachperson.',
+  },
+  {
+    frage: 'Die Abrechnung passt nicht zum Ausmass',
+    ansatz: 'Mengen, Einheitspreise und Nachträge systematisch gegen Vertrag und Leistungsverzeichnis prüfen, mit Fundstelle für jede Abweichung.',
+  },
+  {
+    frage: 'Viele Beteiligte im selben Graben',
+    ansatz: 'Kostenteiler und Zuständigkeiten zwischen Netzbetreiber, Generalunternehmer und Werkeigentümern vor Baubeginn klären.',
+  },
+  {
+    frage: 'Wissen steckt in einzelnen Köpfen',
+    ansatz: 'Normen- und Vertragswissen in Werkzeuge und Wissensbasen übertragen, die das ganze Team nutzen kann.',
+  },
+];
+
+const zitat = zeugnisse[1];
+---
+<Basis
+  title={person.name}
+  description="Alessandro Cortese aus Chur verbindet über 30 Jahre Tiefbaupraxis mit KI-Agenten: Bauherrenvertretung, Netzinfrastruktur und digitale Prüfwerkzeuge."
+  typ="profile"
+  jsonLd={[personJsonLd(Astro.site!)]}
+>
+  <section class="held">
+    <div class="wrap held-raster">
+      <div class="held-text">
+        <span class="label label-eis einblenden">Tiefbau · Netzinfrastruktur · KI-Agenten · Chur</span>
+        <h1 class="einblenden einblenden-2">Tiefbau verstehen. <span>KI richtig einsetzen.</span></h1>
+        <p class="held-lead einblenden einblenden-3">
+          Ich bin Alessandro Cortese, Bauherrenvertreter Tiefbau mit über 30 Jahren Praxis. Ich übersetze
+          Infrastrukturwissen in digitale Werkzeuge und KI-Agenten, die Offerten, Abrechnungen und
+          Projektabschlüsse schneller und nachvollziehbarer prüfen.
+        </p>
+        <div class="btn-reihe einblenden einblenden-4">
+          <a class="btn" href="/kontakt/">Fachlichen Austausch starten <span class="pfeil" aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="/kompetenzen/">Kompetenzen entdecken</a>
+        </div>
+        <dl class="kennzahlen">
+          {kennzahlen.map((k) => (
+            <div>
+              <dt>{k.label}</dt>
+              <dd class="wert">{k.wert}</dd>
+              <dd class="quelle">{k.quelle}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <div class="held-bild">
+        <Leitmotiv />
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt" aria-labelledby="bereiche-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Pos. 100 · Kompetenzbereiche</span>
+        <h2 id="bereiche-titel">Drei Bereiche, eine Praxis</h2>
+        <p>Die Bereiche bauen aufeinander auf: Wer Infrastruktur versteht, erkennt, wo Digitalisierung hilft. Und wer digitalisiert, weiss, wo KI sinnvoll ist.</p>
+      </div>
+      <ol class="bereiche">
+        {bereiche.map((b) => (
+          <li class="karte bereich">
+            <span class="bereich-nr" aria-hidden="true">{b.nr}</span>
+            <h3>{b.titel}</h3>
+            <p>{b.text}</p>
+            <ul class="bereich-links">
+              {b.links.map((l) => <li><a href={l.href}>{l.label} →</a></li>)}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="abschnitt band-hell" aria-labelledby="probleme-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Pos. 200 · Aus der Praxis</span>
+        <h2 id="probleme-titel">Fragen, die ich kenne, und wie ich sie angehe</h2>
+        <p>Keine Versprechen, sondern Arbeitsweisen aus dem Projektalltag im Tiefbau und Netzbau.</p>
+      </div>
+      <div class="raster-2">
+        {probleme.map((p) => (
+          <article class="karte problem">
+            <span class="label">Problemstellung</span>
+            <h3>{p.frage}</h3>
+            <span class="label label-eis">Ansatz</span>
+            <p>{p.ansatz}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt" aria-labelledby="projekte-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Pos. 300 · Projekte</span>
+        <h2 id="projekte-titel">Fallstudien und Demonstratoren</h2>
+        <p>Klar gekennzeichnet: persönliche Projekte, Konzepte und berufliche Erfahrung. Dazu {anzahlReferenzen} belegte Referenzprojekte aus Strassen-, Brücken-, Bahn- und Wasserbau.</p>
+      </div>
+      <div class="raster-3">
+        {projekte.map((p) => <ProjektKarte projekt={p} />)}
+      </div>
+      <div class="btn-reihe mehr-reihe">
+        <a class="btn btn-ghost" href="/projekte/">Alle Projekte und {anzahlReferenzen} Referenzen</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt" aria-labelledby="person-titel">
+    <div class="wrap person">
+      <picture class="person-bild">
+        <source srcset="/bilder/portrait.webp" type="image/webp" />
+        <img src="/bilder/portrait.jpg" alt="Porträt von Alessandro Cortese" width="320" height="320" loading="lazy" decoding="async" />
+      </picture>
+      <div class="person-text">
+        <span class="pos">Pos. 400 · Kurz vorgestellt</span>
+        <h2 id="person-titel">Vom Tiefbauzeichner zum Bauherrenvertreter</h2>
+        <p>
+          Angefangen hat alles 1994 mit der Lehre als Tiefbauzeichner. Danach habe ich Hauptstrassen projektiert,
+          Projekte bei zwei Ingenieurbüros geleitet und beim Tiefbauamt Graubünden ein Team von vier Bauleitern geführt.
+          Seit 2025 begleite ich als Bauherrenvertreter den Glasfaserausbau.
+        </p>
+        <p>
+          Seit dem Jahr 2000 bin ich Prüfungsexperte für Bauzeichnerinnen und Bauzeichner. Mit der Ausbildung zum
+          KI-Professional an der HSO verbinde ich diese Erfahrung mit KI-Agenten.
+        </p>
+        <a class="btn btn-ghost" href="/profil/">Zum Profil</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt band-hell" aria-labelledby="wissen-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Pos. 500 · Wissen</span>
+        <h2 id="wissen-titel">Aktuelle Fachbeiträge</h2>
+        <p>Erfahrungen und Einordnungen zu KI im Bauwesen, Netzinfrastruktur und verantwortungsvoller Digitalisierung.</p>
+      </div>
+      {artikel.length > 0 ? (
+        <div class="raster-3">{artikel.map((a) => <ArtikelKarte artikel={a} />)}</div>
+      ) : (
+        <div class="karte leer">
+          <h3>Die ersten Beiträge sind in Arbeit</h3>
+          <p>Hier erscheinen bald Fachbeiträge zu KI-Agenten im Tiefbau, zum Glasfaserausbau und zum Datenschutz im Projektalltag.</p>
+        </div>
+      )}
+      <div class="btn-reihe mehr-reihe">
+        <a class="btn btn-ghost btn-hell" href="/wissen/">Zum Wissensbereich</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschluss" aria-labelledby="abschluss-titel">
+    <div class="wrap abschluss-raster">
+      <figure class="zitat">
+        <blockquote><p>«{zitat.text}»</p></blockquote>
+        <figcaption>{zitat.quelle} · {zitat.art}</figcaption>
+      </figure>
+      <div class="abschluss-text">
+        <h2 id="abschluss-titel">Ein Projekt, eine Frage, eine Idee?</h2>
+        <p>Ich freue mich auf den fachlichen Austausch zu Tiefbau, Netzinfrastruktur und dem praktischen Einsatz von KI.</p>
+        <div class="btn-reihe">
+          <a class="btn" href="/kontakt/">Kontakt aufnehmen <span class="pfeil" aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href={person.linkedin} rel="noopener me" target="_blank">LinkedIn<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .held { position: relative; overflow: hidden; border-bottom: 1px solid var(--linie); }
+  .held::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .55;
+    background-image: linear-gradient(var(--linie) 1px, transparent 1px), linear-gradient(90deg, var(--linie) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%);
+  }
+  .held-raster {
+    position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(28px, 5vw, 64px); align-items: center; padding-block: clamp(40px, 7vw, 96px);
+  }
+  .held-text { display: grid; gap: 22px; min-width: 0; }
+  .held h1 { font-size: var(--s-4); text-transform: uppercase; letter-spacing: -0.01em; font-weight: 700; }
+  .held h1 span { display: block; color: var(--eis); }
+  .held-lead { color: var(--text-ruhig); font-size: var(--s-1); line-height: 1.55; max-width: 54ch; }
+  .kennzahlen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 6px 0 0; padding-top: 18px; border-top: 1px solid var(--linie); }
+  .kennzahlen div { display: flex; flex-direction: column; gap: 4px; }
+  .kennzahlen dt { order: 2; font-size: 0.9rem; color: var(--text); line-height: 1.3; }
+  .kennzahlen dd { margin: 0; }
+  .kennzahlen .wert { order: 1; font: 600 var(--s-3) var(--f-display); line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
+  .kennzahlen .quelle { order: 3; font-family: var(--f-mono); font-size: 0.68rem; color: var(--text-ruhig); }
+
+  .bereiche { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .bereich { padding: 28px; }
+  .bereich-nr { font: 700 3rem var(--f-display); color: #6a8599; line-height: 1; }
+  .bereich h3 { font-size: 1.8rem; text-transform: uppercase; }
+  .bereich-links { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; }
+  .bereich-links a { display: inline-block; padding: 6px 0; font-weight: 600; text-decoration: none; }
+  .bereich-links a:hover { text-decoration: underline; }
+
+  .problem h3 { font-size: 1.45rem; margin-bottom: 8px; }
+  .mehr-reihe { margin-top: 28px; }
+  .band-hell .btn-ghost { color: var(--papier-text); border-color: var(--papier-linie); }
+  .band-hell .btn-ghost:hover { background: #fff; border-color: var(--papier-akzent); }
+  .leer { max-width: 640px; }
+
+  .person { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
+  .person-bild img { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--linie-hell); display: block; filter: saturate(.9); }
+  .person-text { display: grid; gap: 16px; justify-items: start; }
+  .person-text h2 { font-size: var(--s-3); }
+  .person-text p { color: var(--text-ruhig); max-width: 62ch; }
+
+  .abschluss { background: linear-gradient(180deg, var(--nacht), var(--tiefe)); }
+  .abschluss-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
+  .zitat { margin: 0; padding-left: 22px; border-left: 3px solid var(--eis); }
+  .zitat blockquote { margin: 0; font: 500 var(--s-2) var(--f-display); line-height: 1.25; }
+  .zitat figcaption { margin-top: 14px; font-family: var(--f-mono); font-size: 0.76rem; color: var(--text-ruhig); }
+  .abschluss-text { display: grid; gap: 16px; }
+  .abschluss-text h2 { font-size: var(--s-3); }
+  .abschluss-text p { color: var(--text-ruhig); }
+
+  @media (max-width: 960px) {
+    .held-raster, .abschluss-raster { grid-template-columns: 1fr; }
+    .bereiche { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .kennzahlen { grid-template-columns: 1fr 1fr; }
+    .person { grid-template-columns: 1fr; }
+    .person-bild { max-width: 180px; }
+  }
+</style>

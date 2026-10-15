@@ -1,0 +1,85 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import ProjektKarte from '../../components/ProjektKarte.astro';
+import { sichtbareProjekte, projektArtLabel } from '../../lib/content';
+import { breadcrumbJsonLd } from '../../lib/seo';
+
+export async function getStaticPaths() {
+  const projekte = await sichtbareProjekte();
+  return projekte.map((p) => ({ params: { slug: p.id }, props: { projekt: p, alle: projekte } }));
+}
+
+interface Props { projekt: CollectionEntry<'projekte'>; alle: CollectionEntry<'projekte'>[]; }
+const { projekt, alle } = Astro.props;
+const { Content } = await render(projekt);
+const d = projekt.data;
+const kompetenzen = (await getCollection('kompetenzen')).filter((k) => d.kompetenzen.includes(k.id));
+const weitere = alle.filter((p) => p.id !== projekt.id).slice(0, 3);
+const site = Astro.site!;
+---
+<Basis
+  title={d.title}
+  description={d.kurz}
+  bild={d.bild ? `${d.bild}.jpg` : undefined}
+  jsonLd={[breadcrumbJsonLd([
+    { name: 'Start', url: site.href },
+    { name: 'Projekte', url: new URL('/projekte/', site).href },
+    { name: d.title, url: new URL(`/projekte/${projekt.id}/`, site).href },
+  ])]}
+>
+  <Seitenkopf titel={d.title} lead={d.kurz} krumen={[{ name: 'Projekte', href: '/projekte/' }, { name: d.title }]}>
+    <span class={`badge badge-${d.art}`}>{projektArtLabel[d.art]}</span>
+  </Seitenkopf>
+
+  <section class="abschnitt">
+    <div class="wrap fallstudie">
+      <aside class="steckbrief" aria-label="Steckbrief">
+        <dl>
+          <div><dt>Art</dt><dd>{projektArtLabel[d.art]}</dd></div>
+          <div><dt>Zeitraum</dt><dd>{d.zeitraum}</dd></div>
+          <div><dt>Rolle</dt><dd>{d.rolle}</dd></div>
+          <div><dt>Technologie</dt><dd><span class="chips">{d.technologie.map((t) => <span class="chip">{t}</span>)}</span></dd></div>
+          {kompetenzen.length > 0 && (
+            <div><dt>Kompetenzen</dt><dd><ul>{kompetenzen.map((k) => <li><a href={`/kompetenzen/${k.id}/`}>{k.data.title}</a></li>)}</ul></dd></div>
+          )}
+        </dl>
+        {d.bild && (
+          <picture class="telefon">
+            <source srcset={`${d.bild}.webp`} type="image/webp" />
+            <img src={`${d.bild}.jpg`} alt={d.bildAlt ?? ''} width="400" height="700" decoding="async" />
+          </picture>
+        )}
+      </aside>
+      <article class="prosa" data-pagefind-body>
+        <Content />
+      </article>
+    </div>
+  </section>
+
+  {weitere.length > 0 && (
+    <section class="abschnitt band-hell" aria-labelledby="weitere-titel">
+      <div class="wrap">
+        <div class="abschnitt-kopf"><span class="pos">Weitere</span><h2 id="weitere-titel">Weitere Fallstudien</h2></div>
+        <div class="raster-3">{weitere.map((p) => <ProjektKarte projekt={p} />)}</div>
+      </div>
+    </section>
+  )}
+</Basis>
+
+<style>
+  .fallstudie { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .steckbrief { position: sticky; top: 88px; display: grid; gap: 24px; }
+  .steckbrief dl { margin: 0; border-top: 1px solid var(--linie); }
+  .steckbrief dl > div { padding: 12px 0; border-bottom: 1px solid var(--linie); display: grid; gap: 4px; }
+  .steckbrief dt { font-family: var(--f-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-ruhig); }
+  .steckbrief dd { margin: 0; }
+  .steckbrief ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+  .telefon { display: block; max-width: 240px; padding: 8px; border-radius: 26px; background: #000; border: 1px solid var(--linie-hell); }
+  .telefon img { display: block; width: 100%; height: auto; border-radius: 19px; }
+  @media (max-width: 900px) {
+    .fallstudie { grid-template-columns: 1fr; }
+    .steckbrief { position: static; }
+  }
+</style>

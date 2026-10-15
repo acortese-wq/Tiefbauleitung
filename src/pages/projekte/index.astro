@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import ProjektKarte from '../../components/ProjektKarte.astro';
+import Referenzliste from '../../components/Referenzliste.astro';
+import { sichtbareProjekte } from '../../lib/content';
+import { breadcrumbJsonLd } from '../../lib/seo';
+
+const projekte = await sichtbareProjekte();
+const anzahl = (await getCollection('referenzen')).length;
+const site = Astro.site!;
+---
+<Basis
+  title="Projekte und Fallstudien"
+  description={`Fallstudien zu persönlichen Projekten und Konzepten sowie ${anzahl} belegte Referenzprojekte aus Strassen-, Brücken-, Bahn- und Wasserbau.`}
+  jsonLd={[breadcrumbJsonLd([{ name: 'Start', url: site.href }, { name: 'Projekte', url: new URL('/projekte/', site).href }])]}
+>
+  <Seitenkopf
+    titel="Projekte"
+    pos="Pos. 300"
+    lead="Fallstudien zu eigenen Projekten und Konzepten, dazu eine belegte Liste beruflicher Referenzprojekte. Jede Karte zeigt, um welche Art von Projekt es sich handelt."
+    krumen={[{ name: 'Projekte' }]}
+  />
+
+  <section class="abschnitt" aria-labelledby="fs-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Fallstudien</span>
+        <h2 id="fs-titel">Eigene Projekte und Konzepte</h2>
+      </div>
+      <dl class="legende">
+        <div><dt><span class="badge badge-persoenlich">Persönliches Projekt</span></dt><dd>Privat entwickelt und genutzt</dd></div>
+        <div><dt><span class="badge badge-konzept">Konzept</span></dt><dd>Methodik ohne Kundendaten oder Ergebnisse</dd></div>
+        <div><dt><span class="badge badge-beruflich">Berufliche Erfahrung</span></dt><dd>Belegt durch Lebenslauf und Zeugnisse</dd></div>
+      </dl>
+      <div class="raster-3">{projekte.map((p) => <ProjektKarte projekt={p} />)}</div>
+    </div>
+  </section>
+
+  <section class="abschnitt band-dunkel" aria-labelledby="ref-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="badge badge-beruflich">Berufliche Erfahrung</span>
+        <h2 id="ref-titel">{anzahl} Referenzprojekte 2006–2025</h2>
+        <p>Aus Lebenslauf und Arbeitszeugnissen. Angegeben sind Arbeitgeber, Bauherr (soweit bekannt) und die eigene Rolle. Projekte im aktuellen Arbeitsverhältnis sind bewusst nicht aufgeführt.</p>
+      </div>
+      <Referenzliste />
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .legende { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 0 0 24px; }
+  .legende div { display: flex; align-items: center; gap: 10px; }
+  .legende dd { margin: 0; color: var(--text-ruhig); font-size: 0.92rem; }
+</style>

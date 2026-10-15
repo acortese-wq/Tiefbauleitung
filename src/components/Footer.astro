@@ -1,0 +1,47 @@
+---
+import { person } from '../data/person';
+const jahr = new Date().getFullYear();
+---
+<footer class="fuss">
+  <div class="wrap fuss-raster">
+    <div class="fuss-marke">
+      <p class="fuss-name">{person.name}</p>
+      <p class="fuss-text">{person.rolle} · {person.ort}, {person.region}</p>
+    </div>
+    <nav aria-label="Fusszeile">
+      <ul>
+        <li><a href="/profil/">Profil</a></li>
+        <li><a href="/kompetenzen/">Kompetenzen</a></li>
+        <li><a href="/projekte/">Projekte</a></li>
+        <li><a href="/wissen/">Wissen</a></li>
+        <li><a href="/kontakt/">Kontakt</a></li>
+      </ul>
+      <ul>
+        <li><a href="/impressum/">Impressum</a></li>
+        <li><a href="/datenschutz/">Datenschutz</a></li>
+        <li><a href="/sitemap-index.xml">Sitemap</a></li>
+        <li><a href={person.linkedin} rel="noopener me" target="_blank">LinkedIn<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="wrap fuss-unten">
+    <span>© {jahr} {person.name}</span>
+    <span>Ohne Cookies, ohne Tracking, Schriften lokal eingebunden</span>
+  </div>
+</footer>
+
+<style>
+  .fuss { border-top: 1px solid var(--linie); background: var(--tiefe); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .fuss-raster { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; padding-block: 48px 32px; }
+  .fuss-name { font: 600 1.4rem var(--f-display); text-transform: uppercase; letter-spacing: 0.03em; }
+  .fuss-text { color: var(--text-ruhig); margin-top: 6px; max-width: 40ch; }
+  .fuss nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .fuss ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .fuss a { color: var(--text-ruhig); text-decoration: none; display: inline-block; padding: 6px 0; }
+  .fuss a:hover { color: var(--eis); }
+  .fuss-unten {
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 18px 28px;
+    border-top: 1px solid var(--linie); font-family: var(--f-mono); font-size: 0.74rem; color: var(--text-ruhig);
+  }
+  @media (max-width: 720px) { .fuss-raster { grid-template-columns: 1fr; } }
+</style>

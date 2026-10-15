@@ -1,0 +1,72 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import ArtikelKarte from '../../components/ArtikelKarte.astro';
+import { sichtbareArtikel, slugify } from '../../lib/content';
+import { breadcrumbJsonLd } from '../../lib/seo';
+import { KATEGORIEN } from '../../content.config';
+
+const artikel = await sichtbareArtikel();
+const kategorien = KATEGORIEN.filter((k) => artikel.some((a) => a.data.kategorie === k));
+const schlagwoerter = [...new Set(artikel.flatMap((a) => a.data.schlagwoerter))].sort((a, b) => a.localeCompare(b, 'de'));
+const site = Astro.site!;
+---
+<Basis
+  title="Wissen und Fachbeiträge"
+  description="Fachbeiträge zu KI im Bauwesen, KI-Agenten im technischen Projektumfeld, Netzinfrastruktur, Tiefbau und verantwortungsvoller Digitalisierung."
+  jsonLd={[breadcrumbJsonLd([{ name: 'Start', url: site.href }, { name: 'Wissen', url: new URL('/wissen/', site).href }])]}
+>
+  <Seitenkopf
+    titel="Wissen"
+    pos="Pos. 500"
+    lead="Erfahrungen und Einordnungen aus der Praxis. Mit offenen Worten zu Chancen und Grenzen von KI."
+    krumen={[{ name: 'Wissen' }]}
+  >
+    <a class="btn btn-ghost such-btn" href="/suche/">Beiträge durchsuchen</a>
+  </Seitenkopf>
+
+  <section class="abschnitt">
+    <div class="wrap wissen-raster">
+      <div>
+        {artikel.length > 0 ? (
+          <div class="raster-2">{artikel.map((a) => <ArtikelKarte artikel={a} />)}</div>
+        ) : (
+          <div class="karte">
+            <h2 class="leer-titel">Die ersten Beiträge sind in Arbeit</h2>
+            <p>Geplant sind Beiträge zu KI-Agenten im Tiefbau, zu Schnittstellen im Glasfaserausbau und zum Datenschutz im Projektalltag.</p>
+          </div>
+        )}
+      </div>
+      {artikel.length > 0 && (
+        <aside class="seitenleiste" aria-label="Kategorien und Schlagwörter">
+          <h2 class="label">Kategorien</h2>
+          <ul class="kat-liste">
+            {kategorien.map((k) => (
+              <li><a href={`/wissen/kategorie/${slugify(k)}/`}>{k} <span>{artikel.filter((a) => a.data.kategorie === k).length}</span></a></li>
+            ))}
+          </ul>
+          <h2 class="label">Schlagwörter</h2>
+          <div class="chips">
+            {schlagwoerter.map((s) => <a class="chip" href={`/wissen/schlagwort/${slugify(s)}/`}>{s}</a>)}
+          </div>
+        </aside>
+      )}
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .wissen-raster { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 40px; align-items: start; }
+  .seitenleiste { display: grid; gap: 12px; position: sticky; top: 88px; }
+  .seitenleiste h2:not(:first-child) { margin-top: 16px; }
+  .kat-liste { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linie); }
+  .kat-liste a { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--linie); text-decoration: none; color: var(--text); }
+  .kat-liste a:hover { color: var(--eis); }
+  .kat-liste span { font-family: var(--f-mono); color: var(--text-ruhig); font-size: 0.8rem; }
+  .leer-titel { font-size: 1.5rem; }
+  .such-btn { justify-self: start; margin-top: 8px; }
+  @media (max-width: 900px) {
+    .wissen-raster { grid-template-columns: 1fr; }
+    .seitenleiste { position: static; }
+  }
+</style>

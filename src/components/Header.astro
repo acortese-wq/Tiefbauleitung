@@ -1,0 +1,90 @@
+---
+const pfad = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = [
+  { href: '/profil/', label: 'Profil' },
+  { href: '/kompetenzen/', label: 'Kompetenzen' },
+  { href: '/projekte/', label: 'Projekte' },
+  { href: '/wissen/', label: 'Wissen' },
+  { href: '/kontakt/', label: 'Kontakt' },
+];
+const aktiv = (href: string) => {
+  const h = href.replace(/\/$/, '');
+  return pfad === h || pfad.startsWith(h + '/');
+};
+---
+<header class="kopf">
+  <div class="wrap kopf-inner">
+    <a class="marke" href="/" aria-label="Alessandro Cortese, zur Startseite">
+      <svg class="marke-zeichen" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="1" y="1" width="30" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path d="M6 22h20M10 22V12h12v10" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <circle cx="16" cy="17" r="2.2" fill="currentColor" />
+        <path d="M16 12V6" stroke="currentColor" stroke-width="1.5" />
+      </svg>
+      <span class="marke-text">Alessandro Cortese</span>
+    </a>
+
+    <nav class="nav-gross" aria-label="Hauptnavigation">
+      <ul>
+        {links.map((l) => (
+          <li><a href={l.href} aria-current={aktiv(l.href) ? 'page' : undefined}>{l.label}</a></li>
+        ))}
+        <li><a class="such-link" href="/suche/" aria-current={aktiv('/suche/') ? 'page' : undefined}><span aria-hidden="true">⌕</span> Suche</a></li>
+      </ul>
+    </nav>
+
+    <details class="nav-klein">
+      <summary>Menü</summary>
+      <nav aria-label="Hauptnavigation mobil">
+        <ul>
+          <li><a href="/" aria-current={pfad === '/' ? 'page' : undefined}>Start</a></li>
+          {links.map((l) => (
+            <li><a href={l.href} aria-current={aktiv(l.href) ? 'page' : undefined}>{l.label}</a></li>
+          ))}
+          <li><a href="/suche/">Suche</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .kopf {
+    position: sticky; top: 0; z-index: 50;
+    padding-top: env(safe-area-inset-top, 0px);
+    background: rgb(10 15 20 / 0.86);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--linie);
+  }
+  .kopf-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; }
+  .marke { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+  .marke:hover { color: var(--eis); }
+  .marke-zeichen { width: 30px; height: 30px; color: var(--eis); flex: none; }
+  .marke-text { font: 600 1.2rem var(--f-display); text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+  .nav-gross ul { display: flex; gap: 2px; list-style: none; margin: 0; padding: 0; }
+  .nav-gross a, .nav-klein a {
+    display: block; color: var(--text-ruhig); text-decoration: none; font-family: var(--f-mono);
+    font-size: 0.8rem; padding: 10px 12px; border-radius: 4px; transition: color .2s, background .2s;
+  }
+  .nav-gross a:hover, .nav-klein a:hover { color: var(--text); background: var(--panel); }
+  .nav-gross a[aria-current='page'], .nav-klein a[aria-current='page'] { color: var(--eis); background: var(--eis-flaeche); }
+  .such-link span { font-size: 1rem; line-height: 0; }
+  .nav-klein { display: none; position: relative; }
+  .nav-klein summary {
+    list-style: none; cursor: pointer; font-family: var(--f-mono); font-size: 0.85rem; color: var(--text);
+    border: 1px solid var(--linie-hell); border-radius: 4px; padding: 10px 14px; min-height: 44px;
+  }
+  .nav-klein summary::-webkit-details-marker { display: none; }
+  .nav-klein[open] summary { border-color: var(--eis); color: var(--eis); }
+  .nav-klein nav {
+    position: absolute; right: 0; top: calc(100% + 8px); min-width: 220px; padding: 8px;
+    background: var(--tiefe); border: 1px solid var(--linie-hell); border-radius: var(--radius);
+    box-shadow: 0 18px 40px -12px rgb(0 0 0 / 0.6);
+  }
+  .nav-klein ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .nav-klein a { font-size: 0.95rem; padding: 12px 14px; }
+  @media (max-width: 880px) {
+    .nav-gross { display: none; }
+    .nav-klein { display: block; }
+  }
+</style>

@@ -1,0 +1,112 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+---
+<Basis title="Suche" description="Volltextsuche in Fachbeiträgen, Kompetenzfeldern und Fallstudien von Alessandro Cortese.">
+  <Seitenkopf titel="Suche" pos="Volltextsuche" lead="Durchsucht Fachbeiträge, Kompetenzfelder und Fallstudien." krumen={[{ name: 'Suche' }]} />
+  <section class="abschnitt such-abschnitt">
+    <div class="wrap">
+      <form class="such-form" role="search" action="/suche/" method="get" data-suche>
+        <label for="suchbegriff" class="label">Suchbegriff</label>
+        <div class="such-zeile">
+          <input id="suchbegriff" name="q" type="search" autocomplete="off" minlength="2" maxlength="80" placeholder="z. B. Abrechnung, FTTH, KI-Agent" />
+          <button class="btn" type="submit">Suchen</button>
+        </div>
+      </form>
+      <p class="such-status" aria-live="polite" data-status>Die Suche benötigt JavaScript. Alternativ finden Sie alle Beiträge im <a href="/wissen/">Wissensbereich</a>.</p>
+      <ol class="such-ergebnisse" data-ergebnisse></ol>
+    </div>
+  </section>
+</Basis>
+
+<script>
+  type PagefindErgebnis = { data: () => Promise<{ url: string; excerpt: string; meta: { title?: string } }> };
+  type Pagefind = { search: (q: string) => Promise<{ results: PagefindErgebnis[] }>; init?: () => Promise<void> };
+
+  const form = document.querySelector<HTMLFormElement>('[data-suche]');
+  const feld = document.querySelector<HTMLInputElement>('#suchbegriff');
+  const status = document.querySelector<HTMLElement>('[data-status]');
+  const liste = document.querySelector<HTMLOListElement>('[data-ergebnisse]');
+  let pagefind: Pagefind | null = null;
+
+  async function laden(): Promise<Pagefind | null> {
+    if (pagefind) return pagefind;
+    try {
+      const pfad = '/pagefind/pagefind.js';
+      pagefind = (await import(/* @vite-ignore */ pfad)) as Pagefind;
+      await pagefind.init?.();
+      return pagefind;
+    } catch {
+      return null;
+    }
+  }
+
+  // Auszüge von Pagefind enthalten nur <mark>-Hervorhebungen; alles andere wird entfernt.
+  function sichererAuszug(html: string): DocumentFragment {
+    const vorlage = document.createElement('template');
+    vorlage.innerHTML = html;
+    const frag = document.createDocumentFragment();
+    for (const knoten of Array.from(vorlage.content.childNodes)) {
+      if (knoten.nodeType === Node.TEXT_NODE) frag.append(knoten.textContent ?? '');
+      else if (knoten instanceof HTMLElement && knoten.tagName === 'MARK') {
+        const m = document.createElement('mark');
+        m.textContent = knoten.textContent;
+        frag.append(m);
+      } else frag.append(knoten.textContent ?? '');
+    }
+    return frag;
+  }
+
+  async function suchen(begriff: string) {
+    if (!status || !liste) return;
+    liste.replaceChildren();
+    const q = begriff.trim();
+    if (q.length < 2) { status.textContent = 'Bitte mindestens zwei Zeichen eingeben.'; return; }
+    status.textContent = 'Suche läuft …';
+    const pf = await laden();
+    if (!pf) { status.textContent = 'Die Suche ist derzeit nicht verfügbar. Bitte nutzen Sie den Wissensbereich.'; return; }
+    const res = await pf.search(q);
+    const daten = await Promise.all(res.results.slice(0, 20).map((r) => r.data()));
+    status.textContent = daten.length === 0 ? `Keine Treffer für «${q}».` : `${daten.length} Treffer für «${q}»`;
+    for (const d of daten) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = d.url;
+      a.textContent = d.meta.title ?? d.url;
+      const p = document.createElement('p');
+      p.append(sichererAuszug(d.excerpt));
+      li.append(a, p);
+      liste.append(li);
+    }
+  }
+
+  if (form && feld && status) {
+    status.textContent = 'Geben Sie einen Suchbegriff ein.';
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const url = new URL(location.href);
+      url.searchParams.set('q', feld.value);
+      history.replaceState(null, '', url);
+      suchen(feld.value);
+    });
+    const start = new URL(location.href).searchParams.get('q');
+    if (start) { feld.value = start; suchen(start); }
+  }
+</script>
+
+<style>
+  .such-abschnitt { border-top: 0; padding-top: 8px; }
+  .such-form { display: grid; gap: 8px; max-width: 720px; }
+  .such-zeile { display: flex; gap: 10px; flex-wrap: wrap; }
+  .such-zeile input {
+    flex: 1 1 260px; min-height: 48px; padding: 10px 14px; border-radius: var(--radius); font: inherit;
+    background: var(--tiefe); color: var(--text); border: 1px solid var(--linie-hell);
+  }
+  .such-zeile input:focus { border-color: var(--eis); outline: 2px solid var(--eis); outline-offset: 1px; }
+  .such-status { margin-top: 18px; font-family: var(--f-mono); font-size: 0.82rem; color: var(--text-ruhig); }
+  .such-ergebnisse { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; max-width: 760px; }
+  .such-ergebnisse :global(li) { padding: 16px 18px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); }
+  .such-ergebnisse :global(a) { font: 600 1.3rem var(--f-display); text-decoration: none; }
+  .such-ergebnisse :global(p) { color: var(--text-ruhig); margin-top: 6px; }
+  .such-ergebnisse :global(mark) { background: var(--eis-flaeche); color: var(--eis-stark); padding: 0 2px; }
+</style>

@@ -1,0 +1,86 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Referenzliste from '../../components/Referenzliste.astro';
+import ProjektKarte from '../../components/ProjektKarte.astro';
+import { alleKompetenzen, sichtbareProjekte } from '../../lib/content';
+import { breadcrumbJsonLd } from '../../lib/seo';
+
+export async function getStaticPaths() {
+  const kompetenzen = await alleKompetenzen();
+  return kompetenzen.map((k) => ({ params: { slug: k.id }, props: { kompetenz: k, alle: kompetenzen } }));
+}
+
+interface Props { kompetenz: CollectionEntry<'kompetenzen'>; alle: CollectionEntry<'kompetenzen'>[]; }
+const { kompetenz, alle } = Astro.props;
+const { Content } = await render(kompetenz);
+const d = kompetenz.data;
+const projekte = (await sichtbareProjekte()).filter((p) => p.data.kompetenzen.includes(kompetenz.id));
+const weitere = alle.filter((k) => k.id !== kompetenz.id);
+const site = Astro.site!;
+const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
+---
+<Basis
+  title={d.title}
+  description={d.kurz}
+  jsonLd={[breadcrumbJsonLd([
+    { name: 'Start', url: site.href },
+    { name: 'Kompetenzen', url: new URL('/kompetenzen/', site).href },
+    { name: d.title, url },
+  ])]}
+>
+  <Seitenkopf
+    titel={d.title}
+    pos={`${d.bereich} · ${d.seit}`}
+    lead={d.kurz}
+    krumen={[{ name: 'Kompetenzen', href: '/kompetenzen/' }, { name: d.title }]}
+  >
+    <div class="chips">{d.grundlagen.map((g) => <span class="chip">{g}</span>)}</div>
+  </Seitenkopf>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <article class="prosa" data-pagefind-body>
+        <Content />
+      </article>
+    </div>
+  </section>
+
+  {projekte.length > 0 && (
+    <section class="abschnitt band-hell" aria-labelledby="bsp-titel">
+      <div class="wrap">
+        <div class="abschnitt-kopf"><span class="pos">Beispiele</span><h2 id="bsp-titel">Passende Fallstudien</h2></div>
+        <div class="raster-3">{projekte.map((p) => <ProjektKarte projekt={p} />)}</div>
+      </div>
+    </section>
+  )}
+
+  {d.referenzFilter && (
+    <section class="abschnitt" aria-labelledby="ref-titel">
+      <div class="wrap">
+        <div class="abschnitt-kopf">
+          <span class="pos">Referenzen</span>
+          <h2 id="ref-titel">Belegte Referenzprojekte</h2>
+          <p>Aus Lebenslauf und Arbeitszeugnissen. Rolle jeweils wie dort angegeben.</p>
+        </div>
+        <Referenzliste filter={d.referenzFilter} kompakt />
+      </div>
+    </section>
+  )}
+
+  <section class="abschnitt" aria-labelledby="weitere-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf"><span class="pos">Weitere Felder</span><h2 id="weitere-titel">Verwandte Kompetenzen</h2></div>
+      <div class="raster-3">
+        {weitere.map((k) => (
+          <a class="karte" href={`/kompetenzen/${k.id}/`}>
+            <span class="label label-eis">{k.data.bereich}</span>
+            <h3>{k.data.title}</h3>
+            <p>{k.data.kurz}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Basis>

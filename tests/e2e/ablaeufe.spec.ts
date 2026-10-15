@@ -1,0 +1,99 @@
+import { test, expect } from '@playwright/test';
+
+test('Navigation führt zu allen Hauptseiten', async ({ page, isMobile }) => {
+  await page.goto('/');
+  const ziele = ['Profil', 'Kompetenzen', 'Projekte', 'Wissen', 'Kontakt'];
+  for (const ziel of ziele) {
+    if (isMobile) await page.locator('.nav-klein summary').click();
+    const nav = page.getByRole('navigation', { name: isMobile ? 'Hauptnavigation mobil' : 'Hauptnavigation' });
+    await nav.getByRole('link', { name: ziel, exact: true }).click();
+    await expect(page.locator('h1')).toBeVisible();
+    const navKlasse = isMobile ? '.nav-klein' : '.nav-gross';
+    await expect(page.locator(`${navKlasse} a[aria-current="page"]`)).toHaveText(ziel);
+  }
+});
+
+test('Startseite zeigt Positionierung und zwei Handlungsoptionen', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('h1')).toContainText('Tiefbau verstehen');
+  await expect(page.getByRole('link', { name: /Fachlichen Austausch starten/ })).toHaveAttribute('href', '/kontakt/');
+  await expect(page.getByRole('link', { name: 'Kompetenzen entdecken' })).toHaveAttribute('href', '/kompetenzen/');
+});
+
+test('Alle internen Links der Startseite und Unterseiten funktionieren', async ({ page, request }) => {
+  const besucht = new Set<string>();
+  const offen = ['/'];
+  const kaputt: string[] = [];
+  while (offen.length) {
+    const pfad = offen.shift()!;
+    if (besucht.has(pfad)) continue;
+    besucht.add(pfad);
+    const r = await request.get(pfad);
+    if (r.status() >= 400) { kaputt.push(`${pfad} → ${r.status()}`); continue; }
+    if (!(r.headers()['content-type'] ?? '').includes('text/html')) continue;
+    await page.goto(pfad);
+    const hrefs = await page.$$eval('a[href^="/"]', (as) => as.map((a) => a.getAttribute('href')!));
+    for (const h of hrefs) {
+      const sauber = h.split('#')[0];
+      if (sauber && !besucht.has(sauber)) offen.push(sauber);
+    }
+  }
+  expect(kaputt).toEqual([]);
+  expect(besucht.size).toBeGreaterThan(15);
+});
+
+test('Referenzprojekte lassen sich filtern', async ({ page }) => {
+  await page.goto('/projekte/');
+  const zaehler = page.locator('[data-zaehler]');
+  await expect(zaehler).toContainText('39');
+  await page.getByRole('button', { name: /Bahn/ }).click();
+  await expect(zaehler).toContainText('1 von 39');
+  await page.getByRole('button', { name: /^Alle/ }).click();
+  await expect(zaehler).toContainText('39 von 39');
+});
+
+test('Kontaktseite verweist auf LinkedIn, solange das Formular deaktiviert ist', async ({ page }) => {
+  await page.goto('/kontakt/');
+  await expect(page.getByRole('link', { name: /Nachricht auf LinkedIn/ })).toHaveAttribute('href', /linkedin\.com\/in\//);
+  await expect(page.locator('form.formular')).toHaveCount(0);
+  await expect(page.getByText('Derzeit über LinkedIn')).toBeVisible();
+});
+
+test('POST an deaktiviertes Formular wird abgelehnt', async ({ request, baseURL }) => {
+  const r = await request.post('/kontakt/', {
+    form: { name: 'Test', email: 'test@example.ch', anliegen: 'Anderes', nachricht: 'x'.repeat(30), einwilligung: 'ja' },
+    headers: { origin: baseURL! },
+  });
+  expect(r.status()).toBe(503);
+});
+
+test('POST von fremder Herkunft wird blockiert (CSRF-Schutz)', async ({ request }) => {
+  const r = await request.post('/kontakt/', {
+    form: { name: 'Test' },
+    headers: { origin: 'https://angreifer.example' },
+  });
+  expect(r.status()).toBe(403);
+});
+
+test('Suche findet Inhalte', async ({ page }) => {
+  await page.goto('/suche/');
+  await page.getByLabel('Suchbegriff').fill('Abrechnung');
+  await page.getByRole('button', { name: 'Suchen' }).click();
+  await expect(page.locator('[data-status]')).toContainText('Treffer');
+  await expect(page.locator('[data-ergebnisse] li').first()).toBeVisible();
+});
+
+test('Suche meldet leere Ergebnisse verständlich', async ({ page }) => {
+  await page.goto('/suche/?q=Xylophonorchester');
+  await expect(page.locator('[data-status]')).toContainText('Keine Treffer');
+});
+
+test('Skip-Link springt zum Inhalt', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'Tastaturbedienung nur auf Desktop geprüft');
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  const skip = page.getByRole('link', { name: 'Zum Inhalt springen' });
+  await expect(skip).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#inhalt$/);
+});

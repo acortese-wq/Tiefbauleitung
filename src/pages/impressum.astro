@@ -1,0 +1,53 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { person } from '../data/person';
+---
+<Basis title="Impressum" description="Impressum und Anbieterkennzeichnung der persönlichen Webseite von Alessandro Cortese.">
+  <Seitenkopf titel="Impressum" krumen={[{ name: 'Impressum' }]} />
+  <section class="abschnitt recht">
+    <div class="wrap prosa">
+      <p class="hinweis">
+        <strong>Offene Angaben:</strong> Die vollständige Postanschrift fehlt noch. Ob für diese persönliche Webseite eine
+        Impressumspflicht besteht, hängt vom Angebot ab (zum Beispiel bei kommerziellen Dienstleistungen gemäss Art. 3 Abs. 1
+        lit. s UWG). Bitte vor der Veröffentlichung rechtlich klären.
+      </p>
+
+      <h2>Verantwortlich für den Inhalt</h2>
+      <p>
+        {person.name}<br />
+        <em class="offen">Strasse und Hausnummer ergänzen</em><br />
+        <em class="offen">PLZ</em> {person.ort}<br />
+        Schweiz
+      </p>
+
+      <h2>Kontakt</h2>
+      <p>
+        Über LinkedIn: <a href={person.linkedin} rel="noopener" target="_blank">{person.linkedinLabel}</a><br />
+        <em class="offen">Geschäftliche E-Mail-Adresse ergänzen, falls erforderlich</em>
+      </p>
+
+      <h2>Hinweis zum Arbeitgeber</h2>
+      <p>
+        Dies ist eine private Webseite. Die Inhalte geben die persönliche Sicht von {person.name} wieder und sind keine
+        Stellungnahmen der {person.arbeitgeber} oder früherer Arbeitgeber.
+      </p>
+
+      <h2>Haftung für Inhalte und Links</h2>
+      <p>
+        Die Inhalte wurden mit Sorgfalt erstellt. Fachbeiträge dienen der allgemeinen Information und ersetzen keine
+        Beratung im Einzelfall. Für Inhalte verlinkter externer Webseiten sind ausschliesslich deren Betreiber verantwortlich.
+      </p>
+
+      <h2>Urheberrecht</h2>
+      <p>
+        Texte, Grafiken und Fotos dieser Webseite sind urheberrechtlich geschützt. Die Verwendung ausserhalb des
+        persönlichen Gebrauchs bedarf der Zustimmung. Der Schachtassistent wurde von {person.name} entwickelt.
+      </p>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .recht { border-top: 0; padding-top: 8px; }
+</style>

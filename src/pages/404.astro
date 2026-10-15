@@ -1,0 +1,26 @@
+---
+import Basis from '../layouts/Basis.astro';
+---
+<Basis title="Seite nicht gefunden" description="Die gesuchte Seite existiert nicht oder wurde verschoben." noindex>
+  <section class="fehlerseite">
+    <div class="wrap">
+      <p class="pos">Fehler 404 · Kote nicht gefunden</p>
+      <h1>Hier ist kein Leitungsplan eingetragen</h1>
+      <p class="lead">Die Seite existiert nicht oder wurde verschoben. Vielleicht hilft einer dieser Wege weiter:</p>
+      <ul class="wege">
+        <li><a class="btn" href="/">Zur Startseite</a></li>
+        <li><a class="btn btn-ghost" href="/kompetenzen/">Kompetenzen</a></li>
+        <li><a class="btn btn-ghost" href="/wissen/">Wissen</a></li>
+        <li><a class="btn btn-ghost" href="/suche/">Suche</a></li>
+      </ul>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .fehlerseite { padding-block: clamp(64px, 12vw, 160px); }
+  .fehlerseite .wrap { display: grid; gap: 18px; }
+  .fehlerseite h1 { font-size: var(--s-4); text-transform: uppercase; max-width: 16ch; }
+  .lead { color: var(--text-ruhig); font-size: var(--s-1); max-width: 56ch; }
+  .wege { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px; }
+</style>

@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { projektArtLabel } from '../lib/content';
+interface Props { projekt: CollectionEntry<'projekte'>; }
+const { projekt } = Astro.props;
+const d = projekt.data;
+---
+<a class="karte projekt-karte" href={`/projekte/${projekt.id}/`}>
+  {d.bild && (
+    <picture class="projekt-bild">
+      <source srcset={`${d.bild}.webp`} type="image/webp" />
+      <img src={`${d.bild}.jpg`} alt={d.bildAlt ?? ''} loading="lazy" decoding="async" width="400" height="600" />
+    </picture>
+  )}
+  {!d.bild && (
+    <div class="projekt-bild projekt-bild-schema" aria-hidden="true">
+      <svg viewBox="0 0 240 150">
+        <rect x="16" y="22" width="60" height="78" rx="3" class="ps-doc" />
+        <path d="M26 40h40M26 52h34M26 64h40M26 76h28" class="ps-zeile" />
+        <path d="M80 61h40" class="ps-fluss" />
+        <circle cx="140" cy="61" r="18" class="ps-agent" />
+        <path d="M132 61l6 6 10-12" class="ps-check" />
+        <path d="M160 61h22" class="ps-fluss" />
+        <rect x="184" y="34" width="44" height="54" rx="3" class="ps-doc" />
+        <path d="M192 50h28M192 62h22M192 74h26" class="ps-zeile" />
+        <text x="16" y="128" class="ps-text">Eingang → Vorprüfung → Prüfbericht</text>
+      </svg>
+    </div>
+  )}
+  <span class={`badge badge-${d.art}`}>{projektArtLabel[d.art]}</span>
+  <h3>{d.title}</h3>
+  <p>{d.kurz}</p>
+  <span class="meta">{d.zeitraum} · {d.technologie.slice(0, 3).join(' · ')}</span>
+  <span class="mehr">Fallstudie lesen →</span>
+</a>
+
+<style>
+  .projekt-karte { padding: 0 0 24px; overflow: hidden; }
+  .projekt-karte > :not(.projekt-bild) { margin-inline: 24px; }
+  .projekt-bild { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--panel); border-bottom: 1px solid var(--linie); margin-bottom: 8px; }
+  .projekt-bild img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .5s; }
+  a.projekt-karte:hover .projekt-bild img { transform: scale(1.03); }
+  .projekt-bild-schema { display: grid; place-items: center; }
+  .projekt-bild-schema svg { width: 90%; }
+  .ps-doc { fill: none; stroke: var(--text-ruhig); stroke-width: 1.4; }
+  .ps-zeile { stroke: var(--linie-hell); stroke-width: 2; stroke-linecap: round; }
+  .ps-fluss { stroke: var(--eis); stroke-width: 2; stroke-dasharray: 4 5; }
+  .ps-agent { fill: var(--eis-flaeche); stroke: var(--eis); stroke-width: 1.8; }
+  .ps-check { fill: none; stroke: var(--eis); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .ps-text { fill: var(--text-ruhig); font-family: var(--f-mono); font-size: 10px; }
+</style>

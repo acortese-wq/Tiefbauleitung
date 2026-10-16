@@ -7,6 +7,18 @@ import Referenzbilder from '../../components/Referenzbilder.astro';
 import ProjektKarte from '../../components/ProjektKarte.astro';
 import { alleKompetenzen, sichtbareProjekte } from '../../lib/content';
 import { breadcrumbJsonLd } from '../../lib/seo';
+import TiefbauInfrastruktur from '../../components/illustrationen/TiefbauInfrastruktur.astro';
+import NetzinfrastrukturLeitungsbau from '../../components/illustrationen/NetzinfrastrukturLeitungsbau.astro';
+import DigitalisierungProzesse from '../../components/illustrationen/DigitalisierungProzesse.astro';
+import KiAgenten from '../../components/illustrationen/KiAgenten.astro';
+
+// Planzeichnung im Seitenkopf, solange kein Kopfbild (bild im Frontmatter) gesetzt ist
+const zeichnungen: Record<string, typeof TiefbauInfrastruktur> = {
+  'tiefbau-infrastruktur': TiefbauInfrastruktur,
+  'netzinfrastruktur-leitungsbau': NetzinfrastrukturLeitungsbau,
+  'digitalisierung-prozesse': DigitalisierungProzesse,
+  'ki-agenten': KiAgenten,
+};
 
 export async function getStaticPaths() {
   const kompetenzen = await alleKompetenzen();
@@ -19,6 +31,7 @@ const { Content } = await render(kompetenz);
 const d = kompetenz.data;
 const projekte = (await sichtbareProjekte()).filter((p) => p.data.kompetenzen.includes(kompetenz.id));
 const weitere = alle.filter((k) => k.id !== kompetenz.id);
+const Zeichnung = zeichnungen[kompetenz.id];
 const site = Astro.site!;
 const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
 ---
@@ -38,6 +51,7 @@ const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
     krumen={[{ name: 'Kompetenzen', href: '/kompetenzen/' }, { name: d.title }]}
     bild={d.bild ? { ordner: 'kompetenzen', name: d.bild, alt: d.bildAlt!, hinweis: d.bildHinweis } : undefined}
   >
+    {Zeichnung && <Zeichnung slot="bild" />}
     <div class="chips">{d.grundlagen.map((g) => <span class="chip">{g}</span>)}</div>
   </Seitenkopf>
 

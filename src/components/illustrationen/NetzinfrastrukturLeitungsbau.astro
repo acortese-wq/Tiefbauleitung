@@ -1,0 +1,54 @@
+---
+// Situationsplan einer Dorfstrasse: bestehende Werkleitungen, neue Glasfasertrasse mit
+// Schächten und Hausanschlüssen, eine Querung mit bestehender Leitung als Konfliktpunkt.
+import '../../styles/plan.css';
+const oben = [250, 330, 410, 500];
+const unten = [290, 380, 470, 550];
+---
+<svg class="pz" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="pz-nl-t pz-nl-d">
+  <title id="pz-nl-t">Situationsplan Werkleitungen mit Glasfasertrasse</title>
+  <desc id="pz-nl-d">Schematischer Situationsplan einer Dorfstrasse mit bestehenden Leitungen für Wasser, Abwasser und Strom. Eine neue Glasfasertrasse mit zwei Schächten erschliesst die Häuser beidseits der Strasse. Wo ein bestehender Wasser-Hausanschluss die Trasse quert, ist ein Konfliktpunkt markiert.</desc>
+
+  <!-- Strasse -->
+  <line x1="220" y1="150" x2="600" y2="150" class="pz-kontur" />
+  <line x1="220" y1="262" x2="600" y2="262" class="pz-kontur" />
+
+  <!-- Gebäude -->
+  {oben.map((x) => <rect x={x} y="70" width="56" height="48" class="pz-flaeche" />)}
+  {unten.map((x) => <rect x={x} y="296" width="56" height="48" class="pz-flaeche" />)}
+
+  <!-- Bestehende Werkleitungen -->
+  <line x1="220" y1="172" x2="600" y2="172" class="pz-leitung" stroke-dasharray="10 4" />
+  <line x1="220" y1="240" x2="600" y2="240" class="pz-leitung" stroke-dasharray="14 4 2 4" />
+  <line x1="220" y1="226" x2="600" y2="226" class="pz-leitung" stroke-dasharray="2 4" />
+  <!-- Wasser-Hausanschluss quert die neue Trasse -->
+  <path d="M438 172 L438 296" class="pz-leitung" stroke-dasharray="10 4" />
+
+  <!-- Neue Glasfasertrasse mit Schächten und Hausanschlüssen -->
+  <line x1="220" y1="204" x2="600" y2="204" class="pz-eis pz-zeichnen" />
+  <g class="pz-auftauchen">
+    <rect x="304" y="196" width="16" height="16" class="pz-eis-flaeche" />
+    <rect x="514" y="196" width="16" height="16" class="pz-eis-flaeche" />
+    {oben.map((x) => <path d={`M${x + 28} 204 L${x + 28} 118`} class="pz-eis-fein" />)}
+    {unten.map((x) => <path d={`M${x + 28} 204 L${x + 28} 296`} class="pz-eis-fein" />)}
+  </g>
+
+  <!-- Konfliktpunkt -->
+  <circle cx="438" cy="204" r="11" class="pz-signal-linie" />
+  <circle cx="438" cy="204" r="2.6" class="pz-signal" />
+
+  <!-- Nordpfeil -->
+  <path d="M574 46 l6 16 l-6 -4 l-6 4 z" class="pz-signal" />
+  <text x="570" y="40" class="pz-text">N</text>
+
+  <!-- Legende und Beschriftung -->
+  <text x="226" y="166" class="pz-text pz-klein">W</text>
+  <text x="226" y="198" class="pz-text pz-klein pz-text-eis">FTTH neu</text>
+  <text x="226" y="222" class="pz-text pz-klein">EW</text>
+  <text x="226" y="256" class="pz-text pz-klein">ARA</text>
+  <line x1="530" y1="196" x2="560" y2="140" class="pz-hinweislinie" />
+  <text x="532" y="134" class="pz-text">Schacht</text>
+  <text x="362" y="140" class="pz-text pz-text-signal">Querung prüfen</text>
+  <line x1="420" y1="144" x2="434" y2="194" class="pz-hinweislinie" />
+  <text x="250" y="384" class="pz-text pz-klein">Situation Werkleitungen, schematisch</text>
+</svg>

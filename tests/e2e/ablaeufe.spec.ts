@@ -129,3 +129,15 @@ test('Mobiles Menü schliesst mit Escape und Klick ausserhalb', async ({ page, i
   await page.mouse.click(8, ansicht.height - 8);
   await expect(menue).not.toHaveAttribute('open', '');
 });
+
+test('Jede Kompetenzseite zeigt eine beschriebene Planzeichnung im Seitenkopf', async ({ page }) => {
+  for (const id of ['tiefbau-infrastruktur', 'netzinfrastruktur-leitungsbau', 'digitalisierung-prozesse', 'ki-agenten']) {
+    await page.goto(`/kompetenzen/${id}/`);
+    const zeichnung = page.locator('.seitenkopf .kopf-illustration svg[role="img"]');
+    await expect(zeichnung).toBeVisible();
+    await expect(zeichnung.locator('title')).not.toBeEmpty();
+    await expect(zeichnung.locator('desc')).not.toBeEmpty();
+    // Text bleibt vor der Zeichnung lesbar (h1 nicht verdeckt)
+    await expect(page.locator('h1')).toBeVisible();
+  }
+});

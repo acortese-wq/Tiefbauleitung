@@ -9,8 +9,13 @@ interface Props {
 }
 const { titel, lead, pos, krumen = [], bild } = Astro.props;
 const pfad = bild && `/bilder/${bild.ordner}/${bild.name}`;
+// Ohne Bilddatei kann eine Zeichnung (SVG) über den Slot «bild» übergeben werden.
+const illustration = !bild && Astro.slots.has('bild');
 ---
-<section class:list={['seitenkopf', { 'mit-bild': bild }]}>
+<section class:list={['seitenkopf', { 'mit-bild': bild || illustration }]}>
+  {illustration && (
+    <div class="kopf-bild kopf-illustration"><slot name="bild" /></div>
+  )}
   {bild && (
     <figure class="kopf-bild">
       <picture>
@@ -48,6 +53,7 @@ const pfad = bild && `/bilder/${bild.ordner}/${bild.name}`;
   }
   .mit-bild { display: flex; flex-direction: column-reverse; }
   .mit-bild .kopf-bild { margin: 24px 16px 0; aspect-ratio: 16 / 9; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; }
+  .mit-bild .kopf-illustration { aspect-ratio: 3 / 2; border: 0; border-radius: 0; overflow: visible; }
   @media (min-width: 900px) {
     .mit-bild { display: block; }
     .mit-bild .kopf-bild {
@@ -61,5 +67,11 @@ const pfad = bild && `/bilder/${bild.ordner}/${bild.name}`;
       -webkit-mask-composite: source-in; mask-composite: intersect;
     }
     .mit-bild .kopf-bild figcaption { bottom: 14px; right: 16px; }
+    /* Zeichnung: nur links weich auslaufen, Planbeschriftung unten bleibt lesbar */
+    .mit-bild .kopf-illustration { padding: 20px 24px 12px 0; }
+    .mit-bild .kopf-illustration > :global(svg) {
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 32%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 32%);
+    }
   }
 </style>

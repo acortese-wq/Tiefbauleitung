@@ -1,0 +1,51 @@
+---
+// Leistungsverzeichnis wird in ein Prüfwerkzeug übertragen: Positionen werden mit
+// Vertrag und Ausmass verglichen, Abweichungen markiert, das Ergebnis ist nachvollziehbar.
+import '../../styles/plan.css';
+const positionen = ['111.111', '113.121', '211.112', '237.211', '237.311', '241.123', '421.101', '511.212'];
+const markiert = new Set([2, 5]);
+const spalten = [0, 1, 2, 3];
+---
+<svg class="pz" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="pz-dp-t pz-dp-d">
+  <title id="pz-dp-t">Vom Leistungsverzeichnis zum Prüfwerkzeug</title>
+  <desc id="pz-dp-d">Schematische Darstellung: Ein Leistungsverzeichnis mit NPK-Positionen wird in eine Prüftabelle übertragen. Zwei Positionen sind markiert, eine Abweichung ist hervorgehoben, am Ende steht ein geprüftes Ergebnis.</desc>
+
+  <!-- Blatt Leistungsverzeichnis -->
+  <rect x="244" y="64" width="128" height="284" rx="3" class="pz-flaeche" />
+  <text x="256" y="86" class="pz-text pz-klein">LV · NPK</text>
+  <line x1="256" y1="94" x2="360" y2="94" class="pz-kontur-hell" />
+  {positionen.map((p, i) => (
+    <g>
+      {markiert.has(i) && <rect x="250" y={102 + i * 28} width="116" height="22" class="pz-eis-flaeche" />}
+      <text x="256" y={117 + i * 28} class={markiert.has(i) ? 'pz-text pz-klein pz-text-eis' : 'pz-text pz-klein'}>{p}</text>
+      <line x1="306" y1={113 + i * 28} x2={330 + ((i * 17) % 28)} y2={113 + i * 28} class="pz-kontur-hell" />
+    </g>
+  ))}
+
+  <!-- Übertragung -->
+  <path d="M372 172 C 400 172, 404 150, 424 150" class="pz-eis pz-zeichnen" />
+  <path d="M372 256 C 400 256, 404 230, 424 230" class="pz-eis pz-zeichnen" />
+
+  <!-- Prüftabelle -->
+  <rect x="424" y="110" width="152" height="170" rx="3" class="pz-flaeche" />
+  {spalten.map((c) => <text x={434 + c * 36} y="128" class="pz-text pz-klein">{['Pos', 'LV', 'Vtg', 'Ausm'][c]}</text>)}
+  {[0, 1, 2, 3, 4].map((r) => (
+    <line x1="430" y1={138 + r * 28} x2="570" y2={138 + r * 28} class="pz-kontur-hell" />
+  ))}
+  {[0, 1, 2].map((c) => <line x1={466 + c * 36} y1="114" x2={466 + c * 36} y2="274" class="pz-kontur-hell" />)}
+  <g class="pz-auftauchen">
+    <rect x="538" y="210" width="34" height="24" class="pz-signal-linie" />
+    <circle cx="555" cy="222" r="3" class="pz-signal" />
+  </g>
+
+  <!-- Ergebnis -->
+  <path d="M500 280 L500 312" class="pz-eis-fein" />
+  <circle cx="500" cy="326" r="14" class="pz-eis-flaeche" />
+  <path d="M493 326 l5 5 l10 -11" class="pz-eis" />
+
+  <!-- Beschriftung -->
+  <text x="432" y="100" class="pz-text">Prüfwerkzeug</text>
+  <text x="520" y="252" class="pz-text pz-klein pz-text-signal">Abweichung</text>
+  <text x="480" y="330" text-anchor="end" class="pz-text pz-klein">mit Fundstelle</text>
+  <text x="244" y="384" class="pz-text pz-klein">Prüfung Leistungsverzeichnis, schematisch</text>
+</svg>

@@ -1,0 +1,64 @@
+---
+// Querschnitt einer Strassenbrücke während der Instandsetzung unter Verkehr:
+// Randbalken rechts abgetragen (Bewehrung freigelegt), Hängegerüst, eine Spur gesperrt.
+import '../../styles/plan.css';
+const buegel = [0, 1, 2];
+---
+<svg class="pz" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="pz-tb-t pz-tb-d">
+  <title id="pz-tb-t">Querschnitt einer Brücke in Instandsetzung</title>
+  <desc id="pz-tb-d">Schematischer Querschnitt einer Strassenbrücke: Fahrbahnplatte auf Plattenbalken und Pfeiler. Der rechte Randbalken ist abgetragen, die Bewehrung freigelegt, darunter hängt ein Arbeitsgerüst. Eine Fahrspur ist gesperrt, auf der anderen läuft der Verkehr weiter.</desc>
+  <defs>
+    <pattern id="pz-tb-boden" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="10" class="pz-schraffur" />
+    </pattern>
+  </defs>
+
+  <!-- Terrain, Fundament, Pfeiler -->
+  <path d="M200 340 L330 318 L470 318 L600 296 L600 400 L200 400 Z" fill="url(#pz-tb-boden)" />
+  <path d="M200 340 L330 318 L470 318 L600 296" class="pz-terrain" />
+  <rect x="356" y="318" width="98" height="22" class="pz-beton" />
+  <path d="M384 226 L392 318 L418 318 L426 226" class="pz-beton" />
+
+  <!-- Überbau: Fahrbahnplatte mit Kragarmen, zwei Stege -->
+  <path d="M262 150 L548 150 L548 166 L470 172 L466 226 L438 226 L434 174 L376 174 L372 226 L344 226 L340 172 L262 166 Z" class="pz-beton" />
+  <!-- Randbalken links (bestehend) mit Geländer -->
+  <rect x="250" y="138" width="14" height="30" class="pz-beton" />
+  <line x1="257" y1="138" x2="257" y2="116" class="pz-kontur-hell" />
+  <line x1="252" y1="116" x2="268" y2="116" class="pz-kontur-hell" />
+
+  <!-- Randbalken rechts: abgetragen, Bewehrung freigelegt -->
+  <rect x="548" y="138" width="16" height="30" class="pz-entfernt" />
+  <g class="pz-auftauchen">
+    {buegel.map((i) => <circle cx={552 + (i % 2) * 8} cy={144 + i * 8} r="1.8" class="pz-punkt" />)}
+    <path d="M550 142 L562 142 L562 164 L550 164" class="pz-eis-fein" />
+  </g>
+
+  <!-- Hängegerüst unter dem Kragarm -->
+  <line x1="512" y1="168" x2="512" y2="236" class="pz-kontur-hell" />
+  <line x1="584" y1="150" x2="584" y2="236" class="pz-kontur-hell" />
+  <line x1="548" y1="150" x2="584" y2="150" class="pz-kontur-hell" />
+  <line x1="500" y1="236" x2="592" y2="236" class="pz-kontur" />
+  <line x1="500" y1="222" x2="500" y2="236" class="pz-kontur-hell" />
+  <line x1="592" y1="222" x2="592" y2="236" class="pz-kontur-hell" />
+
+  <!-- Verkehr: linke Spur offen, rechte Spur gesperrt -->
+  <path d="M405 140 v8" class="pz-kontur-hell" stroke-dasharray="2 2" />
+  <circle cx="335" cy="132" r="7" class="pz-eis" />
+  <circle cx="335" cy="132" r="1.8" class="pz-punkt" />
+  <path d="M462 150 L468 132 L496 132 L502 150 Z" class="pz-flaeche" />
+  <circle cx="482" cy="124" r="4.5" class="pz-signal" />
+
+  <!-- Masse und Beschriftung -->
+  <line x1="262" y1="74" x2="548" y2="74" class="pz-masslinie" />
+  <line x1="262" y1="68" x2="262" y2="80" class="pz-masslinie" />
+  <line x1="548" y1="68" x2="548" y2="80" class="pz-masslinie" />
+  <line x1="405" y1="68" x2="405" y2="80" class="pz-masslinie" />
+  <text x="300" y="66" class="pz-text">Fahrstreifen</text>
+  <text x="430" y="66" class="pz-text pz-text-signal">gesperrt</text>
+  <text x="314" y="108" class="pz-text pz-text-eis">Verkehr</text>
+  <line x1="562" y1="138" x2="580" y2="110" class="pz-hinweislinie" />
+  <text x="598" y="104" text-anchor="end" class="pz-text">Randbalken</text>
+  <text x="598" y="91" text-anchor="end" class="pz-text pz-klein pz-text-eis">Bewehrung frei</text>
+  <text x="508" y="254" class="pz-text">Hängegerüst</text>
+  <text x="250" y="384" class="pz-text pz-klein">Querschnitt Brücke, Instandsetzung unter Verkehr, schematisch</text>
+</svg>

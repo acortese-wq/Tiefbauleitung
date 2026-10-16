@@ -1,0 +1,57 @@
+---
+// Ablauf eines KI-Agenten mit klarer Aufgabe: Belege rein, Abgleich mit Wissensbasis
+// (Normen, Vertrag), Prüfbericht mit Fundstellen, Entscheid bei der Fachperson.
+import '../../styles/plan.css';
+const belege = ['Offerte', 'Ausmass', 'Rechnung'];
+const netz = [[396, 186], [430, 160], [462, 186], [446, 222], [412, 222], [430, 194]];
+const kanten = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [0, 5], [1, 5], [2, 5], [3, 5], [4, 5]];
+---
+<svg class="pz" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="pz-ki-t pz-ki-d">
+  <title id="pz-ki-t">Ablauf eines Prüf-Agenten</title>
+  <desc id="pz-ki-d">Schematischer Ablauf: Offerte, Ausmass und Rechnung gehen an einen KI-Agenten. Der Agent gleicht sie mit einer Wissensbasis aus Normen und Vertrag ab und erstellt einen Prüfbericht mit Fundstellen. Den Entscheid trifft die Fachperson.</desc>
+
+  <!-- Belege -->
+  {belege.map((b, i) => (
+    <g>
+      <path d={`M250 ${110 + i * 76} h44 l10 10 v38 h-54 z`} class="pz-flaeche" />
+      <line x1="258" y1={132 + i * 76} x2="294" y2={132 + i * 76} class="pz-kontur-hell" />
+      <line x1="258" y1={140 + i * 76} x2="286" y2={140 + i * 76} class="pz-kontur-hell" />
+      <text x="250" y={172 + i * 76} class="pz-text pz-klein">{b}</text>
+      <path d={`M306 ${136 + i * 76} C 340 ${136 + i * 76}, 350 192, 384 192`} class="pz-eis-fein" />
+    </g>
+  ))}
+
+  <!-- Wissensbasis -->
+  <ellipse cx="430" cy="78" rx="34" ry="8" class="pz-flaeche" />
+  <path d="M396 78 v34 a34 8 0 0 0 68 0 v-34" class="pz-kontur" />
+  <text x="474" y="84" class="pz-text pz-klein">Normen · Vertrag</text>
+  <line x1="430" y1="122" x2="430" y2="156" class="pz-eis-fein" stroke-dasharray="3 3" />
+
+  <!-- Agent -->
+  <g>
+    {kanten.map(([a, b]) => <line x1={netz[a][0]} y1={netz[a][1]} x2={netz[b][0]} y2={netz[b][1]} class="pz-eis-fein" />)}
+    {netz.map(([x, y], i) => <circle cx={x} cy={y} r={i === 5 ? 6 : 3.4} class="pz-punkt" />)}
+  </g>
+  <text x="404" y="248" class="pz-text pz-text-eis">KI-Agent</text>
+
+  <!-- Prüfbericht -->
+  <path d="M470 194 C 488 194, 492 194, 506 194" class="pz-eis pz-zeichnen" />
+  <rect x="506" y="150" width="66" height="92" rx="3" class="pz-flaeche" />
+  {[0, 1, 2].map((r) => (
+    <g>
+      <path d={`M514 ${170 + r * 22} l3 3 l6 -7`} class={r === 1 ? 'pz-signal-linie' : 'pz-eis'} />
+      <line x1="530" y1={168 + r * 22} x2="564" y2={168 + r * 22} class="pz-kontur-hell" />
+    </g>
+  ))}
+  <text x="506" y="262" class="pz-text pz-klein">Prüfbericht</text>
+
+  <!-- Fachperson entscheidet -->
+  <path d="M539 270 L539 296" class="pz-eis-fein" />
+  <g class="pz-auftauchen">
+    <circle cx="539" cy="312" r="8" class="pz-kontur" />
+    <path d="M523 344 c2 -14 30 -14 32 0" class="pz-kontur" />
+    <circle cx="560" cy="300" r="3.5" class="pz-signal" />
+  </g>
+  <text x="450" y="364" class="pz-text pz-klein">Fachperson entscheidet</text>
+  <text x="244" y="384" class="pz-text pz-klein">Ablauf Prüf-Agent, schematisch</text>
+</svg>

@@ -8,6 +8,22 @@ In der Arbeitsumgebung steht kein Bildgenerator zur Verfügung. Dieses Dokument 
 Prompts und die fertige technische Einbindung. Die Bilder selbst erzeugt Alessandro Cortese mit einem Generator
 seiner Wahl; danach genügt `npm run bilder` und ein Eintrag im Frontmatter.
 
+## Umgesetzt: Planzeichnungen in den Kopfbereichen
+
+Da in der Arbeitsumgebung kein Bildgenerator verfügbar ist, haben die vier Kompetenzseiten seit 16. Oktober 2026
+je eine technische Zeichnung in der Sprache des Leitmotivs (Vektorgrafik, `src/components/illustrationen/`):
+
+| Seite | Zeichnung |
+|---|---|
+| Tiefbau und Infrastruktur | Brückenquerschnitt in Instandsetzung: Randbalken abgetragen, Bewehrung frei, Hängegerüst, Spur gesperrt, Verkehr läuft |
+| Netzinfrastruktur und Leitungsbau | Situationsplan Dorfstrasse: bestehende Werkleitungen, neue FTTH-Trasse mit Schächten und Hausanschlüssen, Querung als Konfliktpunkt |
+| Digitalisierung technischer Prozesse | LV mit NPK-Positionen → Prüfwerkzeug → Abweichung markiert → Ergebnis mit Fundstelle |
+| KI-Agenten | Offerte, Ausmass, Rechnung → KI-Agent mit Wissensbasis (Normen, Vertrag) → Prüfbericht → Fachperson entscheidet |
+
+Jede Zeichnung hat Titel und Beschreibung für Screenreader, respektiert «Bewegung reduzieren» und wiegt nur wenige
+KiB. Sobald ein Foto (KI oder eigen) mit `bild:` im Frontmatter gesetzt ist, ersetzt es die Zeichnung automatisch.
+Die Prompts unten bleiben für diesen späteren Schritt gültig.
+
 ## 1. Visuelle Identität der Webseite
 
 | Merkmal | Bestand |
@@ -31,7 +47,7 @@ Gemessene Darstellungsgrössen in CSS-Pixeln (Desktop 1440 px / Smartphone 390 p
 | Startseite, Hero rechts | 545 × 418 / 358 × 275 | SVG-Leitmotiv Grabenquerschnitt → KI-Agent | **Beibehalten** | Eigenständigstes Element der Seite, transportiert die Positionierung exakt. Ein Foto würde mit der Titelzeile konkurrieren und die Marke austauschbarer machen. |
 | Startseite, Kompetenzkarten (3) | 365 × 356 | nur Text | Vorerst beibehalten | Bilder hier würden die Startseite um ca. 150 KiB schwerer machen. Nach Vorliegen der Kopfbilder neu beurteilen (P2). |
 | Kompetenzübersicht, Netzgrafik | 1128 × 490 | SVG-Netz der vier Felder | **Beibehalten** | Zeigt den Zusammenhang der Felder, passt zum Leitmotiv. |
-| **Kompetenzseiten, Kopf rechts (4)** | 792 × 488 (1920 px: 1056 × 488) / 356 × 199 | **leer** | **Neu: KI-Bild (P1)** | Grösste sichtbare Lücke: rechte Hälfte des Seitenkopfs ist auf allen vier Seiten leer. Höchster Nutzen pro Bild. |
+| **Kompetenzseiten, Kopf rechts (4)** | 792 × 488 (1920 px: 1056 × 488) / 356 × 199 | war leer, jetzt Planzeichnung | **Zeichnung umgesetzt; optional später KI-Foto** | Grösste sichtbare Lücke: rechte Hälfte des Seitenkopfs ist auf allen vier Seiten leer. Höchster Nutzen pro Bild. |
 | Fallstudien BM-Trainer, Rechnen mit Pokémon | 363 × 227 | echte App-Screenshots | **Beibehalten** | Authentischer Beleg, ein KI-Bild wäre schlechter. |
 | Fallstudie Prüf-Agent (Konzept) | 363 × 227 | Schema Eingang → Prüfung → Prüfbericht | **Beibehalten** | Ehrlich als Konzept erkennbar. Ein fotorealistisches Bild würde ein fertiges Produkt suggerieren. |
 | Referenzobjekte (3) | 268 × 201 / 356 × 267 | echte Fotos | **Beibehalten, nie durch KI ersetzen** | Belegte Referenzen. Rheinbrücke Fläsch nur 512 px breit: Original in höherer Auflösung nachliefern. |

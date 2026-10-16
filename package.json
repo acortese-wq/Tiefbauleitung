@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "astro dev",
     "admin": "KEYSTATIC=true astro dev",
+    "bilder": "node scripts/bilder.mjs",
     "build": "astro check && astro build && pagefind --site dist/client",
     "build:fast": "astro build && pagefind --site dist/client",
     "build:vorschau": "SHOW_DRAFTS=true astro build && pagefind --site dist/client",
@@ -45,6 +46,7 @@
     "pagefind": "1.5.2",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "sharp": "0.35.5",
     "typescript": "5.9.3",
     "vitest": "5.0.5"
   },

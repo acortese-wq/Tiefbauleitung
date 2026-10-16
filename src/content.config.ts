@@ -54,6 +54,13 @@ const kompetenzen = defineCollection({
     seit: z.string(),
     grundlagen: z.array(z.string()).default([]),
     referenzFilter: z.string().optional(),
+    // Kopfbild: public/bilder/kompetenzen/<bild>-800.webp, -1600.webp und .jpg (erzeugt mit npm run bilder)
+    bild: z.string().regex(/^[a-z0-9-]+$/).optional(),
+    bildAlt: z.string().optional(),
+    // Sichtbarer Hinweis unter dem Bild; KI-Bilder immer als solche kennzeichnen
+    bildHinweis: z.string().default('KI-generierte Illustration'),
+  }).refine((k) => !k.bild || k.bildAlt, {
+    message: 'Zu jedem Kopfbild gehört bildAlt (Bildbeschreibung).',
   }),
 });
 
@@ -72,7 +79,7 @@ const referenzen = defineCollection({
     bildAlt: z.string().optional(),
     bildNachweis: z.string().optional(),
     // Link zur Lizenz bei fremden Fotos (z. B. Creative Commons)
-    bildLizenz: z.string().url().optional(),
+    bildLizenz: z.url().optional(),
   }).refine((r) => !r.bild || (r.bildAlt && r.bildNachweis), {
     message: 'Zu jedem Foto gehören bildAlt (Bildbeschreibung) und bildNachweis (Urheber/Lizenz).',
   }),

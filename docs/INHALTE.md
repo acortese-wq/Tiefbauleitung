@@ -41,6 +41,15 @@ eigene Fotos (bei Aufnahmen im Arbeitsverhältnis Freigabe des Arbeitgebers prü
 Urheber und Lizenz im Nachweis (z. B. «Max Muster, CC BY-SA 4.0, Wikimedia Commons»). Keine Personen erkennbar ohne
 deren Einverständnis.
 
+## Kopfbilder der Kompetenzseiten (KI-Bilder)
+
+1. Original (3:2, mind. 2400 × 1600 px) als `quellbilder/kompetenzen/<id>.jpg` ablegen.
+2. `npm run bilder` ausführen.
+3. Im Frontmatter der Kompetenz `bild: <id>` und `bildAlt: …` ergänzen.
+
+Prompts, Bildregeln und Prüfliste: [BILDKONZEPT.md](BILDKONZEPT.md). KI-Bilder werden automatisch als
+«KI-generierte Illustration» gekennzeichnet und nie für Referenzobjekte verwendet.
+
 ## Regeln für Inhalte
 
 - **Nur Belegtes.** Keine erfundenen Kennzahlen, Kunden oder Ergebnisse. Fehlendes als Platzhalter kennzeichnen.

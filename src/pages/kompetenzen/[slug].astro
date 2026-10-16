@@ -36,6 +36,7 @@ const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
     pos={`${d.bereich} · ${d.seit}`}
     lead={d.kurz}
     krumen={[{ name: 'Kompetenzen', href: '/kompetenzen/' }, { name: d.title }]}
+    bild={d.bild ? { ordner: 'kompetenzen', name: d.bild, alt: d.bildAlt!, hinweis: d.bildHinweis } : undefined}
   >
     <div class="chips">{d.grundlagen.map((g) => <span class="chip">{g}</span>)}</div>
   </Seitenkopf>

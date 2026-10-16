@@ -25,7 +25,10 @@ const base = githubPages ? process.env.BASE_PATH || '/Tiefbauleitung' : undefine
  */
 function unterordnerLinks(unterordner, seite) {
   const ohne = unterordner.replace(/^\//, '');
-  const intern = new RegExp(`((?:href|src|srcset|action)=")/(?!/|${ohne}/)`, 'g');
+  const intern = new RegExp(`((?:href|src|action)=")/(?!/|${ohne}/)`, 'g');
+  // srcset kann mehrere Adressen enthalten («a.webp 800w, b.webp 1600w»): jede einzeln ergänzen
+  const srcset = /srcset="([^"]*)"/g;
+  const eintrag = new RegExp(`(^|,\\s*)/(?!/|${ohne}/)`, 'g');
   const absolut = new RegExp(`${seite.replace(/[.]/g, '\\.')}/(?!${ohne}/)`, 'g');
   /**
    * @param {string} ordner
@@ -44,7 +47,10 @@ function unterordnerLinks(unterordner, seite) {
       'astro:build:done': async ({ dir }) => {
         for await (const datei of dateien(fileURLToPath(dir))) {
           const alt = await readFile(datei, 'utf8');
-          const neu = alt.replace(intern, `$1${unterordner}/`).replace(absolut, `${seite}${unterordner}/`);
+          const neu = alt
+            .replace(srcset, (_, wert) => `srcset="${wert.replace(eintrag, `$1${unterordner}/`)}"`)
+            .replace(intern, `$1${unterordner}/`)
+            .replace(absolut, `${seite}${unterordner}/`);
           if (neu !== alt) await writeFile(datei, neu);
         }
       },

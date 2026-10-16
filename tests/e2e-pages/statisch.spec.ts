@@ -23,7 +23,9 @@ for (const pfad of SEITEN) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
     const falscheLinks = await page.$$eval('a[href], img[src], link[href], script[src], source[srcset]', (els, basis) =>
       els
-        .map((e) => e.getAttribute('href') ?? e.getAttribute('src') ?? e.getAttribute('srcset') ?? '')
+        // srcset kann mehrere Adressen enthalten: jede einzeln prüfen
+        .flatMap((e) => (e.getAttribute('href') ?? e.getAttribute('src') ?? e.getAttribute('srcset') ?? '').split(','))
+        .map((u) => u.trim())
         .filter((u) => u.startsWith('/') && !u.startsWith(basis)), BASIS);
     expect(falscheLinks).toEqual([]);
     const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();

@@ -167,13 +167,17 @@
   },
   {
     "id": "nasstobel-brandacker",
-    "name": "Nasstobel – Brandacker",
+    "name": "Lehnenbrücke Nasstobel – Brandacker",
     "arbeitgeber": "Tiefbauamt Graubünden",
     "zeitraum": "2013–2025",
     "rolle": "Ausführungsprojekt, Submission, Bauleitung",
     "fachgebiete": [
+      "kunstbauten",
       "strasse"
-    ]
+    ],
+    "bild": "nasstobel-brandacker",
+    "bildAlt": "Lehnenbrücke Nasstobel: geschwungene Strassenbrücke auf Stützen entlang einer bewaldeten Felsflanke, frischer Belag mit Leitschranken, im Hintergrund der Talboden mit Siedlung",
+    "bildNachweis": "Alessandro Cortese"
   },
   {
     "id": "rastplatz-heidiland",

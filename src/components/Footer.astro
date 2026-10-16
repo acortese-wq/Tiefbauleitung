@@ -1,5 +1,7 @@
 ---
 import { person } from '../data/person';
+import { hatSichtbareArtikel } from '../lib/content';
+const wissen = await hatSichtbareArtikel();
 const jahr = new Date().getFullYear();
 ---
 <footer class="fuss">
@@ -13,7 +15,7 @@ const jahr = new Date().getFullYear();
         <li><a href="/profil/">Profil</a></li>
         <li><a href="/kompetenzen/">Kompetenzen</a></li>
         <li><a href="/projekte/">Projekte</a></li>
-        <li><a href="/wissen/">Wissen</a></li>
+        {wissen && <li><a href="/wissen/">Wissen</a></li>}
         <li><a href="/kontakt/">Kontakt</a></li>
       </ul>
       <ul>

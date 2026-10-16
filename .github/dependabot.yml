@@ -1,0 +1,18 @@
+# Wöchentliche Prüfung auf Sicherheits- und Versionsupdates.
+# Dependabot öffnet Pull Requests; der Workflow testet sie, veröffentlicht aber nichts.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      astro:
+        patterns: ['astro', '@astrojs/*']
+      tests:
+        patterns: ['@playwright/*', 'playwright*', '@axe-core/*', 'vitest', 'lighthouse']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

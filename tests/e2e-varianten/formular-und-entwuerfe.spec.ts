@@ -79,3 +79,9 @@ test('Kategorie- und Schlagwortseiten funktionieren', async ({ page }) => {
   await page.goto('/wissen/schlagwort/ftth/');
   await expect(page.locator('.artikel-karte')).toHaveCount(1);
 });
+
+test('Mit sichtbaren Beiträgen erscheint «Wissen» in Navigation und Startseite', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('navigation', { name: 'Hauptnavigation' }).getByRole('link', { name: 'Wissen' })).toBeAttached();
+  await expect(page.locator('#wissen-titel')).toBeVisible();
+});

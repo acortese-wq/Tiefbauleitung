@@ -37,7 +37,10 @@ Statische Variante ohne Server, direkt aus diesem Repository. Adresse:
 **Einmalig in GitHub einstellen:**
 1. GitHub Pages braucht ein **öffentliches Repository** (oder GitHub Pro für private Repositories):
    *Settings → General → Danger Zone → Change visibility*. Vorher die Git-Historie prüfen (siehe unten).
-2. *Settings → Pages → Build and deployment → Source:* **GitHub Actions**.
+2. *Settings → Pages → Build and deployment → Source:* **GitHub Actions**. Steht dort «Deploy from a branch»,
+   versucht GitHub zusätzlich einen Jekyll-Build des Quellcodes («pages build and deployment»), der bei jedem Push
+   fehlschlägt. Keine `.nojekyll` oder `_config.yml` im Repository-Wurzelverzeichnis anlegen, sonst kann dieser Build
+   die Webseite mit Rohdateien überschreiben.
 
 **Danach automatisch:** Jeder Push auf `main` startet `.github/workflows/pages.yml`. Der Workflow prüft
 Abhängigkeiten, Typen, Unit-Tests und den statischen Build im Unterordner (Playwright) und veröffentlicht nur,
@@ -59,6 +62,12 @@ wenn alles grün ist. Manuell: *Actions → GitHub Pages → Run workflow*.
 Autor-Angaben) entfernt; der erste Commit trägt jetzt die GitHub-Noreply-Adresse. Die Historie enthält weiterhin die
 frühere Einseiten-Version mit Porträt. Alte Commit-Kennungen können bei GitHub noch eine Zeit lang direkt abrufbar
 sein; für eine sofortige vollständige Entfernung ist der GitHub-Support zuständig.
+
+### Pull Requests und Updates
+
+Der Workflow baut und testet auch Pull Requests auf `main`, veröffentlicht sie aber nicht. Dependabot
+(`.github/dependabot.yml`) schlägt wöchentlich npm-Updates und monatlich Action-Updates als Pull Request vor.
+Zusammenführen erst, wenn der Workflow grün ist.
 
 ## Deployment auf Infomaniak (Node.js)
 

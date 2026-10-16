@@ -1,5 +1,7 @@
 ---
 import Basis from '../layouts/Basis.astro';
+import { hatSichtbareArtikel } from '../lib/content';
+const wissen = await hatSichtbareArtikel();
 ---
 <Basis title="Seite nicht gefunden" description="Die gesuchte Seite existiert nicht oder wurde verschoben." noindex>
   <section class="fehlerseite">
@@ -10,7 +12,8 @@ import Basis from '../layouts/Basis.astro';
       <ul class="wege">
         <li><a class="btn" href="/">Zur Startseite</a></li>
         <li><a class="btn btn-ghost" href="/kompetenzen/">Kompetenzen</a></li>
-        <li><a class="btn btn-ghost" href="/wissen/">Wissen</a></li>
+        {wissen && <li><a class="btn btn-ghost" href="/wissen/">Wissen</a></li>}
+        <li><a class="btn btn-ghost" href="/projekte/">Projekte</a></li>
         <li><a class="btn btn-ghost" href="/suche/">Suche</a></li>
       </ul>
     </div>

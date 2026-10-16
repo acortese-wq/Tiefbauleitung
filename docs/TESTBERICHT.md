@@ -1,17 +1,17 @@
 # Testbericht
 
-Stand: 15. Oktober 2026. Alle Werte stammen aus tatsächlich ausgeführten Läufen in der Entwicklungsumgebung
+Stand: 16. Oktober 2026. Alle Werte stammen aus tatsächlich ausgeführten Läufen in der Entwicklungsumgebung
 (Linux, Node 22.22, Chromium 141 über Playwright 1.56.1). Nicht getestete Punkte sind am Ende aufgeführt.
 
 ## Zusammenfassung
 
 | Prüfung | Werkzeug | Ergebnis |
 |---|---|---|
-| Typprüfung | `astro check` (47 Dateien) | 0 Fehler, 0 Warnungen |
+| Typprüfung | `astro check` (51 Dateien) | 0 Fehler, 0 Warnungen |
 | Produktions-Build | `astro build` + Pagefind | erfolgreich, 17 Seiten + Kontakt (SSR), 7 Seiten im Suchindex |
 | Unit-Tests | Vitest | **28 bestanden** |
-| End-to-End | Playwright, Desktop Chrome + Pixel 7 | **123 bestanden**, 1 übersprungen (Skip-Link nur Desktop) |
-| End-to-End Varianten | Formular aktiv, Entwürfe sichtbar, CSRF | **8 bestanden** |
+| End-to-End | Playwright, Desktop Chrome + Pixel 7 | **130 bestanden**, 2 übersprungen (Skip-Link nur Desktop, Menü-Schliessen nur Mobil) |
+| End-to-End Varianten | Formular aktiv, Entwürfe sichtbar, «Wissen» in Navigation, CSRF | **9 bestanden** |
 | GitHub-Pages-Build | Playwright gegen statischen Dateiserver im Unterordner /Tiefbauleitung/, Desktop + Mobil: Status, Konsole, axe, keine Platzhalter, alle Links im Unterordner, Suche, Navigation, Canonical, Sitemap, robots | **42 bestanden** |
 | Barrierefreiheit | axe-core, Tags WCAG 2.0/2.1/2.2 A und AA, alle 16 Seiten, Desktop und Mobil | 0 Verstösse (nach Korrektur von 2 Kontrastfehlern) |
 | Abhängigkeiten | `npm audit` | 0 bekannte Schwachstellen |
@@ -23,6 +23,23 @@ Stand: 15. Oktober 2026. Alle Werte stammen aus tatsächlich ausgeführten Läuf
 
 Core Web Vitals (Lighthouse, simuliertes mobiles Netz, lokaler Server): LCP 2,1 s (Start) bzw. 1,8 s, CLS 0,029 bzw.
 0,024, TBT 0 ms. Gesamtgewicht der Startseite rund 182 KiB. Werte im echten Betrieb können abweichen.
+
+## Optimierungsrunde 16. Oktober 2026
+
+GitHub-Pages-Build, lokaler Server mit gzip im Unterordner, Lighthouse 12.8.2, mobil simuliert:
+
+| Seite | Vorher (Leistung · LCP · CLS) | Nachher |
+|---|---|---|
+| Startseite | 100 · 1,4 s · 0,029 | 98 · 1,8 s · 0,012 (drei Wiederholungen: 99/1,7 s, 98/1,8 s, 100/1,4 s) |
+| /projekte/ | 99 · 1,6 s · 0,025 | 99 · 1,6 s · 0,025 |
+| /kompetenzen/tiefbau-infrastruktur/ | 100 · 1,5 s · 0 | 100 · 1,4 s · 0 |
+| /profil/ | 100 · 1,5 s · 0,021 | 100 · 1,5 s · 0,021 |
+
+Barrierefreiheit, Best Practices und SEO: überall 100, vorher wie nachher. Die LCP der Startseite streut zwischen
+1,4 und 1,8 s; LCP-Element ist ein Textlabel (abhängig vom Laden der Schrift). Eine Verschlechterung durch die
+Änderungen ist daraus nicht ableitbar, eine Verbesserung auch nicht. Neue Tests: Zielgruppe und Fotos auf der
+Startseite, kein Link auf leeren Wissensbereich, chronologische Referenzliste, Menü schliesst mit Escape und Klick
+ausserhalb, «Wissen» erscheint mit sichtbaren Beiträgen.
 
 ## Was die End-to-End-Tests abdecken
 

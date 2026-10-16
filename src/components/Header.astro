@@ -1,10 +1,12 @@
 ---
+import { hatSichtbareArtikel } from '../lib/content';
 const pfad = Astro.url.pathname.replace(/\/$/, '') || '/';
+const wissen = await hatSichtbareArtikel();
 const links = [
   { href: '/profil/', label: 'Profil' },
   { href: '/kompetenzen/', label: 'Kompetenzen' },
   { href: '/projekte/', label: 'Projekte' },
-  { href: '/wissen/', label: 'Wissen' },
+  ...(wissen ? [{ href: '/wissen/', label: 'Wissen' }] : []),
   { href: '/kontakt/', label: 'Kontakt' },
 ];
 const aktiv = (href: string) => {
@@ -47,6 +49,21 @@ const aktiv = (href: string) => {
     </details>
   </div>
 </header>
+
+<script>
+  // Mobiles Menü schliessen: Escape, Klick ausserhalb, Klick auf einen Link
+  const menue = document.querySelector<HTMLDetailsElement>('.nav-klein');
+  if (menue) {
+    const schliessen = () => { menue.open = false; };
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menue.open) { schliessen(); menue.querySelector('summary')?.focus(); }
+    });
+    document.addEventListener('click', (e) => {
+      if (menue.open && !menue.contains(e.target as Node)) schliessen();
+    });
+    menue.querySelectorAll('a').forEach((a) => a.addEventListener('click', schliessen));
+  }
+</script>
 
 <style>
   .kopf {

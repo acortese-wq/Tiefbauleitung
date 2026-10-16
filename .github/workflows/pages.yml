@@ -1,10 +1,13 @@
 # Baut, testet und veröffentlicht die Webseite auf GitHub Pages
 # (https://acortese-wq.github.io/Tiefbauleitung/) bei jedem Push auf main.
+# Pull Requests (z. B. von Dependabot) werden nur gebaut und getestet, nicht veröffentlicht.
 # Voraussetzung: Settings → Pages → Source: «GitHub Actions».
 name: GitHub Pages
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -14,7 +17,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
   cancel-in-progress: false
 
 jobs:
@@ -35,12 +38,15 @@ jobs:
       - name: Statischer Build und Tests im Unterordner
         run: npm run test:pages
       - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
       - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
         with:
           path: dist
 
   veroeffentlichen:
     needs: bauen-und-testen
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

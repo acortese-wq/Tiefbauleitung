@@ -4,6 +4,7 @@ import Basis from '../layouts/Basis.astro';
 import Leitmotiv from '../components/Leitmotiv.astro';
 import ProjektKarte from '../components/ProjektKarte.astro';
 import ArtikelKarte from '../components/ArtikelKarte.astro';
+import Referenzbilder from '../components/Referenzbilder.astro';
 import { person, kennzahlen, zeugnisse } from '../data/person';
 import { sichtbareArtikel, sichtbareProjekte } from '../lib/content';
 import { personJsonLd } from '../lib/seo';
@@ -72,6 +73,9 @@ const zitat = zeugnisse[1];
           Ich bin Alessandro Cortese, Bauingenieur und Bauherrenvertreter Tiefbau mit über 30 Jahren Praxis. Ich übersetze
           Infrastrukturwissen in digitale Werkzeuge und KI-Agenten, die Offerten, Abrechnungen und
           Projektabschlüsse schneller und nachvollziehbarer prüfen.
+        </p>
+        <p class="held-zielgruppe einblenden einblenden-3">
+          <span class="label">Für</span> Bauherren · Netzbetreiber · Ingenieurbüros · öffentliche Verwaltungen
         </p>
         <div class="btn-reihe einblenden einblenden-4">
           <a class="btn" href="/kontakt/">Fachlichen Austausch starten <span class="pfeil" aria-hidden="true">→</span></a>
@@ -145,6 +149,9 @@ const zitat = zeugnisse[1];
       <div class="raster-3">
         {projekte.map((p) => <ProjektKarte projekt={p} />)}
       </div>
+      <div class="foto-reihe">
+        <Referenzbilder titel="Referenzobjekte im Bild" />
+      </div>
       <div class="btn-reihe mehr-reihe">
         <a class="btn btn-ghost" href="/projekte/">Alle Projekte und {anzahlReferenzen} Referenzen</a>
       </div>
@@ -174,6 +181,7 @@ const zitat = zeugnisse[1];
     </div>
   </section>
 
+  {artikel.length > 0 && (
   <section class="abschnitt band-hell" aria-labelledby="wissen-titel">
     <div class="wrap">
       <div class="abschnitt-kopf">
@@ -181,19 +189,13 @@ const zitat = zeugnisse[1];
         <h2 id="wissen-titel">Aktuelle Fachbeiträge</h2>
         <p>Erfahrungen und Einordnungen zu KI im Bauwesen, Netzinfrastruktur und verantwortungsvoller Digitalisierung.</p>
       </div>
-      {artikel.length > 0 ? (
-        <div class="raster-3">{artikel.map((a) => <ArtikelKarte artikel={a} />)}</div>
-      ) : (
-        <div class="karte leer">
-          <h3>Die ersten Beiträge sind in Arbeit</h3>
-          <p>Hier erscheinen bald Fachbeiträge zu KI-Agenten im Tiefbau, zum Glasfaserausbau und zum Datenschutz im Projektalltag.</p>
-        </div>
-      )}
+      <div class="raster-3">{artikel.map((a) => <ArtikelKarte artikel={a} />)}</div>
       <div class="btn-reihe mehr-reihe">
         <a class="btn btn-ghost btn-hell" href="/wissen/">Zum Wissensbereich</a>
       </div>
     </div>
   </section>
+  )}
 
   <section class="abschnitt abschluss" aria-labelledby="abschluss-titel">
     <div class="wrap abschluss-raster">
@@ -246,6 +248,10 @@ const zitat = zeugnisse[1];
 
   .problem h3 { font-size: 1.45rem; margin-bottom: 8px; }
   .mehr-reihe { margin-top: 28px; }
+  .foto-reihe { margin-top: 40px; }
+  .foto-reihe :global(.bildband) { margin-bottom: 0; }
+  .held-zielgruppe { color: var(--text); font-size: 0.98rem; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+  .held-zielgruppe .label { color: var(--eis); }
   .band-hell .btn-ghost { color: var(--papier-text); border-color: var(--papier-linie); }
   .band-hell .btn-ghost:hover { background: #fff; border-color: var(--papier-akzent); }
   .leer { max-width: 640px; }

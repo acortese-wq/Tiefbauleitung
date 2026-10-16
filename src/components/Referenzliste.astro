@@ -5,7 +5,11 @@ import { fachgebietLabels } from '../data/person';
 interface Props { filter?: string; kompakt?: boolean; }
 const { filter, kompakt = false } = Astro.props;
 
-const alle = (await getCollection('referenzen')).map((r) => r.data);
+// Neueste zuerst; innerhalb gleicher Zeiträume die Reihenfolge aus referenzen.json.
+const startjahr = (z: string) => Number(z.slice(0, 4)) || 0;
+const alle = (await getCollection('referenzen'))
+  .map((r, i) => ({ ...r.data, i }))
+  .sort((a, b) => startjahr(b.zeitraum) - startjahr(a.zeitraum) || a.i - b.i);
 const filterWerte = filter ? filter.split(',').map((f) => f.trim()) : [];
 const liste = filterWerte.length ? alle.filter((r) => r.fachgebiete.some((g) => filterWerte.includes(g))) : alle;
 const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser'].filter((g) => liste.some((r) => r.fachgebiete.includes(g as never)));

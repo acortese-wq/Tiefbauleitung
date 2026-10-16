@@ -2,7 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test('Navigation führt zu allen Hauptseiten', async ({ page, isMobile }) => {
   await page.goto('/');
-  const ziele = ['Profil', 'Kompetenzen', 'Projekte', 'Wissen', 'Kontakt'];
+  // «Wissen» erscheint erst, wenn Fachbeiträge veröffentlicht sind (siehe Varianten-Tests)
+  const ziele = ['Profil', 'Kompetenzen', 'Projekte', 'Kontakt'];
   for (const ziel of ziele) {
     if (isMobile) await page.locator('.nav-klein summary').click();
     const nav = page.getByRole('navigation', { name: isMobile ? 'Hauptnavigation mobil' : 'Hauptnavigation' });
@@ -90,4 +91,41 @@ test('Skip-Link springt zum Inhalt', async ({ page, isMobile }) => {
   await expect(skip).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#inhalt$/);
+});
+
+test('Ohne veröffentlichte Beiträge verlinkt die Startseite keinen leeren Wissensbereich', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('a[href="/wissen/"]')).toHaveCount(0);
+  await expect(page.getByText('Die ersten Beiträge sind in Arbeit')).toHaveCount(0);
+});
+
+test('Startseite nennt Zielgruppen und zeigt Fotos der Referenzobjekte', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.held-zielgruppe')).toContainText('Bauherren');
+  const fotos = page.locator('.foto-reihe figure');
+  expect(await fotos.count()).toBeGreaterThan(0);
+  await expect(fotos.first().locator('img')).toHaveAttribute('alt', /.+/);
+  await expect(fotos.first().locator('figcaption')).toContainText('Foto:');
+});
+
+test('Referenzliste ist chronologisch, neueste zuerst', async ({ page }) => {
+  await page.goto('/projekte/');
+  const zeitraeume = (await page.locator('.ref-liste .ref-zeit').allTextContents()).map((t) => Number(t.slice(0, 4)));
+  expect(zeitraeume.length).toBeGreaterThan(10);
+  expect([...zeitraeume].sort((a, b) => b - a)).toEqual(zeitraeume);
+});
+
+test('Mobiles Menü schliesst mit Escape und Klick ausserhalb', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'nur mobil');
+  await page.goto('/');
+  const menue = page.locator('.nav-klein');
+  await menue.locator('summary').click();
+  await expect(menue).toHaveAttribute('open', '');
+  await page.keyboard.press('Escape');
+  await expect(menue).not.toHaveAttribute('open', '');
+  await menue.locator('summary').click();
+  // Freie Fläche unten links, ausserhalb des aufgeklappten Menüs
+  const ansicht = page.viewportSize()!;
+  await page.mouse.click(8, ansicht.height - 8);
+  await expect(menue).not.toHaveAttribute('open', '');
 });

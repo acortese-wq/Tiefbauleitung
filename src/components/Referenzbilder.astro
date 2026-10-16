@@ -23,7 +23,7 @@ const mitBild = (await getCollection('referenzen'))
             <figcaption>
               <strong>{r.name}</strong>
               <span>{r.rolle} · {r.zeitraum}</span>
-              <small>Foto: {r.bildNachweis}{r.bildLizenz && <> · <a href={r.bildLizenz} rel="license noopener" target="_blank">Lizenz</a></>}</small>
+              <small>Foto: {r.bildNachweis}{r.bildLizenz && <> · <a href={r.bildLizenz} rel="license noopener" target="_blank">Lizenz<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></>}</small>
             </figcaption>
           </figure>
         </li>

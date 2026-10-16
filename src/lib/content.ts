@@ -14,6 +14,11 @@ export async function sichtbareArtikel(): Promise<CollectionEntry<'artikel'>[]> 
   return alle.sort((a, b) => b.data.datum.getTime() - a.data.datum.getTime());
 }
 
+/** Navigation und Startseite verlinken den Wissensbereich nur, wenn sichtbare Beiträge existieren. */
+export async function hatSichtbareArtikel(): Promise<boolean> {
+  return (await sichtbareArtikel()).length > 0;
+}
+
 export async function sichtbareProjekte(): Promise<CollectionEntry<'projekte'>[]> {
   const alle = await getCollection('projekte', ({ data }) => istSichtbar(data.status));
   return alle.sort((a, b) => a.data.reihenfolge - b.data.reihenfolge);

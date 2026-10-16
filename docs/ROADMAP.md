@@ -7,7 +7,7 @@
 3. **Rechtstexte unvollständig.** Postanschrift, Log-Aufbewahrung und Stand fehlen. Juristische Prüfung ausstehend.
 4. **Fachbeiträge sind Entwürfe.** Sie müssen inhaltlich geprüft und freigegeben werden.
 5. **HSO-Abschlussjahr unbekannt.** Auf der Profilseite als «Jahr offen» markiert.
-6. **Noch keine Fotos der Referenzobjekte.** Die Funktion ist vorbereitet (docs/INHALTE.md). Eine Websuche fand keine frei lizenzierten, eindeutig zuordenbaren Fotos; eigene Fotos sind die beste Quelle.
+6. **Erst drei Fotos von Referenzobjekten** (Rheinbrücke Fläsch, Lehnenbrücke Nasstobel, Plessurbrücke Litzirüti). Bildnachweise sind zu bestätigen; weitere eigene Fotos ergänzen (docs/INHALTE.md).
 7. **Ratenbegrenzung nur im Arbeitsspeicher** (eine Instanz).
 8. **Keine Mehrsprachigkeit.** Nur Deutsch.
 9. **Admin nur lokal.** Inhalte pflegen braucht Node.js auf dem eigenen Rechner. Alternative siehe unten.
@@ -22,6 +22,8 @@
 - App-Name «Rechnen mit Pokémon» beibehalten oder für die Webseite umbenennen?
 - Schachtassistent: Darf er mit Namen und Urheberschaft genannt werden, obwohl er im beruflichen Umfeld eingesetzt wird?
 
+Optimierungsrunde Oktober 2026: siehe [OPTIMIERUNG-2026-10.md](OPTIMIERUNG-2026-10.md).
+
 ## Nächste Schritte (priorisiert)
 
 | Prio | Schritt | Aufwand |
@@ -31,7 +33,6 @@
 | 1 | Drei Fachbeiträge prüfen und freigeben | 1–2 h |
 | 2 | Geschäftliche E-Mail einrichten, Formular aktivieren, `npm run test:varianten` | 1 h |
 | 2 | Echte Fotos (Baustellen, Porträt in Arbeitsumgebung) mit Bildrechten ergänzen | offen |
-| 2 | CI-Pipeline (GitHub Actions): `npm run test:alle` bei jedem Push | 1 h |
 | 3 | Keystatic im GitHub-Modus mit Login, damit Inhalte im Browser gepflegt werden können | 2 h |
 | 3 | Datenschutzfreundliche Statistik (z. B. selbst gehostet, ohne Cookies) nur falls nötig, mit Anpassung der Datenschutzerklärung | 2 h |
 | 3 | Englisch und Italienisch (Astro i18n), zuerst Startseite und Profil | 1–2 Tage |

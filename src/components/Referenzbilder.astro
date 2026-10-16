@@ -23,7 +23,7 @@ const mitBild = (await getCollection('referenzen'))
             <figcaption>
               <strong>{r.name}</strong>
               <span>{r.rolle} · {r.zeitraum}</span>
-              <small>Foto: {r.bildNachweis}</small>
+              <small>Foto: {r.bildNachweis}{r.bildLizenz && <> · <a href={r.bildLizenz} rel="license noopener" target="_blank">Lizenz</a></>}</small>
             </figcaption>
           </figure>
         </li>
@@ -43,4 +43,5 @@ const mitBild = (await getCollection('referenzen'))
   .bildband figcaption { display: grid; gap: 4px; padding: 14px 16px 16px; }
   .bildband figcaption span { color: var(--text-ruhig); font-size: 0.92rem; }
   .bildband figcaption small { font-family: var(--f-mono); font-size: 0.7rem; color: var(--text-ruhig); }
+  .bildband figcaption small a { color: var(--eis); }
 </style>

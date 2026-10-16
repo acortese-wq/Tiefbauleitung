@@ -71,6 +71,8 @@ const referenzen = defineCollection({
     bild: z.string().regex(/^[a-z0-9-]+$/).optional(),
     bildAlt: z.string().optional(),
     bildNachweis: z.string().optional(),
+    // Link zur Lizenz bei fremden Fotos (z. B. Creative Commons)
+    bildLizenz: z.string().url().optional(),
   }).refine((r) => !r.bild || (r.bildAlt && r.bildNachweis), {
     message: 'Zu jedem Foto gehören bildAlt (Bildbeschreibung) und bildNachweis (Urheber/Lizenz).',
   }),

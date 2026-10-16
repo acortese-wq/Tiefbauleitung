@@ -141,3 +141,13 @@ test('Jede Kompetenzseite zeigt eine beschriebene Planzeichnung im Seitenkopf', 
     await expect(page.locator('h1')).toBeVisible();
   }
 });
+
+test('Kompetenzbereiche der Startseite zeigen dekorative Zeichnungen', async ({ page }) => {
+  await page.goto('/');
+  const zeichnungen = page.locator('.bereich-bild svg');
+  await expect(zeichnungen).toHaveCount(3);
+  for (const z of await zeichnungen.all()) {
+    await expect(z).toBeVisible();
+    await expect(z).toHaveAttribute('aria-hidden', 'true');
+  }
+});

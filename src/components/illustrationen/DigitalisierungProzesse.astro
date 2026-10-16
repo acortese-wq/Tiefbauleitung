@@ -2,13 +2,28 @@
 // Leistungsverzeichnis wird in ein Prüfwerkzeug übertragen: Positionen werden mit
 // Vertrag und Ausmass verglichen, Abweichungen markiert, das Ergebnis ist nachvollziehbar.
 import '../../styles/plan.css';
+
+interface Props {
+  /** Ohne Beschriftung, auf das Motiv zugeschnitten und dekorativ (z. B. in Karten) */
+  kompakt?: boolean;
+}
+const { kompakt = false } = Astro.props;
 const positionen = ['111.111', '113.121', '211.112', '237.211', '237.311', '241.123', '421.101', '511.212'];
 const markiert = new Set([2, 5]);
 const spalten = [0, 1, 2, 3];
 ---
-<svg class="pz" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="pz-dp-t pz-dp-d">
-  <title id="pz-dp-t">Vom Leistungsverzeichnis zum Prüfwerkzeug</title>
-  <desc id="pz-dp-d">Schematische Darstellung: Ein Leistungsverzeichnis mit NPK-Positionen wird in eine Prüftabelle übertragen. Zwei Positionen sind markiert, eine Abweichung ist hervorgehoben, am Ende steht ein geprüftes Ergebnis.</desc>
+<svg
+  class:list={['pz', { 'pz-kompakt': kompakt }]}
+  viewBox={kompakt ? '236 56 352 300' : '0 0 600 400'}
+  preserveAspectRatio="xMidYMid meet"
+  {...(kompakt ? { 'aria-hidden': 'true' } : { role: 'img', 'aria-labelledby': 'pz-dp-t pz-dp-d' })}
+>
+  {!kompakt && (
+    <Fragment>
+    <title id="pz-dp-t">Vom Leistungsverzeichnis zum Prüfwerkzeug</title>
+    <desc id="pz-dp-d">Schematische Darstellung: Ein Leistungsverzeichnis mit NPK-Positionen wird in eine Prüftabelle übertragen. Zwei Positionen sind markiert, eine Abweichung ist hervorgehoben, am Ende steht ein geprüftes Ergebnis.</desc>
+    </Fragment>
+  )}
 
   <!-- Blatt Leistungsverzeichnis -->
   <rect x="244" y="64" width="128" height="284" rx="3" class="pz-flaeche" />

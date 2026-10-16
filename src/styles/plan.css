@@ -28,3 +28,6 @@
   @keyframes pz-zeichnen { to { stroke-dashoffset: 0; } }
   @keyframes pz-auftauchen { to { opacity: 1; } }
 }
+
+/* Kompakte Fassung ohne Beschriftung */
+.pz-kompakt .pz-text, .pz-kompakt .pz-hinweislinie { display: none; }

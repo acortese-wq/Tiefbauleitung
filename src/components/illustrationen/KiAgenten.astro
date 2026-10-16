@@ -2,13 +2,28 @@
 // Ablauf eines KI-Agenten mit klarer Aufgabe: Belege rein, Abgleich mit Wissensbasis
 // (Normen, Vertrag), Prüfbericht mit Fundstellen, Entscheid bei der Fachperson.
 import '../../styles/plan.css';
+
+interface Props {
+  /** Ohne Beschriftung, auf das Motiv zugeschnitten und dekorativ (z. B. in Karten) */
+  kompakt?: boolean;
+}
+const { kompakt = false } = Astro.props;
 const belege = ['Offerte', 'Ausmass', 'Rechnung'];
 const netz = [[396, 186], [430, 160], [462, 186], [446, 222], [412, 222], [430, 194]];
 const kanten = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [0, 5], [1, 5], [2, 5], [3, 5], [4, 5]];
 ---
-<svg class="pz" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="pz-ki-t pz-ki-d">
-  <title id="pz-ki-t">Ablauf eines Prüf-Agenten</title>
-  <desc id="pz-ki-d">Schematischer Ablauf: Offerte, Ausmass und Rechnung gehen an einen KI-Agenten. Der Agent gleicht sie mit einer Wissensbasis aus Normen und Vertrag ab und erstellt einen Prüfbericht mit Fundstellen. Den Entscheid trifft die Fachperson.</desc>
+<svg
+  class:list={['pz', { 'pz-kompakt': kompakt }]}
+  viewBox={kompakt ? '240 60 348 296' : '0 0 600 400'}
+  preserveAspectRatio="xMidYMid meet"
+  {...(kompakt ? { 'aria-hidden': 'true' } : { role: 'img', 'aria-labelledby': 'pz-ki-t pz-ki-d' })}
+>
+  {!kompakt && (
+    <Fragment>
+    <title id="pz-ki-t">Ablauf eines Prüf-Agenten</title>
+    <desc id="pz-ki-d">Schematischer Ablauf: Offerte, Ausmass und Rechnung gehen an einen KI-Agenten. Der Agent gleicht sie mit einer Wissensbasis aus Normen und Vertrag ab und erstellt einen Prüfbericht mit Fundstellen. Den Entscheid trifft die Fachperson.</desc>
+    </Fragment>
+  )}
 
   <!-- Belege -->
   {belege.map((b, i) => (

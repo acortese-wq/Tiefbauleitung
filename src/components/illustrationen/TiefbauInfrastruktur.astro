@@ -2,11 +2,26 @@
 // Querschnitt einer Strassenbrücke während der Instandsetzung unter Verkehr:
 // Randbalken rechts abgetragen (Bewehrung freigelegt), Hängegerüst, eine Spur gesperrt.
 import '../../styles/plan.css';
+
+interface Props {
+  /** Ohne Beschriftung, auf das Motiv zugeschnitten und dekorativ (z. B. in Karten) */
+  kompakt?: boolean;
+}
+const { kompakt = false } = Astro.props;
 const buegel = [0, 1, 2];
 ---
-<svg class="pz" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="pz-tb-t pz-tb-d">
-  <title id="pz-tb-t">Querschnitt einer Brücke in Instandsetzung</title>
-  <desc id="pz-tb-d">Schematischer Querschnitt einer Strassenbrücke: Fahrbahnplatte auf Plattenbalken und Pfeiler. Der rechte Randbalken ist abgetragen, die Bewehrung freigelegt, darunter hängt ein Arbeitsgerüst. Eine Fahrspur ist gesperrt, auf der anderen läuft der Verkehr weiter.</desc>
+<svg
+  class:list={['pz', { 'pz-kompakt': kompakt }]}
+  viewBox={kompakt ? '236 104 368 246' : '0 0 600 400'}
+  preserveAspectRatio="xMidYMid meet"
+  {...(kompakt ? { 'aria-hidden': 'true' } : { role: 'img', 'aria-labelledby': 'pz-tb-t pz-tb-d' })}
+>
+  {!kompakt && (
+    <Fragment>
+    <title id="pz-tb-t">Querschnitt einer Brücke in Instandsetzung</title>
+    <desc id="pz-tb-d">Schematischer Querschnitt einer Strassenbrücke: Fahrbahnplatte auf Plattenbalken und Pfeiler. Der rechte Randbalken ist abgetragen, die Bewehrung freigelegt, darunter hängt ein Arbeitsgerüst. Eine Fahrspur ist gesperrt, auf der anderen läuft der Verkehr weiter.</desc>
+    </Fragment>
+  )}
   <defs>
     <pattern id="pz-tb-boden" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
       <line x1="0" y1="0" x2="0" y2="10" class="pz-schraffur" />

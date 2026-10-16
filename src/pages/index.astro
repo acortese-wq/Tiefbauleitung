@@ -5,6 +5,9 @@ import Leitmotiv from '../components/Leitmotiv.astro';
 import ProjektKarte from '../components/ProjektKarte.astro';
 import ArtikelKarte from '../components/ArtikelKarte.astro';
 import Referenzbilder from '../components/Referenzbilder.astro';
+import TiefbauInfrastruktur from '../components/illustrationen/TiefbauInfrastruktur.astro';
+import DigitalisierungProzesse from '../components/illustrationen/DigitalisierungProzesse.astro';
+import KiAgenten from '../components/illustrationen/KiAgenten.astro';
 import { person, kennzahlen, zeugnisse } from '../data/person';
 import { sichtbareArtikel, sichtbareProjekte } from '../lib/content';
 import { personJsonLd } from '../lib/seo';
@@ -17,6 +20,7 @@ const bereiche = [
   {
     nr: '01',
     titel: 'Infrastruktur',
+    Zeichnung: TiefbauInfrastruktur,
     text: 'Strassen, Brücken, Werkleitungen und Glasfaser. Von der Submission bis zur Schlussabrechnung, aus Sicht von Ingenieurbüro und Bauherr.',
     links: [
       { href: '/kompetenzen/tiefbau-infrastruktur/', label: 'Tiefbau und Infrastruktur' },
@@ -26,12 +30,14 @@ const bereiche = [
   {
     nr: '02',
     titel: 'Digitalisierung',
+    Zeichnung: DigitalisierungProzesse,
     text: 'Wiederkehrende Prüf- und Rechenarbeit in schlanke Werkzeuge übersetzen, die im Projektalltag tatsächlich genutzt werden.',
     links: [{ href: '/kompetenzen/digitalisierung-prozesse/', label: 'Digitalisierung technischer Prozesse' }],
   },
   {
     nr: '03',
     titel: 'Künstliche Intelligenz',
+    Zeichnung: KiAgenten,
     text: 'KI-Agenten mit klarer Aufgabe, nachvollziehbaren Belegen und einer Fachperson, die entscheidet.',
     links: [{ href: '/kompetenzen/ki-agenten/', label: 'KI-Agenten und praktische KI' }],
   },
@@ -107,6 +113,7 @@ const zitat = zeugnisse[1];
       <ol class="bereiche">
         {bereiche.map((b) => (
           <li class="karte bereich">
+            <div class="bereich-bild"><b.Zeichnung kompakt /></div>
             <span class="bereich-nr" aria-hidden="true">{b.nr}</span>
             <h3>{b.titel}</h3>
             <p>{b.text}</p>
@@ -239,7 +246,11 @@ const zitat = zeugnisse[1];
   .kennzahlen .quelle { order: 3; font-family: var(--f-mono); font-size: 0.68rem; color: var(--text-ruhig); }
 
   .bereiche { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-  .bereich { padding: 28px; }
+  .bereich { padding: 28px; overflow: hidden; }
+  .bereich-bild {
+    margin: -28px -28px 22px; aspect-ratio: 16 / 9; padding: 14px 18px;
+    background: var(--nacht); border-bottom: 1px solid var(--linie);
+  }
   .bereich-nr { font: 700 3rem var(--f-display); color: #6a8599; line-height: 1; }
   .bereich h3 { font-size: 1.8rem; text-transform: uppercase; }
   .bereich-links { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; }

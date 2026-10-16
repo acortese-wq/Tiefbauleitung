@@ -2,12 +2,27 @@
 // Situationsplan einer Dorfstrasse: bestehende Werkleitungen, neue Glasfasertrasse mit
 // Schächten und Hausanschlüssen, eine Querung mit bestehender Leitung als Konfliktpunkt.
 import '../../styles/plan.css';
+
+interface Props {
+  /** Ohne Beschriftung, auf das Motiv zugeschnitten und dekorativ (z. B. in Karten) */
+  kompakt?: boolean;
+}
+const { kompakt = false } = Astro.props;
 const oben = [250, 330, 410, 500];
 const unten = [290, 380, 470, 550];
 ---
-<svg class="pz" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="pz-nl-t pz-nl-d">
-  <title id="pz-nl-t">Situationsplan Werkleitungen mit Glasfasertrasse</title>
-  <desc id="pz-nl-d">Schematischer Situationsplan einer Dorfstrasse mit bestehenden Leitungen für Wasser, Abwasser und Strom. Eine neue Glasfasertrasse mit zwei Schächten erschliesst die Häuser beidseits der Strasse. Wo ein bestehender Wasser-Hausanschluss die Trasse quert, ist ein Konfliktpunkt markiert.</desc>
+<svg
+  class:list={['pz', { 'pz-kompakt': kompakt }]}
+  viewBox={kompakt ? '216 60 384 292' : '0 0 600 400'}
+  preserveAspectRatio="xMidYMid meet"
+  {...(kompakt ? { 'aria-hidden': 'true' } : { role: 'img', 'aria-labelledby': 'pz-nl-t pz-nl-d' })}
+>
+  {!kompakt && (
+    <Fragment>
+    <title id="pz-nl-t">Situationsplan Werkleitungen mit Glasfasertrasse</title>
+    <desc id="pz-nl-d">Schematischer Situationsplan einer Dorfstrasse mit bestehenden Leitungen für Wasser, Abwasser und Strom. Eine neue Glasfasertrasse mit zwei Schächten erschliesst die Häuser beidseits der Strasse. Wo ein bestehender Wasser-Hausanschluss die Trasse quert, ist ein Konfliktpunkt markiert.</desc>
+    </Fragment>
+  )}
 
   <!-- Strasse -->
   <line x1="220" y1="150" x2="600" y2="150" class="pz-kontur" />

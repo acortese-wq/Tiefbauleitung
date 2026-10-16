@@ -151,3 +151,12 @@ test('Kompetenzbereiche der Startseite zeigen dekorative Zeichnungen', async ({ 
     await expect(z).toHaveAttribute('aria-hidden', 'true');
   }
 });
+
+test('Startseite zeigt das Bild «Vom Graben zum Rechenzentrum» mit KI-Kennzeichnung', async ({ page }) => {
+  await page.goto('/');
+  const bild = page.locator('.weg-bild');
+  await bild.scrollIntoViewIfNeeded();
+  await expect(bild.locator('img')).toHaveAttribute('alt', /Leitungsgraben/);
+  await expect.poll(() => bild.locator('img').evaluate((i: HTMLImageElement) => i.naturalWidth)).toBeGreaterThan(0);
+  await expect(bild.locator('figcaption')).toContainText('KI-generierte Illustration');
+});

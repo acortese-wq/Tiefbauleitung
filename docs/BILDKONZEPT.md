@@ -24,6 +24,23 @@ Jede Zeichnung hat Titel und Beschreibung für Screenreader, respektiert «Beweg
 KiB. Sobald ein Foto (KI oder eigen) mit `bild:` im Frontmatter gesetzt ist, ersetzt es die Zeichnung automatisch.
 Die Prompts unten bleiben für diesen späteren Schritt gültig.
 
+## Umgesetzt: KI-Bild «Vom Graben zum Rechenzentrum» (Startseite)
+
+KI-Bild von Alessandro Cortese, eingebunden am 16. Oktober 2026 als breites Bildband direkt nach dem Einstieg der
+Startseite. Zweigeteilt: links Leitungsgraben mit Rohrbündel vor Bergkulisse, rechts Leitung unter der Strasse bis
+zum Rechenzentrum. Es zeigt die Kernaussage der Seite (Infrastruktur trägt Digitalisierung und KI).
+
+- **Retusche:** Das Schild rechts trug eine typische KI-Fehlschrift («Grisokes Rechneentrum – Batenpluss»). Der Text
+  wurde entfernt, das Schild ist jetzt leer. Sonst unverändert.
+- **Dateien:** Original 1408 × 768 in `quellbilder/startseite/graben-rechenzentrum.jpg`, Webfassungen 800 und
+  1400 px WebP (42 und 117 KiB) und JPG-Fallback, Originalformat ohne Zuschnitt, Metadaten entfernt.
+- **Kennzeichnung:** «KI-generierte Illustration» in der Bildlegende.
+- **Messung (Lighthouse mobil, 3 Läufe):** Leistung 98–100, LCP 1,4–2,0 s, CLS ≤ 0,012, Gewicht 187 KiB (vorher
+  144 KiB). Barrierefreiheit, Best Practices, SEO 100.
+- **Fachlich zu beachten:** Die leuchtenden Rohre und Lichtlinien sind bewusst symbolisch, keine reale Bauweise.
+  Für ein späteres Update eine Fassung mit mind. 2400 px Breite verwenden (aktuell 1408 px, auf grossen
+  Bildschirmen leicht weich).
+
 ## 1. Visuelle Identität der Webseite
 
 | Merkmal | Bestand |

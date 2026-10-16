@@ -103,6 +103,29 @@ const zitat = zeugnisse[1];
     </div>
   </section>
 
+  <section class="bildband-start" aria-label="Vom Leitungsgraben zum Rechenzentrum">
+    <div class="wrap">
+      <figure class="weg-bild">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/bilder/startseite/graben-rechenzentrum-800.webp 800w, /bilder/startseite/graben-rechenzentrum-1400.webp 1400w"
+            sizes="(min-width: 1160px) 1128px, calc(100vw - 32px)"
+          />
+          <img
+            src="/bilder/startseite/graben-rechenzentrum.jpg"
+            alt="Zweigeteiltes Bild: links ein offener Leitungsgraben mit Rohrbündel, Bagger und Rohrlager vor Bergkulisse, rechts dieselbe Leitung unter einer Strasse bis zu einem Rechenzentrum mit Serverschränken."
+            width="1400" height="764" loading="lazy" decoding="async"
+          />
+        </picture>
+        <figcaption>
+          <span><strong>Vom Graben zum Rechenzentrum.</strong> Digitalisierung und KI beginnen im Boden: ohne sauber gebaute Infrastruktur keine Daten, keine Netze, keine Agenten.</span>
+          <small>KI-generierte Illustration</small>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
   <section class="abschnitt" aria-labelledby="bereiche-titel">
     <div class="wrap">
       <div class="abschnitt-kopf">
@@ -246,6 +269,16 @@ const zitat = zeugnisse[1];
   .kennzahlen .quelle { order: 3; font-family: var(--f-mono); font-size: 0.68rem; color: var(--text-ruhig); }
 
   .bereiche { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .bildband-start { padding-block: clamp(8px, 2vw, 24px) 0; }
+  .weg-bild { margin: 0; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; background: var(--tiefe); }
+  .weg-bild picture { display: block; aspect-ratio: 1400 / 764; background: var(--panel); }
+  .weg-bild img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .weg-bild figcaption {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 24px;
+    padding: 14px 18px 16px; color: var(--text-ruhig); font-size: 0.98rem;
+  }
+  .weg-bild figcaption strong { color: var(--text); font-weight: 600; }
+  .weg-bild figcaption small { font-family: var(--f-mono); font-size: 0.7rem; }
   .bereich { padding: 28px; overflow: hidden; }
   .bereich-bild {
     margin: -28px -28px 22px; aspect-ratio: 16 / 9; padding: 14px 18px;

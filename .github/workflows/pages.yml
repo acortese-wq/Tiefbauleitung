@@ -37,7 +37,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Statischer Build und Tests im Unterordner
         run: npm run test:pages
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
         if: github.event_name != 'pull_request'
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request'

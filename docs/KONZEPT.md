@@ -13,8 +13,9 @@ Netzbau und beim Einsatz von KI bearbeiten kann und warum ein fachlicher Austaus
 - Angaben im Gespräch (HSO KI-Professional, Kinder-Apps, Werkzeuge)
 
 ### Wichtige Feststellungen
-1. **Kein Titel «Bauingenieur».** Das Bauingenieurstudium an der HTW Chur (2002–2005) wurde ohne Abschluss beendet.
-   Die Webseite positioniert deshalb als «Bauherrenvertreter Tiefbau» mit über 30 Jahren Praxis.
+1. **Berufsbezeichnung «Bauingenieur»** auf ausdrücklichen Wunsch von Alessandro Cortese (16.10.2026). Das
+   Bauingenieurstudium an der HTW Chur (2002–2005) erscheint ohne Abschlussangabe. Ein Diplomtitel («dipl.», «FH»,
+   «Ing. FH») wird nirgends verwendet. Rechtliche Einschätzung siehe DATENSCHUTZ-SICHERHEIT.md.
 2. **Arbeitgeber nur allgemein.** Auf Wunsch keine internen Projekte, Namen oder Werkzeugdetails aus dem
    aktuellen Arbeitsverhältnis. Projekte bei Swisscom erscheinen nicht in den Referenzen.
 3. **Kontakt über LinkedIn.** Es gibt keine freigegebene E-Mail-Adresse. Das Kontaktformular ist vollständig gebaut,
@@ -31,7 +32,7 @@ Netzbau und beim Einsatz von KI bearbeiten kann und warum ein fachlicher Austaus
 
 **Kernaussage:** «Tiefbau verstehen. KI richtig einsetzen.»
 
-Praxisorientierter Tiefbaufachmann, der Infrastrukturwissen in Werkzeuge und KI-Agenten übersetzt. Kein KI-Guru:
+Praxisorientierter Bauingenieur, der Infrastrukturwissen in Werkzeuge und KI-Agenten übersetzt. Kein KI-Guru:
 Die Seite benennt Grenzen offen und trennt klar zwischen beruflicher Erfahrung, persönlichen Projekten und Konzepten.
 
 **Zielgruppen:** Entscheidungsträger aus Bau und Infrastruktur, Telekommunikation und Netzbau, Bauherren und

@@ -4,6 +4,7 @@
 export const person = {
   name: 'Alessandro Cortese',
   vorname: 'Alessandro',
+  beruf: 'Bauingenieur',
   rolle: 'Bauherrenvertreter Tiefbau und Access Project Manager',
   arbeitgeber: 'Swisscom AG',
   ort: 'Chur',
@@ -105,7 +106,7 @@ export const ausbildung = [
   {
     zeit: '2002–2005',
     titel: 'Bauingenieurstudium HTW Chur',
-    hinweis: 'Bau und Gestaltung, Vertiefung Ingenieurbau, berufsbegleitend, ohne Abschluss',
+    hinweis: 'Bau und Gestaltung, Vertiefung Ingenieurbau, berufsbegleitend',
   },
 ];
 

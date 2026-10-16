@@ -3,6 +3,7 @@ import { render, type CollectionEntry } from 'astro:content';
 import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import Referenzliste from '../../components/Referenzliste.astro';
+import Referenzbilder from '../../components/Referenzbilder.astro';
 import ProjektKarte from '../../components/ProjektKarte.astro';
 import { alleKompetenzen, sichtbareProjekte } from '../../lib/content';
 import { breadcrumbJsonLd } from '../../lib/seo';
@@ -64,6 +65,7 @@ const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
           <h2 id="ref-titel">Belegte Referenzprojekte</h2>
           <p>Aus Lebenslauf und Arbeitszeugnissen. Rolle jeweils wie dort angegeben.</p>
         </div>
+        <Referenzbilder filter={d.referenzFilter} />
         <Referenzliste filter={d.referenzFilter} kompakt />
       </div>
     </section>

@@ -4,6 +4,7 @@ import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import ProjektKarte from '../../components/ProjektKarte.astro';
 import Referenzliste from '../../components/Referenzliste.astro';
+import Referenzbilder from '../../components/Referenzbilder.astro';
 import { sichtbareProjekte } from '../../lib/content';
 import { breadcrumbJsonLd } from '../../lib/seo';
 
@@ -45,6 +46,7 @@ const site = Astro.site!;
         <h2 id="ref-titel">{anzahl} Referenzprojekte 2006–2025</h2>
         <p>Aus Lebenslauf und Arbeitszeugnissen. Angegeben sind Arbeitgeber, Bauherr (soweit bekannt) und die eigene Rolle. Projekte im aktuellen Arbeitsverhältnis sind bewusst nicht aufgeführt.</p>
       </div>
+      <Referenzbilder />
       <Referenzliste />
     </div>
   </section>

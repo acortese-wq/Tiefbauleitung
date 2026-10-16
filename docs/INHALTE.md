@@ -24,6 +24,23 @@ Die Admin-Oberfläche schreibt Markdown-Dateien ins Repository. Sie ist bewusst 
 Der Build prüft alle Felder. Fehlt etwas oder ist eine Beschreibung zu lang, bricht er mit einer verständlichen
 Meldung ab.
 
+## Fotos der Referenzobjekte
+
+1. Foto als `public/bilder/referenzen/<name>.jpg` und `<name>.webp` ablegen (Breite ca. 1200 px, Querformat 4:3).
+   `<name>` nur mit Kleinbuchstaben, Ziffern und Bindestrichen, am einfachsten die `id` des Objekts.
+2. Im Eintrag in `src/data/referenzen.json` ergänzen:
+   ```json
+   "bild": "calfreisentobelbruecke",
+   "bildAlt": "Instandgesetzte Brücke über das Tobel, Blick von Süden",
+   "bildNachweis": "Alessandro Cortese"
+   ```
+3. Das Foto erscheint automatisch auf der Projektseite und auf der passenden Kompetenzseite.
+
+Ohne `bildAlt` und `bildNachweis` bricht der Build ab. Nur Fotos verwenden, an denen die Rechte geklärt sind:
+eigene Fotos (bei Aufnahmen im Arbeitsverhältnis Freigabe des Arbeitgebers prüfen) oder frei lizenzierte Fotos mit
+Urheber und Lizenz im Nachweis (z. B. «Max Muster, CC BY-SA 4.0, Wikimedia Commons»). Keine Personen erkennbar ohne
+deren Einverständnis.
+
 ## Regeln für Inhalte
 
 - **Nur Belegtes.** Keine erfundenen Kennzahlen, Kunden oder Ergebnisse. Fehlendes als Platzhalter kennzeichnen.

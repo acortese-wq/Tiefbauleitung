@@ -67,6 +67,12 @@ const referenzen = defineCollection({
     zeitraum: z.string(),
     rolle: z.string(),
     fachgebiete: z.array(z.enum(['kunstbauten', 'strasse', 'bahn', 'wasser', 'netz'])),
+    // Foto: Dateien public/bilder/referenzen/<bild>.jpg und .webp. Nachweis ist Pflicht, sobald ein Bild gesetzt ist.
+    bild: z.string().regex(/^[a-z0-9-]+$/).optional(),
+    bildAlt: z.string().optional(),
+    bildNachweis: z.string().optional(),
+  }).refine((r) => !r.bild || (r.bildAlt && r.bildNachweis), {
+    message: 'Zu jedem Foto gehören bildAlt (Bildbeschreibung) und bildNachweis (Urheber/Lizenz).',
   }),
 });
 

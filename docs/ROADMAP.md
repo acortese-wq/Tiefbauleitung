@@ -7,7 +7,7 @@
 3. **Rechtstexte unvollständig.** Postanschrift, Log-Aufbewahrung und Stand fehlen. Juristische Prüfung ausstehend.
 4. **Fachbeiträge sind Entwürfe.** Sie müssen inhaltlich geprüft und freigegeben werden.
 5. **HSO-Abschlussjahr unbekannt.** Auf der Profilseite als «Jahr offen» markiert.
-6. **Keine echten Baustellenfotos.** Bilder stammen aus Porträt und App-Screenshots, sonst Illustrationen.
+6. **Noch keine Fotos der Referenzobjekte.** Die Funktion ist vorbereitet (docs/INHALTE.md). Eine Websuche fand keine frei lizenzierten, eindeutig zuordenbaren Fotos; eigene Fotos sind die beste Quelle.
 7. **Ratenbegrenzung nur im Arbeitsspeicher** (eine Instanz).
 8. **Keine Mehrsprachigkeit.** Nur Deutsch.
 9. **Admin nur lokal.** Inhalte pflegen braucht Node.js auf dem eigenen Rechner. Alternative siehe unten.

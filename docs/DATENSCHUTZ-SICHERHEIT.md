@@ -40,6 +40,10 @@
 
 ## Weitere Rechtsfragen
 
+- ⚠ **Berufsbezeichnung «Bauingenieur»:** auf Wunsch verwendet, ohne Diplomtitel. Unrichtige Titel oder
+  Berufsbezeichnungen, die besondere Fähigkeiten vermuten lassen, können nach Art. 3 Abs. 1 lit. c UWG unlauter sein.
+  Geschützt sind insbesondere Hochschultitel (z. B. «dipl. Bauingenieur FH/ETH»). Verwendung juristisch bestätigen lassen.
+
 - ⚠ **Markenrecht «Pokémon»:** Der App-Name «Rechnen mit Pokémon» verwendet eine geschützte Marke. Für eine private,
   nicht öffentlich verfügbare App unkritischer; auf einer öffentlichen Webseite trotzdem klären oder umbenennen.
 - ⚠ **Bilder Dritter:** Die App-Screenshots enthalten Emoji-Grafiken des Betriebssystems. Nutzung prüfen.

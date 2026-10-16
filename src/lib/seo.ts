@@ -6,7 +6,7 @@ export function personJsonLd(site: URL) {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: person.name,
-    jobTitle: person.rolle,
+    jobTitle: [person.beruf, person.rolle],
     worksFor: { '@type': 'Organization', name: person.arbeitgeber },
     address: { '@type': 'PostalAddress', addressLocality: person.ort, addressRegion: 'GR', addressCountry: 'CH' },
     knowsLanguage: ['de', 'it', 'en'],

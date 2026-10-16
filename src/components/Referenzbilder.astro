@@ -1,0 +1,46 @@
+---
+// Bildband der Referenzobjekte. Zeigt nur Objekte mit hinterlegtem Foto; ohne Fotos erscheint nichts.
+import { getCollection } from 'astro:content';
+
+interface Props { filter?: string; titel?: string; }
+const { filter, titel = 'Referenzobjekte im Bild' } = Astro.props;
+const filterWerte = filter ? filter.split(',').map((f) => f.trim()) : [];
+const mitBild = (await getCollection('referenzen'))
+  .map((r) => r.data)
+  .filter((r) => r.bild && (!filterWerte.length || r.fachgebiete.some((g) => filterWerte.includes(g))));
+---
+{mitBild.length > 0 && (
+  <section class="bildband" aria-label={titel}>
+    <h3 class="bildband-titel">{titel}</h3>
+    <ul>
+      {mitBild.map((r) => (
+        <li>
+          <figure>
+            <picture>
+              <source srcset={`/bilder/referenzen/${r.bild}.webp`} type="image/webp" />
+              <img src={`/bilder/referenzen/${r.bild}.jpg`} alt={r.bildAlt} loading="lazy" decoding="async" width="800" height="600" />
+            </picture>
+            <figcaption>
+              <strong>{r.name}</strong>
+              <span>{r.rolle} · {r.zeitraum}</span>
+              <small>Foto: {r.bildNachweis}</small>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .bildband { margin-bottom: 40px; }
+  .bildband-titel { font-size: 1.5rem; margin-bottom: 14px; }
+  .bildband ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .bildband figure { margin: 0; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; background: var(--tiefe); height: 100%; display: flex; flex-direction: column; }
+  .bildband picture { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--panel); }
+  .bildband img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+  .bildband figure:hover img { transform: scale(1.03); }
+  .bildband figcaption { display: grid; gap: 4px; padding: 14px 16px 16px; }
+  .bildband figcaption span { color: var(--text-ruhig); font-size: 0.92rem; }
+  .bildband figcaption small { font-family: var(--f-mono); font-size: 0.7rem; color: var(--text-ruhig); }
+</style>

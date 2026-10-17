@@ -119,7 +119,12 @@ export const weiterbildung = [
   { zeit: '2022', titel: 'Beschaffung nach IVöB' },
   { zeit: '2022–2023', titel: 'Mitarbeiterführung Basis und Aufbau' },
   { zeit: '2022–2024', titel: 'Führungscoaching' },
-  { zeit: 'offen', titel: 'HSO KI-Professional mit Schwerpunkt KI-Agenten', offen: true },
+  {
+    zeit: 'offen',
+    titel: 'HSO KI-Professional mit Schwerpunkt KI-Agenten',
+    hinweis: 'Abschlussarbeit «Trennungskompass» als beste Arbeit des Lehrgangs bewertet',
+    offen: true,
+  },
 ];
 
 export const sprachen = [

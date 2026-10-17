@@ -166,6 +166,7 @@ test('Werkzeugkasten zeigt freigegebene Werkzeuge mit Urheberangabe', async ({ p
   const karten = page.locator('#werkzeugkasten .wk-karte');
   await expect(karten).toHaveCount(11);
   await expect(page.locator('#werkzeugkasten')).toContainText('Urheber: Alessandro Cortese');
+  await expect(page.locator('#werkzeugkasten')).toContainText('Beste Abschlussarbeit');
   await page.goto('/kompetenzen/ki-agenten/');
   await expect(page.locator('.werkzeugkasten')).toContainText('Schachtassistent');
 });

@@ -24,6 +24,7 @@ const Kopf = kompetenz ? 'h3' : 'h4';
               <span class="wk-meta">
                 <span class="label">{kompetenz ? w.gruppe : 'Eigenentwicklung'}</span>
                 {w.privat && <span class="badge badge-persoenlich">Privat</span>}
+                {w.auszeichnung && <span class="badge badge-auszeichnung">{w.auszeichnung}</span>}
               </span>
               <Kopf class="wk-name">{w.name}</Kopf>
               <p>{w.zweck}</p>
@@ -46,6 +47,7 @@ const Kopf = kompetenz ? 'h3' : 'h4';
   .wk-name { font: 600 1.25rem var(--f-display); letter-spacing: 0.01em; margin: 0; }
   .wk-karte p { margin: 0; color: var(--text-ruhig); font-size: 0.95rem; }
   .wk-zusatz { font-family: var(--f-mono); font-size: 0.74rem !important; color: var(--eis) !important; }
+  .badge-auszeichnung { color: var(--signal); }
   .wk-link { margin-top: auto; padding-top: 4px; font-weight: 600; text-decoration: none; }
   .wk-link:hover { text-decoration: underline; }
 </style>

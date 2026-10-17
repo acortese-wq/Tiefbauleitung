@@ -44,8 +44,9 @@ const werte = [
           zur Bauabnahme. Mein Anspruch: Es wird gebaut, was vereinbart wurde, in Qualität, Kosten und Terminen.
         </p>
         <p>
-          Parallel habe ich mich zum KI-Professional an der HSO weitergebildet, mit Schwerpunkt KI-Agenten. Seither
-          entwickle ich Werkzeuge, die Prüf- und Rechenarbeit im Tiefbau beschleunigen, und privat Lern-Apps für meine Kinder.
+          Parallel habe ich mich zum KI-Professional an der HSO weitergebildet, mit Schwerpunkt KI-Agenten. Meine
+          Abschlussarbeit, der Chatbot «Trennungskompass», wurde als beste Arbeit des Lehrgangs bewertet. Seither
+          entwickle ich Werkzeuge, die Prüf- und Rechenarbeit im Tiefbau beschleunigen (<a href="/projekte/#werkzeugkasten">Werkzeugkasten</a>), und privat Lern-Apps für meine Kinder.
         </p>
       </div>
     </div>
@@ -119,7 +120,7 @@ const werte = [
           <h3 class="liste-titel">Weiterbildung</h3>
           <dl class="tabelle">
             {weiterbildung.map((w) => (
-              <div><dt>{w.offen ? (offenePunkteZeigen ? <em class="offen">Jahr offen</em> : 'kürzlich') : w.zeit}</dt><dd>{w.titel}</dd></div>
+              <div><dt>{w.offen ? (offenePunkteZeigen ? <em class="offen">Jahr offen</em> : 'kürzlich') : w.zeit}</dt><dd>{w.titel}{'hinweis' in w && w.hinweis && <small>{w.hinweis}</small>}</dd></div>
             ))}
           </dl>
         </div>

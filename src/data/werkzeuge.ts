@@ -11,6 +11,8 @@ export interface Werkzeug {
   /** Kurze sachliche Zusatzangabe, z. B. Sprachen oder Urheberschaft */
   zusatz?: string;
   privat?: boolean;
+  /** Hervorgehobene Auszeichnung (Badge auf der Karte) */
+  auszeichnung?: string;
   /** Interner Link auf eine Fallstudie */
   link?: { href: string; label: string };
   kompetenzen: string[];
@@ -66,7 +68,7 @@ export const werkzeuge: Werkzeug[] = [
   {
     name: 'Initialaufwand EBBE / Altlasten',
     gruppe: 'Fachrechner',
-    zweck: 'Schätzt den Initialaufwand für Projekte mit belastetem Boden und Altlasten ab.',
+    zweck: 'Berechnet den Honoraraufwand für die Initialisierung von EBBE- und Altlasten-Projekten, auch wenn das Projekt danach nicht ausgeführt wird.',
     kompetenzen: ['tiefbau-infrastruktur', 'digitalisierung-prozesse'],
   },
   {
@@ -86,7 +88,8 @@ export const werkzeuge: Werkzeug[] = [
     name: 'Trennungskompass',
     gruppe: 'Assistenten und Chatbots',
     zweck: 'Chatbot zur Orientierung in familienrechtlichen Fragen rund um eine Trennung.',
-    privat: true,
+    zusatz: 'Abschlussarbeit HSO KI-Professional, Schwerpunkt KI-Agenten',
+    auszeichnung: 'Beste Abschlussarbeit',
     kompetenzen: ['ki-agenten'],
   },
 ];

@@ -8,6 +8,7 @@ import Referenzbilder from '../components/Referenzbilder.astro';
 import TiefbauInfrastruktur from '../components/illustrationen/TiefbauInfrastruktur.astro';
 import DigitalisierungProzesse from '../components/illustrationen/DigitalisierungProzesse.astro';
 import KiAgenten from '../components/illustrationen/KiAgenten.astro';
+import { werkzeuge } from '../data/werkzeuge';
 import { person, kennzahlen, zeugnisse } from '../data/person';
 import { sichtbareArtikel, sichtbareProjekte } from '../lib/content';
 import { personJsonLd } from '../lib/seo';
@@ -174,10 +175,18 @@ const zitat = zeugnisse[1];
       <div class="abschnitt-kopf">
         <span class="pos">Pos. 300 · Projekte</span>
         <h2 id="projekte-titel">Fallstudien und Demonstratoren</h2>
-        <p>Klar gekennzeichnet: persönliche Projekte, Konzepte und berufliche Erfahrung. Dazu {anzahlReferenzen} belegte Referenzprojekte aus Strassen-, Brücken-, Bahn- und Wasserbau.</p>
+        <p>Klar gekennzeichnet: persönliche Projekte, Konzepte und berufliche Erfahrung. Dazu {werkzeuge.length} eigene Werkzeuge und {anzahlReferenzen} belegte Referenzprojekte aus Strassen-, Brücken-, Bahn- und Wasserbau.</p>
       </div>
       <div class="raster-3">
         {projekte.map((p) => <ProjektKarte projekt={p} />)}
+      </div>
+      <div class="wk-teaser karte">
+        <div>
+          <h3>Werkzeugkasten</h3>
+          <p>{werkzeuge.length} selbst entwickelte Werkzeuge für Offerte, Kosten, Abrechnung und Fachfragen, gebaut mit KI-Unterstützung (Claude).</p>
+        </div>
+        <ul class="wk-namen">{werkzeuge.map((w) => <li class="chip">{w.name}</li>)}</ul>
+        <a class="wk-teaser-link" href="/projekte/#werkzeugkasten">Zum Werkzeugkasten →</a>
       </div>
       <div class="foto-reihe">
         <Referenzbilder titel="Referenzobjekte im Bild" />
@@ -293,6 +302,12 @@ const zitat = zeugnisse[1];
   .problem h3 { font-size: 1.45rem; margin-bottom: 8px; }
   .mehr-reihe { margin-top: 28px; }
   .foto-reihe { margin-top: 40px; }
+  .wk-teaser { margin-top: 24px; padding: 24px 26px; display: grid; gap: 14px; }
+  .wk-teaser h3 { font-size: 1.5rem; margin-bottom: 6px; }
+  .wk-teaser p { margin: 0; color: var(--text-ruhig); max-width: 70ch; }
+  .wk-namen { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .wk-teaser-link { font-weight: 600; text-decoration: none; justify-self: start; }
+  .wk-teaser-link:hover { text-decoration: underline; }
   .foto-reihe :global(.bildband) { margin-bottom: 0; }
   .held-zielgruppe { color: var(--text); font-size: 0.98rem; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
   .held-zielgruppe .label { color: var(--eis); }

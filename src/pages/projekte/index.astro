@@ -5,6 +5,8 @@ import Seitenkopf from '../../components/Seitenkopf.astro';
 import ProjektKarte from '../../components/ProjektKarte.astro';
 import Referenzliste from '../../components/Referenzliste.astro';
 import Referenzbilder from '../../components/Referenzbilder.astro';
+import Werkzeugkasten from '../../components/Werkzeugkasten.astro';
+import { werkzeuge } from '../../data/werkzeuge';
 import { sichtbareProjekte } from '../../lib/content';
 import { breadcrumbJsonLd } from '../../lib/seo';
 
@@ -14,13 +16,13 @@ const site = Astro.site!;
 ---
 <Basis
   title="Projekte und Fallstudien"
-  description={`Fallstudien zu persönlichen Projekten und Konzepten sowie ${anzahl} belegte Referenzprojekte aus Strassen-, Brücken-, Bahn- und Wasserbau.`}
+  description={`Fallstudien, ${werkzeuge.length} selbst entwickelte Werkzeuge für Offerte, Kosten und Abrechnung sowie ${anzahl} belegte Referenzprojekte aus dem Tiefbau.`}
   jsonLd={[breadcrumbJsonLd([{ name: 'Start', url: site.href }, { name: 'Projekte', url: new URL('/projekte/', site).href }])]}
 >
   <Seitenkopf
     titel="Projekte"
     pos="Pos. 300"
-    lead="Fallstudien zu eigenen Projekten und Konzepten, dazu eine belegte Liste beruflicher Referenzprojekte. Jede Karte zeigt, um welche Art von Projekt es sich handelt."
+    lead="Fallstudien zu eigenen Projekten und Konzepten, ein Werkzeugkasten mit selbst entwickelten Werkzeugen und eine belegte Liste beruflicher Referenzprojekte."
     krumen={[{ name: 'Projekte' }]}
   />
 
@@ -36,6 +38,17 @@ const site = Astro.site!;
         <div><dt><span class="badge badge-beruflich">Berufliche Erfahrung</span></dt><dd>Belegt durch Lebenslauf und Zeugnisse</dd></div>
       </dl>
       <div class="raster-3">{projekte.map((p) => <ProjektKarte projekt={p} />)}</div>
+    </div>
+  </section>
+
+  <section class="abschnitt" id="werkzeugkasten" aria-labelledby="wk-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Werkzeugkasten</span>
+        <h2 id="wk-titel">{werkzeuge.length} eigene Werkzeuge aus der Praxis</h2>
+        <p>Selbst entwickelt, mit KI-Unterstützung (Claude), in Excel, HTML und Copilot Studio. Genannt sind Name und Zweck; Daten, Kunden und Ergebnisse aus Projekten bleiben vertraulich.</p>
+      </div>
+      <Werkzeugkasten />
     </div>
   </section>
 

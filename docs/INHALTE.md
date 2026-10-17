@@ -20,6 +20,8 @@ Die Admin-Oberfläche schreibt Markdown-Dateien ins Repository. Sie ist bewusst 
 - Kompetenzfelder: `src/content/kompetenzen/<slug>.md`
 - Referenzprojekte: `src/data/referenzen.json`
 - Person, Werdegang, Zeugnisse: `src/data/person.ts`
+- Werkzeugkasten (eigene Werkzeuge): `src/data/werkzeuge.ts` – nur Name und neutraler Zweck, keine Arbeitgeber-,
+  Kunden- oder Projektdaten, keine Markennamen Dritter
 
 Der Build prüft alle Felder. Fehlt etwas oder ist eine Beschreibung zu lang, bricht er mit einer verständlichen
 Meldung ab.

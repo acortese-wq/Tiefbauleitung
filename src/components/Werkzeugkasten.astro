@@ -1,0 +1,51 @@
+---
+import { werkzeuge, werkzeuggruppen } from '../data/werkzeuge';
+
+interface Props {
+  /** Nur Werkzeuge dieser Kompetenz zeigen (ohne Gruppentitel) */
+  kompetenz?: string;
+}
+const { kompetenz } = Astro.props;
+const auswahl = kompetenz ? werkzeuge.filter((w) => w.kompetenzen.includes(kompetenz)) : werkzeuge;
+const gruppen = kompetenz
+  ? [{ titel: undefined, liste: auswahl }]
+  : werkzeuggruppen.map((g) => ({ titel: g, liste: auswahl.filter((w) => w.gruppe === g) }));
+// Überschriften-Hierarchie: mit Gruppentiteln h3 → h4, sonst direkt h3
+const Kopf = kompetenz ? 'h3' : 'h4';
+---
+{auswahl.length > 0 && (
+  <div class="werkzeugkasten">
+    {gruppen.map((g) => (
+      <div class="wk-gruppe">
+        {g.titel && <h3 class="wk-gruppe-titel">{g.titel}</h3>}
+        <ul class="wk-liste">
+          {g.liste.map((w) => (
+            <li class="karte wk-karte">
+              <span class="wk-meta">
+                <span class="label">{kompetenz ? w.gruppe : 'Eigenentwicklung'}</span>
+                {w.privat && <span class="badge badge-persoenlich">Privat</span>}
+              </span>
+              <Kopf class="wk-name">{w.name}</Kopf>
+              <p>{w.zweck}</p>
+              {w.zusatz && <p class="wk-zusatz">{w.zusatz}</p>}
+              {w.link && <a class="wk-link" href={w.link.href}>{w.link.label} →</a>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+)}
+
+<style>
+  .werkzeugkasten { display: grid; gap: 32px; }
+  .wk-gruppe-titel { font-size: 1.4rem; margin-bottom: 14px; }
+  .wk-liste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .wk-karte { padding: 20px 22px; display: flex; flex-direction: column; gap: 8px; }
+  .wk-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .wk-name { font: 600 1.25rem var(--f-display); letter-spacing: 0.01em; margin: 0; }
+  .wk-karte p { margin: 0; color: var(--text-ruhig); font-size: 0.95rem; }
+  .wk-zusatz { font-family: var(--f-mono); font-size: 0.74rem !important; color: var(--eis) !important; }
+  .wk-link { margin-top: auto; padding-top: 4px; font-weight: 600; text-decoration: none; }
+  .wk-link:hover { text-decoration: underline; }
+</style>

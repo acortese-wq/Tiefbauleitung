@@ -16,7 +16,10 @@
 
 - Welche Domain? (z. B. `cortese.ch`, `alessandro-cortese.ch`)
 - Postanschrift für Impressum und Datenschutz, oder Impressumspflicht verneinen lassen?
-- Freigabe des Arbeitgebers für Webseite, Werkzeugbeschreibungen und Fachbeiträge?
+- Freigabe des Arbeitgebers für Webseite, Werkzeugkasten und Fachbeiträge? (Werkzeugkasten am 17.10.2026 durch
+  Alessandro Cortese freigegeben: Name und neutraler Zweck, ohne Preisanalyse Kanton; Werkzeuge aus dem
+  Arbeitsumfeld wie OffertIQ, NPK-KoPa, Prüf-Agent, juristischer Chatbot vorsorglich mit Arbeitgeber klären)
+- Zweckbeschreibungen im Werkzeugkasten prüfen (Schachtassistent, DLV-Rechner, NPK_WISP_TB-KoPa)
 - Jahr des Abschlusses HSO KI-Professional?
 - Stimmen die ergänzten Normenbezüge (SIA 205, 262, 269, 405, VSS)?
 - App-Name «Rechnen mit Pokémon» beibehalten oder für die Webseite umbenennen?

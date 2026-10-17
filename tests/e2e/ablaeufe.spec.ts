@@ -160,3 +160,20 @@ test('Startseite zeigt das Bild «Vom Graben zum Rechenzentrum» mit KI-Kennzeic
   await expect.poll(() => bild.locator('img').evaluate((i: HTMLImageElement) => i.naturalWidth)).toBeGreaterThan(0);
   await expect(bild.locator('figcaption')).toContainText('KI-generierte Illustration');
 });
+
+test('Werkzeugkasten zeigt freigegebene Werkzeuge mit Urheberangabe', async ({ page }) => {
+  await page.goto('/projekte/#werkzeugkasten');
+  const karten = page.locator('#werkzeugkasten .wk-karte');
+  await expect(karten).toHaveCount(11);
+  await expect(page.locator('#werkzeugkasten')).toContainText('Urheber: Alessandro Cortese');
+  await page.goto('/kompetenzen/ki-agenten/');
+  await expect(page.locator('.werkzeugkasten')).toContainText('Schachtassistent');
+});
+
+test('Nicht freigegebene Werkzeug- und Markennamen erscheinen nirgends', async ({ page }) => {
+  for (const pfad of ['/', '/projekte/', '/kompetenzen/ki-agenten/', '/kompetenzen/digitalisierung-prozesse/', '/kompetenzen/netzinfrastruktur-leitungsbau/', '/kompetenzen/tiefbau-infrastruktur/']) {
+    await page.goto(pfad);
+    const text = (await page.locator('body').innerText()).toLowerCase();
+    for (const verboten of ['preisanalyse', 'swisscomgpt', 'cablex']) expect(text, `${verboten} auf ${pfad}`).not.toContain(verboten);
+  }
+});

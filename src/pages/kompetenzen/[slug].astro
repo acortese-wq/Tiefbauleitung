@@ -5,6 +5,8 @@ import Seitenkopf from '../../components/Seitenkopf.astro';
 import Referenzliste from '../../components/Referenzliste.astro';
 import Referenzbilder from '../../components/Referenzbilder.astro';
 import ProjektKarte from '../../components/ProjektKarte.astro';
+import Werkzeugkasten from '../../components/Werkzeugkasten.astro';
+import { werkzeuge } from '../../data/werkzeuge';
 import { alleKompetenzen, sichtbareProjekte } from '../../lib/content';
 import { breadcrumbJsonLd } from '../../lib/seo';
 import TiefbauInfrastruktur from '../../components/illustrationen/TiefbauInfrastruktur.astro';
@@ -32,6 +34,7 @@ const d = kompetenz.data;
 const projekte = (await sichtbareProjekte()).filter((p) => p.data.kompetenzen.includes(kompetenz.id));
 const weitere = alle.filter((k) => k.id !== kompetenz.id);
 const Zeichnung = zeichnungen[kompetenz.id];
+const hatWerkzeuge = werkzeuge.some((w) => w.kompetenzen.includes(kompetenz.id));
 const site = Astro.site!;
 const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
 ---
@@ -62,6 +65,19 @@ const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
       </article>
     </div>
   </section>
+
+  {hatWerkzeuge && (
+    <section class="abschnitt" aria-labelledby="wk-titel">
+      <div class="wrap">
+        <div class="abschnitt-kopf">
+          <span class="pos">Werkzeugkasten</span>
+          <h2 id="wk-titel">Eigene Werkzeuge in diesem Feld</h2>
+        </div>
+        <Werkzeugkasten kompetenz={kompetenz.id} />
+        <p class="wk-alle"><a href="/projekte/#werkzeugkasten">Alle Werkzeuge ansehen →</a></p>
+      </div>
+    </section>
+  )}
 
   {projekte.length > 0 && (
     <section class="abschnitt band-hell" aria-labelledby="bsp-titel">
@@ -101,3 +117,7 @@ const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
     </div>
   </section>
 </Basis>
+
+<style>
+  .wk-alle { margin-top: 20px; font-weight: 600; }
+</style>

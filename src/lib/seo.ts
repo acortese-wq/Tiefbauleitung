@@ -10,6 +10,16 @@ export function personJsonLd(site: URL) {
     worksFor: { '@type': 'Organization', name: person.arbeitgeber },
     address: { '@type': 'PostalAddress', addressLocality: person.ort, addressRegion: 'GR', addressCountry: 'CH' },
     knowsLanguage: ['de', 'it', 'en'],
+    knowsAbout: [
+      'Tiefbau', 'Netzbau', 'Glasfaserausbau (FTTH)', 'Werkleitungen', 'Bauherrenvertretung', 'Bauleitung',
+      'Vergabewesen (IVöB/BöB)', 'SIA 118', 'NPK', 'Abrechnungsprüfung', 'KI-Agenten',
+    ],
+    hasCredential: {
+      '@type': 'EducationalOccupationalCredential',
+      name: 'KI-Professional (KI-Agent)',
+      credentialCategory: 'Zertifikat',
+      recognizedBy: { '@type': 'EducationalOrganization', name: 'HSO Wirtschafts- und Informatikschule' },
+    },
     sameAs: [person.linkedin],
     url: site.href,
     image: new URL(`${person.portrait}`, site).href,

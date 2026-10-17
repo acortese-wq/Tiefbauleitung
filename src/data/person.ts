@@ -17,7 +17,7 @@ export const person = {
 export const kennzahlen = [
   { wert: '30+', label: 'Jahre im Tiefbau', quelle: 'Lehre als Tiefbauzeichner ab 1994' },
   { wert: '17', label: 'Jahre beim Tiefbauamt Graubünden', quelle: '2000–2005 und 2013–2025' },
-  { wert: '26', label: 'Jahre Prüfungsexperte', quelle: 'seit Juni 2000' },
+  { wert: '2', label: 'Seiten im Netzbau', quelle: 'Strasseneigentümer 2021–2025 · Netzbetreiber seit 2025' },
 ];
 
 export type Station = {

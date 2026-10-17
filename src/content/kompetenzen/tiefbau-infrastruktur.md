@@ -2,7 +2,7 @@
 title: Tiefbau und Infrastruktur
 kurz: Kantonsstrassen, Brücken, Galerien und Instandsetzungen von der Studie bis zur Schlussabrechnung. Aus Sicht von Ingenieurbüro und Bauherr.
 bereich: Infrastruktur
-reihenfolge: 1
+reihenfolge: 2
 seit: Erfahrung seit 2000
 grundlagen: [SIA 118, NPK, VSS-Normen, SIA 262, SIA 269]
 referenzFilter: strasse,kunstbauten,bahn

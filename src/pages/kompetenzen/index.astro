@@ -9,7 +9,7 @@ const site = Astro.site!;
 ---
 <Basis
   title="Kompetenzen"
-  description="Vier Kompetenzfelder: Tiefbau und Infrastruktur, Netzinfrastruktur und Leitungsbau, Digitalisierung technischer Prozesse sowie KI-Agenten."
+  description="Vier Kompetenzfelder: Netzbau, Glasfaser und Leitungsbau, Tiefbau und Infrastruktur, Digitalisierung technischer Prozesse sowie KI-Agenten."
   jsonLd={[breadcrumbJsonLd([{ name: 'Start', url: site.href }, { name: 'Kompetenzen', url: new URL('/kompetenzen/', site).href }])]}
 >
   <Seitenkopf
@@ -32,7 +32,7 @@ const site = Astro.site!;
           <circle cx="360" cy="150" r="10" class="n-punkt" />
           <circle cx="600" cy="70" r="12" class="n-punkt n-punkt-eis" />
           <text x="120" y="268" text-anchor="middle" class="n-text">Tiefbau</text>
-          <text x="300" y="268" text-anchor="middle" class="n-text">Netzinfrastruktur</text>
+          <text x="300" y="268" text-anchor="middle" class="n-text">Netzbau</text>
           <text x="380" y="140" class="n-text">Digitalisierung</text>
           <text x="600" y="44" text-anchor="middle" class="n-text n-text-eis">KI-Agenten</text>
           <line x1="20" y1="250" x2="700" y2="250" class="n-terrain" />

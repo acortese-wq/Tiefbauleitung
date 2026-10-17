@@ -8,6 +8,7 @@ import Referenzbilder from '../components/Referenzbilder.astro';
 import TiefbauInfrastruktur from '../components/illustrationen/TiefbauInfrastruktur.astro';
 import DigitalisierungProzesse from '../components/illustrationen/DigitalisierungProzesse.astro';
 import KiAgenten from '../components/illustrationen/KiAgenten.astro';
+import NetzinfrastrukturLeitungsbau from '../components/illustrationen/NetzinfrastrukturLeitungsbau.astro';
 import { werkzeuge } from '../data/werkzeuge';
 import { person, kennzahlen, zeugnisse } from '../data/person';
 import { sichtbareArtikel, sichtbareProjekte } from '../lib/content';
@@ -15,33 +16,81 @@ import { personJsonLd } from '../lib/seo';
 
 const projekte = (await sichtbareProjekte()).slice(0, 3);
 const artikel = (await sichtbareArtikel()).slice(0, 3);
-const anzahlReferenzen = (await getCollection('referenzen')).length;
+const referenzen = await getCollection('referenzen');
+const anzahlReferenzen = referenzen.length;
+const anzahlWasser = referenzen.filter((r) => r.data.fachgebiete.includes('wasser')).length;
 
 const bereiche = [
   {
     nr: '01',
-    titel: 'Infrastruktur',
+    titel: 'Tiefbau',
     Zeichnung: TiefbauInfrastruktur,
-    text: 'Strassen, Brücken, Werkleitungen und Glasfaser. Von der Submission bis zur Schlussabrechnung, aus Sicht von Ingenieurbüro und Bauherr.',
-    links: [
-      { href: '/kompetenzen/tiefbau-infrastruktur/', label: 'Tiefbau und Infrastruktur' },
-      { href: '/kompetenzen/netzinfrastruktur-leitungsbau/', label: 'Netzinfrastruktur und Leitungsbau' },
-    ],
+    text: 'Kantonsstrassen, Brücken und Instandsetzungen. Von der Submission bis zur Schlussabrechnung, aus Sicht von Ingenieurbüro und Bauherr.',
+    links: [{ href: '/kompetenzen/tiefbau-infrastruktur/', label: 'Tiefbau und Infrastruktur' }],
   },
   {
     nr: '02',
+    titel: 'Netzbau',
+    Zeichnung: NetzinfrastrukturLeitungsbau,
+    text: 'Glasfaserausbau und Werkleitungen im Strassenraum: Bauüberwachung, Nachträge, Kostenteiler und Schnittstellen mit Werkeigentümern.',
+    links: [{ href: '/kompetenzen/netzinfrastruktur-leitungsbau/', label: 'Netzbau, Glasfaser und Leitungsbau' }],
+  },
+  {
+    nr: '03',
     titel: 'Digitalisierung',
     Zeichnung: DigitalisierungProzesse,
     text: 'Wiederkehrende Prüf- und Rechenarbeit in schlanke Werkzeuge übersetzen, die im Projektalltag tatsächlich genutzt werden.',
     links: [{ href: '/kompetenzen/digitalisierung-prozesse/', label: 'Digitalisierung technischer Prozesse' }],
   },
   {
-    nr: '03',
+    nr: '04',
     titel: 'Künstliche Intelligenz',
     Zeichnung: KiAgenten,
     text: 'KI-Agenten mit klarer Aufgabe, nachvollziehbaren Belegen und einer Fachperson, die entscheidet.',
     links: [{ href: '/kompetenzen/ki-agenten/', label: 'KI-Agenten und praktische KI' }],
   },
+];
+
+// Netzbau: nur Angaben aus Lebenslauf, Zeugnissen und Referenzliste
+const perspektiven = [
+  {
+    zeit: 'seit 2025',
+    titel: 'Netzbetreiber',
+    ort: 'Bauherrenvertreter Tiefbau im Glasfaserausbau (FTTH), Ostschweiz',
+    punkte: [
+      'Projektsteuerung und Bauüberwachung mit dem Generalunternehmer',
+      'Vergabe-, Vertrags- und Nachtragsmanagement nach SIA 118, NPK und Vergaberecht',
+      'Baukostencontrolling, Rechnungs- und Abrechnungsprüfung',
+      'Kostenaufteilung und Schnittstellen mit kantonalen und kommunalen Werkeigentümern',
+    ],
+  },
+  {
+    zeit: '2021–2025',
+    titel: 'Strasseneigentümer',
+    ort: 'Leiter Projektierung und Bau, Tiefbauamt Graubünden, Bezirk 1 Chur',
+    punkte: [
+      'Leitungsgesuche zusammen mit dem Bezirkschef bearbeitet und beurteilt',
+      'Neu- und Ausbau von Verbindungsstrassen, baulicher Unterhalt der Kantonsstrassen',
+      'Submissionswesen und Prüfung von Schlussabrechnungen',
+    ],
+  },
+  {
+    zeit: '2006–2013',
+    titel: 'Werkleitungsbau',
+    ort: 'Projekt- und Bauleitung bei Ingenieurbüros in Ilanz und Chur',
+    punkte: [
+      'Wasserversorgungen und Siedlungsentwässerungen',
+      'Quartiererschliessungen mit Strasse und Werkleitungen',
+      `${anzahlWasser} belegte Referenzprojekte im Leitungs- und Wasserbau`,
+    ],
+  },
+];
+
+const beitraege = [
+  { titel: 'Schnittstellen beurteilen', text: 'Ich weiss, worauf ein Strasseneigentümer im Leitungsgesuch achtet und was ein Netzbetreiber für einen reibungslosen Bau braucht.' },
+  { titel: 'Kosten und Abrechnung prüfen', text: 'Mengen, Einheitspreise, Nachträge und Kostenteiler werden gegen Vertrag und NPK geprüft, nicht nur durchgewinkt.' },
+  { titel: 'Risiken früh erkennen', text: 'Konflikte mit bestehenden Werkleitungen, Auflagen und Bauabläufen gehören auf den Tisch, bevor gegraben wird.' },
+  { titel: 'Beteiligte zusammenbringen', text: 'Generalunternehmer, Gemeinden, Kanton und Werkeigentümer: Ich kenne die Begriffe und Interessen aller Seiten.' },
 ];
 
 const probleme = [
@@ -67,22 +116,23 @@ const zitat = zeugnisse[1];
 ---
 <Basis
   title={person.name}
-  description="Alessandro Cortese, Bauingenieur aus Chur, verbindet über 30 Jahre Tiefbaupraxis mit KI-Agenten: Bauherrenvertretung, Netzinfrastruktur und Prüfwerkzeuge."
+  description="Alessandro Cortese, Bauingenieur aus Chur: über 30 Jahre Tiefbau, Bauherrenvertreter im Glasfaserausbau und eigene KI-Agenten für Offerte und Abrechnung."
   typ="profile"
   jsonLd={[personJsonLd(Astro.site!)]}
 >
   <section class="held">
     <div class="wrap held-raster">
       <div class="held-text">
-        <span class="label label-eis einblenden">Tiefbau · Netzinfrastruktur · KI-Agenten · Chur</span>
-        <h1 class="einblenden einblenden-2">Tiefbau verstehen. <span>KI richtig einsetzen.</span></h1>
+        <span class="label label-eis einblenden">Tiefbau · Netzbau · Glasfaser · KI-Agenten · Chur</span>
+        <h1 class="einblenden einblenden-2">Tiefbau und Netzbau verstehen. <span>KI richtig einsetzen.</span></h1>
         <p class="held-lead einblenden einblenden-3">
-          Ich bin Alessandro Cortese, Bauingenieur und Bauherrenvertreter Tiefbau mit über 30 Jahren Praxis. Ich übersetze
-          Infrastrukturwissen in digitale Werkzeuge und KI-Agenten, die Offerten, Abrechnungen und
-          Projektabschlüsse schneller und nachvollziehbarer prüfen.
+          Ich bin Alessandro Cortese, Bauingenieur mit über 30 Jahren im Tiefbau. Heute begleite ich als
+          Bauherrenvertreter den Glasfaserausbau, davor habe ich beim Tiefbauamt Graubünden Leitungsgesuche beurteilt.
+          Ich kenne beide Seiten des Grabens und entwickle KI-Werkzeuge, die Offerten und Abrechnungen
+          nachvollziehbar prüfen.
         </p>
         <p class="held-zielgruppe einblenden einblenden-3">
-          <span class="label">Für</span> Bauherren · Netzbetreiber · Ingenieurbüros · öffentliche Verwaltungen
+          <span class="label">Für</span> Netzbetreiber · Bauherren · Ingenieurbüros · öffentliche Verwaltungen
         </p>
         <div class="btn-reihe einblenden einblenden-4">
           <a class="btn" href="/kontakt/">Fachlichen Austausch starten <span class="pfeil" aria-hidden="true">→</span></a>
@@ -131,8 +181,8 @@ const zitat = zeugnisse[1];
     <div class="wrap">
       <div class="abschnitt-kopf">
         <span class="pos">Pos. 100 · Kompetenzbereiche</span>
-        <h2 id="bereiche-titel">Drei Bereiche, eine Praxis</h2>
-        <p>Die Bereiche bauen aufeinander auf: Wer Infrastruktur versteht, erkennt, wo Digitalisierung hilft. Und wer digitalisiert, weiss, wo KI sinnvoll ist.</p>
+        <h2 id="bereiche-titel">Vier Felder, eine Praxis</h2>
+        <p>Die Felder bauen aufeinander auf: Wer Strassen und Werkleitungen gebaut hat, versteht den Netzbau. Wer beides kennt, sieht, wo Digitalisierung hilft und wo KI sinnvoll ist.</p>
       </div>
       <ol class="bereiche">
         {bereiche.map((b) => (
@@ -147,6 +197,35 @@ const zitat = zeugnisse[1];
           </li>
         ))}
       </ol>
+    </div>
+  </section>
+
+  <section class="abschnitt netzbau" aria-labelledby="netzbau-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Pos. 150 · Netzbau</span>
+        <h2 id="netzbau-titel">Netzbau aus beiden Perspektiven</h2>
+        <p>Wer Glasfaser oder Werkleitungen baut, baut im Strassenraum anderer. Ich habe beide Seiten verantwortet: die des Strasseneigentümers und die des Netzbetreibers.</p>
+      </div>
+      <ol class="perspektiven">
+        {perspektiven.map((p) => (
+          <li class="karte perspektive">
+            <span class="label label-eis">{p.zeit}</span>
+            <h3>{p.titel}</h3>
+            <p class="perspektive-ort">{p.ort}</p>
+            <ul>{p.punkte.map((x) => <li>{x}</li>)}</ul>
+          </li>
+        ))}
+      </ol>
+      <div class="beitrag">
+        <h3>Was das einem Arbeitgeber bringt</h3>
+        <dl class="beitrag-liste">
+          {beitraege.map((b) => (
+            <div><dt>{b.titel}</dt><dd>{b.text}</dd></div>
+          ))}
+        </dl>
+        <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/">Netzbau, Glasfaser und Leitungsbau im Detail →</a>
+      </div>
     </div>
   </section>
 
@@ -263,11 +342,11 @@ const zitat = zeugnisse[1];
     mask-image: radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%);
   }
   .held-raster {
-    position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    position: relative; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     gap: clamp(28px, 5vw, 64px); align-items: center; padding-block: clamp(40px, 7vw, 96px);
   }
   .held-text { display: grid; gap: 22px; min-width: 0; }
-  .held h1 { font-size: var(--s-4); text-transform: uppercase; letter-spacing: -0.01em; font-weight: 700; }
+  .held h1 { font-size: clamp(2.4rem, 1.4rem + 3.6vw, 4.2rem); text-transform: uppercase; letter-spacing: -0.01em; font-weight: 700; }
   .held h1 span { display: block; color: var(--eis); }
   .held-lead { color: var(--text-ruhig); font-size: var(--s-1); line-height: 1.55; max-width: 54ch; }
   .kennzahlen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 6px 0 0; padding-top: 18px; border-top: 1px solid var(--linie); }
@@ -277,7 +356,21 @@ const zitat = zeugnisse[1];
   .kennzahlen .wert { order: 1; font: 600 var(--s-3) var(--f-display); line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
   .kennzahlen .quelle { order: 3; font-family: var(--f-mono); font-size: 0.68rem; color: var(--text-ruhig); }
 
-  .bereiche { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .bereiche { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .bereich h3 { font-size: 1.6rem; }
+  .netzbau { border-top: 1px solid var(--linie); }
+  .perspektiven { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .perspektive { padding: 24px 26px; display: flex; flex-direction: column; gap: 8px; }
+  .perspektive h3 { font-size: 1.7rem; text-transform: uppercase; }
+  .perspektive-ort { margin: 0; color: var(--text); font-weight: 600; }
+  .perspektive ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 6px; color: var(--text-ruhig); font-size: 0.95rem; }
+  .beitrag { margin-top: 32px; padding: 28px; border: 1px solid var(--linie); border-left: 3px solid var(--signal); border-radius: var(--radius); background: var(--tiefe); }
+  .beitrag h3 { font-size: 1.5rem; margin-bottom: 16px; }
+  .beitrag-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 32px; margin: 0; }
+  .beitrag-liste dt { font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .beitrag-liste dd { margin: 0; color: var(--text-ruhig); }
+  .beitrag-link { display: inline-block; margin-top: 20px; font-weight: 600; text-decoration: none; }
+  .beitrag-link:hover { text-decoration: underline; }
   .bildband-start { padding-block: clamp(8px, 2vw, 24px) 0; }
   .weg-bild { margin: 0; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; background: var(--tiefe); }
   .weg-bild picture { display: block; aspect-ratio: 1400 / 764; background: var(--panel); }
@@ -330,8 +423,18 @@ const zitat = zeugnisse[1];
   .abschluss-text h2 { font-size: var(--s-3); }
   .abschluss-text p { color: var(--text-ruhig); }
 
+  /* Niedrige Desktop-Bildschirme (z. B. 1280 × 720): Handlungsaufrufe ohne Scrollen sichtbar */
+  @media (min-width: 961px) and (max-height: 820px) {
+    .held-raster { padding-block: 36px 48px; }
+  }
+  @media (max-width: 1100px) {
+    .bereiche { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
   @media (max-width: 960px) {
     .held-raster, .abschluss-raster { grid-template-columns: 1fr; }
+    .perspektiven, .beitrag-liste { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
     .bereiche { grid-template-columns: 1fr; }
   }
   @media (max-width: 640px) {

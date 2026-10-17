@@ -16,7 +16,7 @@ test('Navigation führt zu allen Hauptseiten', async ({ page, isMobile }) => {
 
 test('Startseite zeigt Positionierung und zwei Handlungsoptionen', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('h1')).toContainText('Tiefbau verstehen');
+  await expect(page.locator('h1')).toContainText('Tiefbau und Netzbau verstehen');
   await expect(page.getByRole('link', { name: /Fachlichen Austausch starten/ })).toHaveAttribute('href', '/kontakt/');
   await expect(page.getByRole('link', { name: 'Kompetenzen entdecken' })).toHaveAttribute('href', '/kompetenzen/');
 });
@@ -145,7 +145,7 @@ test('Jede Kompetenzseite zeigt eine beschriebene Planzeichnung im Seitenkopf', 
 test('Kompetenzbereiche der Startseite zeigen dekorative Zeichnungen', async ({ page }) => {
   await page.goto('/');
   const zeichnungen = page.locator('.bereich-bild svg');
-  await expect(zeichnungen).toHaveCount(3);
+  await expect(zeichnungen).toHaveCount(4);
   for (const z of await zeichnungen.all()) {
     await expect(z).toBeVisible();
     await expect(z).toHaveAttribute('aria-hidden', 'true');
@@ -187,4 +187,20 @@ test('Fallstudie Trennungskompass nennt Gruppenarbeit, Bewertung und Grenzen, oh
   await expect(inhalt).toContainText('Grenzen und offene Risiken');
   const text = await inhalt.innerText();
   for (const vertraulich of ['7\'725', '7’725', 'Bexio', '54 Erstkontakte', 'intoChat']) expect(text).not.toContain(vertraulich);
+});
+
+test('Startseite zeigt Netzbau aus beiden Perspektiven und den Nutzen für Arbeitgeber', async ({ page }) => {
+  await page.goto('/');
+  const netzbau = page.locator('section.netzbau');
+  await expect(netzbau.locator('.perspektive')).toHaveCount(3);
+  await expect(netzbau).toContainText('Netzbetreiber');
+  await expect(netzbau).toContainText('Strasseneigentümer');
+  await expect(netzbau).toContainText('Was das einem Arbeitgeber bringt');
+  await expect(netzbau.getByRole('link', { name: /im Detail/ })).toHaveAttribute('href', '/kompetenzen/netzinfrastruktur-leitungsbau/');
+});
+
+test('Kompetenzseite Netzbau trennt Vorhandenes, Konzept und Ideen', async ({ page }) => {
+  await page.goto('/kompetenzen/netzinfrastruktur-leitungsbau/');
+  const prosa = page.locator('article.prosa');
+  for (const t of ['Eigenentwicklungen, vorhanden', 'Konzept', 'Ideen, noch nicht umgesetzt']) await expect(prosa).toContainText(t);
 });

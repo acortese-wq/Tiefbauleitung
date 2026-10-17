@@ -244,6 +244,9 @@ Checkliste für jedes neue Bild:
 
 ## 7. Porträt: Briefing für ein echtes Foto
 
+**Erledigt am 17. Oktober 2026:** neues Profilfoto von Alessandro Cortese eingebunden (600 × 600 px, JPG 40 KiB, WebP 16 KiB,
+Metadaten entfernt). Das Briefing unten bleibt als Vorlage für weitere Aufnahmen.
+
 Kein KI-Porträt. Empfehlung für eine Aufnahme durch eine Fotografin oder einen Fotografen:
 
 - Ort: Baustelle oder Brücke in Graubünden, Blaue Stunde oder bedeckter Himmel

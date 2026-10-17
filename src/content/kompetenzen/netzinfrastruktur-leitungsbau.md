@@ -21,7 +21,7 @@ Typische Fragen im Alltag:
 
 ## Zwei Perspektiven, eine Baustelle
 
-**Als Netzbetreiber (seit April 2025).** Als Bauherrenvertreter Tiefbau und Access Project Manager im Glasfaserausbau (FTTH) in der Ostschweiz steuere ich Projekte und überwache den Bau zusammen mit dem Generalunternehmer. Dazu gehören Vergabe-, Vertrags- und Nachtragsmanagement nach SIA 118, NPK und Vergaberecht, Baukostencontrolling, Rechnungs- und Abrechnungsprüfung sowie die Klärung von Kostenaufteilungen mit kantonalen und kommunalen Werkeigentümern.
+**Als Netzbetreiber (seit April 2025).** Als Bauherrenvertreter Tiefbau und Access Project Manager im Glasfaserausbau (FTTH) in der Ostschweiz leite und steuere ich Projekte im Sinne der Bauherrschaft, von der Planung bis zur Endkontrolle. Ich überwache den Bau zusammen mit dem Generalunternehmer und den Ausführungspartnern, führe Zwischen- und Endkontrollen durch und verantworte die Ausbauqualität. Für die Anspruchsgruppen und ihre Projektleitungen bin ich Ansprechstelle. Dazu gehören Vergabe-, Vertrags- und Nachtragsmanagement nach SIA 118, NPK und Vergaberecht, Baukostencontrolling, Rechnungs- und Abrechnungsprüfung sowie die Klärung von Kostenaufteilungen mit kantonalen und kommunalen Werkeigentümern.
 
 **Als Strasseneigentümer (2021–2025).** Beim Tiefbauamt Graubünden habe ich als Leiter Projektierung und Bau im Bezirk 1 Chur Leitungsgesuche zusammen mit dem Bezirkschef bearbeitet und beurteilt. Ich weiss deshalb, worauf die Strassenseite achtet, bevor ein Werk im Kantonsstrassennetz bauen darf.
 
@@ -32,6 +32,7 @@ Typische Fragen im Alltag:
 - **Schnittstellen beurteilen.** Kostenaufteilungen, Zuständigkeiten und Auflagen gehören vor den Baubeginn, nicht in den Nachtrag.
 - **Abrechnung systematisch prüfen.** Mengen, Einheitspreise und Nachträge gegen Vertrag und NPK, mit nachvollziehbarer Begründung.
 - **Planung und Ausführung zusammenbringen.** Als ehemaliger Bauleiter erkenne ich, wo ein Plan auf der Baustelle nicht aufgeht.
+- **Qualität abnehmen, nicht nur abrechnen.** Zwischen- und Endkontrollen gehören zur Bauherrenrolle, damit das Netz so gebaut ist, wie es bestellt wurde.
 - **Die Sprache aller Beteiligten.** Generalunternehmer, Gemeinde, Kanton und Werkeigentümer verfolgen unterschiedliche Ziele. Ich kenne die Begriffe und Interessen jeder Seite.
 
 ## Netzbau und KI: Stand der Dinge

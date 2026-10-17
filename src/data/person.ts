@@ -1,4 +1,6 @@
 // Belegte Angaben aus Lebenslauf (2024), Arbeitszeugnissen und LinkedIn-Profil.
+// Stelle seit 2025: allgemeine Aufgaben zusätzlich aus der Rollenbeschreibung des Arbeitgebers (intern, nicht
+// veröffentlicht; keine internen Bezeichnungen, Stufen oder Namen übernehmen).
 // Neue Angaben nur mit Quelle ergänzen. Nichts erfinden.
 
 export const person = {
@@ -35,7 +37,9 @@ export const werdegang: Station[] = [
     titel: 'Access Project Manager / Bauherrenvertreter Tiefbau',
     organisation: 'Swisscom AG, Ostschweiz',
     punkte: [
-      'Projektsteuerung und Bauüberwachung im Glasfaserausbau (FTTH) mit Generalunternehmer und weiteren Anspruchsgruppen',
+      'Leitung und Steuerung von Projekten im Glasfaserausbau (FTTH) im Sinne der Bauherrschaft: Kosten, Qualität und Termine von Anfang bis Ende',
+      'Bauüberwachung mit Generalunternehmer und Ausführungspartnern, Zwischen- und Endkontrollen, Verantwortung für die Ausbauqualität',
+      'Ansprechstelle für die Anspruchsgruppen und deren Projektleitungen, Vertretung der Interessen des Netzbetreibers',
       'Vergabe-, Vertrags- und Nachtragsmanagement auf Basis SIA 118, NPK und Vergaberecht (IVöB/BöB)',
       'Baukostencontrolling sowie Rechnungs- und Abrechnungsprüfung',
       'Klärung von Kostenaufteilungen und Schnittstellen mit kantonalen und kommunalen Werkeigentümern',

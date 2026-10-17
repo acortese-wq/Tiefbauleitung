@@ -172,10 +172,10 @@ test('Werkzeugkasten zeigt freigegebene Werkzeuge mit Urheberangabe', async ({ p
 });
 
 test('Nicht freigegebene Werkzeug- und Markennamen erscheinen nirgends', async ({ page }) => {
-  for (const pfad of ['/', '/projekte/', '/kompetenzen/ki-agenten/', '/kompetenzen/digitalisierung-prozesse/', '/kompetenzen/netzinfrastruktur-leitungsbau/', '/kompetenzen/tiefbau-infrastruktur/']) {
+  for (const pfad of ['/', '/profil/', '/projekte/', '/kompetenzen/ki-agenten/', '/kompetenzen/digitalisierung-prozesse/', '/kompetenzen/netzinfrastruktur-leitungsbau/', '/kompetenzen/tiefbau-infrastruktur/']) {
     await page.goto(pfad);
     const text = (await page.locator('body').innerText()).toLowerCase();
-    for (const verboten of ['preisanalyse', 'swisscomgpt', 'cablex']) expect(text, `${verboten} auf ${pfad}`).not.toContain(verboten);
+    for (const verboten of ['preisanalyse', 'swisscomgpt', 'cablex', 'job band', 'becher', 'c2 internal']) expect(text, `${verboten} auf ${pfad}`).not.toContain(verboten);
   }
 });
 

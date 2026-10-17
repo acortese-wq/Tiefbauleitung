@@ -6,6 +6,9 @@ zeitraum: 2026, Abschlussarbeit
 rolle: Mitglied einer Vierergruppe
 technologie: [Workflow-Agent, Prompt-Engineering, n8n, Modellvergleich, Regressionstests]
 kompetenzen: [ki-agenten]
+bild: /bilder/trennungskompass
+bildAlt: "Screenshot Trennungskompass: Startseite «Klarheit in einer schwierigen Zeit» zum Schweizer Scheidungs- und Familienrecht, Sprachwahl DE, FR, IT, EN, RU, Schaltflächen «Im Chat fragen» und «Mandatsanfrage ausfüllen»"
+bildRahmen: tablet
 reihenfolge: 0
 ---
 
@@ -23,7 +26,11 @@ Eine Anwaltskanzlei im Familienrecht erhält regelmässig Erstanfragen rund um T
 
 ## Lösung
 
-Der Trennungskompass beantwortet häufige Fragen von Ratsuchenden und führt sie strukturiert zur passenden nächsten Stelle. Er ist als **kontrollierter Workflow-Agent** gebaut, nicht als autonomer Agent.
+Der Trennungskompass gibt Ratsuchenden eine verständliche Orientierung zu Scheidung, Unterhalt, Kindern und Vorsorge, gestützt auf Schweizer Rechtsquellen. Er ist als **kontrollierter Workflow-Agent** gebaut, nicht als autonomer Agent.
+
+- **Chat in fünf Sprachen:** Deutsch, Französisch, Italienisch, Englisch und Russisch
+- **Mandatsanfrage:** Wer anwaltliche Unterstützung braucht, gelangt direkt zum Anfrageformular der Kanzlei
+- **Klare Rolle:** ausdrücklich eine Orientierungshilfe, keine Rechtsberatung und kein Ersatz für eine Anwältin oder einen Anwalt
 
 ## Architekturentscheide
 

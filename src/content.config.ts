@@ -39,6 +39,8 @@ const projekte = defineCollection({
     kompetenzen: z.array(z.string()).default([]),
     bild: z.string().optional(),
     bildAlt: z.string().optional(),
+    // Rahmen auf der Fallstudienseite: Smartphone (Standard) oder Tablet
+    bildRahmen: z.enum(['telefon', 'tablet']).default('telefon'),
     reihenfolge: z.number().default(100),
     status: z.enum(['entwurf', 'veroeffentlicht']).default('veroeffentlicht'),
   }),

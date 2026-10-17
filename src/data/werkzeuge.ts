@@ -88,7 +88,7 @@ export const werkzeuge: Werkzeug[] = [
     name: 'Trennungskompass',
     gruppe: 'Assistenten und Chatbots',
     zweck: 'Kontrollierter Workflow-Agent für Erstanfragen im Familienrecht, mit Eskalation an die Opferhilfe bei Hinweisen auf häusliche Gewalt.',
-    zusatz: 'Abschlussarbeit HSO KI-Professional (KI-Agent) · Gruppenarbeit · 91/100',
+    zusatz: 'Abschlussarbeit HSO KI-Professional (KI-Agent) · Gruppenarbeit · 91/100 · fünf Sprachen',
     auszeichnung: 'Stärkste Arbeit im Kurs',
     link: { href: '/projekte/trennungskompass/', label: 'Zur Fallstudie' },
     kompetenzen: ['ki-agenten'],

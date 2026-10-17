@@ -120,10 +120,9 @@ export const weiterbildung = [
   { zeit: '2022–2023', titel: 'Mitarbeiterführung Basis und Aufbau' },
   { zeit: '2022–2024', titel: 'Führungscoaching' },
   {
-    zeit: 'offen',
-    titel: 'HSO KI-Professional mit Schwerpunkt KI-Agenten',
-    hinweis: 'Abschlussarbeit «Trennungskompass» als beste Arbeit des Lehrgangs bewertet',
-    offen: true,
+    zeit: '2026',
+    titel: 'Zertifikatslehrgang KI-Professional (KI-Agent), HSO Wirtschafts- und Informatikschule',
+    hinweis: 'Zertifikat Juli 2026 · Abschlussarbeit «Trennungskompass» (Gruppenarbeit), 91/100, stärkste Arbeit im Kurs',
   },
 ];
 

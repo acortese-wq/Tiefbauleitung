@@ -6,7 +6,7 @@ zeitraum: Konzept 2026
 rolle: Konzept und Methodik
 technologie: [KI-Agent, Wissensbasis, strukturierte Ausgabe]
 kompetenzen: [ki-agenten, netzinfrastruktur-leitungsbau, tiefbau-infrastruktur]
-reihenfolge: 3
+reihenfolge: 1
 ---
 
 > Diese Fallstudie beschreibt ein **Konzept**. Sie stellt kein Kundenprojekt dar und enthält keine Daten oder Ergebnisse aus einem Arbeitsverhältnis.

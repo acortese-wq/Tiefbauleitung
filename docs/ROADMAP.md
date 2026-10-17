@@ -6,7 +6,7 @@
 2. **Kontaktformular aus.** Kontakt nur über LinkedIn, bis eine geschäftliche E-Mail und SMTP bestehen.
 3. **Rechtstexte unvollständig.** Postanschrift, Log-Aufbewahrung und Stand fehlen. Juristische Prüfung ausstehend.
 4. **Fachbeiträge sind Entwürfe.** Sie müssen inhaltlich geprüft und freigegeben werden.
-5. **HSO-Abschlussjahr unbekannt.** Auf der Profilseite als «Jahr offen» markiert.
+5. ~~HSO-Abschlussjahr unbekannt.~~ Geklärt: Zertifikat KI-Professional (KI-Agent) vom 25.07.2026.
 6. **Erst drei Fotos von Referenzobjekten** (Rheinbrücke Fläsch, Lehnenbrücke Nasstobel, Plessurbrücke Litzirüti). Bildnachweise sind zu bestätigen; weitere eigene Fotos ergänzen (docs/INHALTE.md).
 7. **Ratenbegrenzung nur im Arbeitsspeicher** (eine Instanz).
 8. **Keine Mehrsprachigkeit.** Nur Deutsch.
@@ -20,7 +20,6 @@
   Alessandro Cortese freigegeben: Name und neutraler Zweck, ohne Preisanalyse Kanton; Werkzeuge aus dem
   Arbeitsumfeld wie OffertIQ, NPK-KoPa, Prüf-Agent, juristischer Chatbot vorsorglich mit Arbeitgeber klären)
 - Zweckbeschreibungen im Werkzeugkasten prüfen (Schachtassistent, DLV-Rechner, NPK_WISP_TB-KoPa)
-- Jahr des Abschlusses HSO KI-Professional?
 - Stimmen die ergänzten Normenbezüge (SIA 205, 262, 269, 405, VSS)?
 - App-Name «Rechnen mit Pokémon» beibehalten oder für die Webseite umbenennen?
 - Schachtassistent: Darf er mit Namen und Urheberschaft genannt werden, obwohl er im beruflichen Umfeld eingesetzt wird?

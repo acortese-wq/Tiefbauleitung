@@ -81,15 +81,16 @@ export const werkzeuge: Werkzeug[] = [
   {
     name: 'Juristischer Chatbot',
     gruppe: 'Assistenten und Chatbots',
-    zweck: 'Beantwortet juristische Fragen aus dem Projektalltag auf Basis einer hinterlegten Wissensbasis.',
+    zweck: 'Beantwortet Fragen zu Vergabe- und Baurecht aus dem Projektalltag auf Basis einer hinterlegten Wissensbasis.',
     kompetenzen: ['ki-agenten'],
   },
   {
     name: 'Trennungskompass',
     gruppe: 'Assistenten und Chatbots',
-    zweck: 'Chatbot zur Orientierung in familienrechtlichen Fragen rund um eine Trennung.',
-    zusatz: 'Abschlussarbeit HSO KI-Professional, Schwerpunkt KI-Agenten',
-    auszeichnung: 'Beste Abschlussarbeit',
+    zweck: 'Kontrollierter Workflow-Agent für Erstanfragen im Familienrecht, mit Eskalation an die Opferhilfe bei Hinweisen auf häusliche Gewalt.',
+    zusatz: 'Abschlussarbeit HSO KI-Professional (KI-Agent) · Gruppenarbeit · 91/100',
+    auszeichnung: 'Stärkste Arbeit im Kurs',
+    link: { href: '/projekte/trennungskompass/', label: 'Zur Fallstudie' },
     kompetenzen: ['ki-agenten'],
   },
 ];

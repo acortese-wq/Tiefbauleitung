@@ -8,7 +8,7 @@ technologie: [Claude Code, HTML, CSS, JavaScript]
 kompetenzen: [ki-agenten, digitalisierung-prozesse]
 bild: /bilder/bm-trainer
 bildAlt: "Screenshot BM-Trainer: Fächerübersicht mit Mathematik, Deutsch, Englisch und Italienisch, Fortschrittsbalken, Fehlerheft und Abzeichen"
-reihenfolge: 1
+reihenfolge: 2
 ---
 
 ## Ausgangslage

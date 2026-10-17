@@ -8,7 +8,7 @@ technologie: [Claude Code, HTML, CSS, JavaScript]
 kompetenzen: [ki-agenten]
 bild: /bilder/rechnen-mit-pokemon
 bildAlt: "Screenshot Rechnen mit Pokémon: Kampf zwischen den Figuren Plussi und Tropfi, Aufgabe 48 plus 34, Zahlentastatur mit Tipp-Knopf"
-reihenfolge: 2
+reihenfolge: 3
 ---
 
 ## Ausgangslage

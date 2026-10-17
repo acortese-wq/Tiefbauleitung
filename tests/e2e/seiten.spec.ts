@@ -13,6 +13,7 @@ const SEITEN = [
   '/projekte/bm-trainer/',
   '/projekte/rechnen-mit-pokemon/',
   '/projekte/konzept-pruefagent-abrechnung/',
+  '/projekte/trennungskompass/',
   '/wissen/',
   '/suche/',
   '/kontakt/',

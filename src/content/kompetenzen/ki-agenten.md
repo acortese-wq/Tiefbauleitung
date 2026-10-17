@@ -3,7 +3,7 @@ title: KI-Agenten und praktische KI-Anwendungen
 kurz: KI dort einsetzen, wo sie im Bauprojekt Zeit spart, und dort kontrollieren, wo Fachwissen entscheidet.
 bereich: Künstliche Intelligenz
 reihenfolge: 4
-seit: HSO KI-Professional, Schwerpunkt KI-Agenten
+seit: Zertifikat HSO KI-Professional (KI-Agent), 2026
 grundlagen: [Copilot Studio, Claude Code, Prompt-Engineering, Wissensbasen]
 ---
 
@@ -30,6 +30,19 @@ KI ersetzt keine fachliche Verantwortung. Sie kann Fehler machen, Zusammenhänge
 
 ## Belegte Erfahrung
 
-- Ausbildung zum KI-Professional an der HSO mit Schwerpunkt KI-Agenten
+- Zertifikat KI-Professional (KI-Agent), HSO Wirtschafts- und Informatikschule, Juli 2026
+- Abschlussarbeit [Trennungskompass](/projekte/trennungskompass/) (Gruppenarbeit): 91 von 100 Punkten, als stärkste Arbeit im Kurs beurteilt
 - Entwicklung eigener KI-Agenten im beruflichen Umfeld, etwa zur Prüfung von Bauabrechnungen und als Chatbot für Vergabe- und Baurecht
 - Private Apps für die eigenen Kinder, entwickelt mit Claude Code
+
+## Weiterbildung: Was ich an der HSO gelernt habe
+
+Zertifikatslehrgang KI-Professional (KI-Agent), sieben Module:
+
+1. **Grundlagen der KI:** Unterscheidung von KI, generativer KI und KI-Agenten, aktuelle Trends und Technologien, Bedeutung von KI für Geschäftsstrategien
+2. **Daten als Grundlage für KI:** strukturierte, unstrukturierte und semi-strukturierte Daten, Datenqualität und -menge, Aufbereitung, Sortierung und Organisation
+3. **Ethische Aspekte, Datenschutz und Security:** Fairness, Bias in KI-Systemen mit Ursachen und Gegenmassnahmen, Fallstudien zu Diskriminierung durch KI
+4. **Einstieg in die Entwicklung von KI-Agenten:** AgentKit und Agent Builder, erste Workflows
+5. **Entwicklung komplexer KI-Agenten:** Workflows und Prozessketten, Guardrails, Best Practices für den produktiven Einsatz
+6. **KI-Agenten integrieren:** Testen und Integration in bestehende Abläufe
+7. **Workshop vor Ort:** Besichtigungen und Präsentation der erarbeiteten Konzepte

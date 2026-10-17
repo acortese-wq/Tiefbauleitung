@@ -12,7 +12,30 @@ const d = projekt.data;
       <img src={`${d.bild}.jpg`} alt={d.bildAlt ?? ''} loading="lazy" decoding="async" width="400" height="600" />
     </picture>
   )}
-  {!d.bild && (
+  {!d.bild && projekt.id === 'trennungskompass' && (
+    <div class="projekt-bild projekt-bild-schema" aria-hidden="true">
+      <svg viewBox="0 0 240 150">
+        <g transform="translate(0 16)">
+        <path d="M14 24h56a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4H32l-10 9v-9h-8a4 4 0 0 1-4-4V28a4 4 0 0 1 4-4z" class="ps-doc" />
+        <path d="M20 36h44M20 45h32" class="ps-zeile" />
+        <path d="M78 46h18" class="ps-fluss" />
+        <rect x="98" y="34" width="22" height="22" rx="3" class="ps-agent" />
+        <rect x="128" y="34" width="22" height="22" rx="3" class="ps-agent" />
+        <path d="M120 45h8" class="ps-fluss" />
+        <path d="M150 45 C 164 45, 166 30, 180 30" class="ps-fluss" />
+        <path d="M150 45 C 164 45, 166 84, 184 84" class="ps-fluss ps-fluss-signal" />
+        <rect x="182" y="14" width="44" height="34" rx="3" class="ps-doc" />
+        <path d="M190 26l4 4 8-9" class="ps-check" />
+        <path d="M206 26h12M190 38h28" class="ps-zeile" />
+        <circle cx="196" cy="84" r="9" class="ps-signal" />
+        <path d="M196 79v6M196 88v1" class="ps-signal-zeichen" />
+        <text x="210" y="88" class="ps-text">Hilfe</text>
+        </g>
+        <text x="16" y="128" class="ps-text">Anfrage → Workflow → Antwort</text>
+      </svg>
+    </div>
+  )}
+  {!d.bild && projekt.id !== 'trennungskompass' && (
     <div class="projekt-bild projekt-bild-schema" aria-hidden="true">
       <svg viewBox="0 0 240 150">
         <rect x="16" y="22" width="60" height="78" rx="3" class="ps-doc" />
@@ -44,7 +67,10 @@ const d = projekt.data;
   .projekt-bild-schema svg { width: 90%; }
   .ps-doc { fill: none; stroke: var(--text-ruhig); stroke-width: 1.4; }
   .ps-zeile { stroke: var(--linie-hell); stroke-width: 2; stroke-linecap: round; }
-  .ps-fluss { stroke: var(--eis); stroke-width: 2; stroke-dasharray: 4 5; }
+  .ps-fluss { fill: none; stroke: var(--eis); stroke-width: 2; stroke-dasharray: 4 5; }
+  .ps-fluss-signal { stroke: var(--signal); }
+  .ps-signal { fill: none; stroke: var(--signal); stroke-width: 1.8; }
+  .ps-signal-zeichen { stroke: var(--signal); stroke-width: 2; stroke-linecap: round; }
   .ps-agent { fill: var(--eis-flaeche); stroke: var(--eis); stroke-width: 1.8; }
   .ps-check { fill: none; stroke: var(--eis); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
   .ps-text { fill: var(--text-ruhig); font-family: var(--f-mono); font-size: 10px; }

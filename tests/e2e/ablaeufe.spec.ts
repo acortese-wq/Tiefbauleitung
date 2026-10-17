@@ -166,7 +166,7 @@ test('Werkzeugkasten zeigt freigegebene Werkzeuge mit Urheberangabe', async ({ p
   const karten = page.locator('#werkzeugkasten .wk-karte');
   await expect(karten).toHaveCount(11);
   await expect(page.locator('#werkzeugkasten')).toContainText('Urheber: Alessandro Cortese');
-  await expect(page.locator('#werkzeugkasten')).toContainText('Beste Abschlussarbeit');
+  await expect(page.locator('#werkzeugkasten')).toContainText('Stärkste Arbeit im Kurs');
   await page.goto('/kompetenzen/ki-agenten/');
   await expect(page.locator('.werkzeugkasten')).toContainText('Schachtassistent');
 });
@@ -177,4 +177,14 @@ test('Nicht freigegebene Werkzeug- und Markennamen erscheinen nirgends', async (
     const text = (await page.locator('body').innerText()).toLowerCase();
     for (const verboten of ['preisanalyse', 'swisscomgpt', 'cablex']) expect(text, `${verboten} auf ${pfad}`).not.toContain(verboten);
   }
+});
+
+test('Fallstudie Trennungskompass nennt Gruppenarbeit, Bewertung und Grenzen, ohne Kanzleizahlen', async ({ page }) => {
+  await page.goto('/projekte/trennungskompass/');
+  const inhalt = page.locator('main');
+  await expect(inhalt).toContainText('Gruppenarbeit');
+  await expect(inhalt).toContainText('91 von 100');
+  await expect(inhalt).toContainText('Grenzen und offene Risiken');
+  const text = await inhalt.innerText();
+  for (const vertraulich of ['7\'725', '7’725', 'Bexio', '54 Erstkontakte', 'intoChat']) expect(text).not.toContain(vertraulich);
 });

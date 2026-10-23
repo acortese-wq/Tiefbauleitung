@@ -36,11 +36,17 @@ Die Schanfiggerstrasse verbindet Chur mit dem Schanfigg und Arosa; der gesamte V
 - **Fundation auf Fels.** Der Untergrund besteht aus Bündnerschiefer mit teils mehreren Metern Hangschutt. Die Lehnenbrücke sollte gemäss geologischen Abklärungen grösstenteils auf Fels gegründet werden.
 - **Entwässerung neu geordnet.** Weil das Wasser wegen der Lehnenbrücke nicht mehr über die Schulter abfliessen konnte, wird es in Rigolen gefasst und grösstenteils ins Nasstobel abgeleitet. Das schont die steilen, wenig stabilen Hangschuttflächen darunter.
 
+![Baustelle an der Felsflanke über Chur: Turmdrehkran, Stützen und Schalung der Lehnenbrücke, rechts die Strasse unter Verkehr](/bilder/projekte/nasstobel-baustelle.jpg)
+
 ## Bauen unter Verkehr
 
 Ausgeführt wurde das Projekt von Herbst 2013 bis November 2016 (gemäss öffentlicher Ausschreibung und Referenzangabe der Bauunternehmung).
 
 Die Strasse ist die einzige Zufahrt ins Schanfigg. Das Projekt sah deshalb den Ausbau unter Verkehr vor, in mehreren Jahresetappen, mit Lichtsignalanlage oder Handregelung und möglichst freier Durchfahrt an Wochenenden und in der Hauptreisezeit. Installationsflächen gibt es an der Felsflanke kaum; vorgesehen waren temporäre Installationsplattformen.
+
+![Lehnenbrücke im Bau: fertiger Abschnitt auf Stützen entlang der Felswand, rechts die Schalung der nächsten Etappe](/bilder/projekte/nasstobel-lehnenbruecke.jpg)
+
+![Untersicht der neuen Lehnenbrücke mit schrägen Stützen, darunter der alte gemauerte Durchlass](/bilder/projekte/nasstobel-untersicht.jpg)
 
 ## Bezug zu meinen Kompetenzen
 

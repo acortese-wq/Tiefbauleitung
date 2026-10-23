@@ -15,6 +15,8 @@ const SEITEN = [
   '/projekte/konzept-pruefagent-abrechnung/',
   '/projekte/trennungskompass/',
   '/projekte/jenins-ortsdurchfahrt/',
+  '/projekte/nasstobel-lehnenbruecke/',
+  '/projekte/plessurbruecke-litziruety/',
   '/wissen/',
   '/suche/',
   '/kontakt/',

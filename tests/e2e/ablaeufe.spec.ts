@@ -213,6 +213,7 @@ test('Hero nennt Name und Rolle, Projektkarten zeigen Beitrag und belegtes Ergeb
   await expect(karte.locator('.projekt-fakten')).toContainText('Mein Beitrag');
   await expect(karte.locator('.projekt-fakten')).toContainText('91 von 100');
   // Ohne belegtes Ergebnis keine Ergebniszeile
+  await page.goto('/projekte/');
   await expect(page.locator('.projekt-karte', { hasText: 'Prüf-Agent' }).locator('.projekt-fakten')).not.toContainText('Ergebnis');
 });
 

@@ -13,15 +13,20 @@
     "id": "plessurbruecke-litziruety",
     "name": "Instandsetzung Plessurbrücke Litzirüti",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
-    "rolle": "Ausführungsprojekt, Submission, Bauleitung",
+    "zeitraum": "2018",
+    "rolle": "Örtliche Bauleitung; zuvor Ausführungsprojekt und Submission",
     "fachgebiete": [
-      "kunstbauten"
+      "kunstbauten",
+      "strasse"
     ],
     "bild": "plessurbruecke-litziruety",
     "bildAlt": "Plessurbrücke Litzirüti nach der Instandsetzung: Natursteinbogen über die Plessur mit neuer Betonfahrbahnplatte und Leitschranke, Nadelwald im Hintergrund",
     "bildNachweis": "jag9889, Wikimedia Commons, CC BY-SA 4.0, verkleinert",
-    "bildLizenz": "https://creativecommons.org/licenses/by-sa/4.0/deed.de"
+    "bildLizenz": "https://creativecommons.org/licenses/by-sa/4.0/deed.de",
+    "ort": "Arosa, Litzirüti",
+    "bauherr": "Tiefbauamt Graubünden",
+    "kurz": "Natursteinbogenbrücke von 1889 instand gesetzt und auf 8.50 m Fahrbahn verbreitert: neue Fahrbahnplatte, Mikropfähle, Mauerkonsole, Bauen im Gewässer unter Verkehr.",
+    "fallstudie": "plessurbruecke-litziruety"
   },
   {
     "id": "plessurbruecke-sassal",
@@ -190,7 +195,11 @@
     ],
     "bild": "nasstobel-brandacker",
     "bildAlt": "Lehnenbrücke Nasstobel: geschwungene Strassenbrücke auf Stützen entlang einer bewaldeten Felsflanke, frischer Belag mit Leitschranken, im Hintergrund der Talboden mit Siedlung",
-    "bildNachweis": "Alessandro Cortese"
+    "bildNachweis": "Alessandro Cortese",
+    "ort": "Chur, Schanfiggerstrasse",
+    "bauherr": "Tiefbauamt Graubünden",
+    "kurz": "Ausbau der Schanfiggerstrasse auf 290 m: talseitige Lehnenbrücke an der Felsflanke, Ersatz der Nasstobelbrücke, Bauen unter Verkehr.",
+    "fallstudie": "nasstobel-lehnenbruecke"
   },
   {
     "id": "rastplatz-heidiland",

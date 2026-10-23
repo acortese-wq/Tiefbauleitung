@@ -84,6 +84,8 @@ a:hover { color: var(--eis-stark); }
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 
+.wrap-breit { max-width: 1480px; }
+
 .label {
   font-family: var(--f-mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--text-ruhig);

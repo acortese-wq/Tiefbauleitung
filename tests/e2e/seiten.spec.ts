@@ -25,6 +25,9 @@ const SEITEN = [
   '/datenschutz/',
   '/seitenuebersicht/',
   '/ki-labor/',
+  '/ki-labor/werkbank/',
+  '/ki-labor/nutzenrechner/',
+  '/ki-labor/radar/',
 ];
 
 function sammleFehler(page: Page) {

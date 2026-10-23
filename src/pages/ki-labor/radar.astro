@@ -1,0 +1,9 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import KiRadar from '../../components/KiRadar.astro';
+---
+<Basis title="KI-Radar" description="Welche Sprachmodelle in Blindvergleichen vorne liegen, gesamt, auf Deutsch und beim Programmieren. Täglich aktualisiert, mit Einordnung für die Bauleitung.">
+  <Seitenkopf titel="KI-Radar" lead="Ranglisten der Sprachmodelle, täglich aktualisiert, mit Einordnung für die Bauleitung." krumen={[{ name: 'KI-Labor', href: '/ki-labor/' }, { name: 'KI-Radar' }]} />
+  <KiRadar />
+</Basis>

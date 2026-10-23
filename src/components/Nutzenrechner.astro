@@ -1,0 +1,325 @@
+---
+// Nutzenrechner: Was wiederkehrende Arbeit kostet und wann sich eine Automatisierung zurückzahlt.
+// Rechnet im Browser (src/lib/nutzen.ts), druckbar als einseitiger Business Case.
+import { teamkosten, payback, chf, zahl, WOCHEN_PRO_MONAT } from '../lib/nutzen';
+
+const regler = {
+  personen: { min: 1, max: 50, schritt: 1, wert: 6, einheit: 'Personen', label: 'Teamgrösse', text: 'Personen, die mit Plänen, LV, Protokollen, Ausmassen oder Berichten arbeiten' },
+  stunden: { min: 1, max: 30, schritt: 1, wert: 8, einheit: 'Std', label: 'Stunden pro Woche und Person', text: 'Wiederkehrende Handarbeit: Ausmasse abtippen, Offerten vergleichen, Protokolle aufbereiten, Daten übertragen' },
+  satz: { min: 60, max: 200, schritt: 5, wert: 110, einheit: 'CHF', label: 'Stundensatz', text: 'Vollkostensatz pro Person und Stunde' },
+  quote: { min: 10, max: 60, schritt: 5, wert: 30, einheit: '%', label: 'Einsparquote', text: 'Anteil, den gute Vorlagen, Prüfwerkzeuge und KI-Workflows übernehmen. Vorsichtig schätzen.' },
+} as const;
+
+const fte = {
+  minuten: { min: 5, max: 240, schritt: 5, wert: 45, einheit: 'Min', label: 'Zeitaufwand heute pro Vorgang' },
+  vorgaenge: { min: 1, max: 100, schritt: 1, wert: 10, einheit: 'pro Woche', label: 'Anzahl Vorgänge' },
+  grad: { min: 10, max: 100, schritt: 5, wert: 70, einheit: '%', label: 'Automatisierungsgrad' },
+  satz2: { min: 60, max: 200, schritt: 5, wert: 110, einheit: 'CHF/Std', label: 'Stundensatz (Vollkosten)' },
+  invest: { min: 0, max: 50000, schritt: 500, wert: 4500, einheit: 'CHF', label: 'Investition einmalig' },
+  laufend: { min: 0, max: 2000, schritt: 10, wert: 100, einheit: 'CHF/Monat', label: 'Laufende Kosten' },
+} as const;
+
+const t = teamkosten(regler.personen.wert, regler.stunden.wert, regler.satz.wert, regler.quote.wert);
+const p = payback({
+  minutenProVorgang: fte.minuten.wert, vorgaengeProWoche: fte.vorgaenge.wert, automatisierungProzent: fte.grad.wert,
+  satz: fte.satz2.wert, investition: fte.invest.wert, laufendMonat: fte.laufend.wert,
+});
+const bewertungText = {
+  'sehr-attraktiv': 'Sehr attraktiv (unter 1 Jahr)',
+  solide: 'Solide (1 bis 2 Jahre)',
+  pruefen: 'Genau prüfen (über 2 Jahre)',
+  'kein-payback': 'Kein Payback: laufende Kosten höher als der Nutzen',
+};
+const soft = [
+  'Weniger Fehler, höhere Qualität',
+  'Schnellere Durchlaufzeit',
+  'Fachleute frei für wertschöpfende Aufgaben',
+  'Nachvollziehbarkeit und Dokumentation',
+  'Skalierbar ohne Mehrkosten',
+  'Einheitliche Prüfung über alle Projekte',
+];
+const heute = new Date().toISOString().slice(0, 10);
+const fmt = (v: number, e: string) => (e === 'CHF' || e.startsWith('CHF/') ? `${zahl(v)} ${e}` : `${zahl(v)} ${e}`);
+---
+<section class="abschnitt rechner" id="nutzenrechner" aria-labelledby="rechner-titel" data-rechner>
+  <div class="wrap wrap-breit">
+    <div class="abschnitt-kopf">
+      <p class="label">Nutzenrechner</p>
+      <h2 id="rechner-titel">Was wiederkehrende Handarbeit <em>wirklich</em> kostet</h2>
+      <p>Schieberegler bewegen, Ergebnis lesen, bei Bedarf als Business Case drucken. Gerechnet wird in Ihrem Browser, nichts wird übermittelt.</p>
+    </div>
+
+    <div class="rk-raster">
+      <div class="rk-eingabe">
+        {Object.entries(regler).map(([name, r]) => (
+          <div class="rk-regler">
+            <div class="rk-regler-kopf">
+              <label for={`rk-${name}`}>{r.label}</label>
+              <output for={`rk-${name}`} data-ausgabe={name}>{fmt(r.wert, r.einheit)}</output>
+            </div>
+            <p>{r.text}</p>
+            <input type="range" id={`rk-${name}`} name={name} min={r.min} max={r.max} step={r.schritt} value={r.wert} data-einheit={r.einheit} />
+          </div>
+        ))}
+      </div>
+      <div class="rk-ergebnis" aria-live="polite">
+        <p class="rk-satz">
+          Ihr Team verwendet zusammen rund <mark data-wert="stundenMonat">{zahl(t.stundenMonat)} Stunden pro Monat</mark> für wiederkehrende Handarbeit.
+          Das sind <mark data-wert="kostenMonat">{chf(t.kostenMonat)}</mark> monatlich.
+        </p>
+        <p class="rk-rechnung" data-wert="rechnung">
+          Rechnung: {regler.personen.wert} Personen × {regler.stunden.wert} Std/Woche × {zahl(WOCHEN_PRO_MONAT, 2)} Wochen = {zahl(t.stundenMonat)} Std/Monat × CHF {regler.satz.wert} = {chf(t.kostenMonat)}. 4.33 = durchschnittliche Wochen pro Monat (52 ÷ 12).
+        </p>
+        <p class="rk-text">
+          Bei einer angenommenen Einsparung von <strong data-wert="quote">{regler.quote.wert} %</strong> sind das <strong data-wert="einsparungMonat">{chf(t.einsparungMonat)}</strong> pro Monat, im Jahr <strong data-wert="einsparungJahr">{chf(t.einsparungJahr)}</strong>.
+        </p>
+        <p class="rk-hinweis">Die Einsparquote ist eine Annahme. Belastbar wird sie erst mit einem Pilot an einer konkreten Aufgabe; dafür ist der Business Case unten gedacht.</p>
+      </div>
+    </div>
+
+    <div class="rk-case" data-case>
+      <div class="rk-case-kopf">
+        <div>
+          <p class="label">Business Case</p>
+          <h3>Rechnet sich die Automatisierung einer Aufgabe?</h3>
+          <p>FTE-Methode und Simple Payback, wie im Lehrgang KI-Professional (HSO) gelernt.</p>
+        </div>
+        <button type="button" class="btn" data-drucken hidden>Drucken / als PDF speichern</button>
+      </div>
+
+      <div class="rk-projekt">
+        <label>
+          <span>Projektbezeichnung</span>
+          <input type="text" name="projekt" placeholder="z. B. Ausmassprüfung Teilrechnungen" autocomplete="off" />
+        </label>
+        <label>
+          <span>Datum</span>
+          <input type="date" name="datum" value={heute} />
+        </label>
+      </div>
+
+      <div class="rk-case-raster">
+        <div class="rk-eingabe rk-eingabe-dunkel">
+          {Object.entries(fte).map(([name, r]) => (
+            <div class="rk-regler">
+              <div class="rk-regler-kopf">
+                <label for={`rk-${name}`}>{r.label}</label>
+                <output for={`rk-${name}`} data-ausgabe={name}>{fmt(r.wert, r.einheit)}</output>
+              </div>
+              <input type="range" id={`rk-${name}`} name={name} min={r.min} max={r.max} step={r.schritt} value={r.wert} data-einheit={r.einheit} />
+            </div>
+          ))}
+          <p class="rk-hinweis">Richtwerte Vollkosten Schweiz: Sachbearbeitung 80–100 CHF/Std, Fachspezialistin oder Fachspezialist 100–130 CHF/Std. 1 FTE = rund 1'800 produktive Stunden pro Jahr. Automatisierungsgrad konservativ schätzen (50–80 %).</p>
+        </div>
+
+        <div class="rk-kennzahlen">
+          <dl>
+            <div><dt>Eingesparte Zeit</dt><dd><span data-wert="stundenWoche">{zahl(p.stundenWoche, 1)}</span> Std/Woche</dd></div>
+            <div><dt>Pro Jahr</dt><dd><span data-wert="stundenJahr">{zahl(p.stundenJahr)}</span> Std</dd></div>
+            <div><dt>FTE-Äquivalent</dt><dd><span data-wert="fte">{zahl(p.fte, 2)}</span> FTE</dd></div>
+            <div><dt>Nutzen pro Jahr</dt><dd data-wert="nutzenJahr">{chf(p.nutzenJahr)}</dd></div>
+            <div><dt>Kosten Jahr 1</dt><dd data-wert="kostenJahr1">{chf(p.kostenJahr1)}</dd></div>
+            <div><dt>Netto ab Jahr 2</dt><dd data-wert="nettoAbJahr2">{chf(p.nettoAbJahr2)}</dd></div>
+          </dl>
+          <div class={`rk-payback ampel-${p.bewertung}`} data-ampel>
+            <p class="label">Simple Payback</p>
+            <p class="rk-payback-wert"><span data-wert="paybackMonate">{p.paybackMonate == null ? '–' : zahl(p.paybackMonate, 1)}</span> <small>Monate</small></p>
+            <p class="rk-payback-text" data-wert="bewertung">{bewertungText[p.bewertung]}</p>
+          </div>
+          <fieldset class="rk-soft">
+            <legend>Weiterer Nutzen (nicht in Franken gerechnet)</legend>
+            {soft.map((s) => (
+              <label><input type="checkbox" name="soft" value={s} /> <span>{s}</span></label>
+            ))}
+          </fieldset>
+        </div>
+      </div>
+      <p class="rk-druckfuss">Erstellt mit dem Nutzenrechner auf tiefbauleitung.com · Annahmen ohne Gewähr, vor einem Entscheid mit einem Pilot prüfen.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { teamkosten, payback, chf, zahl, WOCHEN_PRO_MONAT, type Bewertung } from '../lib/nutzen';
+
+  const wurzel = document.querySelector<HTMLElement>('[data-rechner]');
+  if (wurzel) {
+    const wert = (name: string) => Number(wurzel.querySelector<HTMLInputElement>(`input[name="${name}"]`)?.value ?? 0);
+    const setze = (name: string, text: string) => {
+      for (const el of wurzel.querySelectorAll<HTMLElement>(`[data-wert="${name}"]`)) el.textContent = text;
+    };
+    const texte: Record<Bewertung, string> = {
+      'sehr-attraktiv': 'Sehr attraktiv (unter 1 Jahr)',
+      solide: 'Solide (1 bis 2 Jahre)',
+      pruefen: 'Genau prüfen (über 2 Jahre)',
+      'kein-payback': 'Kein Payback: laufende Kosten höher als der Nutzen',
+    };
+
+    const rechne = () => {
+      for (const r of wurzel.querySelectorAll<HTMLInputElement>('input[type="range"]')) {
+        const text = `${zahl(Number(r.value))} ${r.dataset.einheit}`;
+        const out = wurzel.querySelector<HTMLOutputElement>(`[data-ausgabe="${r.name}"]`);
+        if (out) out.textContent = text;
+        r.setAttribute('aria-valuetext', text);
+        r.style.setProperty('--anteil', `${((Number(r.value) - Number(r.min)) / (Number(r.max) - Number(r.min))) * 100}%`);
+      }
+      const personen = wert('personen');
+      const stunden = wert('stunden');
+      const satz = wert('satz');
+      const quote = wert('quote');
+      const t = teamkosten(personen, stunden, satz, quote);
+      setze('stundenMonat', `${zahl(t.stundenMonat)} Stunden pro Monat`);
+      setze('kostenMonat', chf(t.kostenMonat));
+      setze('quote', `${quote} %`);
+      setze('einsparungMonat', chf(t.einsparungMonat));
+      setze('einsparungJahr', chf(t.einsparungJahr));
+      setze('rechnung', `Rechnung: ${personen} Personen × ${stunden} Std/Woche × ${zahl(WOCHEN_PRO_MONAT, 2)} Wochen = ${zahl(t.stundenMonat)} Std/Monat × CHF ${satz} = ${chf(t.kostenMonat)}. 4.33 = durchschnittliche Wochen pro Monat (52 ÷ 12).`);
+
+      const p = payback({
+        minutenProVorgang: wert('minuten'), vorgaengeProWoche: wert('vorgaenge'), automatisierungProzent: wert('grad'),
+        satz: wert('satz2'), investition: wert('invest'), laufendMonat: wert('laufend'),
+      });
+      setze('stundenWoche', zahl(p.stundenWoche, 1));
+      setze('stundenJahr', zahl(p.stundenJahr));
+      setze('fte', zahl(p.fte, 2));
+      setze('nutzenJahr', chf(p.nutzenJahr));
+      setze('kostenJahr1', chf(p.kostenJahr1));
+      setze('nettoAbJahr2', chf(p.nettoAbJahr2));
+      setze('paybackMonate', p.paybackMonate == null ? '–' : zahl(p.paybackMonate, 1));
+      setze('bewertung', texte[p.bewertung]);
+      const ampel = wurzel.querySelector<HTMLElement>('[data-ampel]');
+      if (ampel) ampel.className = `rk-payback ampel-${p.bewertung}`;
+    };
+
+    wurzel.addEventListener('input', rechne);
+    rechne();
+
+    const drucken = wurzel.querySelector<HTMLButtonElement>('[data-drucken]');
+    if (drucken) {
+      drucken.hidden = false;
+      drucken.addEventListener('click', () => {
+        document.body.classList.add('druck-rechner');
+        window.print();
+      });
+      window.addEventListener('afterprint', () => document.body.classList.remove('druck-rechner'));
+    }
+  }
+</script>
+
+<style>
+  .rechner h2 em { font-style: normal; color: var(--signal); }
+  .rk-raster { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); border: 1px solid var(--linie-hell); border-radius: 12px; overflow: hidden; }
+  .rk-eingabe { background: var(--papier, #f4f1ea); color: var(--papier-text, #14202b); padding: clamp(18px, 3vw, 36px); display: grid; gap: 26px; }
+  .rk-regler-kopf { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .rk-regler-kopf label { font-weight: 700; font-size: 1.02rem; }
+  .rk-regler-kopf output { font: 600 1rem var(--f-mono); white-space: nowrap; }
+  .rk-regler p { font-size: 0.9rem; margin-top: 4px; color: var(--papier-ruhig, #4a5560); }
+
+  /* Schieberegler mit Massstab */
+  .rk-regler input[type='range'] {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 32px; margin-top: 12px; background: transparent; cursor: pointer;
+    --anteil: 50%;
+  }
+  .rk-regler input[type='range']::-webkit-slider-runnable-track {
+    height: 14px; border: 1.5px solid currentColor; border-radius: 2px;
+    background:
+      linear-gradient(90deg, var(--signal) 0 var(--anteil), transparent var(--anteil)) bottom / 100% 3px no-repeat,
+      repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 12px) bottom / 100% 6px no-repeat;
+  }
+  .rk-regler input[type='range']::-moz-range-track {
+    height: 14px; border: 1.5px solid currentColor; border-radius: 2px;
+    background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 12px) bottom / 100% 6px no-repeat;
+  }
+  .rk-regler input[type='range']::-moz-range-progress { height: 3px; background: var(--signal); }
+  .rk-regler input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 30px; margin-top: -9px; border-radius: 2px; background: #14202b; border: 2px solid #14202b;
+  }
+  .rk-regler input[type='range']::-moz-range-thumb { width: 18px; height: 30px; border-radius: 2px; background: #14202b; border: 2px solid #14202b; }
+  .rk-regler input[type='range']:focus-visible { outline: 3px solid var(--signal); outline-offset: 4px; }
+  .rk-eingabe-dunkel .rk-regler input[type='range']::-webkit-slider-thumb { background: var(--eis); border-color: var(--eis); }
+  .rk-eingabe-dunkel .rk-regler input[type='range']::-moz-range-thumb { background: var(--eis); border-color: var(--eis); }
+
+  .rk-ergebnis { background: var(--nacht); padding: clamp(18px, 3vw, 36px); display: grid; gap: 16px; align-content: center; }
+  .rk-satz { font: 600 clamp(1.3rem, 2.2vw, 1.75rem)/1.35 var(--f-display); }
+  .rk-satz mark { background: none; color: var(--text); border-bottom: 3px solid var(--signal); padding-bottom: 1px; }
+  .rk-rechnung { font: 0.82rem/1.55 var(--f-mono); color: var(--text-ruhig); border-left: 2px solid var(--linie-hell); padding-left: 12px; }
+  .rk-text { font-size: 1.02rem; }
+  .rk-text strong { color: var(--text); }
+  .rk-hinweis { font-size: 0.86rem; color: var(--text-ruhig); }
+  .rk-eingabe .rk-hinweis { color: inherit; opacity: 0.8; }
+
+  .rk-case { margin-top: 28px; border: 1px solid var(--linie-hell); border-radius: 12px; background: var(--tiefe); padding: clamp(18px, 3vw, 32px); }
+  .rk-case-kopf { display: flex; justify-content: space-between; align-items: start; gap: 16px; flex-wrap: wrap; }
+  .rk-case-kopf h3 { font-size: var(--s-2); margin-top: 4px; }
+  .rk-case-kopf p:not(.label) { color: var(--text-ruhig); margin-top: 6px; }
+  .rk-projekt { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-top: 18px; }
+  .rk-projekt label { display: grid; gap: 4px; }
+  .rk-projekt span { font: 500 0.8rem var(--f-mono); color: var(--text-ruhig); }
+  .rk-projekt input { font: inherit; min-height: 44px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--linie-hell); background: var(--nacht); color: var(--text); color-scheme: dark; }
+  .rk-case-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; margin-top: 18px; }
+  .rk-eingabe-dunkel { background: var(--nacht); color: var(--text); border: 1px solid var(--linie); border-radius: 10px; gap: 18px; }
+  .rk-kennzahlen dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 0; }
+  .rk-kennzahlen dl div { border: 1px solid var(--linie); border-radius: 8px; padding: 10px 12px; background: var(--nacht); }
+  .rk-kennzahlen dt { font: 500 0.72rem var(--f-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-ruhig); }
+  .rk-kennzahlen dd { margin: 4px 0 0; font-weight: 700; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+  .rk-payback { margin-top: 14px; border-radius: 10px; padding: 16px 18px; border: 2px solid var(--linie-hell); }
+  .rk-payback-wert { font: 700 2.4rem/1.1 var(--f-display); margin-top: 4px; }
+  .rk-payback-wert small { font-size: 1rem; font-weight: 500; color: var(--text-ruhig); }
+  .rk-payback-text { font-weight: 600; margin-top: 4px; }
+  .ampel-sehr-attraktiv { border-color: #7ee2a8; } .ampel-sehr-attraktiv .rk-payback-text { color: #7ee2a8; }
+  .ampel-solide { border-color: #f2d35a; } .ampel-solide .rk-payback-text { color: #f2d35a; }
+  .ampel-pruefen, .ampel-kein-payback { border-color: #ff7b72; } .ampel-pruefen .rk-payback-text, .ampel-kein-payback .rk-payback-text { color: #ff7b72; }
+  .rk-soft { margin: 16px 0 0; padding: 0; border: 0; display: grid; gap: 6px; }
+  .rk-soft legend { font: 500 0.8rem var(--f-mono); color: var(--text-ruhig); margin-bottom: 4px; }
+  .rk-soft label { display: flex; gap: 8px; align-items: center; min-height: 32px; font-size: 0.93rem; cursor: pointer; }
+  .rk-soft input { width: 18px; height: 18px; accent-color: var(--eis); }
+  .rk-druckfuss { display: none; }
+
+  @media (max-width: 900px) {
+    .rk-raster, .rk-case-raster { grid-template-columns: 1fr; }
+    .rk-projekt { grid-template-columns: 1fr; }
+  }
+
+  /* Druck: nur der Business Case, hell, eine Seite */
+  @media print {
+    :global(body.druck-rechner) :global(header), :global(body.druck-rechner) :global(footer),
+    :global(body.druck-rechner) :global(.skip-link), :global(body.druck-rechner main > :not(.rechner)) { display: none !important; }
+    :global(body.druck-rechner) { background: #fff !important; color: #000 !important; }
+    .rechner { padding: 0 !important; }
+    .rechner, .rechner * { color: #000 !important; background: #fff !important; border-color: #999 !important; box-shadow: none !important; }
+    .abschnitt-kopf p, [data-drucken] { display: none !important; }
+    @page { size: A4; margin: 12mm; }
+    :global(:root) { color-scheme: light; }
+    :global(html), :global(body.druck-rechner) { background: #fff !important; }
+    :global(body.druck-rechner) { font-size: 10pt; }
+    .rk-eingabe, .rk-eingabe-dunkel { gap: 4px !important; align-content: start; padding: 10px !important; }
+    .rk-projekt { grid-template-columns: 2fr 1fr !important; margin-top: 8px !important; }
+    .rk-case-raster { margin-top: 8px !important; gap: 10px !important; }
+    .rk-case-kopf p:not(.label) { margin-top: 2px !important; }
+    .abschnitt-kopf { margin-bottom: 6px !important; }
+    .abschnitt-kopf h2 { font-size: 16pt !important; }
+    .rk-raster, .rk-case-raster { grid-template-columns: 1fr 1fr !important; }
+    .rk-raster, .rk-eingabe-dunkel, .rk-kennzahlen dl div, .rk-payback { break-inside: avoid; }
+    .rk-ergebnis { padding: 12px !important; gap: 8px !important; }
+    .rk-case { padding: 12px !important; }
+    .rk-case-kopf h3 { font-size: 13pt !important; }
+    .rk-kennzahlen dl { grid-template-columns: 1fr 1fr 1fr !important; gap: 6px !important; }
+    .rk-kennzahlen dl div { padding: 6px 8px !important; }
+    .rk-kennzahlen dd { font-size: 11pt !important; }
+    .rk-payback { margin-top: 8px !important; padding: 8px 12px !important; }
+    .rk-payback-wert { font-size: 20pt !important; }
+    .rk-soft { margin-top: 8px !important; gap: 0 !important; }
+    .rk-soft label { min-height: 0 !important; font-size: 9pt !important; }
+    .rk-soft input { -webkit-appearance: none; appearance: none; width: 10px !important; height: 10px !important; border: 1px solid #000 !important; border-radius: 1px; }
+    .rk-soft input:checked { background: #000 !important; }
+    .rk-hinweis { font-size: 8pt !important; }
+    .rk-regler input[type='range'] { display: none; }
+    .rk-regler p { display: none; }
+    .rk-eingabe { gap: 6px; padding: 12px; }
+    .rk-satz { font-size: 1.1rem; }
+    .rk-satz mark { border-bottom-color: #000; }
+    .rk-projekt input { border: 0; border-bottom: 1px solid #000 !important; border-radius: 0; padding: 2px 0; min-height: 0; }
+    .rk-druckfuss { display: block; margin-top: 12px; font-size: 0.75rem; }
+    .rk-case { margin-top: 12px; }
+  }
+</style>

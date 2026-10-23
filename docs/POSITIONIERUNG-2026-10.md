@@ -42,7 +42,7 @@ der identische lokale Build.
 |---|---|---|---|
 | Technische Führungskraft | Netzbau erst auf Unterseite erkennbar | Netzbau im Titel, eigener Abschnitt mit drei Perspektiven und konkreten Aufgaben | anonymisiertes Netzbau-Beispiel (Freigabe Arbeitgeber) |
 | Recruiter / Headhunter | Profil «Tiefbau + KI», Netzbau unscharf | Rolle, Zeitraum und Aufgaben im Netzbau auf einen Blick; Zertifikat 2026; Werkzeugkasten | Lebenslauf zum Herunterladen, Aussage zu gewünschten Aufgaben (bewusst offen gelassen, siehe unten) |
-| Geschäftsleitung | Nutzen nur indirekt | «Was das einem Arbeitgeber bringt»: Schnittstellen, Abrechnung, Risiken, Beteiligte | belegte Wirkung (Zahlen) nicht vorhanden |
+| Geschäftsleitung | Nutzen nur indirekt | «Was Auftraggeber davon haben» (bis 23.10.: «Was das einem Arbeitgeber bringt»): Schnittstellen, Abrechnung, Risiken, Beteiligte | belegte Wirkung (Zahlen) nicht vorhanden |
 
 ## 4. Massnahmen
 
@@ -70,8 +70,9 @@ inklusive axe WCAG 2.2 AA ohne Verstösse. Nicht überprüfbar: Live-Ladezeiten,
 
 ## 6. Offene Punkte
 
-- **Signal an den Arbeitsmarkt:** Die Seite sagt bewusst nicht «offen für neue Stellen», weil ein laufendes
-  Arbeitsverhältnis besteht. Ob und wie das formuliert werden soll, entscheidet Alessandro Cortese.
+- **Ziel der Seite (entschieden 23. Oktober 2026): Beratung und Sichtbarkeit**, keine Bewerbung. Der Nutzenabschnitt heisst
+  deshalb «Was Auftraggeber davon haben», Kontakt und Schluss sprechen Beratung und fachliche Zweitmeinung an.
+  Eine Nebenbeschäftigung neben der Anstellung ist mit dem Arbeitgeber zu klären.
 - Anonymisiertes Netzbau-Beispiel und Kennzahlen aus dem Glasfaserausbau nur mit Freigabe des Arbeitgebers.
 - Schadenfälle und Sachverhaltsklärungen nur ergänzen, wenn Erfahrung vorhanden ist.
 - Lebenslauf als PDF, LinkedIn-Empfehlungen zum Netzbau als zusätzliche Belege.

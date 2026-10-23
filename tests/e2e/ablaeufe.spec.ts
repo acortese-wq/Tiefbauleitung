@@ -189,13 +189,13 @@ test('Fallstudie Trennungskompass nennt Gruppenarbeit, Bewertung und Grenzen, oh
   for (const vertraulich of ['7\'725', '7’725', 'Bexio', '54 Erstkontakte', 'intoChat']) expect(text).not.toContain(vertraulich);
 });
 
-test('Startseite zeigt Netzbau aus beiden Perspektiven und den Nutzen für Arbeitgeber', async ({ page }) => {
+test('Startseite zeigt Netzbau aus beiden Perspektiven und den Nutzen für Auftraggeber', async ({ page }) => {
   await page.goto('/');
   const netzbau = page.locator('section.netzbau');
   await expect(netzbau.locator('.perspektive')).toHaveCount(3);
   await expect(netzbau).toContainText('Netzbetreiber');
   await expect(netzbau).toContainText('Strasseneigentümer');
-  await expect(netzbau).toContainText('Was das einem Arbeitgeber bringt');
+  await expect(netzbau).toContainText('Was Auftraggeber davon haben');
   await expect(netzbau.getByRole('link', { name: /im Detail/ })).toHaveAttribute('href', '/kompetenzen/netzinfrastruktur-leitungsbau/');
 });
 
@@ -285,7 +285,7 @@ test('Fusszeile führt zur lesbaren Seitenübersicht mit allen Fallstudien', asy
 test('KI-Labor: Werkbank füllt den Prompt live und markiert fehlende Angaben, ohne externe Anfragen', async ({ page }) => {
   const anfragen: string[] = [];
   page.on('request', (r) => anfragen.push(r.url()));
-  await page.goto('/ki-labor/#nachtrag');
+  await page.goto('/ki-labor/werkbank/#nachtrag');
   const wb = page.locator('#nachtrag');
   await expect(wb).toBeVisible();
   await expect(page.locator('#lv-plausibilitaet')).toBeHidden();
@@ -298,7 +298,7 @@ test('KI-Labor: Werkbank füllt den Prompt live und markiert fehlende Angaben, o
 });
 
 test('KI-Labor: Schnellprüfung rechnet ein LV im Browser nach', async ({ page }) => {
-  await page.goto('/ki-labor/#lv-plausibilitaet');
+  await page.goto('/ki-labor/werkbank/#lv-plausibilitaet');
   const wb = page.locator('#lv-plausibilitaet');
   await wb.getByRole('button', { name: 'Beispiel einsetzen' }).click();
   const res = wb.locator('[data-pruefung]');
@@ -310,7 +310,7 @@ test('KI-Labor: Schnellprüfung rechnet ein LV im Browser nach', async ({ page }
 });
 
 test('KI-Labor: Offertvergleich erkennt Anbieter und Spekulationsverdacht', async ({ page }) => {
-  await page.goto('/ki-labor/');
+  await page.goto('/ki-labor/werkbank/');
   await page.getByRole('navigation', { name: 'Vorlagen' }).getByRole('link', { name: /Offerten vergleichen/ }).click();
   const wb = page.locator('#offertvergleich');
   await wb.getByRole('button', { name: 'Beispiel einsetzen' }).click();
@@ -318,14 +318,27 @@ test('KI-Labor: Offertvergleich erkennt Anbieter und Spekulationsverdacht', asyn
   await expect(wb.locator('[data-pruefung]')).toContainText('unter 50 %');
 });
 
-test('KI-Labor zeigt zehn Einsatzfelder und den KI-Radar', async ({ page }) => {
+test('KI-Labor: Übersicht führt zu Werkbank, Nutzenrechner und Radar', async ({ page }) => {
   await page.goto('/ki-labor/');
   await expect(page.locator('.felder > li')).toHaveCount(10);
+  await page.locator('.feld-link', { hasText: 'Zur Werkbank' }).first().click();
+  await expect(page).toHaveURL(/\/ki-labor\/werkbank\/#lv-plausibilitaet$/);
+  await expect(page.locator('#lv-plausibilitaet')).toBeVisible();
+  await page.goto('/ki-labor/radar/');
   const radar = page.locator('[data-radar]');
   await expect(radar.locator('[role="tabpanel"]:visible li')).toHaveCount(10);
   await radar.getByRole('tab', { name: 'Deutsch' }).click();
   await expect(radar.getByRole('tab', { name: 'Deutsch' })).toHaveAttribute('aria-selected', 'true');
-  await page.locator('.feld-link', { hasText: 'Zur Werkbank' }).first().click();
-  await expect(page).toHaveURL(/#lv-plausibilitaet$/);
-  await expect(page.locator('#lv-plausibilitaet')).toBeVisible();
+});
+
+test('Nutzenrechner rechnet in Franken und bietet Druck an', async ({ page }) => {
+  await page.goto('/ki-labor/nutzenrechner/');
+  const r = page.locator('[data-rechner]');
+  await r.getByLabel('Teamgrösse').fill('12');
+  await r.getByLabel('Stunden pro Woche und Person').fill('10');
+  await r.getByLabel('Stundensatz', { exact: true }).fill('65');
+  await expect(r.locator('[data-wert="kostenMonat"]')).toHaveText(/^CHF 33.800$/);
+  await expect(r.locator('[data-wert="paybackMonate"]')).not.toHaveText('');
+  await expect(r.getByRole('button', { name: /Drucken/ })).toBeVisible();
+  await expect(r).not.toContainText('Erstgespräch');
 });

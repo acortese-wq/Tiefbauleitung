@@ -86,3 +86,27 @@ describe('pruefe', () => {
     expect(r.kennzahlen.find((k) => k.label.startsWith('Differenz'))?.wert).toMatch(/^\+CHF 1.100\.00$/);
   });
 });
+
+import { teamkosten, payback } from '../../src/lib/nutzen';
+
+describe('Nutzenrechner', () => {
+  it('rechnet Teamkosten wie im Beispiel (12 Personen × 10 h × 4.33 Wochen)', () => {
+    const r = teamkosten(12, 10, 65, 40);
+    expect(Math.round(r.stundenMonat)).toBe(520);
+    expect(Math.round(r.kostenMonat)).toBe(33800);
+    expect(Math.round(r.einsparungJahr)).toBe(162240);
+  });
+  it('rechnet FTE und Payback wie das Excel-Template', () => {
+    const r = payback({ minutenProVorgang: 45, vorgaengeProWoche: 10, automatisierungProzent: 90, satz: 300, investition: 4400, laufendMonat: 900 });
+    expect(r.stundenWoche).toBeCloseTo(6.75);
+    expect(r.stundenJahr).toBeCloseTo(351);
+    expect(r.fte).toBe(0.2);
+    expect(r.nutzenJahr).toBeCloseTo(105300);
+    expect(r.kostenJahr1).toBe(15200);
+    expect(r.paybackMonate).toBeCloseTo(4400 / (105300 / 12 - 900));
+    expect(r.bewertung).toBe('sehr-attraktiv');
+  });
+  it('meldet keinen Payback, wenn die laufenden Kosten den Nutzen übersteigen', () => {
+    expect(payback({ minutenProVorgang: 5, vorgaengeProWoche: 1, automatisierungProzent: 50, satz: 100, investition: 1000, laufendMonat: 500 }).bewertung).toBe('kein-payback');
+  });
+});

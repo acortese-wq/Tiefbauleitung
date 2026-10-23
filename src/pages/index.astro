@@ -88,8 +88,8 @@ const perspektiven = [
 ];
 
 const beitraege = [
-  { titel: 'Schnittstellen beurteilen', text: 'Ich weiss, worauf ein Strasseneigentümer im Leitungsgesuch achtet und was ein Netzbetreiber für einen reibungslosen Bau braucht.' },
-  { titel: 'Kosten und Abrechnung prüfen', text: 'Mengen, Einheitspreise, Nachträge und Kostenteiler werden gegen Vertrag und NPK geprüft, nicht nur durchgewinkt.' },
+  { titel: 'Schnittstellen beurteilen', text: 'Ich weiss, worauf ein Strasseneigentümer im Leitungsgesuch achtet und was ein Netzbetreiber für einen reibungslosen Bau braucht. Das erspart Schlaufen in der Bewilligung.' },
+  { titel: 'Kosten und Abrechnung prüfen', text: 'Mengen, Einheitspreise, Nachträge und Kostenteiler prüfe ich gegen Vertrag und NPK, als Zweitmeinung oder vor der Freigabe.' },
   { titel: 'Risiken früh erkennen', text: 'Konflikte mit bestehenden Werkleitungen, Auflagen und Bauabläufen gehören auf den Tisch, bevor gegraben wird.' },
   { titel: 'Beteiligte zusammenbringen', text: 'Generalunternehmer, Gemeinden, Kanton und Werkeigentümer: Ich kenne die Begriffe und Interessen aller Seiten.' },
 ];
@@ -222,7 +222,7 @@ const zitat = zeugnisse[1];
         ))}
       </ol>
       <div class="beitrag">
-        <h3>Was das einem Arbeitgeber bringt</h3>
+        <h3>Was Auftraggeber davon haben</h3>
         <dl class="beitrag-liste">
           {beitraege.map((b) => (
             <div><dt>{b.titel}</dt><dd>{b.text}</dd></div>
@@ -274,7 +274,7 @@ const zitat = zeugnisse[1];
       <div class="wk-teaser karte">
         <div>
           <h3>KI-Labor</h3>
-          <p>Geprüfte Prompt-Vorlagen für Offertprüfung, Nachträge, Protokolle, Werkleitungen und Glasfaserausbau. Felder ausfüllen, kopieren, Ergebnis fachlich prüfen.</p>
+          <p>Prompt-Werkbank mit Schnellprüfung für LV, Offerten und Ausmass, ein Nutzenrechner in Franken und der täglich aktualisierte KI-Radar.</p>
         </div>
         <a class="wk-teaser-link" href="/ki-labor/">Zum KI-Labor →</a>
       </div>
@@ -334,7 +334,7 @@ const zitat = zeugnisse[1];
       </figure>
       <div class="abschluss-text">
         <h2 id="abschluss-titel">Ein Projekt, eine Frage, eine Idee?</h2>
-        <p>Ich freue mich auf den fachlichen Austausch zu Tiefbau, Netzinfrastruktur und dem praktischen Einsatz von KI.</p>
+        <p>Für Beratung, eine fachliche Zweitmeinung oder den Austausch zu Tiefbau, Netzinfrastruktur und dem praktischen Einsatz von KI.</p>
         <div class="btn-reihe">
           <a class="btn" href="/kontakt/">Kontakt aufnehmen <span class="pfeil" aria-hidden="true">→</span></a>
           <a class="btn btn-ghost" href={person.linkedin} rel="noopener me" target="_blank">LinkedIn<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a>

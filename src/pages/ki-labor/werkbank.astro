@@ -1,10 +1,8 @@
 ---
-import Basis from '../layouts/Basis.astro';
-import Seitenkopf from '../components/Seitenkopf.astro';
-import KiRadar from '../components/KiRadar.astro';
-import { prompts, kategorieLabels, type Kategorie } from '../data/prompts';
-import { einsatzfelder } from '../data/einsatzfelder';
-import { fuelle, beispielWerte } from '../lib/prompt';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import { prompts, kategorieLabels, type Kategorie } from '../../data/prompts';
+import { fuelle, beispielWerte } from '../../lib/prompt';
 
 const kategorien = (Object.keys(kategorieLabels) as Kategorie[]).filter((k) => prompts.some((p) => p.kategorie === k));
 // Ohne JavaScript zeigt jede Werkbank den Prompt mit Beispielwerten
@@ -14,13 +12,13 @@ const vorschau = (id: string) => {
 };
 ---
 <Basis
-  title="KI-Labor: Prompts für die Bauleitung"
-  description="Werkbank für Prompts im Tiefbau und Netzbau: Angaben eintragen, Prompt passt sich an, Tabellen werden direkt im Browser geprüft. Dazu der KI-Radar mit aktuellen Ranglisten."
+  title="Prompt-Werkbank für die Bauleitung"
+  description="Prompt-Werkbank für Tiefbau und Netzbau: Angaben eintragen, der Prompt passt sich an, LV, Offertvergleiche und Ausmasse werden direkt im Browser geprüft."
 >
   <Seitenkopf
-    titel="KI-Labor"
+    titel="Prompt-Werkbank"
     lead="Prompt-Werkbank für die Bauleitung im Tiefbau und Netzbau. Links eintragen, was Sie wissen, in der Mitte entsteht der Prompt, rechts sehen Sie das Resultat. Alles läuft in Ihrem Browser, nichts wird gespeichert oder übermittelt."
-    krumen={[{ name: 'KI-Labor' }]}
+    krumen={[{ name: 'KI-Labor', href: '/ki-labor/' }, { name: 'Werkbank' }]}
   />
 
   <section class="abschnitt" aria-labelledby="werkbank-titel">
@@ -132,37 +130,12 @@ const vorschau = (id: string) => {
     </div>
   </section>
 
-  <KiRadar />
-
-  <section class="abschnitt" aria-labelledby="felder-titel">
-    <div class="wrap">
-      <div class="abschnitt-kopf">
-        <p class="label">Überblick</p>
-        <h2 id="felder-titel">10 Dinge, die KI in der Bauleitung heute leisten kann</h2>
-        <p>Aus meiner Praxis im Tiefbau und Netzbau, unabhängig vom Anbieter. Überall gilt: Die KI bereitet vor, die Fachperson entscheidet.</p>
-      </div>
-      <ol class="felder">
-        {einsatzfelder.map((f, i) => (
-          <li class="feld">
-            <span class="feld-nr" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            <div class="feld-karte">
-              <h3>{f.titel}</h3>
-              <p>{f.text}</p>
-              <ul class="feld-tags" aria-label="Stichworte">{f.tags.map((t) => <li>{t}</li>)}</ul>
-              {f.link && <a class="feld-link" href={f.link.href}>{f.link.label}<span class="visually-hidden">: {f.titel}</span> →</a>}
-            </div>
-          </li>
-        ))}
-      </ol>
-      <p class="felder-grenze"><strong>Was KI nicht kann:</strong> Verantwortung übernehmen, die Baustelle sehen, einen Vertrag verbindlich auslegen oder einen Vergabeentscheid treffen.</p>
-    </div>
-  </section>
 </Basis>
 
 <script>
-  import { prompts } from '../data/prompts';
-  import { fuelle, beispielWerte, fehlendePflichtfelder, type Werte } from '../lib/prompt';
-  import { pruefe, type Pruefergebnis } from '../lib/tabellenpruefung';
+  import { prompts } from '../../data/prompts';
+  import { fuelle, beispielWerte, fehlendePflichtfelder, type Werte } from '../../lib/prompt';
+  import { pruefe, type Pruefergebnis } from '../../lib/tabellenpruefung';
 
   const werkbaenke = Array.from(document.querySelectorAll<HTMLElement>('[data-werkbank]'));
   const wahl = document.querySelector<HTMLElement>('[data-wahl]');
@@ -337,7 +310,6 @@ const vorschau = (id: string) => {
 </script>
 
 <style>
-  .wrap-breit { max-width: 1480px; }
 
   /* Auswahl */
   .wahl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 24px; margin-bottom: 20px; }
@@ -430,38 +402,4 @@ const vorschau = (id: string) => {
     .wb-spalten { grid-template-columns: 1fr; }
   }
 
-  /* Zehn Einsatzfelder */
-  .felder { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: 18px; }
-  .felder::before {
-    content: ''; position: absolute; top: 8px; bottom: 8px; left: 50%; width: 0;
-    border-left: 2px dashed var(--linie-hell);
-  }
-  .feld { position: relative; display: grid; grid-template-columns: 1fr 56px 1fr; align-items: center; }
-  .feld-nr {
-    grid-column: 2; justify-self: center; z-index: 1; display: grid; place-items: center;
-    width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--eis); background: var(--nacht);
-    font: 600 0.9rem var(--f-mono); color: var(--eis);
-  }
-  .feld-karte {
-    grid-row: 1; grid-column: 1; border: 1px solid var(--linie); border-radius: var(--radius);
-    background: var(--tiefe); padding: 16px 18px;
-  }
-  .feld:nth-child(even) .feld-karte { grid-column: 3; }
-  .feld-karte h3 { font-size: 1.15rem; }
-  .feld-karte p { color: var(--text-ruhig); margin-top: 6px; font-size: 0.95rem; }
-  .feld-tags { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-  .feld-tags li {
-    font: 500 0.72rem var(--f-mono); text-transform: uppercase; letter-spacing: 0.04em;
-    padding: 3px 8px; border-radius: 4px; border: 1px solid var(--linie-hell); color: var(--eis);
-  }
-  .feld-link { display: inline-block; margin-top: 10px; font-weight: 600; font-size: 0.92rem; text-decoration: none; }
-  .feld-link:hover { text-decoration: underline; }
-  .felder-grenze { margin-top: 24px; color: var(--text-ruhig); max-width: 70ch; }
-  .felder-grenze strong { color: var(--signal); }
-  @media (max-width: 760px) {
-    .felder::before { left: 22px; }
-    .feld { grid-template-columns: 44px 1fr; gap: 12px; align-items: start; }
-    .feld-nr { grid-column: 1; grid-row: 1; }
-    .feld-karte, .feld:nth-child(even) .feld-karte { grid-column: 2; }
-  }
 </style>

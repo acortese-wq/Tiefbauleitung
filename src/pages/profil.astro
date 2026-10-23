@@ -1,7 +1,7 @@
 ---
 import Basis from '../layouts/Basis.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
-import { person, werdegang, ausbildung, weiterbildung, sprachen, nebenamt, zeugnisse } from '../data/person';
+import { person, werdegang, ausbildung, weiterbildung, sprachen, nebenamt, zeugnisse, berufsprofil } from '../data/person';
 import { personJsonLd, breadcrumbJsonLd } from '../lib/seo';
 
 const site = Astro.site!;
@@ -48,6 +48,30 @@ const werte = [
           <a href="/projekte/trennungskompass/">«Trennungskompass»</a>, wurde als stärkste Arbeit im Kurs beurteilt. Seither
           entwickle ich Werkzeuge, die Prüf- und Rechenarbeit im Tiefbau beschleunigen (<a href="/projekte/#werkzeugkasten">Werkzeugkasten</a>), und privat Lern-Apps für meine Kinder.
         </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt berufsprofil" id="berufsprofil" aria-labelledby="berufsprofil-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <span class="pos">Kurzprofil</span>
+        <h2 id="berufsprofil-titel">Berufliches Profil</h2>
+      </div>
+      <div class="bp-raster">
+        <div class="bp-text">
+          {berufsprofil.absaetze.map((a) => <p>{a}</p>)}
+        </div>
+        <div class="bp-listen">
+          <h3 class="liste-titel">Fachliche Schwerpunkte</h3>
+          <ul class="bp-schwerpunkte">
+            {berufsprofil.schwerpunkte.map((s) => <li class="chip">{s}</li>)}
+          </ul>
+          <h3 class="liste-titel">Arbeitsweise</h3>
+          <ul class="bp-arbeitsweise">
+            {berufsprofil.arbeitsweise.map((a) => <li>{a}</li>)}
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -162,6 +186,16 @@ const werte = [
   .zeitachse ul li::marker { color: var(--eis); }
   .nebenamt { margin-top: 36px; max-width: 620px; }
   .liste-titel { font-size: 1.4rem; margin: 0 0 10px; }
+  .berufsprofil { border-top: 1px solid var(--linie); }
+  .bp-raster { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .bp-text { display: grid; gap: 14px; }
+  .bp-text p { margin: 0; color: var(--text-ruhig); font-size: 1.06rem; line-height: 1.65; }
+  .bp-text p:first-child { color: var(--text); font-size: var(--s-1); line-height: 1.5; }
+  .bp-schwerpunkte { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .bp-arbeitsweise { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .bp-arbeitsweise li { position: relative; padding-left: 22px; color: var(--text); }
+  .bp-arbeitsweise li::before { content: ''; position: absolute; left: 2px; top: 0.6em; width: 10px; height: 2px; background: var(--eis); }
+  @media (max-width: 860px) { .bp-raster { grid-template-columns: 1fr; } }
   .liste-titel:not(:first-child) { margin-top: 28px; }
   .tabelle { margin: 0; border-top: 1px solid var(--papier-linie); }
   .tabelle div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--papier-linie); }

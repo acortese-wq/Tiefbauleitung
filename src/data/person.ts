@@ -172,3 +172,36 @@ export const fachgebietLabels: Record<string, string> = {
   wasser: 'Wasser',
   netz: 'Netzbau',
 };
+
+// Berufliches Profil: Selbstbeschreibung von Alessandro Cortese (17./23.10.2026), bewusst neutral und ohne Zielrolle.
+export const berufsprofil = {
+  absaetze: [
+    'Erfahrener Bauherrenvertreter und Projektmanager mit langjähriger Erfahrung in den Bereichen Netzinfrastruktur, FTTH-Ausbau, Tiefbau, Projektsteuerung sowie Kosten- und Qualitätsmanagement.',
+    'Fundierte Kenntnisse in der Planung, Umsetzung und Begleitung von Infrastrukturprojekten entlang des gesamten Projektlebenszyklus. Schwerpunkte liegen in der Kostenkontrolle, Ausmass- und Rechnungsprüfung, Nachtragsmanagement, Risikobewertung, Qualitätssicherung sowie der Steuerung interner und externer Anspruchsgruppen.',
+    'Ausgeprägte analytische Fähigkeiten kombiniert mit einem hohen Qualitäts- und Wirtschaftlichkeitsbewusstsein. Routiniert in der Zusammenarbeit mit Bauunternehmen, Ingenieurbüros, Behörden, Partnerunternehmen und internen Fachbereichen.',
+    'Interesse und Erfahrung im Einsatz von digitalen Lösungen, Datenanalysen, künstlicher Intelligenz und Automatisierung zur Unterstützung von Projekten, Prozessen und Entscheidungsgrundlagen.',
+  ],
+  schwerpunkte: [
+    'Bauherrenvertretung',
+    'Netzinfrastruktur und FTTH',
+    'Projekt- und Programmmanagement',
+    'Tiefbau und Werkleitungsbau',
+    'Kosten- und Budgetmanagement',
+    'Ausmass-, Offert- und Rechnungsprüfung',
+    'Nachtrags- und Vertragsmanagement',
+    'Qualitäts- und Risikomanagement',
+    'Stakeholder- und Partnermanagement',
+    'Governance und Revisionssicherheit',
+    'Datenanalyse und Reporting',
+    'Künstliche Intelligenz und Automatisierung',
+    'Prozessoptimierung und Wissensmanagement',
+  ],
+  arbeitsweise: [
+    'Analytisch und strukturiert',
+    'Qualitäts- und kostenbewusst',
+    'Lösungs- und umsetzungsorientiert',
+    'Verlässlich und verantwortungsbewusst',
+    'Kommunikations- und kooperationsstark',
+    'Hoher Fokus auf Transparenz und Nachvollziehbarkeit',
+  ],
+};

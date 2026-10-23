@@ -231,3 +231,12 @@ test('Scroll-Animation verändert nie die Deckkraft und entfällt bei reduzierte
     await kontext.close();
   }
 });
+
+test('Profil zeigt berufliches Profil mit Schwerpunkten und Arbeitsweise', async ({ page }) => {
+  await page.goto('/profil/');
+  const bp = page.locator('#berufsprofil');
+  await expect(bp.getByRole('heading', { name: 'Berufliches Profil' })).toBeVisible();
+  await expect(bp.locator('.bp-schwerpunkte li')).toHaveCount(13);
+  await expect(bp.locator('.bp-arbeitsweise li')).toHaveCount(6);
+  await expect(bp).toContainText('Netzinfrastruktur, FTTH-Ausbau');
+});

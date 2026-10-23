@@ -7,13 +7,10 @@ rolle: Örtliche Bauleitung des Tiefbauamts
 ergebnis: Laut Protokollen im Bauprogramm; Belag für November 2018, Teilabnahme auf den 27. November 2018 terminiert
 technologie: [Brückeninstandsetzung, Mikropfähle, Natursteinmauern, Bauen im Gewässer, Bauen unter Verkehr]
 kompetenzen: [tiefbau-infrastruktur]
-bild: /bilder/referenzen/plessurbruecke-litziruety
-bildAlt: "Plessurbrücke Litzirüti nach der Instandsetzung: Natursteinbogen über die Plessur mit neuer Betonfahrbahnplatte und Leitschranke, Nadelwald im Hintergrund"
-bildRahmen: foto
 reihenfolge: 0.8
 ---
 
-> **Berufliches Projekt** beim Tiefbauamt Graubünden, Kunstbauten und Bauwerkserhaltung. Grundlagen: das öffentlich aufgelegte Auflageprojekt (technischer Bericht, August 2017) und meine eigenen Bausitzungsprotokolle von März bis Oktober 2018. Namen von Beteiligten und Kosten werden nicht genannt. Foto: jag9889, Wikimedia Commons, CC BY-SA 4.0.
+> **Berufliches Projekt** beim Tiefbauamt Graubünden, Kunstbauten und Bauwerkserhaltung. Grundlagen: das öffentlich aufgelegte Auflageprojekt (technischer Bericht, August 2017) und meine eigenen Bausitzungsprotokolle von März bis Oktober 2018. Namen von Beteiligten und Kosten werden nicht genannt.
 
 ## Ausgangslage
 

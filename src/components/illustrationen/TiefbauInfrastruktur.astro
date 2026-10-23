@@ -8,6 +8,8 @@ interface Props {
   kompakt?: boolean;
 }
 const { kompakt = false } = Astro.props;
+// Eindeutige Muster-ID, falls die Zeichnung mehrmals auf einer Seite steht
+const muster = `pz-tb-boden-${kompakt ? 'k' : 'v'}-${Math.random().toString(36).slice(2, 7)}`;
 const buegel = [0, 1, 2];
 ---
 <svg
@@ -23,13 +25,13 @@ const buegel = [0, 1, 2];
     </Fragment>
   )}
   <defs>
-    <pattern id="pz-tb-boden" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <pattern id={muster} width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
       <line x1="0" y1="0" x2="0" y2="10" class="pz-schraffur" />
     </pattern>
   </defs>
 
   <!-- Terrain, Fundament, Pfeiler -->
-  <path d="M200 340 L330 318 L470 318 L600 296 L600 400 L200 400 Z" fill="url(#pz-tb-boden)" />
+  <path d="M200 340 L330 318 L470 318 L600 296 L600 400 L200 400 Z" fill={`url(#${muster})`} />
   <path d="M200 340 L330 318 L470 318 L600 296" class="pz-terrain" />
   <rect x="356" y="318" width="98" height="22" class="pz-beton" />
   <path d="M384 226 L392 318 L418 318 L426 226" class="pz-beton" />

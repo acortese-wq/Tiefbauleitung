@@ -4,6 +4,7 @@ kurz: Abschlussarbeit HSO KI-Professional (KI-Agent), Gruppenarbeit. Ein kontrol
 art: demonstrator
 zeitraum: 2026, Abschlussarbeit
 rolle: Mitglied einer Vierergruppe
+ergebnis: 91 von 100 Punkten, stärkste Arbeit im Kurs
 technologie: [Workflow-Agent, Prompt-Engineering, n8n, Modellvergleich, Regressionstests]
 kompetenzen: [ki-agenten]
 bild: /bilder/trennungskompass

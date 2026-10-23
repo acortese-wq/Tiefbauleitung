@@ -214,6 +214,26 @@ a.chip:hover { border-color: var(--eis); }
   .einblenden-4 { animation-delay: .24s; }
   @keyframes einblenden { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 }
+/* Scrollgekoppeltes Auftauchen: nur wo unterstützt, ohne Transparenz (Kontrast bleibt jederzeit voll), kein Zeitverzug.
+   Verwendet «translate», damit Hover-Effekte mit «transform» unabhängig bleiben. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Zwei Regeln mit verschiedener Spezifität: sonst fasst der Minifier alles zur Kurzschreibweise
+       «animation» zusammen, in der Browser «view()» nicht akzeptieren. */
+    :where(main .abschnitt .abschnitt-kopf, main .abschnitt .karte, main .weg-bild) {
+      animation: auftauchen linear both;
+    }
+    main .abschnitt .abschnitt-kopf,
+    main .abschnitt .karte,
+    main .weg-bild {
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+    @keyframes auftauchen { from { translate: 0 22px; } to { translate: 0 0; } }
+  }
+}
+a.karte:focus-visible { border-color: var(--eis); outline-offset: 4px; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

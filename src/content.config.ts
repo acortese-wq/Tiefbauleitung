@@ -35,6 +35,8 @@ const projekte = defineCollection({
     art: z.enum(PROJEKTARTEN),
     zeitraum: z.string(),
     rolle: z.string(),
+    // Nur belegte Ergebnisse (z. B. Bewertung); leer lassen, wenn keins vorliegt
+    ergebnis: z.string().optional(),
     technologie: z.array(z.string()).default([]),
     kompetenzen: z.array(z.string()).default([]),
     bild: z.string().optional(),

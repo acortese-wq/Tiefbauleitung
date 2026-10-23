@@ -204,3 +204,30 @@ test('Kompetenzseite Netzbau trennt Vorhandenes, Konzept und Ideen', async ({ pa
   const prosa = page.locator('article.prosa');
   for (const t of ['Eigenentwicklungen, vorhanden', 'Konzept', 'Ideen, noch nicht umgesetzt']) await expect(prosa).toContainText(t);
 });
+
+test('Hero nennt Name und Rolle, Projektkarten zeigen Beitrag und belegtes Ergebnis', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.held-name')).toContainText('Alessandro Cortese');
+  await expect(page.locator('.held-name')).toContainText('Bauingenieur');
+  const karte = page.locator('.projekt-karte', { hasText: 'Trennungskompass' });
+  await expect(karte.locator('.projekt-fakten')).toContainText('Mein Beitrag');
+  await expect(karte.locator('.projekt-fakten')).toContainText('91 von 100');
+  // Ohne belegtes Ergebnis keine Ergebniszeile
+  await expect(page.locator('.projekt-karte', { hasText: 'BM-Trainer' }).locator('.projekt-fakten')).not.toContainText('Ergebnis');
+});
+
+test('Scroll-Animation verändert nie die Deckkraft und entfällt bei reduzierter Bewegung', async ({ browser }) => {
+  for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+    const kontext = await browser.newContext({ reducedMotion });
+    const seite = await kontext.newPage();
+    await seite.goto('/');
+    const karte = seite.locator('.projekt-karte').first();
+    const zustand = await karte.evaluate((e) => ({
+      animationen: e.getAnimations().map((a) => (a as CSSAnimation).animationName),
+      deckkraft: getComputedStyle(e).opacity,
+    }));
+    expect(zustand.deckkraft).toBe('1');
+    if (reducedMotion === 'reduce') expect(zustand.animationen).not.toContain('auftauchen');
+    await kontext.close();
+  }
+});

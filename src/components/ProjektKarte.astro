@@ -53,6 +53,10 @@ const d = projekt.data;
   <span class={`badge badge-${d.art}`}>{projektArtLabel[d.art]}</span>
   <h3>{d.title}</h3>
   <p>{d.kurz}</p>
+  <dl class="projekt-fakten">
+    <div><dt>Mein Beitrag</dt><dd>{d.rolle}</dd></div>
+    {d.ergebnis && <div><dt>Ergebnis</dt><dd>{d.ergebnis}</dd></div>}
+  </dl>
   <span class="meta">{d.zeitraum} · {d.technologie.slice(0, 3).join(' · ')}</span>
   <span class="mehr">Fallstudie lesen →</span>
 </a>
@@ -63,6 +67,11 @@ const d = projekt.data;
   .projekt-bild { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--panel); border-bottom: 1px solid var(--linie); margin-bottom: 8px; }
   .projekt-bild img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .5s; }
   a.projekt-karte:hover .projekt-bild img { transform: scale(1.03); }
+  .projekt-fakten { margin-block: 4px 2px; display: grid; gap: 6px; font-size: 0.9rem; }
+  .projekt-fakten div { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px; }
+  .projekt-fakten dt { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-ruhig); padding-top: 3px; }
+  .projekt-fakten dd { margin: 0; color: inherit; }
+  :global(.band-hell) .projekt-fakten dt { color: var(--papier-ruhig); }
   .projekt-bild-schema { display: grid; place-items: center; }
   .projekt-bild-schema svg { width: 90%; }
   .ps-doc { fill: none; stroke: var(--text-ruhig); stroke-width: 1.4; }

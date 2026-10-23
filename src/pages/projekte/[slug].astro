@@ -39,7 +39,8 @@ const site = Astro.site!;
         <dl>
           <div><dt>Art</dt><dd>{projektArtLabel[d.art]}</dd></div>
           <div><dt>Zeitraum</dt><dd>{d.zeitraum}</dd></div>
-          <div><dt>Rolle</dt><dd>{d.rolle}</dd></div>
+          <div><dt>Mein Beitrag</dt><dd>{d.rolle}</dd></div>
+          {d.ergebnis && <div><dt>Ergebnis</dt><dd>{d.ergebnis}</dd></div>}
           <div><dt>Technologie</dt><dd><span class="chips">{d.technologie.map((t) => <span class="chip">{t}</span>)}</span></dd></div>
           {kompetenzen.length > 0 && (
             <div><dt>Kompetenzen</dt><dd><ul>{kompetenzen.map((k) => <li><a href={`/kompetenzen/${k.id}/`}>{k.data.title}</a></li>)}</ul></dd></div>

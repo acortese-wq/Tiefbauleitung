@@ -124,10 +124,13 @@ const zitat = zeugnisse[1];
   <section class="held">
     <div class="wrap held-raster">
       <div class="held-text">
-        <span class="label label-eis einblenden">Tiefbau · Netzbau · Glasfaser · KI-Agenten · Chur</span>
+        <p class="held-name einblenden">
+          <span class="held-name-person">{person.name}</span>
+          <span class="label label-eis">{person.beruf} · Bauherrenvertreter Netzbau · Chur</span>
+        </p>
         <h1 class="einblenden einblenden-2">Tiefbau und Netzbau verstehen. <span>KI richtig einsetzen.</span></h1>
         <p class="held-lead einblenden einblenden-3">
-          Ich bin Alessandro Cortese, Bauingenieur mit über 30 Jahren im Tiefbau. Heute begleite ich als
+          Über 30 Jahre im Tiefbau. Heute begleite ich als
           Bauherrenvertreter den Glasfaserausbau, davor habe ich beim Tiefbauamt Graubünden Leitungsgesuche beurteilt.
           Ich kenne beide Seiten des Grabens und entwickle KI-Werkzeuge, die Offerten und Abrechnungen
           nachvollziehbar prüfen.
@@ -403,6 +406,8 @@ const zitat = zeugnisse[1];
   .wk-teaser-link { font-weight: 600; text-decoration: none; justify-self: start; }
   .wk-teaser-link:hover { text-decoration: underline; }
   .foto-reihe :global(.bildband) { margin-bottom: 0; }
+  .held-name { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+  .held-name-person { font: 600 1.35rem var(--f-display); letter-spacing: 0.04em; text-transform: uppercase; color: var(--text); }
   .held-zielgruppe { color: var(--text); font-size: 0.98rem; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
   .held-zielgruppe .label { color: var(--eis); }
   .band-hell .btn-ghost { color: var(--papier-text); border-color: var(--papier-linie); }

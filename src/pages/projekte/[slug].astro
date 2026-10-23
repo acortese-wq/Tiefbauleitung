@@ -47,9 +47,9 @@ const site = Astro.site!;
           )}
         </dl>
         {d.bild && (
-          <picture class:list={['telefon', { tablet: d.bildRahmen === 'tablet' }]}>
+          <picture class:list={[d.bildRahmen === 'foto' ? 'foto-rahmen' : 'telefon', { tablet: d.bildRahmen === 'tablet' }]}>
             <source srcset={`${d.bild}.webp`} type="image/webp" />
-            <img src={`${d.bild}.jpg`} alt={d.bildAlt ?? ''} width="400" height="700" decoding="async" />
+            <img src={`${d.bild}.jpg`} alt={d.bildAlt ?? ''} width={d.bildRahmen === 'foto' ? 900 : 400} height={d.bildRahmen === 'foto' ? 675 : 700} decoding="async" />
           </picture>
         )}
       </aside>
@@ -79,6 +79,8 @@ const site = Astro.site!;
   .steckbrief ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
   .telefon { display: block; max-width: 240px; padding: 8px; border-radius: 26px; background: #000; border: 1px solid var(--linie-hell); }
   .telefon img { display: block; width: 100%; height: auto; border-radius: 19px; }
+  .foto-rahmen { display: block; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; }
+  .foto-rahmen img { display: block; width: 100%; height: auto; }
   .telefon.tablet { max-width: 340px; padding: 10px; border-radius: 22px; }
   .telefon.tablet img { border-radius: 12px; }
   @media (max-width: 900px) {

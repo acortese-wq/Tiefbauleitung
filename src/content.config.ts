@@ -42,7 +42,7 @@ const projekte = defineCollection({
     bild: z.string().optional(),
     bildAlt: z.string().optional(),
     // Rahmen auf der Fallstudienseite: Smartphone (Standard) oder Tablet
-    bildRahmen: z.enum(['telefon', 'tablet']).default('telefon'),
+    bildRahmen: z.enum(['telefon', 'tablet', 'foto']).default('telefon'),
     reihenfolge: z.number().default(100),
     status: z.enum(['entwurf', 'veroeffentlicht']).default('veroeffentlicht'),
   }),
@@ -77,6 +77,11 @@ const referenzen = defineCollection({
     bauherr: z.string().optional(),
     zeitraum: z.string(),
     rolle: z.string(),
+    // Gemeinde und Kurzbeschrieb (1–2 Sätze), optional
+    ort: z.string().optional(),
+    kurz: z.string().max(260).optional(),
+    // Slug einer Fallstudie in src/content/projekte/
+    fallstudie: z.string().optional(),
     fachgebiete: z.array(z.enum(['kunstbauten', 'strasse', 'bahn', 'wasser', 'netz'])),
     // Foto: Dateien public/bilder/referenzen/<bild>.jpg und .webp. Nachweis ist Pflicht, sobald ein Bild gesetzt ist.
     bild: z.string().regex(/^[a-z0-9-]+$/).optional(),

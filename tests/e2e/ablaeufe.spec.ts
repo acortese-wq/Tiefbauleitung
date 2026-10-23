@@ -213,7 +213,7 @@ test('Hero nennt Name und Rolle, Projektkarten zeigen Beitrag und belegtes Ergeb
   await expect(karte.locator('.projekt-fakten')).toContainText('Mein Beitrag');
   await expect(karte.locator('.projekt-fakten')).toContainText('91 von 100');
   // Ohne belegtes Ergebnis keine Ergebniszeile
-  await expect(page.locator('.projekt-karte', { hasText: 'BM-Trainer' }).locator('.projekt-fakten')).not.toContainText('Ergebnis');
+  await expect(page.locator('.projekt-karte', { hasText: 'Prüf-Agent' }).locator('.projekt-fakten')).not.toContainText('Ergebnis');
 });
 
 test('Scroll-Animation verändert nie die Deckkraft und entfällt bei reduzierter Bewegung', async ({ browser }) => {
@@ -239,4 +239,16 @@ test('Profil zeigt berufliches Profil mit Schwerpunkten und Arbeitsweise', async
   await expect(bp.locator('.bp-schwerpunkte li')).toHaveCount(13);
   await expect(bp.locator('.bp-arbeitsweise li')).toHaveCount(6);
   await expect(bp).toContainText('Netzinfrastruktur, FTTH-Ausbau');
+});
+
+test('Referenz Jenins zeigt Ort, Kurzbeschrieb, Netzbau-Filter und Link zur Fallstudie', async ({ page }) => {
+  await page.goto('/projekte/');
+  const eintrag = page.locator('.ref-liste li', { hasText: 'Ortsdurchfahrt Jenins' });
+  await expect(eintrag).toContainText('2018');
+  await expect(eintrag.locator('.ref-kurz')).toContainText('Kabelschutzrohren');
+  await eintrag.getByRole('link', { name: /Fallstudie lesen/ }).click();
+  await expect(page.locator('h1')).toContainText('Ortsdurchfahrt Jenins');
+  // Keine Namen von Beteiligten oder Kosten aus den Protokollen
+  const text = await page.locator('main').innerText();
+  for (const intern of ['Walo', 'Repower', 'Swisscom', 'Fromm', 'Franken', 'Parzelle']) expect(text).not.toContain(intern);
 });

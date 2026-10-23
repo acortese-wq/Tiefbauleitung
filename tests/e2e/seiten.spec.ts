@@ -14,6 +14,7 @@ const SEITEN = [
   '/projekte/rechnen-mit-pokemon/',
   '/projekte/konzept-pruefagent-abrechnung/',
   '/projekte/trennungskompass/',
+  '/projekte/jenins-ortsdurchfahrt/',
   '/wissen/',
   '/suche/',
   '/kontakt/',

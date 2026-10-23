@@ -23,6 +23,7 @@ const mitBild = (await getCollection('referenzen'))
             <figcaption>
               <strong>{r.name}</strong>
               <span>{r.rolle} · {r.zeitraum}</span>
+              {r.fallstudie && <a href={`/projekte/${r.fallstudie}/`}>Fallstudie lesen →</a>}
               <small>Foto: {r.bildNachweis}{r.bildLizenz && <> · <a href={r.bildLizenz} rel="license noopener" target="_blank">Lizenz<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></>}</small>
             </figcaption>
           </figure>
@@ -42,6 +43,8 @@ const mitBild = (await getCollection('referenzen'))
   .bildband figure:hover img { transform: scale(1.03); }
   .bildband figcaption { display: grid; gap: 4px; padding: 14px 16px 16px; }
   .bildband figcaption span { color: var(--text-ruhig); font-size: 0.92rem; }
+  .bildband figcaption a { font-weight: 600; font-size: 0.9rem; text-decoration: none; }
+  .bildband figcaption a:hover { text-decoration: underline; }
   .bildband figcaption small { font-family: var(--f-mono); font-size: 0.7rem; color: var(--text-ruhig); }
   .bildband figcaption small a { color: var(--eis); }
 </style>

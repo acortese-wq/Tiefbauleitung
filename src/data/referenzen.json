@@ -111,13 +111,22 @@
   },
   {
     "id": "jeninserstrasse",
-    "name": "Jeninserstrasse (Jenins innerorts)",
+    "name": "Ortsdurchfahrt Jenins, Strasse und Werkleitungen",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
-    "rolle": "Auflage-, Ausführungsprojekt, Submission, Bauleitung",
+    "zeitraum": "2018",
+    "rolle": "Örtliche Bauleitung; zuvor Auflage-, Ausführungsprojekt und Submission",
     "fachgebiete": [
-      "strasse"
-    ]
+      "strasse",
+      "wasser",
+      "netz"
+    ],
+    "ort": "Jenins",
+    "bauherr": "Tiefbauamt Graubünden und Gemeinde Jenins",
+    "kurz": "Erneuerung der Kantonsstrasse im engen Dorfkern zusammen mit Wasserleitung, Mischwasserkanalisation und Kabelschutzrohren für Strom und Telekommunikation, in Etappen bei laufendem Dorfleben.",
+    "fallstudie": "jenins-ortsdurchfahrt",
+    "bild": "jeninserstrasse",
+    "bildAlt": "Enge Dorfstrasse in Jenins während der Bauarbeiten: offener Leitungsgraben, neue Kanalisationsrohre, Rüttelplatte und Absperrungen zwischen den Häusern",
+    "bildNachweis": "Alessandro Cortese"
   },
   {
     "id": "flaescherstrasse",

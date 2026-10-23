@@ -12,7 +12,7 @@ const alle = (await getCollection('referenzen'))
   .sort((a, b) => startjahr(b.zeitraum) - startjahr(a.zeitraum) || a.i - b.i);
 const filterWerte = filter ? filter.split(',').map((f) => f.trim()) : [];
 const liste = filterWerte.length ? alle.filter((r) => r.fachgebiete.some((g) => filterWerte.includes(g))) : alle;
-const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser'].filter((g) => liste.some((r) => r.fachgebiete.includes(g as never)));
+const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser', 'netz'].filter((g) => liste.some((r) => r.fachgebiete.includes(g as never)));
 ---
 <div class="referenzen" data-referenzen>
   {!kompakt && (
@@ -31,8 +31,10 @@ const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser'].filter((g) => liste
       <li data-gebiete={r.fachgebiete.join(' ')}>
         <span class="ref-zeit">{r.zeitraum}</span>
         <span class="ref-name">
-          <strong>{r.name}</strong>
+          <strong>{r.name}{r.ort && <span class="ref-ort"> · {r.ort}</span>}</strong>
           <span>{r.arbeitgeber}{r.bauherr ? ` · Bauherr: ${r.bauherr}` : ''}</span>
+          {r.kurz && <span class="ref-kurz">{r.kurz}</span>}
+          {r.fallstudie && <a class="ref-fallstudie" href={`/projekte/${r.fallstudie}/`}>Fallstudie lesen →</a>}
         </span>
         <span class="ref-rolle">{r.rolle}</span>
         <span class="ref-tags">{r.fachgebiete.map((g) => <span class="chip">{fachgebietLabels[g]}</span>)}</span>
@@ -65,6 +67,10 @@ const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser'].filter((g) => liste
 </script>
 
 <style>
+  .ref-ort { font-weight: 400; color: var(--text-ruhig); }
+  .ref-kurz { display: block; margin-top: 4px; color: var(--text-ruhig); font-size: 0.92rem; max-width: 62ch; }
+  .ref-fallstudie { display: inline-block; margin-top: 4px; font-weight: 600; font-size: 0.92rem; text-decoration: none; }
+  .ref-fallstudie:hover { text-decoration: underline; }
   .ref-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   .ref-filter[hidden] { display: none; }
   .ref-filter button {

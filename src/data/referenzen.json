@@ -86,11 +86,19 @@
     "id": "lehnenbruecke-ricaldei",
     "name": "Lehnenbrücke Ricaldei",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
-    "rolle": "Submissionsprojekt, Bauleitung",
+    "zeitraum": "2020–2021",
+    "rolle": "Örtliche Bauleitung; zuvor Submissionsprojekt",
     "fachgebiete": [
-      "kunstbauten"
-    ]
+      "kunstbauten",
+      "strasse"
+    ],
+    "ort": "Chur, Tschiertscherstrasse",
+    "bauherr": "Tiefbauamt Graubünden",
+    "kurz": "Ersatz einer Lehnenbrücke im Rutschgebiet unter Verkehr: verankerte Baugrubensicherung, Pfeiler in Schächten, Überwachung des Hangs und Ersatz einer gekippten Wandmauer.",
+    "fallstudie": "lehnenbruecke-ricaldei",
+    "bild": "lehnenbruecke-ricaldei",
+    "bildAlt": "Neue Lehnenbrücke Ricaldei aus der Luft: geschwungene Fahrbahn auf Pfeilern am Waldhang",
+    "bildNachweis": "Alessandro Cortese"
   },
   {
     "id": "bruecke-versam",

@@ -7,6 +7,9 @@ rolle: Örtliche Bauleitung des Tiefbauamts
 ergebnis: Laut Protokollen im Bauprogramm; Belag für November 2018, Teilabnahme auf den 27. November 2018 terminiert
 technologie: [Brückeninstandsetzung, Mikropfähle, Natursteinmauern, Bauen im Gewässer, Bauen unter Verkehr]
 kompetenzen: [tiefbau-infrastruktur]
+bild: /bilder/projekte/litzirueti-bruecke
+bildAlt: "Instandgesetzte Plessurbrücke Litzirüti: alter Natursteinbogen mit neuer, breiterer Fahrbahnplatte und Leitplanke, darunter die Plessur"
+bildRahmen: foto
 reihenfolge: 0.8
 ---
 
@@ -33,6 +36,8 @@ Die Plessurbrücke Litzirüti liegt an der Schanfiggerstrasse zwischen Langwies 
 - **Mauern im Ortsbild.** Talseitige Stützmauern als natursteinverkleidete Schwergewichtsmauern, im Schutz einer Baugrubensicherung erstellt.
 - **Entwässerung.** Wasserschalen, Einlaufschächte und kombinierte Sicker- und Transportleitungen, Einleitung in die Plessur nach Nachweis.
 
+![Bewehrung der neuen Fahrbahnplatte über dem alten Bogen, kurz vor dem Betonieren](/bilder/projekte/litzirueti-bewehrung.jpg)
+
 ## Meine Rolle
 
 Als örtliche Bauleitung des Tiefbauamts habe ich von der Startsitzung bis zur Teilabnahme die Bausitzungen geleitet und protokolliert. Dazu gehörten Bauprogramm und Termine, Planlieferungen, Ausführungskontrollen, Absteckungen zur Qualitätssicherung, die Werkleitungen in der Brücke sowie die Abstimmung mit Fischerei, Wildhut und Gemeinde.
@@ -44,6 +49,10 @@ Als örtliche Bauleitung des Tiefbauamts habe ich von der Startsitzung bis zur T
 - **Verkehr.** Lichtsignalanlage während der Bauzeit; im Sommerfenster an Wochenenden und ausserhalb der Arbeitszeiten zweispurige Verkehrsführung, Rücksicht auf Anlässe in Arosa.
 - **Qualität.** Erstprüfungen und Produktnachweise vor Baubeginn, Musterflächen für die Natursteinmauern, Prüfpfähle für die Mikropfähle vorgängig gesetzt und geprüft.
 
+![Betonieren der Fahrbahnplatte mit Pumpe; darunter Gerüst und Schalung über der Plessur, rechts die natursteinverkleidete Mauer](/bilder/projekte/litzirueti-betonieren.jpg)
+
 ## Ergebnis
 
 Geplant waren zwei Bauphasen in den Jahren 2018 und 2019. Mit einem überarbeiteten, beschleunigten Bauprogramm des Unternehmers sollten die Arbeiten bereits 2018 abgeschlossen werden. Die Brückenplatte wurde am 21. September 2018 betoniert, die Belagsarbeiten folgten im November, die Teilabnahme war für den 27. November 2018 angesetzt. In den Bausitzungen im Herbst wurde das Bauprogramm jeweils als eingehalten festgehalten.
+
+![Kabelschutzrohre im Graben neben der Brücke, für die Werkleitungen in der Brücke](/bilder/projekte/litzirueti-kabelschutzrohre.jpg)

@@ -24,6 +24,7 @@ const SEITEN = [
   '/impressum/',
   '/datenschutz/',
   '/seitenuebersicht/',
+  '/ki-labor/',
 ];
 
 function sammleFehler(page: Page) {

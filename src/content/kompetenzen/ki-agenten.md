@@ -34,6 +34,7 @@ KI ersetzt keine fachliche Verantwortung. Sie kann Fehler machen, Zusammenhänge
 - Abschlussarbeit [Trennungskompass](/projekte/trennungskompass/) (Gruppenarbeit): 91 von 100 Punkten, als stärkste Arbeit im Kurs beurteilt
 - Entwicklung eigener KI-Agenten im beruflichen Umfeld, etwa zur Prüfung von Bauabrechnungen und als Chatbot für Vergabe- und Baurecht
 - Private Apps für die eigenen Kinder, entwickelt mit Claude Code
+- [KI-Labor](/ki-labor/): Prompt-Vorlagen für die Bauleitung zum Ausprobieren, direkt auf dieser Webseite
 
 ## Weiterbildung: Was ich an der HSO gelernt habe
 

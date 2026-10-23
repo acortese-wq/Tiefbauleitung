@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('Navigation führt zu allen Hauptseiten', async ({ page, isMobile }) => {
   await page.goto('/');
   // «Wissen» erscheint erst, wenn Fachbeiträge veröffentlicht sind (siehe Varianten-Tests)
-  const ziele = ['Profil', 'Kompetenzen', 'Projekte', 'Kontakt'];
+  const ziele = ['Profil', 'Kompetenzen', 'Projekte', 'KI-Labor', 'Kontakt'];
   for (const ziel of ziele) {
     if (isMobile) await page.locator('.nav-klein summary').click();
     const nav = page.getByRole('navigation', { name: isMobile ? 'Hauptnavigation mobil' : 'Hauptnavigation' });
@@ -280,4 +280,20 @@ test('Fusszeile führt zur lesbaren Seitenübersicht mit allen Fallstudien', asy
   await expect(page.locator('h1')).toContainText('Seitenübersicht');
   await expect(page.locator('main')).toContainText('Plessurbrücke Sassal');
   await expect(page.locator('main').getByRole('link', { name: 'XML-Sitemap' })).toHaveAttribute('href', /sitemap-index\.xml$/);
+});
+
+test('KI-Labor füllt Prompts live aus, filtert nach Thema und sendet nichts', async ({ page }) => {
+  const anfragen: string[] = [];
+  page.on('request', (r) => anfragen.push(r.url()));
+  await page.goto('/ki-labor/');
+  await expect(page.locator('h1')).toContainText('KI-Labor');
+  const karte = page.locator('#nachtrag');
+  await karte.getByLabel('Nachgetragene Leistung').fill('Felsabtrag im Graben');
+  await expect(karte.locator('pre')).toContainText('Nachtrag: Felsabtrag im Graben');
+  await expect(karte.locator('pre')).not.toContainText('{{');
+  await page.getByRole('button', { name: /Netzbau und Werkleitungen/ }).click();
+  await expect(page.locator('#trasse')).toBeVisible();
+  await expect(page.locator('#nachtrag')).toBeHidden();
+  const extern = anfragen.filter((u) => !u.startsWith(new URL(page.url()).origin));
+  expect(extern).toEqual([]);
 });

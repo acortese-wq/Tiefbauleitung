@@ -1,0 +1,147 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { prompts, kategorieLabels, type Kategorie, type PromptVorlage } from '../data/prompts';
+
+const fuellen = (p: PromptVorlage) => p.felder.reduce((t, f) => t.replaceAll(`{{${f.name}}}`, f.beispiel), p.vorlage);
+const kategorien = (Object.keys(kategorieLabels) as Kategorie[]).filter((k) => prompts.some((p) => p.kategorie === k));
+---
+<Basis
+  title="KI-Labor: Prompts für die Bauleitung"
+  description="Geprüfte Prompt-Vorlagen für Bauleitung, Offertprüfung, Nachträge, Werkleitungen und Glasfaserausbau. Felder ausfüllen, Prompt kopieren, Ergebnis fachlich prüfen."
+>
+  <Seitenkopf
+    titel="KI-Labor"
+    lead="Prompt-Vorlagen für die Bauleitung im Tiefbau und Netzbau. Felder ausfüllen, Prompt kopieren und im KI-Werkzeug Ihrer Wahl verwenden. Alles läuft in Ihrem Browser, nichts wird gespeichert oder übermittelt."
+    krumen={[{ name: 'KI-Labor' }]}
+  />
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="labor-regeln">
+        <div>
+          <p class="label">So sind die Vorlagen gebaut</p>
+          <p>Rolle, Kontext, klare Aufgabe in Schritten, festes Ausgabeformat und eine Grenze, was die KI nicht entscheiden soll. Dieselben Prinzipien wie bei meinen Agenten: begrenzte Aufgabe, kontrollierter Ablauf, Prüfung durch die Fachperson.</p>
+        </div>
+        <p class="hinweis"><strong>Datenschutz:</strong> Keine Personendaten, Preise aus laufenden Vergaben oder vertraulichen Unterlagen in öffentliche KI-Dienste eingeben. Dafür eine vom Arbeitgeber freigegebene Lösung verwenden oder die Daten vorher anonymisieren.</p>
+      </div>
+
+      <div class="labor-filter" data-laborfilter role="group" aria-label="Vorlagen nach Thema filtern" hidden>
+        <button type="button" data-wert="alle" aria-pressed="true">Alle<span>{prompts.length}</span></button>
+        {kategorien.map((k) => (
+          <button type="button" data-wert={k} aria-pressed="false">{kategorieLabels[k]}<span>{prompts.filter((p) => p.kategorie === k).length}</span></button>
+        ))}
+      </div>
+
+      <ol class="labor-liste">
+        {prompts.map((p) => (
+          <li class="labor-karte" data-kategorie={p.kategorie} data-vorlage={p.vorlage} id={p.id}>
+            <p class="label">{kategorieLabels[p.kategorie]}</p>
+            <h2>{p.titel}</h2>
+            <p class="labor-zweck">{p.zweck}</p>
+            <div class="labor-raster">
+              <div class="labor-felder">
+                {p.felder.map((f) => (
+                  <label>
+                    <span>{f.label}</span>
+                    <input type="text" name={f.name} placeholder={f.beispiel} autocomplete="off" />
+                  </label>
+                ))}
+                <p class="labor-tipp">Leere Felder verwenden das Beispiel.</p>
+              </div>
+              <div class="labor-ausgabe">
+                <pre tabindex="0" aria-label={`Prompt: ${p.titel}`}><code>{fuellen(p)}</code></pre>
+                <div class="labor-aktionen">
+                  <button type="button" class="btn" data-kopieren hidden>Prompt kopieren</button>
+                  <span class="labor-status" role="status" aria-live="polite"></span>
+                </div>
+              </div>
+            </div>
+            <p class="labor-pruefen"><strong>Selbst prüfen:</strong> {p.pruefen}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</Basis>
+
+<script>
+  const filter = document.querySelector<HTMLElement>('[data-laborfilter]');
+  const karten = Array.from(document.querySelectorAll<HTMLElement>('.labor-karte'));
+
+  if (filter) {
+    filter.hidden = false;
+    filter.addEventListener('click', (e) => {
+      const knopf = (e.target as HTMLElement).closest('button');
+      if (!knopf) return;
+      const wert = knopf.dataset.wert ?? 'alle';
+      for (const k of karten) k.hidden = wert !== 'alle' && k.dataset.kategorie !== wert;
+      for (const b of filter.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b === knopf));
+    });
+  }
+
+  for (const karte of karten) {
+    const vorlage = karte.dataset.vorlage ?? '';
+    const code = karte.querySelector('code');
+    const felder = Array.from(karte.querySelectorAll<HTMLInputElement>('input'));
+    const knopf = karte.querySelector<HTMLButtonElement>('[data-kopieren]');
+    const status = karte.querySelector<HTMLElement>('.labor-status');
+    const text = () => felder.reduce((t, f) => t.replaceAll(`{{${f.name}}}`, f.value.trim() || f.placeholder), vorlage);
+    for (const f of felder) f.addEventListener('input', () => { if (code) code.textContent = text(); });
+    if (knopf && navigator.clipboard) {
+      knopf.hidden = false;
+      knopf.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(text());
+          if (status) status.textContent = 'Kopiert.';
+        } catch {
+          if (status) status.textContent = 'Kopieren nicht möglich, bitte Text markieren.';
+        }
+        setTimeout(() => { if (status) status.textContent = ''; }, 3000);
+      });
+    }
+  }
+</script>
+
+<style>
+  .labor-regeln { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: start; margin-bottom: 32px; }
+  .labor-regeln p:not(.label):not(.hinweis) { color: var(--text-ruhig); margin-top: 8px; max-width: 60ch; }
+  .labor-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .labor-filter[hidden] { display: none; }
+  .labor-filter button {
+    font: 500 0.82rem var(--f-mono); min-height: 40px; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--linie-hell); background: var(--tiefe); color: var(--text);
+  }
+  .labor-filter button span { color: var(--text-ruhig); margin-left: 6px; }
+  .labor-filter button[aria-pressed='true'] { background: var(--eis); border-color: var(--eis); color: var(--nacht); }
+  .labor-filter button[aria-pressed='true'] span { color: var(--nacht); }
+  .labor-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 24px; }
+  .labor-karte { border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); padding: clamp(18px, 3vw, 28px); }
+  .labor-karte[hidden] { display: none; }
+  .labor-karte h2 { font-size: var(--s-2); margin-top: 4px; }
+  .labor-zweck { color: var(--text-ruhig); margin-top: 6px; max-width: 70ch; }
+  .labor-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 20px; margin-top: 18px; }
+  .labor-felder { display: grid; gap: 12px; align-content: start; }
+  .labor-felder label { display: grid; gap: 4px; }
+  .labor-felder label span { font: 500 0.82rem var(--f-mono); color: var(--text-ruhig); }
+  .labor-felder input {
+    font: inherit; font-size: 0.95rem; min-height: 44px; padding: 8px 12px; border-radius: 8px;
+    border: 1px solid var(--linie-hell); background: var(--nacht); color: var(--text);
+  }
+  .labor-felder input::placeholder { color: var(--text-ruhig); opacity: 0.8; }
+  .labor-felder input:focus-visible { outline: 2px solid var(--eis); outline-offset: 1px; }
+  .labor-tipp { font-size: 0.85rem; color: var(--text-ruhig); }
+  .labor-ausgabe pre {
+    margin: 0; max-height: 360px; overflow: auto; white-space: pre-wrap; word-break: break-word;
+    padding: 14px 16px; border-radius: 8px; border: 1px solid var(--linie); background: var(--nacht);
+    font: 0.86rem/1.55 var(--f-mono); color: var(--text);
+  }
+  .labor-ausgabe pre:focus-visible { outline: 2px solid var(--eis); outline-offset: 2px; }
+  .labor-aktionen { display: flex; align-items: center; gap: 12px; margin-top: 10px; min-height: 44px; }
+  .labor-status { font: 500 0.85rem var(--f-mono); color: var(--eis); }
+  .labor-pruefen { margin-top: 16px; font-size: 0.93rem; color: var(--text-ruhig); }
+  .labor-pruefen strong { color: var(--signal); }
+  @media (max-width: 860px) {
+    .labor-regeln, .labor-raster { grid-template-columns: 1fr; }
+  }
+</style>

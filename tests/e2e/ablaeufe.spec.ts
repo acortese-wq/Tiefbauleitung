@@ -46,11 +46,11 @@ test('Alle internen Links der Startseite und Unterseiten funktionieren', async (
 test('Referenzprojekte lassen sich filtern', async ({ page }) => {
   await page.goto('/projekte/');
   const zaehler = page.locator('[data-zaehler]');
-  await expect(zaehler).toContainText('39');
+  await expect(zaehler).toContainText('38');
   await page.getByRole('button', { name: /Bahn/ }).click();
-  await expect(zaehler).toContainText('1 von 39');
+  await expect(zaehler).toContainText('1 von 38');
   await page.getByRole('button', { name: /^Alle/ }).click();
-  await expect(zaehler).toContainText('39 von 39');
+  await expect(zaehler).toContainText('38 von 38');
 });
 
 test('Kontaktseite verweist auf LinkedIn, solange das Formular deaktiviert ist', async ({ page }) => {

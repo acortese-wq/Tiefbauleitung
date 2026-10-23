@@ -6,7 +6,7 @@ interface Props { filter?: string; kompakt?: boolean; }
 const { filter, kompakt = false } = Astro.props;
 
 // Neueste zuerst; innerhalb gleicher Zeiträume die Reihenfolge aus referenzen.json.
-const startjahr = (z: string) => Number(z.slice(0, 4)) || 0;
+const startjahr = (z: string) => Number(z.match(/\d{4}/)?.[0]) || 0;
 const alle = (await getCollection('referenzen'))
   .map((r, i) => ({ ...r.data, i }))
   .sort((a, b) => startjahr(b.zeitraum) - startjahr(a.zeitraum) || a.i - b.i);
@@ -34,7 +34,7 @@ const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser', 'netz'].filter((g) 
           <strong>{r.name}{r.ort && <span class="ref-ort"> · {r.ort}</span>}</strong>
           <span>{r.arbeitgeber}{r.bauherr ? ` · Bauherr: ${r.bauherr}` : ''}</span>
           {r.kurz && <span class="ref-kurz">{r.kurz}</span>}
-          {r.fallstudie && <a class="ref-fallstudie" href={`/projekte/${r.fallstudie}/`}>Fallstudie lesen →</a>}
+          {r.fallstudie && <a class="ref-fallstudie" href={`/projekte/${r.fallstudie}/`}>Infos<span class="visually-hidden"> zu {r.name}</span> →</a>}
         </span>
         <span class="ref-rolle">{r.rolle}</span>
         <span class="ref-tags">{r.fachgebiete.map((g) => <span class="chip">{fachgebietLabels[g]}</span>)}</span>

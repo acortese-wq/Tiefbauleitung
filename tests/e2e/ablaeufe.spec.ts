@@ -247,7 +247,7 @@ test('Referenz Jenins zeigt Ort, Kurzbeschrieb, Netzbau-Filter und Link zur Fall
   const eintrag = page.locator('.ref-liste li', { hasText: 'Ortsdurchfahrt Jenins' });
   await expect(eintrag).toContainText('2018');
   await expect(eintrag.locator('.ref-kurz')).toContainText('Kabelschutzrohren');
-  await eintrag.getByRole('link', { name: /Fallstudie lesen/ }).click();
+  await eintrag.getByRole('link', { name: /^Infos/ }).click();
   await expect(page.locator('h1')).toContainText('Ortsdurchfahrt Jenins');
   // Keine Namen von Beteiligten oder Kosten aus den Protokollen
   const text = await page.locator('main').innerText();
@@ -258,9 +258,18 @@ test('Referenz Plessurbrücke Sassal zeigt Jahre, Bild und Fallstudie ohne Namen
   await page.goto('/projekte/');
   const eintrag = page.locator('.ref-liste li', { hasText: 'Plessurbrücke Sassal' });
   await expect(eintrag).toContainText('2020–2021');
-  await eintrag.getByRole('link', { name: /Fallstudie lesen/ }).click();
+  await eintrag.getByRole('link', { name: /^Infos/ }).click();
   await expect(page.locator('h1')).toContainText('Plessurbrücke Sassal');
   await expect(page.locator('main img[src*="sassal-werkleitungen"]')).toHaveCount(1);
   const text = await page.locator('main').innerText();
   for (const intern of ['Vetsch', 'Casutt', 'Stoffel', 'IBC', 'Swisscom', 'UPC', 'Parzelle']) expect(text).not.toContain(intern);
+});
+
+test('Referenz Fläscherstrasse nennt die Kleintiermauer und führt über «Infos» zur Fallstudie', async ({ page }) => {
+  await page.goto('/projekte/');
+  const eintrag = page.locator('.ref-liste li', { hasText: 'Fläscherstrasse' });
+  await expect(eintrag.locator('.ref-kurz')).toContainText('Kleintiermauer');
+  await eintrag.getByRole('link', { name: /^Infos zu Fläscherstrasse/ }).click();
+  await expect(page.locator('h1')).toContainText('Kleintiermauer');
+  await expect(page.locator('main')).toContainText('Amphibien');
 });

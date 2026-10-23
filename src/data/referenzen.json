@@ -143,13 +143,20 @@
   },
   {
     "id": "flaescherstrasse",
-    "name": "Fläscherstrasse (Rheinbrücke bis Fläsch)",
+    "name": "Fläscherstrasse (Fläsch bis Rheinbrücke) mit Kleintiermauer",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
+    "zeitraum": "ab 2014",
     "rolle": "Auflage-, Ausführungsprojekt, Submission, Bauleitung",
     "fachgebiete": [
       "strasse"
-    ]
+    ],
+    "ort": "Fläsch",
+    "bauherr": "Tiefbauamt Graubünden",
+    "kurz": "Ausbau der Verbindungsstrasse auf rund 800 m mit neuer Entwässerung und Stützmauer. Erstmals beim Tiefbauamt Graubünden eine Kleintiermauer für Frösche und andere Amphibien umgesetzt.",
+    "fallstudie": "flaescherstrasse-kleintiermauer",
+    "bild": "flaescherstrasse",
+    "bildAlt": "Fläscherstrasse im Bau: entlang der Strassenböschung eine Kleintiermauer aus Betonelementen, daneben ein Maisfeld",
+    "bildNachweis": "Alessandro Cortese"
   },
   {
     "id": "litziruety-arosa",

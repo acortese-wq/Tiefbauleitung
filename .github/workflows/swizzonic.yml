@@ -28,7 +28,10 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - name: Testbrowser installieren
+        # Hängt die Paketinstallation bei GitHub, früh abbrechen statt erst nach 20 Minuten
+        timeout-minutes: 6
+        run: npx playwright install --with-deps chromium
       - name: Build für tiefbauleitung.com und Tests an der Wurzel
         run: npm run test:swizzonic
       - name: Hinweis, falls Zugangsdaten fehlen

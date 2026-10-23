@@ -4,7 +4,7 @@ kurz: Natursteinbogenbrücke von 1889 instand gesetzt und auf 8.50 m Fahrbahn ve
 art: beruflich
 zeitraum: 2018, Tiefbauamt Graubünden
 rolle: Örtliche Bauleitung des Tiefbauamts
-ergebnis: Laut Protokollen im Bauprogramm, Belag im November 2018, Teilabnahme Ende November 2018
+ergebnis: Laut Protokollen im Bauprogramm; Belag für November 2018, Teilabnahme auf den 27. November 2018 terminiert
 technologie: [Brückeninstandsetzung, Mikropfähle, Natursteinmauern, Bauen im Gewässer, Bauen unter Verkehr]
 kompetenzen: [tiefbau-infrastruktur]
 bild: /bilder/referenzen/plessurbruecke-litziruety

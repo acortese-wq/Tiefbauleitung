@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 
 const SEITEN = [
   '/', '/profil/', '/kompetenzen/', '/kompetenzen/netzinfrastruktur-leitungsbau/', '/kompetenzen/tiefbau-infrastruktur/',
-  '/kompetenzen/digitalisierung-prozesse/', '/kompetenzen/ki-agenten/', '/projekte/', '/projekte/trennungskompass/', '/projekte/jenins-ortsdurchfahrt/', '/projekte/nasstobel-lehnenbruecke/', '/projekte/plessurbruecke-litziruety/',
+  '/kompetenzen/digitalisierung-prozesse/', '/kompetenzen/ki-agenten/', '/projekte/', '/projekte/trennungskompass/', '/projekte/jenins-ortsdurchfahrt/', '/projekte/nasstobel-lehnenbruecke/', '/projekte/plessurbruecke-litziruety/', '/projekte/rheinbruecke-flaesch-kolksicherung/',
   '/suche/', '/kontakt/', '/impressum/', '/datenschutz/',
 ];
 const DOMAIN = 'https://tiefbauleitung.com';

@@ -42,15 +42,19 @@
     "id": "rheinbruecke-flaesch-kolk",
     "name": "Rheinbrücke Fläsch, Kolksicherung Pfeiler",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
-    "rolle": "Submission, Bauleitung",
+    "zeitraum": "2018–2020",
+    "rolle": "Örtliche Bauleitung; zuvor Submission",
     "fachgebiete": [
       "kunstbauten",
       "wasser"
     ],
     "bild": "rheinbruecke-flaesch-kolk",
     "bildAlt": "Baustelle Kolksicherung an der Rheinbrücke Fläsch: Pfeiler mit Spundwandumschliessung im Rhein, Blocksteinschüttung am Ufer, Autokran und Bagger unter der Brücke, verschneite Berge im Hintergrund",
-    "bildNachweis": "Alessandro Cortese"
+    "bildNachweis": "Alessandro Cortese",
+    "ort": "Fläsch / Maienfeld",
+    "bauherr": "Tiefbauamt Graubünden",
+    "kurz": "Neue Tiefenfundation mit 20 m langen Bohrpfählen unter den Pfeilern der Rheinbrücke, gebaut in zwei Wintern im Flussbett, mit Hochwasseralarm und Bauwerksüberwachung.",
+    "fallstudie": "rheinbruecke-flaesch-kolksicherung"
   },
   {
     "id": "flaesch-rheinbruecke",

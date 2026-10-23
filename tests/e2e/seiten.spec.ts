@@ -17,6 +17,7 @@ const SEITEN = [
   '/projekte/jenins-ortsdurchfahrt/',
   '/projekte/nasstobel-lehnenbruecke/',
   '/projekte/plessurbruecke-litziruety/',
+  '/projekte/rheinbruecke-flaesch-kolksicherung/',
   '/wissen/',
   '/suche/',
   '/kontakt/',

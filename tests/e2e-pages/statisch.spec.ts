@@ -5,7 +5,7 @@ import AxeBuilder from '@axe-core/playwright';
 const SEITEN = [
   './', 'profil/', 'kompetenzen/', 'kompetenzen/tiefbau-infrastruktur/', 'kompetenzen/netzinfrastruktur-leitungsbau/',
   'kompetenzen/digitalisierung-prozesse/', 'kompetenzen/ki-agenten/', 'projekte/', 'projekte/bm-trainer/',
-  'projekte/rechnen-mit-pokemon/', 'projekte/konzept-pruefagent-abrechnung/', 'projekte/trennungskompass/', 'projekte/jenins-ortsdurchfahrt/', 'projekte/nasstobel-lehnenbruecke/', 'projekte/plessurbruecke-litziruety/', 'wissen/', 'suche/', 'kontakt/',
+  'projekte/rechnen-mit-pokemon/', 'projekte/konzept-pruefagent-abrechnung/', 'projekte/trennungskompass/', 'projekte/jenins-ortsdurchfahrt/', 'projekte/nasstobel-lehnenbruecke/', 'projekte/plessurbruecke-litziruety/', 'projekte/rheinbruecke-flaesch-kolksicherung/', 'wissen/', 'suche/', 'kontakt/',
   'impressum/', 'datenschutz/',
 ];
 const BASIS = '/Tiefbauleitung/';

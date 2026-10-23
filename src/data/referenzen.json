@@ -188,13 +188,21 @@
   },
   {
     "id": "luzisteigstrasse",
-    "name": "Luzisteigstrasse, Maienfeld innerorts (Pflästerung)",
+    "name": "Luzisteigstrasse, Pflästerung Städtli Maienfeld",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
-    "rolle": "Submission, Bauleitung",
+    "zeitraum": "2017",
+    "rolle": "Örtliche Bauleitung; zuvor Submission",
     "fachgebiete": [
-      "strasse"
-    ]
+      "strasse",
+      "netz"
+    ],
+    "ort": "Maienfeld",
+    "bauherr": "Tiefbauamt Graubünden und Stadt Maienfeld",
+    "kurz": "Rund 1'000 m² Pflästerung im ISOS-geschützten Städtli erneuert: Bogenpflästerung nach Muster der Denkmalpflege, Kabelblöcke, Archäologie an der Stadtmauer, Umleitung mit Postauto-Fahrversuch.",
+    "fallstudie": "maienfeld-staedtli-pflaesterung",
+    "bild": "luzisteigstrasse",
+    "bildAlt": "Neue Bogenpflästerung im Städtli Maienfeld zwischen historischen Häusern",
+    "bildNachweis": "Alessandro Cortese"
   },
   {
     "id": "rohanschanze",

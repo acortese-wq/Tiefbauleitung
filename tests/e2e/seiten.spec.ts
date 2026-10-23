@@ -23,6 +23,7 @@ const SEITEN = [
   '/kontakt/',
   '/impressum/',
   '/datenschutz/',
+  '/seitenuebersicht/',
 ];
 
 function sammleFehler(page: Page) {

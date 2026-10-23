@@ -273,3 +273,11 @@ test('Referenz Fläscherstrasse nennt die Kleintiermauer und führt über «Info
   await expect(page.locator('h1')).toContainText('Kleintiermauer');
   await expect(page.locator('main')).toContainText('Amphibien');
 });
+
+test('Fusszeile führt zur lesbaren Seitenübersicht mit allen Fallstudien', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('footer').getByRole('link', { name: 'Seitenübersicht' }).click();
+  await expect(page.locator('h1')).toContainText('Seitenübersicht');
+  await expect(page.locator('main')).toContainText('Plessurbrücke Sassal');
+  await expect(page.locator('main').getByRole('link', { name: 'XML-Sitemap' })).toHaveAttribute('href', /sitemap-index\.xml$/);
+});

@@ -1,0 +1,59 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { sichtbareProjekte, sichtbareArtikel, alleKompetenzen } from '../lib/content';
+
+const kompetenzen = await alleKompetenzen();
+const projekte = await sichtbareProjekte();
+const artikel = await sichtbareArtikel();
+---
+<Basis title="Seitenübersicht" description="Alle Seiten der Webseite von Alessandro Cortese auf einen Blick: Profil, Kompetenzen, Projekte und Fallstudien.">
+  <Seitenkopf titel="Seitenübersicht" krumen={[{ name: 'Seitenübersicht' }]} />
+  <section class="abschnitt">
+    <div class="wrap prosa">
+      <h2>Hauptseiten</h2>
+      <ul>
+        <li><a href="/">Startseite</a></li>
+        <li><a href="/profil/">Profil</a></li>
+        <li><a href="/kompetenzen/">Kompetenzen</a></li>
+        <li><a href="/projekte/">Projekte und Referenzen</a></li>
+        {artikel.length > 0 && <li><a href="/wissen/">Wissen</a></li>}
+        <li><a href="/suche/">Suche</a></li>
+        <li><a href="/kontakt/">Kontakt</a></li>
+      </ul>
+
+      <h2>Kompetenzen</h2>
+      <ul>
+        {kompetenzen.map((k) => <li><a href={`/kompetenzen/${k.id}/`}>{k.data.title}</a></li>)}
+      </ul>
+
+      <h2>Projekte und Fallstudien</h2>
+      <ul>
+        {projekte.map((p) => <li><a href={`/projekte/${p.id}/`}>{p.data.title}</a></li>)}
+      </ul>
+
+      {artikel.length > 0 && (
+        <>
+          <h2>Fachbeiträge</h2>
+          <ul>
+            {artikel.map((a) => <li><a href={`/wissen/${a.id}/`}>{a.data.title}</a></li>)}
+          </ul>
+        </>
+      )}
+
+      <h2>Rechtliches</h2>
+      <ul>
+        <li><a href="/impressum/">Impressum</a></li>
+        <li><a href="/datenschutz/">Datenschutz</a></li>
+      </ul>
+
+      <p class="hinweis-klein">Für Suchmaschinen gibt es zusätzlich die <a href="/sitemap-index.xml">XML-Sitemap</a>.</p>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .prosa ul { padding-left: 1.2em; }
+  .prosa li + li { margin-top: 0.35em; }
+  .hinweis-klein { color: var(--text-ruhig); font-size: 0.95rem; }
+</style>

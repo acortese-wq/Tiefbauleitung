@@ -3,11 +3,19 @@
     "id": "calfreisentobelbruecke",
     "name": "Instandsetzung Calfreisentobelbrücke",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
-    "rolle": "Strassenprojekt, Submission, Bauleitung",
+    "zeitraum": "2017",
+    "rolle": "Örtliche Bauleitung; zuvor Strassenprojekt und Submission",
     "fachgebiete": [
-      "kunstbauten"
-    ]
+      "kunstbauten",
+      "netz"
+    ],
+    "ort": "Calfreisen, Schanfiggerstrasse",
+    "bauherr": "Tiefbauamt Graubünden",
+    "kurz": "Hohlkastenbrücke vor dem Tunnel Calfreisen unter Verkehr instand gesetzt: Aufbeton, Lager, Trägerstege und ein neuer Kabelblock, talseitig geführt, um spätere Konflikte mit Leitungen zu vermeiden.",
+    "fallstudie": "calfreisentobelbruecke",
+    "bild": "calfreisentobelbruecke",
+    "bildAlt": "Calfreisentobelbrücke während der Instandsetzung: Bewehrung des Aufbetons auf der Fahrbahnplatte, im Hintergrund das Tunnelportal",
+    "bildNachweis": "Alessandro Cortese"
   },
   {
     "id": "plessurbruecke-litziruety",

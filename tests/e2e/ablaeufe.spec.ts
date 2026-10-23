@@ -339,6 +339,8 @@ test('Nutzenrechner rechnet in Franken und bietet Druck an', async ({ page }) =>
   await r.getByLabel('Stundensatz', { exact: true }).fill('65');
   await expect(r.locator('[data-wert="kostenMonat"]')).toHaveText(/^CHF 33.800$/);
   await expect(r.locator('[data-wert="paybackMonate"]')).not.toHaveText('');
+  await expect(r.locator('[data-wert="paybackRechnung"]')).toContainText('Monate');
+  await expect(r.locator('.rk-erklaerung')).toContainText('Was ist der Simple Payback?');
   await expect(r.getByRole('button', { name: /Drucken/ })).toBeVisible();
   await expect(r).not.toContainText('Erstgespräch');
 });

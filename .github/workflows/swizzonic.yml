@@ -28,10 +28,21 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: Testbrowser aus dem Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - name: Testbrowser installieren
-        # Hängt die Paketinstallation bei GitHub, früh abbrechen statt erst nach 20 Minuten
-        timeout-minutes: 6
-        run: npx playwright install --with-deps chromium
+        # Hängt die Installation bei GitHub, nach 3 Minuten neu versuchen; zuletzt ohne Systempakete,
+        # die auf dem Ubuntu-Runner ohnehin vorhanden sind
+        timeout-minutes: 12
+        run: |
+          for i in 1 2; do
+            timeout 180 npx playwright install --with-deps chromium && exit 0
+            echo "::warning::Installation des Testbrowsers fehlgeschlagen (Versuch $i), neuer Versuch"
+          done
+          timeout 180 npx playwright install chromium
       - name: Build für tiefbauleitung.com und Tests an der Wurzel
         run: npm run test:swizzonic
       - name: Hinweis, falls Zugangsdaten fehlen

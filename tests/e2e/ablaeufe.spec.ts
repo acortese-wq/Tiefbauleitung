@@ -253,3 +253,14 @@ test('Referenz Jenins zeigt Ort, Kurzbeschrieb, Netzbau-Filter und Link zur Fall
   const text = await page.locator('main').innerText();
   for (const intern of ['Walo', 'Repower', 'Swisscom', 'Fromm', 'Franken', 'Parzelle']) expect(text).not.toContain(intern);
 });
+
+test('Referenz Plessurbrücke Sassal zeigt Jahre, Bild und Fallstudie ohne Namen aus den Protokollen', async ({ page }) => {
+  await page.goto('/projekte/');
+  const eintrag = page.locator('.ref-liste li', { hasText: 'Plessurbrücke Sassal' });
+  await expect(eintrag).toContainText('2020–2021');
+  await eintrag.getByRole('link', { name: /Fallstudie lesen/ }).click();
+  await expect(page.locator('h1')).toContainText('Plessurbrücke Sassal');
+  await expect(page.locator('main img[src*="sassal-werkleitungen"]')).toHaveCount(1);
+  const text = await page.locator('main').innerText();
+  for (const intern of ['Vetsch', 'Casutt', 'Stoffel', 'IBC', 'Swisscom', 'UPC', 'Parzelle']) expect(text).not.toContain(intern);
+});

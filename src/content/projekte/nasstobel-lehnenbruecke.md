@@ -2,7 +2,7 @@
 title: Lehnenbrücke Nasstobel – Brandacker
 kurz: Ausbau der Schanfiggerstrasse an einer steilen Felsflanke ob Chur. Verbreiterung talseitig über eine Lehnenbrücke, Ersatz der Nasstobelbrücke, Bauen unter Verkehr.
 art: beruflich
-zeitraum: Tiefbauamt Graubünden, Bezirk 1 Chur
+zeitraum: 2013–2016, Tiefbauamt Graubünden
 rolle: Ausführungsprojekt, Submission und Bauleitung
 technologie: [Lehnenbrücke, Brückenersatz, Fundation auf Fels, Strassenentwässerung, Bauen unter Verkehr]
 kompetenzen: [tiefbau-infrastruktur]
@@ -37,6 +37,8 @@ Die Schanfiggerstrasse verbindet Chur mit dem Schanfigg und Arosa; der gesamte V
 - **Entwässerung neu geordnet.** Weil das Wasser wegen der Lehnenbrücke nicht mehr über die Schulter abfliessen konnte, wird es in Rigolen gefasst und grösstenteils ins Nasstobel abgeleitet. Das schont die steilen, wenig stabilen Hangschuttflächen darunter.
 
 ## Bauen unter Verkehr
+
+Ausgeführt wurde das Projekt von Herbst 2013 bis November 2016 (gemäss öffentlicher Ausschreibung und Referenzangabe der Bauunternehmung).
 
 Die Strasse ist die einzige Zufahrt ins Schanfigg. Das Projekt sah deshalb den Ausbau unter Verkehr vor, in mehreren Jahresetappen, mit Lichtsignalanlage oder Handregelung und möglichst freier Durchfahrt an Wochenenden und in der Hauptreisezeit. Installationsflächen gibt es an der Felsflanke kaum; vorgesehen waren temporäre Installationsplattformen.
 

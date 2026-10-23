@@ -28,11 +28,19 @@
     "id": "plessurbruecke-sassal",
     "name": "Plessurbrücke Sassal",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
-    "rolle": "Submissionsgrundlagen, Bauleitung",
+    "zeitraum": "2020–2021",
+    "rolle": "Örtliche Bauleitung; zuvor Submissionsgrundlagen",
     "fachgebiete": [
-      "kunstbauten"
-    ]
+      "kunstbauten",
+      "netz"
+    ],
+    "ort": "Chur, Meiersbodenstrasse",
+    "bauherr": "Tiefbauamt Graubünden",
+    "kurz": "Ersatzneubau einer Brücke von 1967 als Stahlverbundbrücke mit Hilfsbrücke, direkt neben der Bahnlinie Chur–Arosa; Druckleitung und Werkleitungen umgelegt und in die neue Brücke integriert.",
+    "fallstudie": "plessurbruecke-sassal",
+    "bild": "plessurbruecke-sassal",
+    "bildAlt": "Neue Plessurbrücke Sassal aus der Luft kurz vor Bauende: Brücke über der Plessur, rechts die Bahnlinie unter einer Steinschlaggalerie",
+    "bildNachweis": "Alessandro Cortese"
   },
   {
     "id": "rheinbruecke-flaesch-kolk",
@@ -87,7 +95,7 @@
     "id": "treuschtobelbruecke",
     "name": "Safienstrasse, Treuschtobelbrücke",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
+    "zeitraum": "2022",
     "rolle": "Ingenieurausschreibung, Auflageprojekt",
     "fachgebiete": [
       "kunstbauten",
@@ -187,7 +195,7 @@
     "id": "nasstobel-brandacker",
     "name": "Lehnenbrücke Nasstobel – Brandacker",
     "arbeitgeber": "Tiefbauamt Graubünden",
-    "zeitraum": "2013–2025",
+    "zeitraum": "2013–2016",
     "rolle": "Ausführungsprojekt, Submission, Bauleitung",
     "fachgebiete": [
       "kunstbauten",

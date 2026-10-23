@@ -1,0 +1,47 @@
+# Baut die Seite für https://tiefbauleitung.com, testet sie und lädt sie per FTPS zu Swizzonic hoch.
+# Voraussetzung: Repository-Secrets SWIZZONIC_FTP_SERVER, SWIZZONIC_FTP_USER, SWIZZONIC_FTP_PASSWORD
+# (Settings → Secrets and variables → Actions). Fehlen sie, wird gebaut und getestet, aber nichts hochgeladen.
+name: Swizzonic
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: swizzonic
+  cancel-in-progress: false
+
+jobs:
+  bauen-testen-hochladen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FTP_SERVER: ${{ secrets.SWIZZONIC_FTP_SERVER }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Build für tiefbauleitung.com und Tests an der Wurzel
+        run: npm run test:swizzonic
+      - name: Hinweis, falls Zugangsdaten fehlen
+        if: env.FTP_SERVER == ''
+        run: echo "::notice::Keine Swizzonic-Zugangsdaten hinterlegt – Build getestet, aber nicht hochgeladen."
+      - name: Per FTPS zu Swizzonic hochladen
+        if: env.FTP_SERVER != ''
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.SWIZZONIC_FTP_SERVER }}
+          username: ${{ secrets.SWIZZONIC_FTP_USER }}
+          password: ${{ secrets.SWIZZONIC_FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./dist/
+          server-dir: ./

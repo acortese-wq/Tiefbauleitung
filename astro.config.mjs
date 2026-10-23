@@ -9,10 +9,14 @@ import { fileURLToPath } from 'node:url';
 // Die Admin-Oberfläche (Keystatic) läuft nur lokal mit `npm run admin`.
 // Im Produktions-Build ist sie nicht enthalten und damit nicht angreifbar.
 const enableAdmin = process.env.KEYSTATIC === 'true';
-// DEPLOY_ZIEL=github-pages erzeugt eine rein statische Seite ohne Node-Server.
+// DEPLOY_ZIEL=github-pages oder swizzonic erzeugt eine rein statische Seite ohne Node-Server.
 const githubPages = process.env.DEPLOY_ZIEL === 'github-pages';
-const formular = process.env.PUBLIC_CONTACT_FORM === 'true' && !githubPages;
-const site = process.env.SITE_URL || (githubPages ? 'https://acortese-wq.github.io' : 'https://www.example.ch');
+const swizzonic = process.env.DEPLOY_ZIEL === 'swizzonic';
+const statisch = githubPages || swizzonic;
+const formular = process.env.PUBLIC_CONTACT_FORM === 'true' && !statisch;
+const site =
+  process.env.SITE_URL ||
+  (githubPages ? 'https://acortese-wq.github.io' : swizzonic ? 'https://tiefbauleitung.com' : 'https://www.example.ch');
 // GitHub Pages aus dem Repository «Tiefbauleitung» liegt im Unterordner /Tiefbauleitung.
 const base = githubPages ? process.env.BASE_PATH || '/Tiefbauleitung' : undefined;
 
@@ -89,7 +93,7 @@ export default defineConfig({
   site,
   base,
   output: 'static',
-  adapter: githubPages ? undefined : node({ mode: 'standalone', bodySizeLimit: 32 * 1024 }),
+  adapter: statisch ? undefined : node({ mode: 'standalone', bodySizeLimit: 32 * 1024 }),
   trailingSlash: 'ignore',
   integrations,
   build: { inlineStylesheets: 'never' },

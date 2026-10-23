@@ -22,7 +22,9 @@
     "test:alle": "npm run test && npm run build && npm run test:e2e && npm run test:varianten",
     "audit": "npm audit",
     "build:pages": "DEPLOY_ZIEL=github-pages astro build && pagefind --site dist && touch dist/.nojekyll",
-    "test:pages": "npm run build:pages && playwright test -c playwright.pages.config.ts"
+    "test:pages": "npm run build:pages && playwright test -c playwright.pages.config.ts",
+    "build:swizzonic": "DEPLOY_ZIEL=swizzonic astro build && pagefind --site dist && cp deploy/swizzonic/.htaccess dist/.htaccess && cp deploy/swizzonic/_astro/.htaccess dist/_astro/.htaccess",
+    "test:swizzonic": "npm run build:swizzonic && playwright test -c playwright.swizzonic.config.ts"
   },
   "dependencies": {
     "@astrojs/node": "11.1.6",

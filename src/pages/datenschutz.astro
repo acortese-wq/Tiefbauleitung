@@ -2,8 +2,8 @@
 import Basis from '../layouts/Basis.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
 import { person } from '../data/person';
-import { githubPages, offenePunkteZeigen } from '../lib/einstellungen';
-const formularAktiv = import.meta.env.PUBLIC_CONTACT_FORM === 'true' && !githubPages;
+import { githubPages, swizzonic, statisch, offenePunkteZeigen } from '../lib/einstellungen';
+const formularAktiv = import.meta.env.PUBLIC_CONTACT_FORM === 'true' && !statisch;
 ---
 <Basis title="Datenschutzerklärung" description="Datenschutzerklärung der persönlichen Webseite von Alessandro Cortese nach dem Schweizer Datenschutzgesetz (DSG).">
   <Seitenkopf titel="Datenschutz" lead="Welche Daten diese Webseite bearbeitet, wozu und wie lange." krumen={[{ name: 'Datenschutz' }]} />
@@ -36,6 +36,13 @@ const formularAktiv = import.meta.env.PUBLIC_CONTACT_FORM === 'true' && !githubP
           verarbeitet GitHub technisch notwendige Angaben wie IP-Adresse, Zeitpunkt, aufgerufene Adresse und
           Browserkennung, um die Seite auszuliefern und den Dienst zu schützen. Details stehen in der
           <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener" target="_blank">Datenschutzerklärung von GitHub</a>.
+        </p>
+      ) : swizzonic ? (
+        <p>
+          Die Webseite wird bei der Swizzonic AG mit Sitz in Zürich betrieben (Produkt SWIZZ Hosting). Beim Aufruf jeder
+          Seite verarbeitet der Server technisch notwendige Angaben wie IP-Adresse, Zeitpunkt, aufgerufene Adresse und
+          Browserkennung. Diese Angaben dienen der Auslieferung der Seite, dem sicheren Betrieb und der Fehlersuche.
+          Details stehen in den Datenschutzbestimmungen auf <a href="https://www.swizzonic.ch/" rel="noopener" target="_blank">swizzonic.ch</a>.
         </p>
       ) : (
         <p>
@@ -74,6 +81,12 @@ const formularAktiv = import.meta.env.PUBLIC_CONTACT_FORM === 'true' && !githubP
         <p>
           Weil die Webseite über GitHub Pages ausgeliefert wird, werden die oben genannten technischen Angaben an GitHub
           in den USA und gegebenenfalls in weitere Länder bekanntgegeben, in denen GitHub Server betreibt.
+        </p>
+      ) : swizzonic ? (
+        <p>
+          Die Webseite wird bei einem Schweizer Anbieter betrieben. Swizzonic gehört zur europäischen team.blue-Gruppe;
+          ob und in welchem Umfang technische Angaben ausserhalb der Schweiz bearbeitet werden, richtet sich nach den
+          Bestimmungen von Swizzonic. Über die Webseite selbst gebe ich keine Personendaten ins Ausland bekannt.
         </p>
       ) : (
         <p>

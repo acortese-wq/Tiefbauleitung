@@ -69,6 +69,45 @@ Der Workflow baut und testet auch Pull Requests auf `main`, veröffentlicht sie 
 (`.github/dependabot.yml`) schlägt wöchentlich npm-Updates und monatlich Action-Updates als Pull Request vor.
 Zusammenführen erst, wenn der Workflow grün ist.
 
+## Deployment auf Swizzonic (tiefbauleitung.com)
+
+Statischer Build an der Domain-Wurzel: `npm run build:swizzonic` (Ordner `dist/`, inklusive `.htaccess` mit https,
+www-Umleitung, Sicherheits-Headern, Zwischenspeicher-Regeln und 404-Seite). Tests: `npm run test:swizzonic`.
+
+### Einmalig bei Swizzonic
+
+1. Im Kundenkonto bei **SWIZZ HOSTING** auf **Aktivieren** klicken und die Domain `tiefbauleitung.com` wählen
+   (kostenloses Paket zur Domain). Keine kostenpflichtigen Pakete (Web Hosting, WordPress, Sitebuilder) wählen.
+2. In der Hosting-Verwaltung (cPanel) **SSL/TLS** bzw. **Let's Encrypt** für `tiefbauleitung.com` und
+   `www.tiefbauleitung.com` einschalten.
+3. Unter **FTP-Konten** einen Benutzer anlegen, Verzeichnis `public_html`. Starkes Passwort verwenden.
+4. Serverstandort und Datenschutzbestimmungen im Vertrag prüfen und die Datenschutzerklärung bei Bedarf anpassen.
+
+### Einmalig bei GitHub
+
+*Settings → Secrets and variables → Actions → New repository secret*:
+
+| Name | Wert |
+|---|---|
+| `SWIZZONIC_FTP_SERVER` | FTP-Server aus der Hosting-Verwaltung, meist `ftp.tiefbauleitung.com` |
+| `SWIZZONIC_FTP_USER` | FTP-Benutzername, z. B. `deploy@tiefbauleitung.com` |
+| `SWIZZONIC_FTP_PASSWORD` | FTP-Passwort |
+
+Zugangsdaten nie in Dateien, Commits oder Chats schreiben.
+
+### Veröffentlichen
+
+Der Workflow `.github/workflows/swizzonic.yml` baut und testet bei jedem Push auf `main` und lädt danach per FTPS
+(verschlüsselt) hoch, sobald die Secrets vorhanden sind. Manuell: *Actions → Swizzonic → Run workflow*.
+Lehnt der Server FTPS ab, zuerst bei Swizzonic nachfragen; unverschlüsseltes FTP nicht verwenden.
+
+### Nach dem ersten Hochladen
+
+- https://tiefbauleitung.com aufrufen, Weiterleitung von http und www prüfen.
+- Header prüfen, z. B. mit https://securityheaders.com.
+- Domain in der Google Search Console anmelden und `https://tiefbauleitung.com/sitemap-index.xml` einreichen.
+- GitHub Pages danach abschalten oder auf die Domain umleiten, damit es keine doppelten Inhalte gibt.
+
 ## Deployment auf Infomaniak (Node.js)
 
 1. **Domain** bei Infomaniak registrieren oder übertragen. DNS auf das Hosting zeigen lassen.

@@ -1,21 +1,138 @@
 ---
 import Basis from '../layouts/Basis.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
-import { prompts, kategorieLabels, type Kategorie, type PromptVorlage } from '../data/prompts';
+import KiRadar from '../components/KiRadar.astro';
+import { prompts, kategorieLabels, type Kategorie } from '../data/prompts';
 import { einsatzfelder } from '../data/einsatzfelder';
+import { fuelle, beispielWerte } from '../lib/prompt';
 
-const fuellen = (p: PromptVorlage) => p.felder.reduce((t, f) => t.replaceAll(`{{${f.name}}}`, f.beispiel), p.vorlage);
 const kategorien = (Object.keys(kategorieLabels) as Kategorie[]).filter((k) => prompts.some((p) => p.kategorie === k));
+// Ohne JavaScript zeigt jede Werkbank den Prompt mit Beispielwerten
+const vorschau = (id: string) => {
+  const p = prompts.find((x) => x.id === id)!;
+  return fuelle(p.vorlage, p.felder, beispielWerte(p.felder));
+};
 ---
 <Basis
   title="KI-Labor: Prompts für die Bauleitung"
-  description="Geprüfte Prompt-Vorlagen für Bauleitung, Offertprüfung, Nachträge, Werkleitungen und Glasfaserausbau. Felder ausfüllen, Prompt kopieren, Ergebnis fachlich prüfen."
+  description="Werkbank für Prompts im Tiefbau und Netzbau: Angaben eintragen, Prompt passt sich an, Tabellen werden direkt im Browser geprüft. Dazu der KI-Radar mit aktuellen Ranglisten."
 >
   <Seitenkopf
     titel="KI-Labor"
-    lead="Prompt-Vorlagen für die Bauleitung im Tiefbau und Netzbau. Felder ausfüllen, Prompt kopieren und im KI-Werkzeug Ihrer Wahl verwenden. Alles läuft in Ihrem Browser, nichts wird gespeichert oder übermittelt."
+    lead="Prompt-Werkbank für die Bauleitung im Tiefbau und Netzbau. Links eintragen, was Sie wissen, in der Mitte entsteht der Prompt, rechts sehen Sie das Resultat. Alles läuft in Ihrem Browser, nichts wird gespeichert oder übermittelt."
     krumen={[{ name: 'KI-Labor' }]}
   />
+
+  <section class="abschnitt" aria-labelledby="werkbank-titel">
+    <div class="wrap wrap-breit">
+      <div class="abschnitt-kopf">
+        <p class="label">Werkbank</p>
+        <h2 id="werkbank-titel">Vorlage wählen, Angaben eintragen, Prompt kopieren</h2>
+        <p>Jede Vorlage folgt denselben Regeln wie meine eigenen Assistenten: Quellen markieren, nichts erfinden, Fehlendes als OFFEN ausweisen, bei Risiko an die Fachperson eskalieren, Selbstcheck vor der Antwort.</p>
+      </div>
+
+      <nav class="wahl" aria-label="Vorlagen" data-wahl hidden>
+        {kategorien.map((k) => (
+          <div class="wahl-gruppe">
+            <p class="label">{kategorieLabels[k]}</p>
+            <ul>
+              {prompts.filter((p) => p.kategorie === k).map((p) => (
+                <li><a href={`#${p.id}`} data-wahl-id={p.id}>{p.titel}{p.schnellpruefung && <span class="wahl-badge">rechnet</span>}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+
+      <p class="hinweis datenschutz"><strong>Datenschutz:</strong> Keine Personendaten, Preise aus laufenden Vergaben oder vertraulichen Unterlagen in öffentliche KI-Dienste eingeben. Die Prüfung von Tabellen hier läuft nur in Ihrem Browser; was Sie danach in ein KI-Werkzeug kopieren, entscheiden Sie.</p>
+
+      {prompts.map((p) => (
+        <article class="werkbank" id={p.id} data-werkbank={p.id} aria-labelledby={`${p.id}-titel`}>
+          <header class="wb-kopf">
+            <p class="label">{kategorieLabels[p.kategorie]}</p>
+            <h3 id={`${p.id}-titel`}>{p.titel}</h3>
+            <p>{p.zweck}</p>
+          </header>
+
+          <div class="wb-spalten">
+            <div class="wb-spalte wb-eingabe">
+              <div class="wb-spaltenkopf">
+                <span class="wb-nr">1</span><h4>Angaben</h4>
+                <span class="wb-fortschritt" data-fortschritt></span>
+              </div>
+              <form class="wb-form" data-form novalidate>
+                {p.felder.map((f) => (
+                  <div class:list={['wb-feld', `typ-${f.typ}`]}>
+                    {f.typ === 'checks' ? (
+                      <fieldset>
+                        <legend>{f.label}</legend>
+                        {f.optionen?.map((o) => (
+                          <label class="wb-check">
+                            <input type="checkbox" name={f.name} value={o.wert} checked={Array.isArray(f.vorgabe) && f.vorgabe.includes(o.wert)} />
+                            <span>{o.label}</span>
+                          </label>
+                        ))}
+                      </fieldset>
+                    ) : (
+                      <label>
+                        <span class="wb-label">{f.label}{f.pflicht && <span class="wb-pflicht" title="Pflichtangabe"> *</span>}</span>
+                        {f.typ === 'select' ? (
+                          <select name={f.name}>
+                            {f.optionen?.map((o) => <option value={o.wert} selected={o.wert === f.vorgabe}>{o.label}</option>)}
+                          </select>
+                        ) : f.typ === 'text' ? (
+                          <input type="text" name={f.name} placeholder={f.beispiel} autocomplete="off" required={f.pflicht} />
+                        ) : (
+                          <textarea name={f.name} rows={f.typ === 'tabelle' ? 7 : 4} placeholder={f.typ === 'tabelle' ? 'Pos → Text → Menge → Einheit → EP → Betrag' : f.beispiel} spellcheck={f.typ !== 'tabelle'} required={f.pflicht}></textarea>
+                        )}
+                        {f.hilfe && <small>{f.hilfe}</small>}
+                      </label>
+                    )}
+                  </div>
+                ))}
+              </form>
+              <div class="wb-knoepfe">
+                <button type="button" class="btn btn-ghost" data-beispiel hidden>Beispiel einsetzen</button>
+                <button type="button" class="btn btn-ghost" data-leeren hidden>Leeren</button>
+              </div>
+            </div>
+
+            <div class="wb-spalte wb-prompt">
+              <div class="wb-spaltenkopf">
+                <span class="wb-nr">2</span><h4>Prompt</h4>
+                <span class="wb-zeichen" data-zeichen></span>
+              </div>
+              <pre tabindex="0" aria-label={`Prompt: ${p.titel}`} data-prompt>{vorschau(p.id)}</pre>
+              <div class="wb-knoepfe">
+                <button type="button" class="btn" data-kopieren hidden>Prompt kopieren</button>
+                <span class="wb-status" role="status" aria-live="polite" data-status></span>
+              </div>
+            </div>
+
+            <div class="wb-spalte wb-resultat">
+              <div class="wb-spaltenkopf">
+                <span class="wb-nr">3</span><h4>Resultat</h4>
+                {p.schnellpruefung && <span class="wb-tag">Schnellprüfung im Browser</span>}
+              </div>
+              {p.schnellpruefung ? (
+                <div class="wb-pruefung" data-pruefung aria-live="polite">
+                  <p class="wb-leer">Tabelle links einfügen oder <strong>Beispiel einsetzen</strong>. Die Prüfung rechnet sofort: Rechenfehler, fehlende Angaben, Einheiten, Doppelpositionen, Kostentreiber{p.id === 'offertvergleich' ? ', Ausreisser und Spekulationsverdacht' : p.id === 'ausmass' ? ', Mehr- und Minderkosten' : ''}.</p>
+                </div>
+              ) : (
+                <div class="wb-beispiel">
+                  <p class="wb-beispiel-titel">So sieht ein gutes Resultat aus <span>(Beispiel)</span></p>
+                  <ul>{p.beispielResultat?.map((z) => <li set:html={z.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />)}</ul>
+                </div>
+              )}
+              <p class="wb-pruefen"><strong>Selbst prüfen:</strong> {p.pruefen}</p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <KiRadar />
 
   <section class="abschnitt" aria-labelledby="felder-titel">
     <div class="wrap">
@@ -40,99 +157,280 @@ const kategorien = (Object.keys(kategorieLabels) as Kategorie[]).filter((k) => p
       <p class="felder-grenze"><strong>Was KI nicht kann:</strong> Verantwortung übernehmen, die Baustelle sehen, einen Vertrag verbindlich auslegen oder einen Vergabeentscheid treffen.</p>
     </div>
   </section>
-
-  <section class="abschnitt" aria-labelledby="vorlagen-titel">
-    <div class="wrap">
-      <div class="abschnitt-kopf">
-        <p class="label">Zum Ausprobieren</p>
-        <h2 id="vorlagen-titel">Prompt-Vorlagen</h2>
-      </div>
-      <div class="labor-regeln">
-        <div>
-          <p class="label">So sind die Vorlagen gebaut</p>
-          <p>Rolle, Kontext, klare Aufgabe in Schritten, festes Ausgabeformat und eine Grenze, was die KI nicht entscheiden soll. Dieselben Prinzipien wie bei meinen Agenten: begrenzte Aufgabe, kontrollierter Ablauf, Prüfung durch die Fachperson.</p>
-        </div>
-        <p class="hinweis"><strong>Datenschutz:</strong> Keine Personendaten, Preise aus laufenden Vergaben oder vertraulichen Unterlagen in öffentliche KI-Dienste eingeben. Dafür eine vom Arbeitgeber freigegebene Lösung verwenden oder die Daten vorher anonymisieren.</p>
-      </div>
-
-      <div class="labor-filter" data-laborfilter role="group" aria-label="Vorlagen nach Thema filtern" hidden>
-        <button type="button" data-wert="alle" aria-pressed="true">Alle<span>{prompts.length}</span></button>
-        {kategorien.map((k) => (
-          <button type="button" data-wert={k} aria-pressed="false">{kategorieLabels[k]}<span>{prompts.filter((p) => p.kategorie === k).length}</span></button>
-        ))}
-      </div>
-
-      <ol class="labor-liste">
-        {prompts.map((p) => (
-          <li class="labor-karte" data-kategorie={p.kategorie} data-vorlage={p.vorlage} id={p.id}>
-            <p class="label">{kategorieLabels[p.kategorie]}</p>
-            <h2>{p.titel}</h2>
-            <p class="labor-zweck">{p.zweck}</p>
-            <div class="labor-raster">
-              <div class="labor-felder">
-                {p.felder.map((f) => (
-                  <label>
-                    <span>{f.label}</span>
-                    <input type="text" name={f.name} placeholder={f.beispiel} autocomplete="off" />
-                  </label>
-                ))}
-                <p class="labor-tipp">Leere Felder verwenden das Beispiel.</p>
-              </div>
-              <div class="labor-ausgabe">
-                <pre tabindex="0" aria-label={`Prompt: ${p.titel}`}><code>{fuellen(p)}</code></pre>
-                <div class="labor-aktionen">
-                  <button type="button" class="btn" data-kopieren hidden>Prompt kopieren</button>
-                  <span class="labor-status" role="status" aria-live="polite"></span>
-                </div>
-              </div>
-            </div>
-            <p class="labor-pruefen"><strong>Selbst prüfen:</strong> {p.pruefen}</p>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
 </Basis>
 
 <script>
-  const filter = document.querySelector<HTMLElement>('[data-laborfilter]');
-  const karten = Array.from(document.querySelectorAll<HTMLElement>('.labor-karte'));
+  import { prompts } from '../data/prompts';
+  import { fuelle, beispielWerte, fehlendePflichtfelder, type Werte } from '../lib/prompt';
+  import { pruefe, type Pruefergebnis } from '../lib/tabellenpruefung';
 
-  if (filter) {
-    filter.hidden = false;
-    filter.addEventListener('click', (e) => {
-      const knopf = (e.target as HTMLElement).closest('button');
-      if (!knopf) return;
-      const wert = knopf.dataset.wert ?? 'alle';
-      for (const k of karten) k.hidden = wert !== 'alle' && k.dataset.kategorie !== wert;
-      for (const b of filter.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b === knopf));
-    });
+  const werkbaenke = Array.from(document.querySelectorAll<HTMLElement>('[data-werkbank]'));
+  const wahl = document.querySelector<HTMLElement>('[data-wahl]');
+
+  // ── Auswahl: eine Werkbank sichtbar, Hash in der Adresse ──
+  function zeige(id: string, scroll = false) {
+    const ziel = werkbaenke.find((w) => w.id === id) ?? werkbaenke[0];
+    for (const w of werkbaenke) w.hidden = w !== ziel;
+    for (const a of wahl?.querySelectorAll<HTMLAnchorElement>('[data-wahl-id]') ?? []) {
+      if (a.dataset.wahlId === ziel.id) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    }
+    if (scroll) ziel.scrollIntoView({ block: 'start' });
+  }
+  if (wahl && werkbaenke.length) {
+    wahl.hidden = false;
+    const start = location.hash.slice(1);
+    zeige(start, werkbaenke.some((w) => w.id === start));
+    window.addEventListener('hashchange', () => zeige(location.hash.slice(1), true));
   }
 
-  for (const karte of karten) {
-    const vorlage = karte.dataset.vorlage ?? '';
-    const code = karte.querySelector('code');
-    const felder = Array.from(karte.querySelectorAll<HTMLInputElement>('input'));
-    const knopf = karte.querySelector<HTMLButtonElement>('[data-kopieren]');
-    const status = karte.querySelector<HTMLElement>('.labor-status');
-    const text = () => felder.reduce((t, f) => t.replaceAll(`{{${f.name}}}`, f.value.trim() || f.placeholder), vorlage);
-    for (const f of felder) f.addEventListener('input', () => { if (code) code.textContent = text(); });
-    if (knopf && navigator.clipboard) {
-      knopf.hidden = false;
-      knopf.addEventListener('click', async () => {
+  // ── Werkbank: Formular → Prompt → Resultat ──
+  for (const wb of werkbaenke) {
+    const vorlage = prompts.find((p) => p.id === wb.dataset.werkbank);
+    if (!vorlage) continue;
+    const form = wb.querySelector<HTMLFormElement>('[data-form]')!;
+    const pre = wb.querySelector<HTMLElement>('[data-prompt]')!;
+    const zeichen = wb.querySelector<HTMLElement>('[data-zeichen]');
+    const fortschritt = wb.querySelector<HTMLElement>('[data-fortschritt]');
+    const pruefung = wb.querySelector<HTMLElement>('[data-pruefung]');
+    const status = wb.querySelector<HTMLElement>('[data-status]');
+    const knopfKopieren = wb.querySelector<HTMLButtonElement>('[data-kopieren]');
+    const knopfBeispiel = wb.querySelector<HTMLButtonElement>('[data-beispiel]');
+    const knopfLeeren = wb.querySelector<HTMLButtonElement>('[data-leeren]');
+
+    const werte = (): Werte => {
+      const w: Werte = {};
+      for (const f of vorlage.felder) {
+        if (f.typ === 'checks') w[f.name] = Array.from(form.querySelectorAll<HTMLInputElement>(`input[name="${f.name}"]:checked`)).map((i) => i.value);
+        else w[f.name] = (form.elements.namedItem(f.name) as HTMLInputElement | null)?.value ?? '';
+      }
+      return w;
+    };
+
+    const zeichnePrompt = (text: string) => {
+      pre.replaceChildren();
+      for (const teil of text.split(/(\[FEHLT: [^\]]+\])/)) {
+        if (!teil) continue;
+        if (teil.startsWith('[FEHLT: ')) {
+          const m = document.createElement('mark');
+          m.textContent = teil;
+          pre.append(m);
+        } else pre.append(teil);
+      }
+    };
+
+    const aktualisiere = () => {
+      const w = werte();
+      const text = fuelle(vorlage.vorlage, vorlage.felder, w);
+      zeichnePrompt(text);
+      if (zeichen) zeichen.textContent = `${text.length.toLocaleString('de-CH')} Zeichen`;
+      const pflicht = vorlage.felder.filter((f) => f.pflicht);
+      const fehlt = fehlendePflichtfelder(vorlage.felder, w);
+      if (fortschritt) {
+        fortschritt.textContent = fehlt.length ? `${pflicht.length - fehlt.length} von ${pflicht.length} Pflichtangaben` : 'vollständig ✓';
+        fortschritt.classList.toggle('ok', !fehlt.length);
+      }
+      if (pruefung) zeichnePruefung(pruefung, pruefe(String(w.tabelle ?? '')));
+      return text;
+    };
+
+    form.addEventListener('input', aktualisiere);
+    form.addEventListener('change', aktualisiere);
+
+    if (knopfBeispiel) {
+      knopfBeispiel.hidden = false;
+      knopfBeispiel.addEventListener('click', () => {
+        const b = beispielWerte(vorlage.felder);
+        for (const f of vorlage.felder) {
+          if (f.typ === 'checks') {
+            for (const i of form.querySelectorAll<HTMLInputElement>(`input[name="${f.name}"]`)) i.checked = (b[f.name] as string[]).includes(i.value);
+          } else if (f.typ !== 'select') {
+            const el = form.elements.namedItem(f.name) as HTMLInputElement | null;
+            if (el) el.value = String(b[f.name] ?? '');
+          }
+        }
+        aktualisiere();
+      });
+    }
+    if (knopfLeeren) {
+      knopfLeeren.hidden = false;
+      knopfLeeren.addEventListener('click', () => {
+        form.reset();
+        aktualisiere();
+      });
+    }
+    if (knopfKopieren && navigator.clipboard) {
+      knopfKopieren.hidden = false;
+      knopfKopieren.addEventListener('click', async () => {
+        const text = aktualisiere();
+        const offen = (text.match(/\[FEHLT: /g) ?? []).length;
         try {
-          await navigator.clipboard.writeText(text());
-          if (status) status.textContent = 'Kopiert.';
+          await navigator.clipboard.writeText(text);
+          if (status) status.textContent = offen ? `Kopiert – ${offen} Angabe${offen > 1 ? 'n fehlen' : ' fehlt'} noch.` : 'Kopiert.';
         } catch {
           if (status) status.textContent = 'Kopieren nicht möglich, bitte Text markieren.';
         }
-        setTimeout(() => { if (status) status.textContent = ''; }, 3000);
+        setTimeout(() => { if (status) status.textContent = ''; }, 3500);
       });
     }
+    aktualisiere();
+  }
+
+  function zeichnePruefung(ziel: HTMLElement, r: Pruefergebnis) {
+    if (r.art === 'leer') {
+      ziel.querySelector('.wb-leer')?.removeAttribute('hidden');
+      ziel.querySelectorAll('.wb-ergebnis').forEach((e) => e.remove());
+      return;
+    }
+    ziel.querySelector('.wb-leer')?.setAttribute('hidden', '');
+    ziel.querySelectorAll('.wb-ergebnis').forEach((e) => e.remove());
+    const box = document.createElement('div');
+    box.className = 'wb-ergebnis';
+
+    const kz = document.createElement('dl');
+    kz.className = 'wb-kennzahlen';
+    for (const k of r.kennzahlen) {
+      const d = document.createElement('div');
+      const dt = document.createElement('dt');
+      dt.textContent = k.label;
+      const dd = document.createElement('dd');
+      dd.textContent = k.wert;
+      d.append(dt, dd);
+      kz.append(d);
+    }
+    box.append(kz);
+
+    const symbol = { fehler: '✕', warnung: '!', hinweis: 'i', ok: '✓' } as const;
+    for (const b of r.befunde) {
+      const det = document.createElement('details');
+      det.className = `wb-befund stufe-${b.stufe}`;
+      det.open = b.stufe === 'fehler';
+      const sum = document.createElement('summary');
+      const s = document.createElement('span');
+      s.className = 'wb-symbol';
+      s.setAttribute('aria-hidden', 'true');
+      s.textContent = symbol[b.stufe];
+      sum.append(s, b.titel);
+      det.append(sum);
+      if (b.details?.length) {
+        const ul = document.createElement('ul');
+        for (const z of b.details.slice(0, 12)) {
+          const li = document.createElement('li');
+          li.textContent = z;
+          ul.append(li);
+        }
+        if (b.details.length > 12) {
+          const li = document.createElement('li');
+          li.textContent = `… und ${b.details.length - 12} weitere`;
+          ul.append(li);
+        }
+        det.append(ul);
+      }
+      box.append(det);
+    }
+    const sp = document.createElement('p');
+    sp.className = 'wb-spalten-info';
+    sp.textContent = `Erkannt als ${r.art === 'lv' ? 'Leistungsverzeichnis' : r.art === 'offerten' ? 'Offertvergleich' : 'Ausmass'} · Spalten: ${r.spalten.join(' · ')}`;
+    box.append(sp);
+    ziel.append(box);
   }
 </script>
 
 <style>
+  .wrap-breit { max-width: 1480px; }
+
+  /* Auswahl */
+  .wahl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 24px; margin-bottom: 20px; }
+  .wahl[hidden] { display: none; }
+  .wahl ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 4px; }
+  .wahl a {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px;
+    padding: 8px 12px; border-radius: 8px; border: 1px solid var(--linie); background: var(--tiefe);
+    color: var(--text); text-decoration: none; font-size: 0.95rem; line-height: 1.3;
+  }
+  .wahl a:hover { border-color: var(--eis); }
+  .wahl a[aria-current='true'] { background: var(--eis); border-color: var(--eis); color: var(--nacht); font-weight: 600; }
+  .wahl-badge { font: 500 0.68rem var(--f-mono); text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor; opacity: 0.85; white-space: nowrap; }
+  .datenschutz { margin-bottom: 20px; }
+
+  /* Werkbank */
+  .werkbank { border: 1px solid var(--linie-hell); border-radius: 12px; background: var(--tiefe); padding: clamp(16px, 2.5vw, 28px); scroll-margin-top: 90px; }
+  .werkbank + .werkbank { margin-top: 24px; }
+  .werkbank[hidden] { display: none; }
+  .wb-kopf h3 { font-size: var(--s-2); margin-top: 4px; }
+  .wb-kopf p:not(.label) { color: var(--text-ruhig); margin-top: 6px; max-width: 80ch; }
+  .wb-spalten { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; margin-top: 20px; align-items: start; }
+  .wb-spalte { border: 1px solid var(--linie); border-radius: 10px; background: var(--nacht); padding: 14px; min-width: 0; }
+  .wb-spaltenkopf { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .wb-spaltenkopf h4 { font-size: 1.05rem; margin: 0; }
+  .wb-nr { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--eis); color: var(--eis); font: 600 0.8rem var(--f-mono); }
+  .wb-fortschritt, .wb-zeichen, .wb-tag { margin-left: auto; font: 500 0.75rem var(--f-mono); color: var(--signal); }
+  .wb-fortschritt.ok { color: var(--eis); }
+  .wb-zeichen { color: var(--text-ruhig); }
+  .wb-tag { color: var(--eis); }
+
+  .wb-form { display: grid; gap: 12px; }
+  .wb-feld label { display: grid; gap: 4px; }
+  .wb-label, .wb-feld legend { font: 500 0.8rem var(--f-mono); color: var(--text-ruhig); }
+  .wb-pflicht { color: var(--signal); }
+  .wb-feld small { font-size: 0.8rem; color: var(--text-ruhig); }
+  .wb-feld input[type='text'], .wb-feld textarea, .wb-feld select {
+    font: inherit; font-size: 0.93rem; min-height: 44px; padding: 8px 10px; border-radius: 8px; width: 100%;
+    border: 1px solid var(--linie-hell); background: var(--tiefe); color: var(--text);
+  }
+  .wb-feld textarea { resize: vertical; line-height: 1.45; }
+  .typ-tabelle textarea { font: 0.8rem/1.45 var(--f-mono); white-space: pre; overflow-x: auto; }
+  .wb-feld input::placeholder, .wb-feld textarea::placeholder { color: var(--text-ruhig); opacity: 0.75; }
+  .wb-feld :is(input, textarea, select):focus-visible { outline: 2px solid var(--eis); outline-offset: 1px; }
+  .wb-feld fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .wb-check { display: flex !important; grid-template-columns: none; align-items: center; gap: 8px; min-height: 36px; font-size: 0.92rem; cursor: pointer; }
+  .wb-check input { width: 18px; height: 18px; accent-color: var(--eis); flex: none; }
+  .wb-knoepfe { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
+
+  .wb-prompt pre {
+    margin: 0; max-height: 640px; overflow: auto; white-space: pre-wrap; word-break: break-word;
+    padding: 12px 14px; border-radius: 8px; border: 1px solid var(--linie); background: var(--tiefe);
+    font: 0.8rem/1.55 var(--f-mono); color: var(--text);
+  }
+  .wb-prompt pre:focus-visible { outline: 2px solid var(--eis); outline-offset: 2px; }
+  .wb-prompt :global(mark) { background: rgba(242, 166, 90, 0.18); color: var(--signal); border-radius: 3px; padding: 0 2px; }
+  .wb-status { font: 500 0.82rem var(--f-mono); color: var(--eis); }
+
+  .wb-leer { color: var(--text-ruhig); font-size: 0.93rem; }
+  .wb-pruefung :global(.wb-kennzahlen) { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 0 0 12px; }
+  .wb-pruefung :global(.wb-kennzahlen div) { border: 1px solid var(--linie); border-radius: 8px; padding: 8px 10px; background: var(--tiefe); }
+  .wb-pruefung :global(.wb-kennzahlen dt) { font: 500 0.72rem var(--f-mono); color: var(--text-ruhig); text-transform: uppercase; letter-spacing: 0.04em; }
+  .wb-pruefung :global(.wb-kennzahlen dd) { margin: 2px 0 0; font-weight: 600; font-size: 0.98rem; font-variant-numeric: tabular-nums; }
+  .wb-pruefung :global(.wb-befund) { border-left: 3px solid var(--linie-hell); padding: 6px 0 6px 10px; margin-top: 8px; }
+  .wb-pruefung :global(.wb-befund summary) { cursor: pointer; display: flex; gap: 8px; align-items: baseline; font-weight: 600; font-size: 0.93rem; min-height: 32px; }
+  .wb-pruefung :global(.wb-befund ul) { margin: 6px 0 0; padding-left: 1.2em; display: grid; gap: 3px; color: var(--text-ruhig); font-size: 0.85rem; }
+  .wb-pruefung :global(.wb-symbol) { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font: 700 0.75rem var(--f-mono); flex: none; }
+  .wb-pruefung :global(.stufe-fehler) { border-color: #ff7b72; }
+  .wb-pruefung :global(.stufe-fehler .wb-symbol) { background: #ff7b72; color: var(--nacht); }
+  .wb-pruefung :global(.stufe-warnung) { border-color: var(--signal); }
+  .wb-pruefung :global(.stufe-warnung .wb-symbol) { background: var(--signal); color: var(--nacht); }
+  .wb-pruefung :global(.stufe-hinweis) { border-color: var(--eis); }
+  .wb-pruefung :global(.stufe-hinweis .wb-symbol) { background: var(--eis); color: var(--nacht); }
+  .wb-pruefung :global(.stufe-ok) { border-color: #7ee2a8; }
+  .wb-pruefung :global(.stufe-ok .wb-symbol) { background: #7ee2a8; color: var(--nacht); }
+  .wb-pruefung :global(.wb-spalten-info) { margin-top: 12px; font: 0.72rem/1.4 var(--f-mono); color: var(--text-ruhig); }
+
+  .wb-beispiel-titel { font-weight: 600; }
+  .wb-beispiel-titel span { font-weight: 400; color: var(--text-ruhig); }
+  .wb-beispiel ul { margin: 8px 0 0; padding-left: 1.1em; display: grid; gap: 6px; font-size: 0.9rem; color: var(--text-ruhig); }
+  .wb-beispiel :global(strong) { color: var(--text); }
+  .wb-pruefen { margin-top: 14px; font-size: 0.86rem; color: var(--text-ruhig); }
+  .wb-pruefen strong { color: var(--signal); }
+
+  @media (max-width: 1180px) {
+    .wb-spalten { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+    .wb-resultat { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .wb-spalten { grid-template-columns: 1fr; }
+  }
+
+  /* Zehn Einsatzfelder */
   .felder { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: 18px; }
   .felder::before {
     content: ''; position: absolute; top: 8px; bottom: 8px; left: 50%; width: 0;
@@ -165,45 +463,5 @@ const kategorien = (Object.keys(kategorieLabels) as Kategorie[]).filter((k) => p
     .feld { grid-template-columns: 44px 1fr; gap: 12px; align-items: start; }
     .feld-nr { grid-column: 1; grid-row: 1; }
     .feld-karte, .feld:nth-child(even) .feld-karte { grid-column: 2; }
-  }
-  .labor-regeln { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: start; margin-bottom: 32px; }
-  .labor-regeln p:not(.label):not(.hinweis) { color: var(--text-ruhig); margin-top: 8px; max-width: 60ch; }
-  .labor-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-  .labor-filter[hidden] { display: none; }
-  .labor-filter button {
-    font: 500 0.82rem var(--f-mono); min-height: 40px; padding: 8px 14px; border-radius: 999px; cursor: pointer;
-    border: 1px solid var(--linie-hell); background: var(--tiefe); color: var(--text);
-  }
-  .labor-filter button span { color: var(--text-ruhig); margin-left: 6px; }
-  .labor-filter button[aria-pressed='true'] { background: var(--eis); border-color: var(--eis); color: var(--nacht); }
-  .labor-filter button[aria-pressed='true'] span { color: var(--nacht); }
-  .labor-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 24px; }
-  .labor-karte { border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); padding: clamp(18px, 3vw, 28px); }
-  .labor-karte[hidden] { display: none; }
-  .labor-karte h2 { font-size: var(--s-2); margin-top: 4px; }
-  .labor-zweck { color: var(--text-ruhig); margin-top: 6px; max-width: 70ch; }
-  .labor-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 20px; margin-top: 18px; }
-  .labor-felder { display: grid; gap: 12px; align-content: start; }
-  .labor-felder label { display: grid; gap: 4px; }
-  .labor-felder label span { font: 500 0.82rem var(--f-mono); color: var(--text-ruhig); }
-  .labor-felder input {
-    font: inherit; font-size: 0.95rem; min-height: 44px; padding: 8px 12px; border-radius: 8px;
-    border: 1px solid var(--linie-hell); background: var(--nacht); color: var(--text);
-  }
-  .labor-felder input::placeholder { color: var(--text-ruhig); opacity: 0.8; }
-  .labor-felder input:focus-visible { outline: 2px solid var(--eis); outline-offset: 1px; }
-  .labor-tipp { font-size: 0.85rem; color: var(--text-ruhig); }
-  .labor-ausgabe pre {
-    margin: 0; max-height: 360px; overflow: auto; white-space: pre-wrap; word-break: break-word;
-    padding: 14px 16px; border-radius: 8px; border: 1px solid var(--linie); background: var(--nacht);
-    font: 0.86rem/1.55 var(--f-mono); color: var(--text);
-  }
-  .labor-ausgabe pre:focus-visible { outline: 2px solid var(--eis); outline-offset: 2px; }
-  .labor-aktionen { display: flex; align-items: center; gap: 12px; margin-top: 10px; min-height: 44px; }
-  .labor-status { font: 500 0.85rem var(--f-mono); color: var(--eis); }
-  .labor-pruefen { margin-top: 16px; font-size: 0.93rem; color: var(--text-ruhig); }
-  .labor-pruefen strong { color: var(--signal); }
-  @media (max-width: 860px) {
-    .labor-regeln, .labor-raster { grid-template-columns: 1fr; }
   }
 </style>

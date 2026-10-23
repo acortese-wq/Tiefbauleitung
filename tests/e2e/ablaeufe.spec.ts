@@ -282,18 +282,50 @@ test('Fusszeile führt zur lesbaren Seitenübersicht mit allen Fallstudien', asy
   await expect(page.locator('main').getByRole('link', { name: 'XML-Sitemap' })).toHaveAttribute('href', /sitemap-index\.xml$/);
 });
 
-test('KI-Labor füllt Prompts live aus, filtert nach Thema und sendet nichts', async ({ page }) => {
+test('KI-Labor: Werkbank füllt den Prompt live und markiert fehlende Angaben, ohne externe Anfragen', async ({ page }) => {
   const anfragen: string[] = [];
   page.on('request', (r) => anfragen.push(r.url()));
-  await page.goto('/ki-labor/');
-  await expect(page.locator('h1')).toContainText('KI-Labor');
-  const karte = page.locator('#nachtrag');
-  await karte.getByLabel('Nachgetragene Leistung').fill('Felsabtrag im Graben');
-  await expect(karte.locator('pre')).toContainText('Nachtrag: Felsabtrag im Graben');
-  await expect(karte.locator('pre')).not.toContainText('{{');
-  await page.getByRole('button', { name: /Netzbau und Werkleitungen/ }).click();
-  await expect(page.locator('#trasse')).toBeVisible();
-  await expect(page.locator('#nachtrag')).toBeHidden();
+  await page.goto('/ki-labor/#nachtrag');
+  const wb = page.locator('#nachtrag');
+  await expect(wb).toBeVisible();
+  await expect(page.locator('#lv-plausibilitaet')).toBeHidden();
+  await expect(wb.locator('[data-prompt]')).toContainText('[FEHLT: Nachgetragene Leistung]');
+  await wb.getByLabel('Nachgetragene Leistung').fill('Felsabtrag im Graben');
+  await expect(wb.locator('[data-prompt]')).toContainText('Nachtrag: Felsabtrag im Graben');
+  await expect(wb.locator('[data-prompt]')).not.toContainText('{{');
   const extern = anfragen.filter((u) => !u.startsWith(new URL(page.url()).origin));
   expect(extern).toEqual([]);
+});
+
+test('KI-Labor: Schnellprüfung rechnet ein LV im Browser nach', async ({ page }) => {
+  await page.goto('/ki-labor/#lv-plausibilitaet');
+  const wb = page.locator('#lv-plausibilitaet');
+  await wb.getByRole('button', { name: 'Beispiel einsetzen' }).click();
+  const res = wb.locator('[data-pruefung]');
+  await expect(res).toContainText('Rechenfehler');
+  await expect(res).toContainText('Summenzeile stimmt nicht');
+  await expect(res).toContainText('Doppelposition');
+  await expect(wb.locator('.wb-fortschritt')).toContainText('vollständig');
+  await expect(wb.locator('[data-prompt]')).toContainText('UNTERLAGE [DOK]');
+});
+
+test('KI-Labor: Offertvergleich erkennt Anbieter und Spekulationsverdacht', async ({ page }) => {
+  await page.goto('/ki-labor/');
+  await page.getByRole('navigation', { name: 'Vorlagen' }).getByRole('link', { name: /Offerten vergleichen/ }).click();
+  const wb = page.locator('#offertvergleich');
+  await wb.getByRole('button', { name: 'Beispiel einsetzen' }).click();
+  await expect(wb.locator('[data-pruefung]')).toContainText('Rangliste nach Total');
+  await expect(wb.locator('[data-pruefung]')).toContainText('unter 50 %');
+});
+
+test('KI-Labor zeigt zehn Einsatzfelder und den KI-Radar', async ({ page }) => {
+  await page.goto('/ki-labor/');
+  await expect(page.locator('.felder > li')).toHaveCount(10);
+  const radar = page.locator('[data-radar]');
+  await expect(radar.locator('[role="tabpanel"]:visible li')).toHaveCount(10);
+  await radar.getByRole('tab', { name: 'Deutsch' }).click();
+  await expect(radar.getByRole('tab', { name: 'Deutsch' })).toHaveAttribute('aria-selected', 'true');
+  await page.locator('.feld-link', { hasText: 'Zur Werkbank' }).first().click();
+  await expect(page).toHaveURL(/#lv-plausibilitaet$/);
+  await expect(page.locator('#lv-plausibilitaet')).toBeVisible();
 });

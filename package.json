@@ -27,17 +27,17 @@
     "test:swizzonic": "npm run build:swizzonic && playwright test -c playwright.swizzonic.config.ts"
   },
   "dependencies": {
-    "@astrojs/node": "11.1.6",
+    "@astrojs/node": "11.1.9",
     "@astrojs/sitemap": "3.7.4",
     "@fontsource/barlow-condensed": "5.3.0",
     "@fontsource/ibm-plex-mono": "5.3.0",
     "@fontsource/source-sans-3": "5.3.1",
-    "astro": "7.3.5",
+    "astro": "7.4.1",
     "nodemailer": "10.1.1"
   },
   "devDependencies": {
-    "@astrojs/check": "0.9.10",
-    "@astrojs/react": "7.0.0",
+    "@astrojs/check": "0.9.11",
+    "@astrojs/react": "7.1.0",
     "@axe-core/playwright": "4.14.0",
     "@keystatic/astro": "6.0.0",
     "@keystatic/core": "0.6.9",

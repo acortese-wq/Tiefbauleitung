@@ -46,7 +46,7 @@ test('robots.txt erlaubt Indexierung und nennt die Sitemap der Domain', async ({
 
 test('Serverregeln liegen im Build: https, www-Umleitung, Sicherheits-Header, 404', async () => {
   const regeln = await readFile('dist/.htaccess', 'utf8');
-  for (const teil of ['RewriteCond %{HTTPS} !=on', 'Strict-Transport-Security', 'X-Frame-Options', "frame-ancestors 'none'", 'ErrorDocument 404 /404.html']) {
+  for (const teil of ['DirectoryIndex index.html', 'RewriteCond %{HTTPS} !=on', 'Strict-Transport-Security', 'X-Frame-Options', "frame-ancestors 'none'", 'ErrorDocument 404 /404.html']) {
     expect(regeln).toContain(teil);
   }
   expect(await readFile('dist/_astro/.htaccess', 'utf8')).toContain('immutable');

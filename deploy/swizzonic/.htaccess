@@ -2,6 +2,8 @@
 # Wird von «npm run build:swizzonic» in dist/ kopiert.
 
 Options -Indexes
+# Unsere Startdatei hat Vorrang vor Platzhaltern des Hosters (z. B. index.php)
+DirectoryIndex index.html
 
 # Statusdatei des automatischen Hochladens nicht öffentlich ausliefern
 <Files ".ftp-deploy-sync-state.json">

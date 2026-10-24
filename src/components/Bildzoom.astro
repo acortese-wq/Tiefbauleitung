@@ -1,0 +1,77 @@
+---
+// Vergrösserte Ansicht für Grafiken: Links auf Bilder unter /bilder/ öffnen sich in einem Overlay statt als nackte Bilddatei.
+// Schliessen mit ×, Esc oder Klick neben das Bild. Ohne JavaScript öffnet der Link weiterhin die Bilddatei.
+---
+<dialog class="bildzoom" aria-label="Grafik vergrössert" data-bildzoom>
+  <div class="bildzoom-leiste">
+    <span class="bildzoom-tipp">Zum Lesen seitlich wischen</span>
+    <a class="bildzoom-original" data-bildzoom-original target="_blank" rel="noopener">In neuem Tab öffnen<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a>
+    <button type="button" class="bildzoom-zu" data-bildzoom-zu aria-label="Vergrösserung schliessen">×</button>
+  </div>
+  <div class="bildzoom-flaeche">
+    <img alt="" data-bildzoom-bild />
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-bildzoom]');
+  if (dialog && typeof dialog.showModal === 'function') {
+    const bild = dialog.querySelector<HTMLImageElement>('[data-bildzoom-bild]')!;
+    const original = dialog.querySelector<HTMLAnchorElement>('[data-bildzoom-original]')!;
+    let ausloeser: HTMLElement | null = null;
+
+    document.addEventListener('click', (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const link = (e.target as Element).closest<HTMLAnchorElement>('a[href]');
+      if (!link || link.closest('[data-bildzoom]') || !/\/bilder\/.+\.(jpe?g|png|webp)$/i.test(link.pathname)) return;
+      e.preventDefault();
+      const vorschau = link.querySelector('img') ?? link.closest('figure')?.querySelector('img');
+      bild.src = link.href;
+      bild.alt = vorschau?.alt ?? '';
+      original.href = link.href;
+      ausloeser = link;
+      dialog.showModal();
+    });
+
+    const schliessen = () => dialog.close();
+    dialog.querySelector('[data-bildzoom-zu]')!.addEventListener('click', schliessen);
+    // Klick neben das Bild (auf den Hintergrund oder die freie Fläche) schliesst
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog || (e.target as Element).classList.contains('bildzoom-flaeche')) schliessen();
+    });
+    dialog.addEventListener('close', () => {
+      bild.removeAttribute('src');
+      ausloeser?.focus({ preventScroll: true });
+    });
+  }
+</script>
+
+<style is:global>
+  .bildzoom {
+    width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+    background: var(--nacht); color: var(--text);
+  }
+  .bildzoom::backdrop { background: rgb(10 15 20 / 0.7); }
+  .bildzoom[open] { display: grid; grid-template-rows: auto 1fr; }
+  :root:has(.bildzoom[open]) { overflow: hidden; }
+  .bildzoom-leiste { display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding: 8px 12px; }
+  .bildzoom-original { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; }
+  .bildzoom-zu {
+    width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--linie-hell); background: var(--tiefe);
+    color: var(--text); font: 400 2rem/1 var(--f-text); cursor: pointer; display: grid; place-items: center;
+  }
+  .bildzoom-zu:hover { border-color: var(--eis); color: var(--eis); }
+  .bildzoom-flaeche { overflow: auto; display: grid; place-items: center; padding: 0 12px 16px; cursor: zoom-out; }
+  .bildzoom-flaeche img { display: block; max-width: 100%; max-height: calc(100dvh - 90px); width: auto; height: auto; border-radius: var(--radius); cursor: default; }
+  .bildzoom-tipp { display: none; margin-right: auto; font: 0.8rem var(--f-mono); color: var(--text-ruhig); }
+  /* Schmale Bildschirme: breite Grafiken in lesbarer Höhe zeigen und seitlich verschieben lassen */
+  @media (max-width: 700px) {
+    .bildzoom-tipp { display: block; }
+    .bildzoom-flaeche { place-items: center start; overflow-x: auto; overscroll-behavior: contain; }
+    .bildzoom-flaeche img { max-width: none; max-height: none; height: min(70dvh, 793px); width: auto; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .bildzoom[open] { animation: bildzoom-ein .2s ease-out; }
+    @keyframes bildzoom-ein { from { opacity: 0; } }
+  }
+</style>

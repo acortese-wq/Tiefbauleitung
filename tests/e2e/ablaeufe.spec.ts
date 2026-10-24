@@ -545,3 +545,30 @@ test('Probierfrage aus dem Netzbau-Quiz auf Startseite und Kompetenz Netzbau', a
     return !!grafik && !!block && !!(grafik.compareDocumentPosition(block) & Node.DOCUMENT_POSITION_FOLLOWING) && !!block.closest('.prosa');
   })).toBe(true);
 });
+
+test('Grafiken öffnen sich vergrössert und lassen sich mit ×, Esc und Klick daneben wieder schliessen', async ({ page }) => {
+  for (const [pfad, grafik] of [['/profil/', '#werdegang-grafik'], ['/kompetenzen/netzinfrastruktur-leitungsbau/', '#netz-uebersicht']]) {
+    await page.goto(pfad);
+    const dialog = page.locator('[data-bildzoom]');
+    const vorschau = page.locator(`${grafik} picture`);
+    await vorschau.scrollIntoViewIfNeeded();
+    // Öffnen und mit × schliessen; die Seite bleibt dieselbe
+    await vorschau.click();
+    await expect(dialog).toBeVisible();
+    await expect(dialog.locator('img')).toHaveJSProperty('complete', true);
+    expect(await dialog.locator('img').evaluate((i: HTMLImageElement) => i.naturalWidth)).toBeGreaterThan(1000);
+    await expect(page).toHaveURL(new RegExp(`${pfad}$`));
+    await page.getByRole('button', { name: 'Vergrösserung schliessen' }).click();
+    await expect(dialog).toBeHidden();
+    // Esc
+    await vorschau.click();
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    // Klick neben das Bild
+    await page.locator(`${grafik} figcaption a`).click();
+    await expect(dialog).toBeVisible();
+    await page.mouse.click(5, (page.viewportSize()?.height ?? 600) - 5);
+    await expect(dialog).toBeHidden();
+  }
+});

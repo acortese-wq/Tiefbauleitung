@@ -1,0 +1,36 @@
+---
+// Kernaussage als persönliches Zitat (Startseite und KI-Labor).
+import { person } from '../data/person';
+interface Props { klein?: boolean }
+const { klein = false } = Astro.props;
+---
+<section class:list={['kernaussage', { klein }]} aria-label="Kernaussage">
+  <div class="wrap">
+    <figure>
+      <blockquote>
+        <p class="ka-satz">«Die KI liefert das Tempo. Meine über 30 Jahre im Tiefbau liefern die Tiefe.»</p>
+        <p class="ka-text">Abgleichen, zusammenfassen, Erstentwürfe schreiben: Das erledigt die KI in Minuten. Die gewonnene Zeit stecke ich in das, was keine Maschine kann, die fachliche Beurteilung. So potenzieren sich KI und Tiefbauwissen.</p>
+      </blockquote>
+      <figcaption>
+        <picture>
+          <source srcset="/bilder/portrait.webp" type="image/webp" />
+          <img src="/bilder/portrait.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" />
+        </picture>
+        <span><strong>{person.name}</strong> {person.beruf}</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .kernaussage { border-top: 1px solid var(--linie); border-bottom: 1px solid var(--linie); background: linear-gradient(90deg, rgba(143, 211, 255, 0.06), transparent 70%); padding-block: clamp(32px, 5vw, 56px); }
+  .kernaussage.klein { background: none; border: 0; padding-block: 0 clamp(20px, 3vw, 32px); }
+  figure { margin: 0; max-width: 900px; border-left: 3px solid var(--signal); padding-left: clamp(16px, 3vw, 28px); }
+  blockquote { margin: 0; }
+  .ka-satz { font: 600 clamp(1.5rem, 3vw, 2.25rem)/1.2 var(--f-display); color: var(--text); }
+  .klein .ka-satz { font-size: clamp(1.25rem, 2.4vw, 1.7rem); }
+  .ka-text { margin-top: 12px; color: var(--text-ruhig); font-size: var(--s-1); line-height: 1.55; max-width: 62ch; }
+  figcaption { display: flex; align-items: center; gap: 12px; margin-top: 16px; font-size: 0.95rem; color: var(--text-ruhig); }
+  figcaption img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; display: block; border: 1px solid var(--linie-hell); }
+  figcaption strong { color: var(--text); font-weight: 600; margin-right: 6px; }
+</style>

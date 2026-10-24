@@ -1,4 +1,5 @@
 ---
+import Kernaussage from '../components/Kernaussage.astro';
 import { getCollection } from 'astro:content';
 import Basis from '../layouts/Basis.astro';
 import Leitmotiv from '../components/Leitmotiv.astro';
@@ -157,6 +158,8 @@ const zitat = zeugnisse[1];
       </div>
     </div>
   </section>
+
+  <Kernaussage />
 
   <section class="bildband-start" aria-label="Vom Leitungsgraben zum Rechenzentrum">
     <div class="wrap">

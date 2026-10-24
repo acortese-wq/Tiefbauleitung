@@ -1,4 +1,5 @@
 ---
+import Kernaussage from '../../components/Kernaussage.astro';
 import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import { einsatzfelder } from '../../data/einsatzfelder';
@@ -37,6 +38,9 @@ const bereiche = [
     lead="KI in der Bauleitung zum Ausprobieren: Prompts für den Alltag, ein Rechner für den Business Case und ein Blick auf die aktuellen Sprachmodelle. Alles läuft in Ihrem Browser, ohne Konto und ohne Datenübermittlung."
     krumen={[{ name: 'KI-Labor' }]}
   />
+
+  <div class="ka-abstand"></div>
+  <Kernaussage klein />
 
   <section class="abschnitt" aria-labelledby="bereiche-titel">
     <div class="wrap">
@@ -80,6 +84,7 @@ const bereiche = [
 </Basis>
 
 <style>
+  .ka-abstand { height: clamp(28px, 4vw, 48px); }
   .labor-karte { display: grid; gap: 10px; align-content: start; text-decoration: none; color: inherit; }
   .labor-karte .chip { justify-self: start; }
   .labor-karte p { color: var(--text-ruhig); }

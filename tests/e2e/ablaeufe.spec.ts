@@ -371,3 +371,12 @@ test('Profil zeigt die Werdegang-Grafik vor den beruflichen Stationen', async ({
   await expect(fig.locator('img')).toHaveAttribute('alt', /Tiefbauzeichner zum Bauingenieur/);
   await expect(fig).toContainText('KI-generierte Illustration');
 });
+
+test('Kernaussage erscheint als Zitat auf Startseite und im KI-Labor', async ({ page }) => {
+  for (const pfad of ['/', '/ki-labor/']) {
+    await page.goto(pfad);
+    const k = page.locator('.kernaussage');
+    await expect(k).toContainText('Die KI liefert das Tempo');
+    await expect(k.locator('figcaption')).toContainText('Alessandro Cortese');
+  }
+});

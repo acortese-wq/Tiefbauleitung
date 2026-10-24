@@ -31,6 +31,9 @@
   --f-text: 'Source Sans 3', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
+  /* Mindestgrössen auf dem Handy: Kartentexte 16 px, Hilfs- und Quellentexte 15 px (Desktop unverändert) */
+  --min-karte: 0px;
+  --min-hilfe: 0px;
   --s-0: 1.0625rem;
   --s-1: 1.25rem;
   --s-2: clamp(1.45rem, 1.2rem + 1vw, 1.8rem);
@@ -63,9 +66,19 @@ body {
 img, svg { max-width: 100%; height: auto; }
 h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.06; margin: 0; text-wrap: balance; font-weight: 600; }
 p { margin: 0; }
+/* Lesbare Zeilenlänge (rund 75 Zeichen); Komponenten können enger setzen */
+main p { max-width: 68ch; }
 a { color: var(--eis); text-underline-offset: 3px; text-decoration-thickness: 1px; }
 a:hover { color: var(--eis-stark); }
 :focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 2px; }
+/* Datumsfelder: Chrome setzt den Fokus in Teilfelder und Kalendersymbol, «:focus-visible» greift dort nicht */
+input[type='date']:focus-within { outline: 2px solid var(--signal); outline-offset: 3px; }
+button, select, summary, input[type='checkbox'], input[type='radio'], input[type='range'],
+label:has(> input[type='checkbox']), label:has(> input[type='radio']) { cursor: pointer; }
+/* iOS vergrössert die Seite beim Antippen von Eingabefeldern unter 16 px */
+@media screen and (max-width: 640px), screen and (pointer: coarse) {
+  input:not([type='checkbox'], [type='radio'], [type='range']), select, textarea { font-size: 16px !important; }
+}
 
 .skip-link {
   position: absolute; left: 12px; top: -60px; z-index: 100;
@@ -87,7 +100,7 @@ a:hover { color: var(--eis-stark); }
 .wrap-breit { max-width: 1480px; }
 
 .label {
-  font-family: var(--f-mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--text-ruhig);
 }
 .label-eis { color: var(--eis); }
@@ -109,7 +122,7 @@ a:hover { color: var(--eis-stark); }
 .abschnitt-kopf { display: grid; gap: 10px; margin-bottom: clamp(28px, 4vw, 48px); max-width: 760px; }
 .abschnitt-kopf h2 { font-size: var(--s-3); }
 .abschnitt-kopf p { color: var(--text-ruhig); font-size: var(--s-1); line-height: 1.5; }
-.pos { font-family: var(--f-mono); font-size: 0.74rem; color: var(--eis); letter-spacing: 0.08em; }
+.pos { font-family: var(--f-mono); font-size: 0.75rem; color: var(--eis); letter-spacing: 0.08em; }
 
 /* Helles Band */
 .band-hell { background: var(--papier); color: var(--papier-text); border-top: 0; }
@@ -139,9 +152,10 @@ a.karte:hover { border-color: var(--eis); transform: translateY(-2px); }
 .raster-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 960px) { .raster-3, .raster-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .raster-2, .raster-3, .raster-4 { grid-template-columns: 1fr; } }
+@media screen and (max-width: 640px) { :root { --min-karte: 16px; --min-hilfe: 15px; } }
 
 .chip {
-  display: inline-block; font-family: var(--f-mono); font-size: 0.72rem; padding: 4px 9px;
+  display: inline-block; font-family: var(--f-mono); font-size: 0.75rem; padding: 4px 9px;
   border: 1px solid var(--linie-hell); border-radius: 3px; color: var(--text); background: var(--panel);
   white-space: nowrap; text-decoration: none;
 }
@@ -149,7 +163,7 @@ a.chip:hover { border-color: var(--eis); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .badge {
-  display: inline-flex; align-items: center; gap: 6px; font-family: var(--f-mono); font-size: 0.7rem;
+  display: inline-flex; align-items: center; gap: 6px; font-family: var(--f-mono); font-size: 0.75rem;
   text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 8px; border-radius: 3px;
   border: 1px solid currentColor; width: fit-content;
 }
@@ -172,12 +186,12 @@ a.chip:hover { border-color: var(--eis); }
 .prosa .figur-breit figcaption strong { color: var(--text); }
 .prosa .figur-hinweis { display: block; margin-top: 6px; font: 0.78rem var(--f-mono); }
 .prosa .kp-raster { width: min(calc(var(--max) - 32px), calc(100vw - 32px)); max-width: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 1.4em 0; }
-.prosa .kp-karte { border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); padding: 14px 16px; font-size: 0.95rem; line-height: 1.55; }
+.prosa .kp-karte { border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); padding: 14px 16px; font-size: max(0.95rem, var(--min-karte)); line-height: 1.55; }
 .prosa .kp-karte h3 { font-size: 1.1rem; margin: 0 0 6px; }
-.prosa .kp-karte p { margin: 0 0 6px; color: var(--eis); font-size: 0.9rem; }
+.prosa .kp-karte p { margin: 0 0 6px; color: var(--eis); font-size: max(0.9rem, var(--min-karte)); }
 .prosa .kp-karte ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; color: var(--text-ruhig); }
 .prosa .kp-staerken { color: var(--text-ruhig); }
-.prosa .kp-hinweis { font-size: 0.85rem; color: var(--text-ruhig); border-left: 2px solid var(--linie-hell); padding-left: 10px; }
+.prosa .kp-hinweis { font-size: max(0.85rem, var(--min-hilfe)); color: var(--text-ruhig); border-left: 2px solid var(--linie-hell); padding-left: 10px; }
 .prosa h2 { font-size: var(--s-2); margin-top: 2em; }
 .prosa h3 { font-size: var(--s-1); margin-top: 1.6em; }
 .prosa ul, .prosa ol { padding-left: 1.25em; }
@@ -208,7 +222,8 @@ a.chip:hover { border-color: var(--eis); }
 .brotkrumen { font-family: var(--f-mono); font-size: 0.76rem; color: var(--text-ruhig); }
 .brotkrumen ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; }
 .brotkrumen li + li::before { content: '/'; margin-right: 6px; color: var(--linie-hell); }
-.brotkrumen a { color: var(--text-ruhig); text-decoration: none; }
+/* Trefferfläche 44 px hoch, ohne das Layout zu verschieben */
+.brotkrumen a { color: var(--text-ruhig); text-decoration: none; display: inline-block; padding-block: 15px; margin-block: -15px; }
 .brotkrumen a:hover { color: var(--eis); }
 
 .hinweis {

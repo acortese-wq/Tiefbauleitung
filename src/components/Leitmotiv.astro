@@ -96,6 +96,8 @@ const kanten = [
   .lm-kote { fill: var(--signal); }
   .lm-masslinie { stroke: var(--signal); stroke-width: 1.1; }
   .lm-hinweislinie { stroke: var(--text-ruhig); stroke-width: .8; stroke-opacity: .7; }
+  /* Schmale Handys: Beschriftung wäre kleiner als 7 px; die Beschreibung für Screenreader bleibt */
+  @media (max-width: 560px) { .lm-text, .lm-hinweislinie { display: none; } }
   .lm-text { fill: var(--text-ruhig); font-family: var(--f-mono); font-size: 11px; }
   .lm-text-eis { fill: var(--eis); }
   .lm-klein { font-size: 9.5px; }

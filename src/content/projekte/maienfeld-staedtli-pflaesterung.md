@@ -21,7 +21,7 @@ Die Luzisteigstrasse führt als Kantonsstrasse mitten durch das Städtli von Mai
 
 ## Projekt in Zahlen
 
-| | |
+| <span class="visually-hidden">Merkmal</span> | <span class="visually-hidden">Angabe</span> |
 |---|---|
 | Fläche | rund 1'000 m² Pflästerung, gemeinsam mit der Stadt Maienfeld |
 | Bauzeit | 19. April bis 14. Juli 2017, in zwei Etappen |

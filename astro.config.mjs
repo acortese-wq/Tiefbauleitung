@@ -2,9 +2,10 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { access, readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 
 // Die Admin-Oberfläche (Keystatic) läuft nur lokal mit `npm run admin`.
 // Im Produktions-Build ist sie nicht enthalten und damit nicht angreifbar.
@@ -21,6 +22,65 @@ const site =
 const base = githubPages ? process.env.BASE_PATH || '/Tiefbauleitung' : undefined;
 
 /**
+ * Alle Dateien eines Ordners (rekursiv), deren Name zum Muster passt.
+ * @param {string} ordner
+ * @param {RegExp} muster
+ * @returns {AsyncGenerator<string>}
+ */
+async function* dateien(ordner, muster) {
+  for (const e of await readdir(ordner, { withFileTypes: true })) {
+    const pfad = join(ordner, e.name);
+    if (e.isDirectory()) yield* dateien(pfad, muster);
+    else if (muster.test(e.name)) yield pfad;
+  }
+}
+
+/**
+ * Fotos aus Markdown-Inhalten (<img> aus /bilder/ ohne Breitenangabe) im fertigen Build ergänzen:
+ * Breite und Höhe (kein Springen beim Laden), Laden erst beim Scrollen und, wo vorhanden, die WebP-Fassung.
+ * Astro 7 rendert Markdown mit Sätteri; so braucht es dafür kein zusätzliches Paket. Läuft vor «unterordnerLinks».
+ * @returns {import('astro').AstroIntegration}
+ */
+function markdownBilder() {
+  const oeffentlich = fileURLToPath(new URL('./public', import.meta.url));
+  /** @param {string} pfad */
+  const vorhanden = (pfad) => access(pfad).then(() => true, () => false);
+  /** @type {Map<string, string>} */
+  const ersatz = new Map();
+  /** @param {string} tag */
+  async function ergaenze(tag) {
+    const src = tag.match(/\ssrc="(\/bilder\/[^"]+\.(?:jpe?g|png))"/i)?.[1];
+    if (!src || /\swidth=/.test(tag)) return tag;
+    if (!ersatz.has(src)) {
+      const { width, height } = await sharp(join(oeffentlich, src)).metadata();
+      const webp = src.replace(/\.(jpe?g|png)$/i, '.webp');
+      const quelle = (await vorhanden(join(oeffentlich, webp))) ? `<source srcset="${webp}" type="image/webp">` : '';
+      ersatz.set(src, `${quelle}|width="${width}" height="${height}" loading="lazy" decoding="async"`);
+    }
+    const [quelle, attribute] = /** @type {string} */ (ersatz.get(src)).split('|');
+    const img = tag.replace(/\s*\/?>$/, ` ${attribute}>`);
+    return quelle ? `<picture>${quelle}${img}</picture>` : img;
+  }
+  return {
+    name: 'markdown-bilder',
+    hooks: {
+      'astro:build:done': async ({ dir }) => {
+        for await (const datei of dateien(fileURLToPath(dir), /\.html$/)) {
+          const alt = await readFile(datei, 'utf8');
+          const tags = [...new Set(alt.match(/<img\s[^>]*>/g) ?? [])];
+          let neu = alt;
+          for (const tag of tags) {
+            const ergebnis = await ergaenze(tag);
+            if (ergebnis !== tag) neu = neu.split(tag).join(ergebnis);
+          }
+          if (neu !== alt) await writeFile(datei, neu);
+        }
+      },
+    },
+  };
+}
+
+/**
  * Ergänzt im fertigen Build den Unterordner in allen internen Links und absoluten Adressen.
  * So bleiben Komponenten und Markdown-Inhalte einfach (Links beginnen mit «/»).
  * @param {string} unterordner z. B. «/Tiefbauleitung»
@@ -34,22 +94,11 @@ function unterordnerLinks(unterordner, seite) {
   const srcset = /srcset="([^"]*)"/g;
   const eintrag = new RegExp(`(^|,\\s*)/(?!/|${ohne}/)`, 'g');
   const absolut = new RegExp(`${seite.replace(/[.]/g, '\\.')}/(?!${ohne}/)`, 'g');
-  /**
-   * @param {string} ordner
-   * @returns {AsyncGenerator<string>}
-   */
-  async function* dateien(ordner) {
-    for (const e of await readdir(ordner, { withFileTypes: true })) {
-      const pfad = join(ordner, e.name);
-      if (e.isDirectory()) yield* dateien(pfad);
-      else if (/\.(html|xml|txt)$/.test(e.name)) yield pfad;
-    }
-  }
   return {
     name: 'unterordner-links',
     hooks: {
       'astro:build:done': async ({ dir }) => {
-        for await (const datei of dateien(fileURLToPath(dir))) {
+        for await (const datei of dateien(fileURLToPath(dir), /\.(html|xml|txt)$/)) {
           const alt = await readFile(datei, 'utf8');
           const neu = alt
             .replace(srcset, (_, wert) => `srcset="${wert.replace(eintrag, `$1${unterordner}/`)}"`)
@@ -78,6 +127,7 @@ const integrations = [
     // Mit aktivem Formular wird die Kontaktseite serverseitig gerendert und deshalb von Hand ergänzt.
     customPages: formular ? [new URL('/kontakt/', site).href] : [],
   }),
+  markdownBilder(),
 ];
 
 if (base) integrations.push(unterordnerLinks(base, site));

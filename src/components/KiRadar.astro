@@ -83,8 +83,8 @@ const ranglisten = [
   .radar-neu li { display: grid; gap: 2px; }
   .radar-neu a { text-decoration: none; }
   .radar-neu a:hover strong { text-decoration: underline; }
-  .radar-tipp ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; color: var(--text-ruhig); font-size: 0.95rem; }
-  .radar-quelle { margin-top: 12px; font-size: 0.82rem; color: var(--text-ruhig); }
+  .radar-tipp ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; color: var(--text-ruhig); font-size: max(0.95rem, var(--min-karte)); }
+  .radar-quelle { margin-top: 12px; font-size: max(0.82rem, var(--min-hilfe)); color: var(--text-ruhig); }
   .radar-quelle strong { color: var(--signal); font-weight: 600; }
   @media (max-width: 900px) {
     .radar-raster { grid-template-columns: 1fr; }

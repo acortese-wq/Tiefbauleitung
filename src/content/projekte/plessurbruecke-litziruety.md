@@ -21,7 +21,7 @@ Die Plessurbrücke Litzirüti liegt an der Schanfiggerstrasse zwischen Langwies 
 
 ## Projekt in Zahlen
 
-| | |
+| <span class="visually-hidden">Merkmal</span> | <span class="visually-hidden">Angabe</span> |
 |---|---|
 | Strassenkorrektion | rund 250 m, Fahrbahn neu 6.00 m plus Kurvenverbreiterungen |
 | Brücke | Fahrbahnbreite neu 8.50 m |

@@ -21,7 +21,7 @@ Die Fläscherstrasse verbindet Fläsch über die Rheinbrücke mit Bad Ragaz. Zwi
 
 ## Projekt in Zahlen
 
-| | |
+| <span class="visually-hidden">Merkmal</span> | <span class="visually-hidden">Angabe</span> |
 |---|---|
 | Ausbaustrecke | rund 800 m, vom Dorfrand Fläsch bis zur Rheinbrücke |
 | Fahrbahn | neu 5.80 m, Bankett wanderweggerecht rund 80 cm |

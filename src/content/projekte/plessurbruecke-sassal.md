@@ -23,7 +23,7 @@ Der Ort ist eng. Unmittelbar neben der Brücke führt die Bahnlinie Chur–Arosa
 
 ## Projekt in Zahlen
 
-| | |
+| <span class="visually-hidden">Merkmal</span> | <span class="visually-hidden">Angabe</span> |
 |---|---|
 | Neue Brücke | Stahlverbundbrücke mit zwei Hohlkastenträgern, Spannweite rund 25 m, Schiefe rund 38° |
 | Breite | Fahrbahn 2 × 3.00 m plus je 0.50 m seitlicher Raum, mit Randabschlüssen 8.00 m |

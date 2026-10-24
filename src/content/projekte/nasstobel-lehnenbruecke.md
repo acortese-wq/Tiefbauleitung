@@ -20,7 +20,7 @@ Die Schanfiggerstrasse verbindet Chur mit dem Schanfigg und Arosa; der gesamte V
 
 ## Projekt in Zahlen
 
-| | |
+| <span class="visually-hidden">Merkmal</span> | <span class="visually-hidden">Angabe</span> |
 |---|---|
 | Baulänge | rund 290 m (km 2.41 bis 2.70) |
 | Fahrbahn | neu mindestens 6.00 m plus Kurvenverbreiterungen |

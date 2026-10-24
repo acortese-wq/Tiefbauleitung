@@ -371,7 +371,7 @@ const zitat = zeugnisse[1];
   .kennzahlen dt { order: 2; font-size: 0.9rem; color: var(--text); line-height: 1.3; }
   .kennzahlen dd { margin: 0; }
   .kennzahlen .wert { order: 1; font: 600 var(--s-3) var(--f-display); line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
-  .kennzahlen .quelle { order: 3; font-family: var(--f-mono); font-size: 0.68rem; color: var(--text-ruhig); }
+  .kennzahlen .quelle { order: 3; font-family: var(--f-mono); font-size: 0.75rem; color: var(--text-ruhig); }
 
   .bereiche { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
   .bereich h3 { font-size: 1.6rem; }
@@ -380,7 +380,7 @@ const zitat = zeugnisse[1];
   .perspektive { padding: 24px 26px; display: flex; flex-direction: column; gap: 8px; }
   .perspektive h3 { font-size: 1.7rem; text-transform: uppercase; }
   .perspektive-ort { margin: 0; color: var(--text); font-weight: 600; }
-  .perspektive ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 6px; color: var(--text-ruhig); font-size: 0.95rem; }
+  .perspektive ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 6px; color: var(--text-ruhig); font-size: max(0.95rem, var(--min-karte)); }
   .beitrag { margin-top: 32px; padding: 28px; border: 1px solid var(--linie); border-left: 3px solid var(--signal); border-radius: var(--radius); background: var(--tiefe); }
   .beitrag h3 { font-size: 1.5rem; margin-bottom: 16px; }
   .beitrag-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 32px; margin: 0; }
@@ -398,7 +398,7 @@ const zitat = zeugnisse[1];
     padding: 14px 18px 16px; color: var(--text-ruhig); font-size: 0.98rem;
   }
   .weg-bild figcaption strong { color: var(--text); font-weight: 600; }
-  .weg-bild figcaption small { font-family: var(--f-mono); font-size: 0.7rem; }
+  .weg-bild figcaption small { font-family: var(--f-mono); font-size: 0.75rem; }
   .bereich { padding: 28px; overflow: hidden; }
   .bereich-bild {
     margin: -28px -28px 22px; aspect-ratio: 16 / 9; padding: 14px 18px;
@@ -407,7 +407,7 @@ const zitat = zeugnisse[1];
   .bereich-nr { font: 700 3rem var(--f-display); color: #6a8599; line-height: 1; }
   .bereich h3 { font-size: 1.8rem; text-transform: uppercase; }
   .bereich-links { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; }
-  .bereich-links a { display: inline-block; padding: 6px 0; font-weight: 600; text-decoration: none; }
+  .bereich-links a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; }
   .bereich-links a:hover { text-decoration: underline; }
 
   .problem h3 { font-size: 1.45rem; margin-bottom: 8px; }
@@ -417,7 +417,7 @@ const zitat = zeugnisse[1];
   .wk-teaser h3 { font-size: 1.5rem; margin-bottom: 6px; }
   .wk-teaser p { margin: 0; color: var(--text-ruhig); max-width: 70ch; }
   .wk-namen { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .wk-teaser-link { font-weight: 600; text-decoration: none; justify-self: start; }
+  .wk-teaser-link { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; justify-self: start; }
   .wk-teaser-link:hover { text-decoration: underline; }
   .foto-reihe :global(.bildband) { margin-bottom: 0; }
   .held-name { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }

@@ -40,11 +40,11 @@ const jahr = new Date().getFullYear();
   .fuss-text { color: var(--text-ruhig); margin-top: 6px; max-width: 40ch; }
   .fuss nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .fuss ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-  .fuss a { color: var(--text-ruhig); text-decoration: none; display: inline-block; padding: 6px 0; }
+  .fuss a { color: var(--text-ruhig); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
   .fuss a:hover { color: var(--eis); }
   .fuss-unten {
     display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 18px 28px;
-    border-top: 1px solid var(--linie); font-family: var(--f-mono); font-size: 0.74rem; color: var(--text-ruhig);
+    border-top: 1px solid var(--linie); font-family: var(--f-mono); font-size: 0.75rem; color: var(--text-ruhig);
   }
   @media (max-width: 720px) { .fuss-raster { grid-template-columns: 1fr; } }
 </style>

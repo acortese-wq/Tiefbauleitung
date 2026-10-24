@@ -322,7 +322,7 @@ const vorschau = (id: string) => {
   }
   .wahl a:hover { border-color: var(--eis); }
   .wahl a[aria-current='true'] { background: var(--eis); border-color: var(--eis); color: var(--nacht); font-weight: 600; }
-  .wahl-badge { font: 500 0.68rem var(--f-mono); text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor; opacity: 0.85; white-space: nowrap; }
+  .wahl-badge { font: 500 0.75rem var(--f-mono); text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor; opacity: 0.85; white-space: nowrap; }
   .datenschutz { margin-bottom: 20px; }
 
   /* Werkbank */
@@ -330,7 +330,7 @@ const vorschau = (id: string) => {
   .werkbank + .werkbank { margin-top: 24px; }
   .werkbank[hidden] { display: none; }
   .wb-kopf h3 { font-size: var(--s-2); margin-top: 4px; }
-  .wb-kopf p:not(.label) { color: var(--text-ruhig); margin-top: 6px; max-width: 80ch; }
+  .wb-kopf p:not(.label) { color: var(--text-ruhig); margin-top: 6px; max-width: 68ch; }
   .wb-spalten { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; margin-top: 20px; align-items: start; }
   .wb-spalte { border: 1px solid var(--linie); border-radius: 10px; background: var(--nacht); padding: 14px; min-width: 0; }
   .wb-spaltenkopf { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
@@ -368,10 +368,10 @@ const vorschau = (id: string) => {
   .wb-prompt :global(mark) { background: rgba(242, 166, 90, 0.18); color: var(--signal); border-radius: 3px; padding: 0 2px; }
   .wb-status { font: 500 0.82rem var(--f-mono); color: var(--eis); }
 
-  .wb-leer { color: var(--text-ruhig); font-size: 0.93rem; }
+  .wb-leer { color: var(--text-ruhig); font-size: max(0.93rem, var(--min-hilfe)); }
   .wb-pruefung :global(.wb-kennzahlen) { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 0 0 12px; }
   .wb-pruefung :global(.wb-kennzahlen div) { border: 1px solid var(--linie); border-radius: 8px; padding: 8px 10px; background: var(--tiefe); }
-  .wb-pruefung :global(.wb-kennzahlen dt) { font: 500 0.72rem var(--f-mono); color: var(--text-ruhig); text-transform: uppercase; letter-spacing: 0.04em; }
+  .wb-pruefung :global(.wb-kennzahlen dt) { font: 500 0.75rem var(--f-mono); color: var(--text-ruhig); text-transform: uppercase; letter-spacing: 0.04em; }
   .wb-pruefung :global(.wb-kennzahlen dd) { margin: 2px 0 0; font-weight: 600; font-size: 0.98rem; font-variant-numeric: tabular-nums; }
   .wb-pruefung :global(.wb-befund) { border-left: 3px solid var(--linie-hell); padding: 6px 0 6px 10px; margin-top: 8px; }
   .wb-pruefung :global(.wb-befund summary) { cursor: pointer; display: flex; gap: 8px; align-items: baseline; font-weight: 600; font-size: 0.93rem; min-height: 32px; }
@@ -385,13 +385,13 @@ const vorschau = (id: string) => {
   .wb-pruefung :global(.stufe-hinweis .wb-symbol) { background: var(--eis); color: var(--nacht); }
   .wb-pruefung :global(.stufe-ok) { border-color: #7ee2a8; }
   .wb-pruefung :global(.stufe-ok .wb-symbol) { background: #7ee2a8; color: var(--nacht); }
-  .wb-pruefung :global(.wb-spalten-info) { margin-top: 12px; font: 0.72rem/1.4 var(--f-mono); color: var(--text-ruhig); }
+  .wb-pruefung :global(.wb-spalten-info) { margin-top: 12px; font: 0.75rem/1.4 var(--f-mono); color: var(--text-ruhig); }
 
   .wb-beispiel-titel { font-weight: 600; }
   .wb-beispiel-titel span { font-weight: 400; color: var(--text-ruhig); }
   .wb-beispiel ul { margin: 8px 0 0; padding-left: 1.1em; display: grid; gap: 6px; font-size: 0.9rem; color: var(--text-ruhig); }
   .wb-beispiel :global(strong) { color: var(--text); }
-  .wb-pruefen { margin-top: 14px; font-size: 0.86rem; color: var(--text-ruhig); }
+  .wb-pruefen { margin-top: 14px; font-size: max(0.86rem, var(--min-hilfe)); color: var(--text-ruhig); }
   .wb-pruefen strong { color: var(--signal); }
 
   @media (max-width: 1180px) {

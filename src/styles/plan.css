@@ -31,3 +31,8 @@
 
 /* Kompakte Fassung ohne Beschriftung */
 .pz-kompakt .pz-text, .pz-kompakt .pz-hinweislinie { display: none; }
+
+/* Schmale Handys: Beschriftung wäre kleiner als 7 px und nicht lesbar. Die Beschreibung für Screenreader (title/desc) bleibt. */
+@media (max-width: 560px) {
+  .pz-text, .pz-hinweislinie { display: none; }
+}

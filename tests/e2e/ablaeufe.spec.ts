@@ -253,12 +253,12 @@ test('Referenz Jenins zeigt Ort, Kurzbeschrieb, Netzbau-Filter und Link zur Fall
   await expect(eintrag.locator('.ref-kurz')).toContainText('Kabelschutzrohren');
   await eintrag.getByRole('link', { name: /^Infos/ }).click();
   await expect(page.locator('h1')).toContainText('Ortsdurchfahrt Jenins');
-  // Keine Namen von Beteiligten oder Kosten aus den Protokollen
+  // Keine Namen von Beteiligten, Kosten oder Grundstücke
   const text = await page.locator('main').innerText();
-  for (const intern of ['Walo', 'Repower', 'Swisscom', 'Fromm', 'Franken', 'Parzelle']) expect(text).not.toContain(intern);
+  for (const intern of ['Swisscom', 'Franken', 'Parzelle']) expect(text).not.toContain(intern);
 });
 
-test('Referenz Plessurbrücke Sassal zeigt Jahre, Bild und Fallstudie ohne Namen aus den Protokollen', async ({ page }) => {
+test('Referenz Plessurbrücke Sassal zeigt Jahre, Bild und Fallstudie ohne Namen von Beteiligten', async ({ page }) => {
   await page.goto('/projekte/');
   const eintrag = page.locator('.ref-liste li', { hasText: 'Plessurbrücke Sassal' });
   await expect(eintrag).toContainText('2020–2021');
@@ -266,7 +266,7 @@ test('Referenz Plessurbrücke Sassal zeigt Jahre, Bild und Fallstudie ohne Namen
   await expect(page.locator('h1')).toContainText('Plessurbrücke Sassal');
   await expect(page.locator('main img[src*="sassal-werkleitungen"]')).toHaveCount(1);
   const text = await page.locator('main').innerText();
-  for (const intern of ['Vetsch', 'Casutt', 'Stoffel', 'IBC', 'Swisscom', 'UPC', 'Parzelle']) expect(text).not.toContain(intern);
+  for (const intern of ['Swisscom', 'Parzelle']) expect(text).not.toContain(intern);
 });
 
 test('Referenz Fläscherstrasse nennt die Kleintiermauer und führt über «Infos» zur Fallstudie', async ({ page }) => {
@@ -424,4 +424,17 @@ test('Werdegang: Stationen leuchten auf, sobald die Trasse sie erreicht', async 
   await expect.poll(() => erste.evaluate((e) => getComputedStyle(e, '::before').backgroundColor)).toBe('rgb(143, 211, 255)');
   const letzte = page.locator('.zeitachse > li').last();
   expect(await letzte.evaluate((e) => getComputedStyle(e, '::before').backgroundColor)).toBe('rgb(10, 15, 20)');
+});
+
+test('Fallstudien und Referenzen nennen keine Protokolle oder Sitzungen', async ({ page }) => {
+  await page.goto('/projekte/');
+  const pfade = await page.locator('main a[href^="/projekte/"]').evaluateAll((links) =>
+    [...new Set(links.map((a) => a.getAttribute('href') ?? '').filter((h) => /^\/projekte\/[^#]+\/$/.test(h)))],
+  );
+  expect(pfade.length).toBeGreaterThan(8);
+  for (const pfad of ['/projekte/', ...pfade]) {
+    await page.goto(pfad);
+    const text = (await page.locator('main').innerText()).toLowerCase();
+    for (const wort of ['protokoll', 'sitzung', 'rapport', 'jour fixe', 'pendenz']) expect(text, `«${wort}» auf ${pfad}`).not.toContain(wort);
+  }
 });

@@ -4,7 +4,7 @@ kurz: Natursteinbogenbrücke von 1889 instand gesetzt und auf 8.50 m Fahrbahn ve
 art: beruflich
 zeitraum: 2018, Tiefbauamt Graubünden
 rolle: Örtliche Bauleitung des Tiefbauamts
-ergebnis: Laut Protokollen im Bauprogramm; Belag für November 2018, Teilabnahme auf den 27. November 2018 terminiert
+ergebnis: Im Bauprogramm; Belag für November 2018, Teilabnahme auf den 27. November 2018 terminiert
 technologie: [Brückeninstandsetzung, Mikropfähle, Natursteinmauern, Bauen im Gewässer, Bauen unter Verkehr]
 kompetenzen: [tiefbau-infrastruktur]
 bild: /bilder/projekte/litzirueti-bruecke
@@ -13,7 +13,7 @@ bildRahmen: foto
 reihenfolge: 0.8
 ---
 
-> **Berufliches Projekt** beim Tiefbauamt Graubünden, Kunstbauten und Bauwerkserhaltung. Grundlagen: das öffentlich aufgelegte Auflageprojekt (technischer Bericht, August 2017) und meine eigenen Bausitzungsprotokolle von März bis Oktober 2018. Namen von Beteiligten und Kosten werden nicht genannt.
+> **Berufliches Projekt** beim Tiefbauamt Graubünden, Kunstbauten und Bauwerkserhaltung. Die technischen Angaben stammen aus dem öffentlich aufgelegten Auflageprojekt (technischer Bericht, August 2017). Namen von Beteiligten und Kosten werden nicht genannt.
 
 ## Ausgangslage
 
@@ -40,7 +40,7 @@ Die Plessurbrücke Litzirüti liegt an der Schanfiggerstrasse zwischen Langwies 
 
 ## Meine Rolle
 
-Als örtliche Bauleitung des Tiefbauamts habe ich von der Startsitzung bis zur Teilabnahme die Bausitzungen geleitet und protokolliert. Dazu gehörten Bauprogramm und Termine, Planlieferungen, Ausführungskontrollen, Absteckungen zur Qualitätssicherung, die Werkleitungen in der Brücke sowie die Abstimmung mit Fischerei, Wildhut und Gemeinde.
+Als örtliche Bauleitung des Tiefbauamts habe ich die Ausführung vom Baustart bis zur Teilabnahme geleitet. Dazu gehörten Bauprogramm und Termine, Planlieferungen, Ausführungskontrollen, Absteckungen zur Qualitätssicherung, die Werkleitungen in der Brücke sowie die Abstimmung mit Fischerei, Wildhut und Gemeinde.
 
 ## Bauen im Gewässer und unter Verkehr
 
@@ -53,6 +53,6 @@ Als örtliche Bauleitung des Tiefbauamts habe ich von der Startsitzung bis zur T
 
 ## Ergebnis
 
-Geplant waren zwei Bauphasen in den Jahren 2018 und 2019. Mit einem überarbeiteten, beschleunigten Bauprogramm des Unternehmers sollten die Arbeiten bereits 2018 abgeschlossen werden. Die Brückenplatte wurde am 21. September 2018 betoniert, die Belagsarbeiten folgten im November, die Teilabnahme war für den 27. November 2018 angesetzt. In den Bausitzungen im Herbst wurde das Bauprogramm jeweils als eingehalten festgehalten.
+Geplant waren zwei Bauphasen in den Jahren 2018 und 2019. Mit einem überarbeiteten, beschleunigten Bauprogramm des Unternehmers sollten die Arbeiten bereits 2018 abgeschlossen werden. Die Brückenplatte wurde am 21. September 2018 betoniert, die Belagsarbeiten folgten im November, die Teilabnahme war für den 27. November 2018 angesetzt. Im Herbst lag der Bau jeweils im Bauprogramm.
 
 ![Kabelschutzrohre im Graben neben der Brücke, für die Werkleitungen in der Brücke](/bilder/projekte/litzirueti-kabelschutzrohre.jpg)

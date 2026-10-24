@@ -13,7 +13,7 @@ bildRahmen: foto
 reihenfolge: 0.68
 ---
 
-> **Berufliches Projekt** beim Tiefbauamt Graubünden, Erhaltung Kunstbauten. Grundlage sind meine eigenen Protokolle der Werkleitungssitzung und der Bausitzungen von März bis Juli 2017. Namen von Beteiligten und Kosten werden nicht genannt.
+> **Berufliches Projekt** beim Tiefbauamt Graubünden, Erhaltung Kunstbauten, 2017. Namen von Beteiligten und Kosten werden nicht genannt.
 
 ## Ausgangslage
 
@@ -32,9 +32,9 @@ Die Calfreisentobelbrücke liegt an der Schanfiggerstrasse zwischen Chur und Aro
 
 ## Meine Rolle
 
-Als örtliche Bauleitung des Tiefbauamts habe ich die Werkleitungssitzung und die Bausitzungen geleitet und protokolliert. Dazu gehörten Bauprogramm und Etappen, Ausführungskontrollen, das Aufbieten von Vermessung und Labor, Regie- und Nachtragsleistungen, Ausmass und die Koordination der Werkeigentümer.
+Als örtliche Bauleitung des Tiefbauamts habe ich die Ausführung geleitet. Dazu gehörten Bauprogramm und Etappen, Ausführungskontrollen, das Aufbieten von Vermessung und Labor, Regie- und Nachtragsleistungen, Ausmass und die Koordination der Werkeigentümer.
 
-## Herausforderungen aus den Bausitzungen
+## Herausforderungen in der Ausführung
 
 - **Mehr Belag als erwartet.** Auf der Brückenplatte lagen bis zu 20 cm Belag. Den Mehraufwand haben wir mit dem Unternehmer bilateral geklärt.
 - **Höhen.** Die neue Fahrbahnplatte liegt höher als die anschliessende Strasse. Übergang, Schächte und Entwässerung des Vorplatzes mussten angepasst werden.

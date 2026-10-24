@@ -13,7 +13,7 @@ bildRahmen: foto
 reihenfolge: 0.67
 ---
 
-> **Berufliches Projekt** beim Tiefbauamt Graubünden, Bezirk 1 Chur. Grundlage sind meine eigenen Protokolle vom Fahrversuch im Februar bis zur letzten Bausitzung im Juli 2017. Namen von Beteiligten, Kosten und Angaben zu einzelnen Grundstücken werden nicht genannt.
+> **Berufliches Projekt** beim Tiefbauamt Graubünden, Bezirk 1 Chur, 2017. Namen von Beteiligten, Kosten und Angaben zu einzelnen Grundstücken werden nicht genannt.
 
 ## Ausgangslage
 
@@ -35,7 +35,7 @@ Die Luzisteigstrasse führt als Kantonsstrasse mitten durch das Städtli von Mai
 - **Pflästerung aufbereitet.** Die alte Pflästerung wurde ausgebaut, aufbereitet und wieder verlegt. Die Musterfläche der Bogenpflästerung hat die Denkmalpflege abgenommen.
 - **Schächte.** Alle Schachtdeckel wurden ersetzt, die Kontrollschächte ausgepflästert.
 
-## Herausforderungen aus den Bausitzungen
+## Herausforderungen in der Ausführung
 
 - **Feuchte Keller.** Anwohnende meldeten feuchte Kellerwände und verlangten Massnahmen gegen versickerndes Oberflächenwasser. Wir haben in der ersten Etappe mittig eine Sickerleitung eingebaut.
 - **Zwei Unternehmer in einer Gasse.** Parallel zur Pflästerung verlegte das Elektrizitätswerk Kabelblöcke und ein privater Bauherr baute eine Unterführung quer durch den Projektperimeter. Bauprogramme, Etappen und Werkleitungskonflikte mussten laufend abgestimmt werden, die Statik der Unterführung prüfte die Abteilung Kunstbauten.
@@ -48,7 +48,7 @@ Die Luzisteigstrasse führt als Kantonsstrasse mitten durch das Städtli von Mai
 
 ## Meine Rolle
 
-Als örtliche Bauleitung des Tiefbauamts habe ich den Fahrversuch und die Bausitzungen organisiert, geleitet und protokolliert. Ich habe Unternehmer, Stadt, Polizei, Postauto, Denkmalpflege, Archäologie und Werkeigentümer koordiniert, Regiearbeiten und Nachträge geprüft und die Information der Anwohnenden begleitet.
+Als örtliche Bauleitung des Tiefbauamts habe ich den Fahrversuch organisiert und die Ausführung geleitet. Ich habe Unternehmer, Stadt, Polizei, Postauto, Denkmalpflege, Archäologie und Werkeigentümer koordiniert, Regiearbeiten und Nachträge geprüft und die Information der Anwohnenden begleitet.
 
 ## Ergebnis
 

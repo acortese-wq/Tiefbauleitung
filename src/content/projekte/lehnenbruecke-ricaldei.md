@@ -13,7 +13,7 @@ bildRahmen: foto
 reihenfolge: 0.66
 ---
 
-> **Berufliches Projekt** beim Tiefbauamt Graubünden, Bezirk 1 Chur. Grundlage sind meine eigenen Bausitzungsprotokolle von April 2020 bis Juni 2021. Namen von Beteiligten, Kosten und Angaben zu einzelnen Grundstücken werden nicht genannt.
+> **Berufliches Projekt** beim Tiefbauamt Graubünden, Bezirk 1 Chur, 2020–2021. Namen von Beteiligten, Kosten und Angaben zu einzelnen Grundstücken werden nicht genannt.
 
 ## Ausgangslage
 
@@ -33,11 +33,11 @@ Die Tschiertscherstrasse führt von Chur nach Tschiertschen. Bei Ricaldei verlä
 
 ## Meine Rolle
 
-Als örtliche Bauleitung des Tiefbauamts habe ich in rund 23 Bausitzungen den Bau von der Startsitzung bis zur Abnahme geführt und protokolliert. Dazu gehörten Bauprogramm und Nachtsperrungen, Ausführungskontrollen, die Überwachung durch den Vermesser, Nachträge und Regiearbeiten, die Teuerungsabrechnung und die Kreditaufstockung für die Mehraufwendungen.
+Als örtliche Bauleitung des Tiefbauamts habe ich den Bau vom Start bis zur Abnahme geführt. Dazu gehörten Bauprogramm und Nachtsperrungen, Ausführungskontrollen, die Überwachung durch den Vermesser, Nachträge und Regiearbeiten, die Teuerungsabrechnung und die Kreditaufstockung für die Mehraufwendungen.
 
-## Herausforderungen aus den Bausitzungen
+## Herausforderungen in der Ausführung
 
-- **Pandemie beim Baustart.** Baubeginn im April 2020, kurz nach Ostern. Sitzungen fanden anfangs im Freien und mit höchstens fünf Personen statt.
+- **Pandemie beim Baustart.** Baubeginn im April 2020, kurz nach Ostern. Die Baustelle lief anfangs unter strengen Schutzmassnahmen mit Abstand und kleinen Gruppen.
 - **Hang in Bewegung.** Die bestehende Stützmauer wurde ab Juni 2020 vermessen. Unter ihrem Fundament war Erdreich abgesackt, wir haben es mit Beton unterfangen. Die Fixpunkte zeigten, dass die bergseitige Wandmauer um mehrere Zentimeter gekippt war. Ihr Ersatz wurde zwingend, das Projekt dafür entstand über den Winter.
 - **Mehr Aufwand als ausgeschrieben.** Geologisches Überprofil bei der Baugrubensicherung, mehr Beton in den Schächten wegen Ausbrüchen, grössere Spannweiten beim Lehrgerüst. Diese Mehraufwendungen habe ich laufend geprüft und dokumentiert.
 - **Wintereinbruch.** Ende Oktober 2020 schneite es bereits. Damit Schneeräumung und Schutz der Betonbauteile möglich waren, wurde vor dem Winter eine Tragschicht eingebaut und im Winter befahren. So musste 2021 nicht der ganze Belag wieder abgebrochen werden.
@@ -47,4 +47,4 @@ Als örtliche Bauleitung des Tiefbauamts habe ich in rund 23 Bausitzungen den Ba
 
 ## Ergebnis
 
-Ende Oktober 2020 war die Brückenplatte fertig betoniert, das Bauende 2020 war auf den 18. Dezember gesetzt. 2021 folgten ab März Wandmauer, Werkleitungen und Belag, die Betonarbeiten waren Ende Juni abgeschlossen, die Abnahme im August 2021 angesetzt. In den Protokollen sind die leistungsfähigen Baumeisterarbeiten und die sauberen Sichtbetonflächen von Kordon und Pfeilern ausdrücklich festgehalten.
+Ende Oktober 2020 war die Brückenplatte fertig betoniert, das Bauende 2020 war auf den 18. Dezember gesetzt. 2021 folgten ab März Wandmauer, Werkleitungen und Belag, die Betonarbeiten waren Ende Juni abgeschlossen, die Abnahme im August 2021 angesetzt. Hervorzuheben sind die leistungsfähigen Baumeisterarbeiten und die sauberen Sichtbetonflächen von Kordon und Pfeilern.

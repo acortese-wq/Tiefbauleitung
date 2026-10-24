@@ -13,7 +13,7 @@ bildRahmen: foto
 reihenfolge: 0.65
 ---
 
-> **Berufliches Projekt** beim Tiefbauamt Graubünden, Bezirk 1 Chur. Grundlagen sind das öffentlich aufgelegte Auflageprojekt (technischer Bericht, April 2019) und meine eigenen Bausitzungsprotokolle von Juli 2020 bis Juli 2021. Namen von Beteiligten und Angaben zu einzelnen Grundstücken werden nicht genannt.
+> **Berufliches Projekt** beim Tiefbauamt Graubünden, Bezirk 1 Chur. Die technischen Angaben stammen aus dem öffentlich aufgelegten Auflageprojekt (technischer Bericht, April 2019). Namen von Beteiligten und Angaben zu einzelnen Grundstücken werden nicht genannt.
 
 ## Ausgangslage
 
@@ -43,9 +43,9 @@ Der Ort ist eng. Unmittelbar neben der Brücke führt die Bahnlinie Chur–Arosa
 
 ## Meine Rolle
 
-Als örtliche Bauleitung des Tiefbauamts habe ich von der Startsitzung bis zur Vorabnahme die Bausitzungen geleitet und protokolliert. Dazu gehörten Bauprogramm und Termine, Ausführungskontrollen, Absteckung und Überwachung, Regie- und Nachtragspreise, Ausmass und Teilrechnungen sowie die Abstimmung mit Bahn, Werkeigentümern, Stadt, Polizei und Fischerei.
+Als örtliche Bauleitung des Tiefbauamts habe ich die Ausführung vom Baustart bis zur Vorabnahme geleitet. Dazu gehörten Bauprogramm und Termine, Ausführungskontrollen, Absteckung und Überwachung, Regie- und Nachtragspreise, Ausmass und Teilrechnungen sowie die Abstimmung mit Bahn, Werkeigentümern, Stadt, Polizei und Fischerei.
 
-## Herausforderungen aus den Bausitzungen
+## Herausforderungen in der Ausführung
 
 - **Bahn direkt neben der Baustelle.** Arbeiten am Widerlager Chur nur mit Sicherheitswärter, Kranbetrieb nach Auflagen der Bahn, Zwangstermine der Bahn im Bauprogramm.
 - **Steinschlag.** Vor Baubeginn wurde der Fels geräumt und ein absturzgefährdeter Felsblock oberhalb der Galerie dauernd überwacht.
@@ -58,10 +58,10 @@ Als örtliche Bauleitung des Tiefbauamts habe ich von der Startsitzung bis zur V
 
 ## Bezug zum Netzbau
 
-Alle Leitungen im Brückenbereich wurden zuerst auf die Hilfsbrücke umgelegt und danach in die neue Brücke integriert, zwischen die beiden Hohlkastenträger. Dafür waren Koordinationssitzungen mit den Werkeigentümern nötig. Die Grundsätze zur Kostentragung waren in den Verfügungen und im kantonalen Strassengesetz geregelt: Muss eine Leitung wegen eines Umbaus von Strasse oder Brücke angepasst werden, trägt der Werkeigentümer die Kosten; den Schutz der Leitungen während der Bauarbeiten trägt der Strasseneigentümer. Genau an diesen Schnittstellen arbeite ich heute aus Sicht des Netzbetreibers.
+Alle Leitungen im Brückenbereich wurden zuerst auf die Hilfsbrücke umgelegt und danach in die neue Brücke integriert, zwischen die beiden Hohlkastenträger. Dafür war eine enge Koordination mit den Werkeigentümern nötig. Die Grundsätze zur Kostentragung regelt das kantonale Strassengesetz: Muss eine Leitung wegen eines Umbaus von Strasse oder Brücke angepasst werden, trägt der Werkeigentümer die Kosten; den Schutz der Leitungen während der Bauarbeiten trägt der Strasseneigentümer. Genau an diesen Schnittstellen arbeite ich heute aus Sicht des Netzbetreibers.
 
 ## Ergebnis
 
-Ab Oktober 2020 lief der Verkehr über die Hilfsbrücke, im Februar 2021 wurden die Stahlträger eingehoben. Im Juni 2021 waren die Betonarbeiten an der Brücke abgeschlossen, danach wurde die Hilfsbrücke zurückgebaut. In der letzten Bausitzung im Juli 2021 waren die Baumeisterarbeiten bis auf die Arbeiten im Gewässer abgeschlossen, die Belagsarbeiten begannen am 19. Juli 2021. Den Deckbelag haben wir mit der Stadt Chur für September koordiniert.
+Ab Oktober 2020 lief der Verkehr über die Hilfsbrücke, im Februar 2021 wurden die Stahlträger eingehoben. Im Juni 2021 waren die Betonarbeiten an der Brücke abgeschlossen, danach wurde die Hilfsbrücke zurückgebaut. Im Juli 2021 waren die Baumeisterarbeiten bis auf die Arbeiten im Gewässer abgeschlossen, die Belagsarbeiten begannen am 19. Juli 2021. Den Deckbelag haben wir mit der Stadt Chur für September koordiniert.
 
 ![Die neue Plessurbrücke Sassal von der Plessur aus, rechts die Ufermauer und die Galerie der Bahnlinie](/bilder/projekte/sassal-plessur.jpg)

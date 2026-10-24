@@ -365,3 +365,10 @@ test('Kompetenz Netzbau zeigt das Kompetenzprofil mit Swisscom-Bezug und Hinweis
   const text = (await main.innerText()).toLowerCase();
   for (const intern of ['cablex', 'swisscomgpt', 'c2 internal']) expect(text).not.toContain(intern);
 });
+
+test('Profil zeigt die Werdegang-Grafik vor den beruflichen Stationen', async ({ page }) => {
+  await page.goto('/profil/');
+  const fig = page.locator('#werdegang-grafik');
+  await expect(fig.locator('img')).toHaveAttribute('alt', /Tiefbauzeichner zum Bauingenieur/);
+  await expect(fig).toContainText('KI-generierte Illustration');
+});

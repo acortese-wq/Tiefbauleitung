@@ -97,6 +97,15 @@ const werte = [
         <h2 id="werdegang-titel">Berufliche Stationen</h2>
         <p>Angaben gemäss Lebenslauf, Arbeitszeugnissen und LinkedIn-Profil.</p>
       </div>
+      <figure class="werdegang-bild" id="werdegang-grafik">
+        <a href="/bilder/werdegang.jpg" class="werdegang-zoom">
+          <picture>
+            <source type="image/webp" srcset="/bilder/werdegang-1000.webp 1000w, /bilder/werdegang-1983.webp 1983w" sizes="(min-width: 1180px) 1128px, calc(100vw - 32px)" />
+            <img src="/bilder/werdegang.jpg" width="1983" height="793" loading="lazy" decoding="async" alt="Infografik «Vom Tiefbauzeichner zum Bauingenieur – Erfahrung trifft KI»: 1994 Lehre als Tiefbauzeichner, Projektierung von Hauptstrassen, Projektleitung in zwei Ingenieurbüros, Führung eines Teams von vier Bauleitern, seit 2025 Bauherrenvertreter im Glasfaserausbau, seit 2000 Prüfungsexperte für Bauzeichnerinnen und Bauzeichner, Zertifikat KI-Professional (KI-Agent) der HSO." />
+          </picture>
+        </a>
+        <figcaption>Der Weg im Überblick. Die Einzelheiten zu jeder Station folgen unten. <span>KI-generierte Illustration · <a href="/bilder/werdegang.jpg">Grafik in voller Grösse öffnen</a></span></figcaption>
+      </figure>
       <ol class="zeitachse">
         {werdegang.map((s) => (
           <li>
@@ -172,6 +181,12 @@ const werte = [
 </Basis>
 
 <style>
+  .werdegang-bild { margin: 0 0 clamp(28px, 4vw, 44px); }
+  .werdegang-bild img { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--linie); }
+  .werdegang-zoom { display: block; cursor: zoom-in; }
+  .werdegang-zoom:focus-visible { outline: 2px solid var(--eis); outline-offset: 3px; }
+  .werdegang-bild figcaption { margin-top: 10px; color: var(--text-ruhig); font-size: 0.95rem; }
+  .werdegang-bild figcaption span { display: block; margin-top: 4px; font: 0.78rem var(--f-mono); }
   .profil-intro { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
   .profil-intro img { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--linie-hell); display: block; }
   .zeitachse { list-style: none; margin: 0; padding: 0 0 0 28px; position: relative; display: grid; gap: 34px; }

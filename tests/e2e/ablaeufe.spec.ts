@@ -238,8 +238,12 @@ test('Profil zeigt berufliches Profil mit Schwerpunkten und Arbeitsweise', async
   const bp = page.locator('#berufsprofil');
   await expect(bp.getByRole('heading', { name: 'Berufliches Profil' })).toBeVisible();
   await expect(bp.locator('.bp-schwerpunkte li')).toHaveCount(13);
+  // Jeder Schwerpunkt ist ein Link mit Nutzen für Auftraggeber
+  await expect(bp.locator('.bp-schwerpunkte a')).toHaveCount(13);
   await expect(bp.locator('.bp-arbeitsweise li')).toHaveCount(6);
   await expect(bp).toContainText('Netzinfrastruktur, FTTH-Ausbau');
+  await bp.getByRole('link', { name: /Ausmass-, Offert- und Rechnungsprüfung/ }).click();
+  await expect(page).toHaveURL(/ki-labor\/werkbank\/#lv-plausibilitaet$/);
 });
 
 test('Referenz Jenins zeigt Ort, Kurzbeschrieb, Netzbau-Filter und Link zur Fallstudie', async ({ page }) => {

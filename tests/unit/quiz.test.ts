@@ -6,8 +6,10 @@ import {
 } from '../../src/lib/quiz';
 
 const SCHEMAS = ['ftth', 'schacht', 'muffe', 'graben', 'hausanschluss'];
-/** Schweizer Zahlformat zurück in eine Zahl: 2’318.40 → 2318.4 */
-const num = (s: string) => Number(s.replace(/[’']/g, ''));
+/** Schweizer Zahlformat zurück in eine Zahl: 2’318.40 → 2318.4. Das Tausenderzeichen hängt von der ICU-Version ab (’ oder '). */
+const num = (s: string) => Number(s.replace(/\u2212/g, '-').replace(/[^\d.+-]/g, ''));
+/** Zahl im Fragetext, unabhängig vom Tausenderzeichen */
+const Z = String.raw`[\d’'\u00a0\u202f]+`;
 const richtigeAntwort = (f: Frage) => f.antworten.find((a) => a.richtig)!.text;
 
 describe('Fragenpool', () => {
@@ -106,7 +108,7 @@ describe('Rechengenerator', () => {
     aushub: (f) => { const [l, b, t] = f.frage.match(/([\d’.]+) m lang, ([\d.]+) m breit, ([\d.]+) m tief/)!.slice(1).map(num); return l * b * t; },
     rechnung: (f) => { const [m, ep] = f.frage.match(/([\d’.]+) m Kabelschutzrohr verlegen à CHF ([\d’.]+)/)!.slice(1).map(num); return m * ep; },
     regie: (f) => { const [p, h, s, hm, ms] = f.frage.match(/(\d) Personen je ([\d.]+) h à CHF ([\d’.]+), dazu Bagger ([\d.]+) h à CHF ([\d’]+\.\d{2})/)!.slice(1).map(num); return p * h * s + hm * ms; },
-    mehrmenge: (f) => { const [v, a] = f.frage.match(/stehen ([\d’]+) m Graben, das Ausmass ergibt ([\d’]+) m/)!.slice(1).map(num); return ((a - v) / v) * 100; },
+    mehrmenge: (f) => { const [v, a] = f.frage.match(new RegExp(`stehen (${Z}) m Graben, das Ausmass ergibt (${Z}) m`))!.slice(1).map(num); return ((a - v) / v) * 100; },
     fuellgrad: (f) => { const [k, d, w] = f.frage.match(/([\d.]+) mm Durchmesser.*?Rohr (\d+) × ([\d.]+) mm/)!.slice(1).map(num); return (k / (d - 2 * w)) ** 2 * 100; },
   };
 
@@ -118,7 +120,7 @@ describe('Rechengenerator', () => {
         expect(new Set(f.antworten.map((a) => a.text)).size, `${typ} ${seed}`).toBe(4);
         expect(f.antworten.filter((a) => a.richtig)).toHaveLength(1);
         const soll = pruefe[typ](f);
-        const ist = num(richtigeAntwort(f).replace(/^CHF |[^\d’.+-]+$/g, '').replace(/[^\d’.+-]/g, ''));
+        const ist = num(richtigeAntwort(f).replace(/[²³]/g, ''));
         expect(Math.abs(ist - soll), `${typ} ${seed}: ${f.frage} → ${richtigeAntwort(f)}`).toBeLessThan(typ === 'mehrmenge' || typ === 'fuellgrad' ? 0.051 : 0.0051);
       }
     }

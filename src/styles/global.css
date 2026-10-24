@@ -171,6 +171,13 @@ a.chip:hover { border-color: var(--eis); }
 .prosa .figur-breit figcaption { max-width: var(--text-max); margin-top: 10px; font-size: 0.98rem; color: var(--text-ruhig); }
 .prosa .figur-breit figcaption strong { color: var(--text); }
 .prosa .figur-hinweis { display: block; margin-top: 6px; font: 0.78rem var(--f-mono); }
+.prosa .kp-raster { width: min(calc(var(--max) - 32px), calc(100vw - 32px)); max-width: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 1.4em 0; }
+.prosa .kp-karte { border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); padding: 14px 16px; font-size: 0.95rem; line-height: 1.55; }
+.prosa .kp-karte h3 { font-size: 1.1rem; margin: 0 0 6px; }
+.prosa .kp-karte p { margin: 0 0 6px; color: var(--eis); font-size: 0.9rem; }
+.prosa .kp-karte ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; color: var(--text-ruhig); }
+.prosa .kp-staerken { color: var(--text-ruhig); }
+.prosa .kp-hinweis { font-size: 0.85rem; color: var(--text-ruhig); border-left: 2px solid var(--linie-hell); padding-left: 10px; }
 .prosa h2 { font-size: var(--s-2); margin-top: 2em; }
 .prosa h3 { font-size: var(--s-1); margin-top: 1.6em; }
 .prosa ul, .prosa ol { padding-left: 1.25em; }

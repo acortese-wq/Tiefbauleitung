@@ -52,6 +52,49 @@ Damit Daten aus dem Internet auf Smartphone, Laptop oder Fernseher ankommen, bra
 - **Qualität abnehmen, nicht nur abrechnen.** Zwischen- und Endkontrollen gehören zur Bauherrenrolle, damit das Netz so gebaut ist, wie es bestellt wurde.
 - **Die Sprache aller Beteiligten.** Generalunternehmer, Gemeinde, Kanton und Werkeigentümer verfolgen unterschiedliche Ziele. Ich kenne die Begriffe und Interessen jeder Seite.
 
+## Kompetenzprofil Netzbau
+
+Swisscom baut das Glasfasernetz der Schweiz und stellt hohe Ansprüche an Qualität, Kosten und Nachvollziehbarkeit. In diesem Umfeld arbeite ich als Bauherrenvertreter: Ich setze mich dafür ein, dass das Netz so gebaut wird, wie es bestellt wurde, in der Qualität, die Kundinnen und Kunden von Swisscom erwarten, zu nachvollziehbaren Kosten und revisionssicher dokumentiert. Dabei verbinde ich technisches Verständnis mit wirtschaftlichem Denken und schaffe belastbare Entscheidungsgrundlagen für Projektleitung und Management.
+
+<div class="kp-raster">
+  <section class="kp-karte">
+    <h3>Bauherrenvertretung</h3>
+    <p>Interessen der Swisscom als Bauherrin vertreten</p><ul><li>Qualität, Kosten und Termine sicherstellen</li><li>Technische und wirtschaftliche Varianten beurteilen</li><li>Externe Partner steuern und begleiten</li><li>Projektunterlagen prüfen und freigeben</li><li>Abnahmen durchführen</li><li>Revisionsfähigkeit der Projekte sicherstellen</li></ul>
+  </section>
+  <section class="kp-karte">
+    <h3>Tiefbau und Telekommunikationsinfrastruktur</h3>
+    <ul><li>FTTH-Ausbau (Fiber to the Home)</li><li>Kabelschutzrohranlagen, Kabeltrassen, Kabelschächte und Zugangsbauwerke</li><li>Leitungsumlegungen, Netzerschliessungen, Netzverdichtungen und Netzsanierungen</li><li>Werkleitungskoordination mit Behörden und Werkeigentümern</li></ul>
+  </section>
+  <section class="kp-karte">
+    <h3>Netztechnik</h3>
+    <p>Verständnis der Übertragungswege vom Rechenzentrum bis zum Endkunden</p><ul><li>Glasfaser- und Kupfernetze, Backbone und Access-Netze</li><li>FTTH-Architekturen</li><li>Netzerweiterungen und Kapazitätsausbauten</li><li>Infrastruktur mit Blick auf den künftigen Betrieb planen</li></ul>
+  </section>
+  <section class="kp-karte">
+    <h3>Projektsteuerung</h3>
+    <ul><li>Projektleitung und Koordination komplexer Infrastrukturprojekte</li><li>Kosten-, Termin- und Qualitätsüberwachung, Projektcontrolling</li><li>Risiko-, Stakeholder- und Eskalationsmanagement</li><li>Zusammenarbeit mit Ingenieurbüros, Tiefbauunternehmen, Elektrizitätswerken, Gemeinden, Kantonen, Bundesstellen, Grundeigentümern und Fachbereichen innerhalb der Swisscom</li><li>Technische, Kosten- und Nachtragsverhandlungen</li></ul>
+  </section>
+  <section class="kp-karte">
+    <h3>Kosten und Verträge</h3>
+    <ul><li>Budgetplanung, Budgetüberwachung und Kostenprognosen</li><li>Wirtschaftlichkeitsbetrachtungen und Plausibilisierung von Angeboten</li><li>Schlussausmasse, Mengen, Einheitspreise, Rechnungen, Nachträge und Regieleistungen prüfen, Doppelverrechnungen erkennen</li><li>SIA 118, NPK, Werkverträge und Leistungsbeschriebe</li><li>Nachtragsmanagement, Nachweisführung und vertragskonforme Leistungsabgrenzung</li></ul>
+  </section>
+  <section class="kp-karte">
+    <h3>Qualität und Nachvollziehbarkeit</h3>
+    <ul><li>Plausibilitätsprüfungen, Baukontrollen und Mängelbeurteilungen</li><li>Risiko- und Ursachenanalysen</li><li>Revisionssichere Dokumentation und Freigabeprozesse</li><li>Nachvollziehbare technische und finanzielle Entscheide</li></ul>
+  </section>
+  <section class="kp-karte">
+    <h3>Recht und Bewilligungen</h3>
+    <ul><li>Fernmeldegesetz (FMG), Leitungsrechte und Werkleitungsrecht</li><li>Baubewilligungsverfahren und Zuständigkeiten von Gemeinden und Kantonen</li><li>Schutzgebiete und Schutzzonen</li><li>Haftungsfragen im Tiefbau</li><li>Eigentums- und Nutzungsrechte an Telekommunikationsanlagen</li></ul>
+  </section>
+  <section class="kp-karte">
+    <h3>Digitalisierung und KI</h3>
+    <ul><li>Kosten- und Mengenanalysen in Excel, Dashboards als Entscheidungsgrundlage</li><li>Microsoft Copilot und Experten-Prompts im Arbeitsalltag</li><li>Prüfprozesse standardisieren und automatisieren</li><li>KI zur Unterstützung von Vertrags- und Dokumentenprüfungen, für Qualität und Effizienz</li></ul>
+  </section>
+</div>
+
+<p class="kp-staerken"><strong>Arbeitsweise:</strong> analytisch und strukturiert, kostenbewusst, revisionssicher dokumentiert und entscheidungsorientiert aufbereitet. Im Umgang mit Partnern verhandlungssicher, lösungsorientiert und offen für neue Technologien.</p>
+
+<p class="kp-hinweis">Persönliche Webseite. Die Angaben beschreiben meine Aufgaben und Erfahrungen; sie geben nicht die Haltung der Swisscom wieder und enthalten keine internen Informationen.</p>
+
 ## Netzbau und KI: Stand der Dinge
 
 Ich unterscheide klar zwischen dem, was es gibt, und dem, was Idee ist.
@@ -79,6 +122,6 @@ Weniger Reibung zwischen den Beteiligten, nachvollziehbare Kostenteiler und eine
 
 ## Belegte Erfahrung
 
-- Seit April 2025 Bauherrenvertreter Tiefbau und Access Project Manager im Glasfaserausbau (FTTH), Ostschweiz
+- Seit April 2025 Bauherrenvertreter Tiefbau und Access Project Manager im Glasfaserausbau (FTTH) bei der Swisscom AG, Ostschweiz
 - 2021–2025 Bearbeitung und Beurteilung von Leitungsgesuchen zusammen mit dem Bezirkschef, Tiefbauamt Graubünden
 - 2006–2013 Projekt- und Bauleitung von Wasserversorgungen, Siedlungsentwässerungen und Quartiererschliessungen

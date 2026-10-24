@@ -354,3 +354,13 @@ test('Kompetenz Netzbau zeigt die Übersichtsgrafik mit Legende und KI-Kennzeich
   await expect(fig).toContainText('Hier arbeite ich');
   await expect(fig).toContainText('KI-generierte Illustration');
 });
+
+test('Kompetenz Netzbau zeigt das Kompetenzprofil mit Swisscom-Bezug und Hinweis, ohne interne Namen', async ({ page }) => {
+  await page.goto('/kompetenzen/netzinfrastruktur-leitungsbau/');
+  await expect(page.locator('.kp-karte')).toHaveCount(8);
+  const main = page.locator('main');
+  await expect(main).toContainText('Interessen der Swisscom als Bauherrin vertreten');
+  await expect(main).toContainText('geben nicht die Haltung der Swisscom wieder');
+  const text = (await main.innerText()).toLowerCase();
+  for (const intern of ['cablex', 'swisscomgpt', 'c2 internal']) expect(text).not.toContain(intern);
+});

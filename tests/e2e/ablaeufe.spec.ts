@@ -328,8 +328,7 @@ test('KI-Labor: Übersicht führt zu Werkbank, Nutzenrechner und Radar', async (
   // Ohne frische Daten (lokal oder bei Ausfall der Quelle) erscheint ein Hinweis statt veralteter Zahlen
   const radar = page.locator('[data-radar], [data-radar-leer]');
   await expect(radar).toHaveCount(1);
-  await expect(page.locator('main')).not.toContainText('LMArena');
-  if (await page.locator('[data-radar]').count()) await expect(page.locator('[data-radar] [role="tabpanel"]:visible li').first()).toBeVisible();
+  await expect(page.getByRole('link', { name: /OpenRouter Rankings/ })).toHaveAttribute('href', 'https://openrouter.ai/rankings');
 });
 
 test('Nutzenrechner rechnet in Franken und bietet Druck an', async ({ page }) => {

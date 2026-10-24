@@ -70,7 +70,7 @@ const werte = [
                 <a href={s.href}>
                   <strong>{s.titel}</strong>
                   <span>{s.nutzen}</span>
-                  <span class="bp-pfeil" aria-hidden="true">→</span>
+                  <span class="bp-pfeil pfeil" aria-hidden="true">→</span>
                 </a>
               </li>
             ))}
@@ -202,6 +202,22 @@ const werte = [
   .zeitachse > li { position: relative; display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 24px; }
   .zeitachse > li::before { content: ''; position: absolute; left: -28px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--nacht); border: 2px solid var(--eis); }
   .zeitachse > li:first-child::before { background: var(--eis); }
+  /* Werdegang als Leitungstrasse: Beim Scrollen zieht sich die Linie von Station zu Station, jede Station leuchtet auf,
+     sobald sie die Bildschirmmitte erreicht. Zwei Regeln je Animation, damit der Minifier «animation-timeline» nicht verschluckt. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .zeitachse { view-timeline: --trasse block; }
+      .zeitachse > li { view-timeline: --station block; }
+      .zeitachse > li::before { z-index: 1; }
+      .zeitachse::after { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; background: var(--eis); transform-origin: 50% 0; scale: 1 0; }
+      :where(.zeitachse)::after { animation: trasse linear both; }
+      .zeitachse::after { animation-timeline: --trasse; animation-range: cover 50vh cover calc(100% - 50vh); }
+      :where(.zeitachse > li)::before { animation: station linear both; }
+      .zeitachse > li::before { animation-timeline: --station; animation-range: cover calc(50vh + 1px) cover calc(50vh + 25px); }
+      @keyframes trasse { to { scale: 1 1; } }
+      @keyframes station { from { background: var(--nacht); box-shadow: 0 0 0 0 rgb(143 211 255 / 0); } to { background: var(--eis); box-shadow: 0 0 0 5px rgb(143 211 255 / 0.2); } }
+    }
+  }
   .zeit { font-family: var(--f-mono); font-size: 0.82rem; color: var(--eis); padding-top: 3px; }
   .zeitachse h3 { font-size: 1.5rem; }
   .org { color: var(--text-ruhig); font-weight: 600; margin-top: 4px; }

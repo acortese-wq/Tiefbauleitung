@@ -34,7 +34,7 @@ const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser', 'netz'].filter((g) 
           <strong>{r.name}{r.ort && <span class="ref-ort"> · {r.ort}</span>}</strong>
           <span>{r.arbeitgeber}{r.bauherr ? ` · Bauherr: ${r.bauherr}` : ''}</span>
           {r.kurz && <span class="ref-kurz">{r.kurz}</span>}
-          {r.fallstudie && <a class="ref-fallstudie" href={`/projekte/${r.fallstudie}/`}>Infos<span class="visually-hidden"> zu {r.name}</span> →</a>}
+          {r.fallstudie && <a class="ref-fallstudie" href={`/projekte/${r.fallstudie}/`}>Infos<span class="visually-hidden"> zu {r.name}</span> <span class="pfeil" aria-hidden="true">→</span></a>}
         </span>
         <span class="ref-rolle">{r.rolle}</span>
         <span class="ref-tags">{r.fachgebiete.map((g) => <span class="chip">{fachgebietLabels[g]}</span>)}</span>
@@ -75,6 +75,7 @@ const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser', 'netz'].filter((g) 
   .ref-filter[hidden] { display: none; }
   .ref-filter button {
     font: 500 0.82rem var(--f-mono); min-height: 44px; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    transition: background .2s, border-color .2s, color .2s, scale .1s;
     border: 1px solid var(--linie-hell); background: var(--tiefe); color: var(--text);
   }
   .ref-filter button span { color: var(--text-ruhig); margin-left: 6px; }

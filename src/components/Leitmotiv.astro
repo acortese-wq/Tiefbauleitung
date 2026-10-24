@@ -52,6 +52,8 @@ const kanten = [
 
     <!-- Glasfaser: Rohrblock → Hausanschluss → Netz -->
     <path d="M282 342 C 360 342, 392 300, 410 250 L 410 196 M 410 160 L 450 64" class="lm-faser" />
+    <!-- Lichtimpuls: läuft nach dem Zeichnen dreimal vom Rohrblock zum KI-Agenten, im Takt des Pulses -->
+    <path d="M282 342 C 360 342, 392 300, 410 250 L 410 196 M 410 160 L 450 64" pathLength="100" class="lm-impuls" />
     <path d="M394 196 h32 v-26 h-32 z" class="lm-haus" />
     <path d="M390 172 l20 -16 l20 16" class="lm-haus" />
 
@@ -92,6 +94,7 @@ const kanten = [
   .lm-knoten { fill: var(--eis); fill-opacity: .7; }
   .lm-knoten-agent { fill: var(--eis); fill-opacity: 1; stroke: var(--eis-stark); stroke-width: 2; }
   .lm-faser { fill: none; stroke: var(--eis); stroke-width: 2.4; stroke-linecap: round; }
+  .lm-impuls { fill: none; stroke: none; }
   .lm-haus { fill: none; stroke: var(--text); stroke-width: 1.5; stroke-linejoin: round; }
   .lm-kote { fill: var(--signal); }
   .lm-masslinie { stroke: var(--signal); stroke-width: 1.1; }
@@ -110,5 +113,7 @@ const kanten = [
     @keyframes lm-zeichnen { to { stroke-dashoffset: 0; } }
     @keyframes lm-auftauchen { to { opacity: 1; } }
     @keyframes lm-puls { 50% { stroke-width: 6; stroke-opacity: .4; } }
+    .lm-impuls { stroke: var(--text); stroke-width: 4.4; stroke-linecap: round; stroke-dasharray: 9 100; stroke-dashoffset: 9; animation: lm-impuls 2.4s cubic-bezier(.45,0,.55,1) 2.6s 3 both; }
+    @keyframes lm-impuls { 65%, 100% { stroke-dashoffset: -100; } }
   }
 </style>

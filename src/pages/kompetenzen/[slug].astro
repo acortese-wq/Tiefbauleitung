@@ -60,7 +60,7 @@ const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
 
   <section class="abschnitt">
     <div class="wrap">
-      <article class="prosa" data-pagefind-body>
+      <article class="prosa" data-pagefind-body data-lesefortschritt>
         <Content />
       </article>
     </div>
@@ -74,7 +74,7 @@ const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
           <h2 id="wk-titel">Eigene Werkzeuge in diesem Feld</h2>
         </div>
         <Werkzeugkasten kompetenz={kompetenz.id} />
-        <p class="wk-alle"><a href="/projekte/#werkzeugkasten">Alle Werkzeuge ansehen →</a></p>
+        <p class="wk-alle"><a href="/projekte/#werkzeugkasten">Alle Werkzeuge ansehen <span class="pfeil" aria-hidden="true">→</span></a></p>
       </div>
     </section>
   )}

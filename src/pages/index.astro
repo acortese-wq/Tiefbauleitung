@@ -147,7 +147,7 @@ const zitat = zeugnisse[1];
           {kennzahlen.map((k) => (
             <div>
               <dt>{k.label}</dt>
-              <dd class="wert">{k.wert}</dd>
+              <dd class="wert" data-zaehlen>{k.wert}</dd>
               <dd class="quelle">{k.quelle}</dd>
             </div>
           ))}
@@ -199,7 +199,7 @@ const zitat = zeugnisse[1];
             <h3>{b.titel}</h3>
             <p>{b.text}</p>
             <ul class="bereich-links">
-              {b.links.map((l) => <li><a href={l.href}>{l.label} →</a></li>)}
+              {b.links.map((l) => <li><a href={l.href}>{l.label} <span class="pfeil" aria-hidden="true">→</span></a></li>)}
             </ul>
           </li>
         ))}
@@ -232,8 +232,8 @@ const zitat = zeugnisse[1];
           ))}
         </dl>
         <div class="beitrag-links">
-          <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/">Netzbau, Glasfaser und Leitungsbau im Detail →</a>
-          <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/#netz-uebersicht">Grafik: Vom Rechenzentrum bis ins Wohnzimmer →</a>
+          <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/">Netzbau, Glasfaser und Leitungsbau im Detail <span class="pfeil" aria-hidden="true">→</span></a>
+          <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/#netz-uebersicht">Grafik: Vom Rechenzentrum bis ins Wohnzimmer <span class="pfeil" aria-hidden="true">→</span></a>
         </div>
       </div>
     </div>
@@ -275,14 +275,14 @@ const zitat = zeugnisse[1];
           <p>{werkzeuge.length} selbst entwickelte Werkzeuge für Offerte, Kosten, Abrechnung und Fachfragen, gebaut mit KI-Unterstützung (Claude).</p>
         </div>
         <ul class="wk-namen">{werkzeuge.map((w) => <li class="chip">{w.name}</li>)}</ul>
-        <a class="wk-teaser-link" href="/projekte/#werkzeugkasten">Zum Werkzeugkasten →</a>
+        <a class="wk-teaser-link" href="/projekte/#werkzeugkasten">Zum Werkzeugkasten <span class="pfeil" aria-hidden="true">→</span></a>
       </div>
       <div class="wk-teaser karte">
         <div>
           <h3>KI-Labor</h3>
           <p>Prompt-Werkbank mit Schnellprüfung für LV, Offerten und Ausmass, ein Nutzenrechner in Franken und der täglich aktualisierte KI-Radar.</p>
         </div>
-        <a class="wk-teaser-link" href="/ki-labor/">Zum KI-Labor →</a>
+        <a class="wk-teaser-link" href="/ki-labor/">Zum KI-Labor <span class="pfeil" aria-hidden="true">→</span></a>
       </div>
       <div class="foto-reihe">
         <Referenzbilder titel="Referenzobjekte im Bild" />
@@ -349,6 +349,46 @@ const zitat = zeugnisse[1];
     </div>
   </section>
 </Basis>
+
+<script>
+  // Kennzahlen zählen einmal hoch, sobald sie sichtbar sind. Der Endwert steht im HTML:
+  // Suchmaschinen, Besuchende ohne JavaScript und mit reduzierter Bewegung sehen ihn sofort.
+  const werte = Array.from(document.querySelectorAll<HTMLElement>('[data-zaehlen]'));
+  if (werte.length && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const endwert = (el: HTMLElement) => `${el.dataset.ziel}${el.dataset.rest ?? ''}`;
+    const zaehle = (el: HTMLElement, ziel: number, rest: string) => {
+      const start = performance.now();
+      const schritt = (jetzt: number) => {
+        if (el.dataset.fertig) return;
+        const t = Math.min(1, (jetzt - start) / 1200);
+        el.textContent = `${Math.round(ziel * (1 - (1 - t) ** 3))}${rest}`;
+        if (t < 1) requestAnimationFrame(schritt);
+      };
+      requestAnimationFrame(schritt);
+    };
+    const beobachter = new IntersectionObserver((eintraege) => {
+      for (const e of eintraege) {
+        if (!e.isIntersecting) continue;
+        beobachter.unobserve(e.target);
+        const el = e.target as HTMLElement;
+        zaehle(el, Number(el.dataset.ziel), el.dataset.rest ?? '');
+      }
+    }, { threshold: 0.6 });
+    for (const el of werte) {
+      const [, zahl, rest = ''] = el.textContent?.trim().match(/^(\d+)(.*)$/) ?? [];
+      if (!zahl) continue;
+      el.dataset.ziel = zahl;
+      el.dataset.rest = rest;
+      el.textContent = `0${rest}`;
+      beobachter.observe(el);
+    }
+    // Beim Drucken ohne vorheriges Scrollen sollen nicht «0» erscheinen
+    addEventListener('beforeprint', () => {
+      beobachter.disconnect();
+      for (const el of werte) if (el.dataset.ziel) { el.dataset.fertig = 'ja'; el.textContent = endwert(el); }
+    });
+  }
+</script>
 
 <style>
   .held { position: relative; overflow: hidden; border-bottom: 1px solid var(--linie); }

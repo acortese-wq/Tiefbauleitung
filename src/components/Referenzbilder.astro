@@ -23,7 +23,7 @@ const mitBild = (await getCollection('referenzen'))
             <figcaption>
               <strong>{r.name}</strong>
               <span>{r.rolle} · {r.zeitraum}</span>
-              {r.fallstudie && <a href={`/projekte/${r.fallstudie}/`}>Infos<span class="visually-hidden"> zu {r.name}</span> →</a>}
+              {r.fallstudie && <a href={`/projekte/${r.fallstudie}/`}>Infos<span class="visually-hidden"> zu {r.name}</span> <span class="pfeil" aria-hidden="true">→</span></a>}
               <small>Foto: {r.bildNachweis}{r.bildLizenz && <> · <a href={r.bildLizenz} rel="license noopener" target="_blank">Lizenz<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></>}</small>
             </figcaption>
           </figure>

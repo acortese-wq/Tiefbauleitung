@@ -29,7 +29,7 @@ const Kopf = kompetenz ? 'h3' : 'h4';
               <Kopf class="wk-name">{w.name}</Kopf>
               <p>{w.zweck}</p>
               {w.zusatz && <p class="wk-zusatz">{w.zusatz}</p>}
-              {w.link && <a class="wk-link" href={w.link.href}>{w.link.label} →</a>}
+              {w.link && <a class="wk-link" href={w.link.href}>{w.link.label} <span class="pfeil" aria-hidden="true">→</span></a>}
             </li>
           ))}
         </ul>

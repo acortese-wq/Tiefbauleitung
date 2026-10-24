@@ -384,3 +384,44 @@ test('Kernaussage erscheint als Zitat auf Startseite und im KI-Labor', async ({ 
     await expect(k.locator('figcaption')).toContainText('Alessandro Cortese');
   }
 });
+
+test('Kennzahlen zählen hoch und enden beim Wert aus dem HTML', async ({ page }) => {
+  await page.goto('/');
+  const werte = page.locator('[data-zaehlen]');
+  await page.locator('.kennzahlen').evaluate((e) => e.scrollIntoView({ block: 'center', behavior: 'instant' }));
+  await expect(werte).toHaveText(['30+', '17', '2'], { timeout: 5000 });
+  // Beim Drucken stehen die Endwerte sofort da
+  await page.goto('/');
+  await page.evaluate(() => dispatchEvent(new Event('beforeprint')));
+  expect(await werte.allTextContents()).toEqual(['30+', '17', '2']);
+});
+
+test('Mit reduzierter Bewegung: Kennzahlen sofort, keine Seitenübergänge, kein Lesefortschritt', async ({ browser }) => {
+  const kontext = await browser.newContext({ reducedMotion: 'reduce' });
+  const page = await kontext.newPage();
+  await page.goto('/');
+  expect(await page.locator('[data-zaehlen]').allTextContents()).toEqual(['30+', '17', '2']);
+  expect(await page.locator('.kopf').evaluate((e) => getComputedStyle(e).viewTransitionName)).toBe('none');
+  await page.goto('/projekte/plessurbruecke-sassal/');
+  expect(await page.locator('.kopf').evaluate((e) => getComputedStyle(e, '::after').content)).toBe('none');
+  await kontext.close();
+});
+
+test('Fallstudie zeigt den Lesefortschritt unter der Kopfzeile', async ({ page }) => {
+  await page.goto('/projekte/plessurbruecke-sassal/');
+  await expect(page.locator('[data-lesefortschritt]')).toHaveCount(1);
+  const fortschritt = () => page.locator('.kopf').evaluate((e) => getComputedStyle(e, '::after').scale);
+  expect(await fortschritt()).toMatch(/^0( 1)?$/);
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+  await expect.poll(fortschritt).toMatch(/^1( 1)?$/);
+});
+
+test('Werdegang: Stationen leuchten auf, sobald die Trasse sie erreicht', async ({ page }) => {
+  await page.goto('/profil/');
+  const erste = page.locator('.zeitachse > li').first();
+  await erste.evaluate((e) => e.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await page.evaluate(() => window.scrollBy({ top: -innerHeight / 3, behavior: 'instant' }));
+  await expect.poll(() => erste.evaluate((e) => getComputedStyle(e, '::before').backgroundColor)).toBe('rgb(143, 211, 255)');
+  const letzte = page.locator('.zeitachse > li').last();
+  expect(await letzte.evaluate((e) => getComputedStyle(e, '::before').backgroundColor)).toBe('rgb(10, 15, 20)');
+});

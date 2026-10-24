@@ -51,7 +51,7 @@ const bereiche = [
             <span class="chip">{b.tag}</span>
             <h3>{b.titel}</h3>
             <p>{b.text}</p>
-            <span class="mehr">Öffnen →</span>
+            <span class="mehr">Öffnen <span class="pfeil" aria-hidden="true">→</span></span>
           </a>
         ))}
       </div>
@@ -73,7 +73,7 @@ const bereiche = [
               <h3>{f.titel}</h3>
               <p>{f.text}</p>
               <ul class="feld-tags" aria-label="Stichworte">{f.tags.map((t) => <li>{t}</li>)}</ul>
-              {f.link && <a class="feld-link" href={f.link.href}>{f.link.label}<span class="visually-hidden">: {f.titel}</span> →</a>}
+              {f.link && <a class="feld-link" href={f.link.href}>{f.link.label}<span class="visually-hidden">: {f.titel}</span> <span class="pfeil" aria-hidden="true">→</span></a>}
             </div>
           </li>
         ))}

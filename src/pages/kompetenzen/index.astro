@@ -46,7 +46,7 @@ const site = Astro.site!;
             <h2 class="k-titel">{k.data.title}</h2>
             <p>{k.data.kurz}</p>
             <div class="chips">{k.data.grundlagen.slice(0, 4).map((g) => <span class="chip">{g}</span>)}</div>
-            <span class="mehr">Kompetenzfeld ansehen →</span>
+            <span class="mehr">Kompetenzfeld ansehen <span class="pfeil" aria-hidden="true">→</span></span>
           </a>
         ))}
       </div>

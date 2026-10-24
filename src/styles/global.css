@@ -109,7 +109,7 @@ label:has(> input[type='checkbox']), label:has(> input[type='radio']) { cursor: 
   display: inline-flex; align-items: center; gap: 10px; min-height: 48px;
   padding: 12px 22px; border-radius: var(--radius); border: 1px solid var(--eis);
   background: var(--eis); color: var(--nacht); font: 600 1rem var(--f-text);
-  text-decoration: none; cursor: pointer; transition: background .2s, color .2s, transform .2s;
+  text-decoration: none; cursor: pointer; transition: background .2s, color .2s, transform .2s, scale .1s;
 }
 .btn:hover { background: var(--eis-stark); color: var(--nacht); }
 .btn-ghost { background: transparent; color: var(--text); border-color: var(--linie-hell); }
@@ -264,6 +264,35 @@ a.chip:hover { border-color: var(--eis); }
   }
 }
 a.karte:focus-visible { border-color: var(--eis); outline-offset: 4px; }
+
+/* Seitenübergänge: Inhalt blendet weich über, die Kopfzeile bleibt stehen. Browser ohne Unterstützung wechseln wie bisher. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  .kopf { view-transition-name: kopfzeile; }
+  ::view-transition-old(root) { animation: seite-aus 140ms ease-in both; }
+  ::view-transition-new(root) { animation: seite-ein 240ms cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes seite-aus { to { opacity: 0; } }
+  @keyframes seite-ein { from { opacity: 0; translate: 0 8px; } }
+}
+
+/* Lesefortschritt («Baufortschritt») unter der Kopfzeile, auf Seiten mit [data-lesefortschritt] */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    :root:has([data-lesefortschritt]) .kopf::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; pointer-events: none;
+      background: var(--signal); transform-origin: 0 50%; scale: 0 1;
+    }
+    :where(:root:has([data-lesefortschritt]) .kopf)::after { animation: lesefortschritt linear both; }
+    :root:has([data-lesefortschritt]) .kopf::after { animation-timeline: scroll(root); }
+    @keyframes lesefortschritt { to { scale: 1 1; } }
+  }
+}
+
+/* Feine Rückmeldungen: Pfeile rücken nach, Tasten geben beim Drücken nach */
+.pfeil { display: inline-block; transition: translate .2s ease-out; }
+@media (hover: hover) { a:hover .pfeil { translate: 4px 0; } }
+a:focus-visible .pfeil { translate: 4px 0; }
+.btn:active, .ref-filter button:active { scale: .97; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }

@@ -325,10 +325,11 @@ test('KI-Labor: Übersicht führt zu Werkbank, Nutzenrechner und Radar', async (
   await expect(page).toHaveURL(/\/ki-labor\/werkbank\/#lv-plausibilitaet$/);
   await expect(page.locator('#lv-plausibilitaet')).toBeVisible();
   await page.goto('/ki-labor/radar/');
-  const radar = page.locator('[data-radar]');
-  await expect(radar.locator('[role="tabpanel"]:visible li')).toHaveCount(10);
-  await radar.getByRole('tab', { name: 'Deutsch' }).click();
-  await expect(radar.getByRole('tab', { name: 'Deutsch' })).toHaveAttribute('aria-selected', 'true');
+  // Ohne frische Daten (lokal oder bei Ausfall der Quelle) erscheint ein Hinweis statt veralteter Zahlen
+  const radar = page.locator('[data-radar], [data-radar-leer]');
+  await expect(radar).toHaveCount(1);
+  await expect(page.locator('main')).not.toContainText('LMArena');
+  if (await page.locator('[data-radar]').count()) await expect(page.locator('[data-radar] [role="tabpanel"]:visible li').first()).toBeVisible();
 });
 
 test('Nutzenrechner rechnet in Franken und bietet Druck an', async ({ page }) => {

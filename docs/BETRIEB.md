@@ -171,6 +171,6 @@ Hoster/Proxy.
 - Das KI-Labor (`/ki-labor/`) läuft vollständig im Browser: Prompt-Vorlagen (`src/data/prompts.ts`, Syntax in `src/lib/prompt.ts`)
   und die Schnellprüfung von LV, Offertvergleich und Ausmass (`src/lib/tabellenpruefung.ts`). Keine Daten verlassen den Browser.
 - Der KI-Radar (`src/data/ki-radar.json`) wird bei jedem Build mit `node scripts/ki-radar.mjs` aktualisiert. Beide Workflows
-  bauen dafür täglich um 04:23 UTC neu. Quellen: LMArena (Rangliste aus Blindvergleichen) und OpenRouter (neue Modelle).
+  bauen dafür täglich um 04:23 UTC neu. Quellen: OpenRouter (meistgenutzte Modelle der Woche und neue Modelle). LMArena wurde am 24.10.2026 entfernt, weil der Datensatz seit Dezember 2025 nicht mehr nachgeführt wird. Daten älter als 14 Tage zeigt die Seite nicht an.
   Schlägt eine Quelle fehl, bleiben die bisherigen Daten stehen; der Build bricht nie deswegen ab.
 - Besucher der Seite rufen keine Drittanbieter auf: Die Daten werden beim Build eingebettet.

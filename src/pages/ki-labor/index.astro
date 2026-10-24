@@ -5,7 +5,8 @@ import { einsatzfelder } from '../../data/einsatzfelder';
 import { prompts } from '../../data/prompts';
 import radar from '../../data/ki-radar.json';
 
-const top = (radar as { arena?: { kategorien: { gesamt: { modell: string }[] } } }).arena?.kategorien.gesamt[0]?.modell;
+const n = (radar as { nutzung?: { stand: string; kategorien: { gesamt?: { modell: string }[] } } }).nutzung;
+const top = n && (Date.now() - Date.parse(`${n.stand}T00:00:00Z`)) / 86400000 <= 14 ? n.kategorien.gesamt?.[0]?.modell : undefined;
 const bereiche = [
   {
     href: '/ki-labor/werkbank/',
@@ -22,7 +23,7 @@ const bereiche = [
   {
     href: '/ki-labor/radar/',
     titel: 'KI-Radar',
-    text: `Welche Sprachmodelle in Blindvergleichen vorne liegen, gesamt, auf Deutsch und beim Programmieren.${top ? ` Derzeit auf Rang 1: ${top}.` : ''} Täglich aktualisiert.`,
+    text: `Welche Sprachmodelle in der Praxis am meisten genutzt werden, gesamt und beim Programmieren.${top ? ` Derzeit auf Rang 1: ${top}.` : ''} Täglich aktualisiert.`,
     tag: 'täglich aktualisiert',
   },
 ];

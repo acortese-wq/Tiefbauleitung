@@ -1,92 +1,93 @@
 ---
-// KI-Radar: täglich im Build aktualisierte Ranglisten (siehe scripts/ki-radar.mjs). Keine Anfragen beim Seitenaufruf.
+// KI-Radar: täglich im Build aktualisierte Daten (siehe scripts/ki-radar.mjs). Keine Anfragen beim Seitenaufruf.
+// Veraltete Daten (älter als 14 Tage) werden nicht angezeigt.
 import radar from '../data/ki-radar.json';
 
-interface Eintrag { rang: number; modell: string; anbieter: string; score: number }
+interface Eintrag { rang: number; modell: string; anbieter: string }
 interface Neu { name: string; anbieter: string; datum: string; kontext: number | null }
 const r = radar as {
   abgerufen?: string;
-  arena?: { quelle: string; stand: string | null; kategorien: Record<'gesamt' | 'deutsch' | 'programmieren', Eintrag[]> };
-  neu?: { quelle: string; modelle: Neu[] };
+  nutzung?: { quelle: string; stand: string; kategorien: { gesamt?: Eintrag[]; programmieren?: Eintrag[] } };
+  neu?: { quelle: string; stand?: string; modelle: Neu[] };
 };
+const MAX_ALTER_TAGE = 14;
+const frisch = (iso?: string) => !!iso && (Date.now() - Date.parse(`${iso}T00:00:00Z`)) / 86400000 <= MAX_ALTER_TAGE;
 const datum = (iso?: string | null) => (iso ? new Date(`${iso}T12:00:00Z`).toLocaleDateString('de-CH', { day: 'numeric', month: 'long', year: 'numeric' }) : 'unbekannt');
-const tage = (iso?: string | null) => (iso && r.abgerufen ? Math.round((Date.parse(r.abgerufen) - Date.parse(iso)) / 86400000) : null);
-const alter = tage(r.arena?.stand);
-const reiter = [
+const nutzung = frisch(r.nutzung?.stand) ? r.nutzung : undefined;
+const neu = frisch(r.neu?.stand ?? r.abgerufen) && r.neu?.modelle.length ? r.neu : undefined;
+const reiter = ([
   { id: 'gesamt', label: 'Gesamt' },
-  { id: 'deutsch', label: 'Deutsch' },
   { id: 'programmieren', label: 'Programmieren' },
-] as const;
+] as const).filter((t) => (nutzung?.kategorien[t.id]?.length ?? 0) > 0);
 const kontext = (n: number | null) => (n ? `${Math.round(n / 1000).toLocaleString('de-CH')}k Kontext` : '');
 ---
-{r.arena && (
-  <section class="abschnitt radar" aria-labelledby="radar-titel">
-    <div class="wrap">
-      <div class="abschnitt-kopf">
-        <p class="label label-eis">KI-Radar · aktualisiert {datum(r.abgerufen)}</p>
-        <h2 id="radar-titel">Welche Sprachmodelle gerade vorne liegen</h2>
-        <p>Rangliste aus Blindvergleichen: Nutzerinnen und Nutzer stellen zwei anonymen Modellen dieselbe Frage und wählen die bessere Antwort. Das misst die Beliebtheit der Antworten, nicht die Eignung für Ihre Aufgabe.</p>
-      </div>
+<section class="abschnitt radar" aria-labelledby="radar-titel">
+  <div class="wrap">
+    <div class="abschnitt-kopf">
+      <p class="label label-eis">KI-Radar{nutzung && ` · Stand ${datum(nutzung.stand)}`}</p>
+      <h2 id="radar-titel">Welche Sprachmodelle gerade am meisten genutzt werden</h2>
+      <p>Rangliste der meistgenutzten Modelle der letzten Woche, gemessen an den verarbeiteten Datenmengen (Tokens) auf der Plattform OpenRouter, die Modelle vieler Anbieter bündelt. Das zeigt, was in der Praxis eingesetzt wird, nicht, was für Ihre Aufgabe am besten passt.</p>
+    </div>
 
-      <div class="radar-raster">
+    <div class="radar-raster">
+      {nutzung && reiter.length > 0 ? (
         <div class="radar-karte" data-radar>
-          <div class="radar-reiter" role="tablist" aria-label="Kategorie">
-            {reiter.map((t, i) => (
-              <button type="button" role="tab" id={`radar-tab-${t.id}`} aria-controls={`radar-${t.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{t.label}</button>
-            ))}
-          </div>
-          {reiter.map((t, i) => {
-            const liste = r.arena!.kategorien[t.id] ?? [];
-            const max = liste[0]?.score ?? 1;
-            const min = (liste.at(-1)?.score ?? 0) - 20;
-            return (
-              <div class="radar-panel" id={`radar-${t.id}`} role="tabpanel" aria-labelledby={`radar-tab-${t.id}`} hidden={i !== 0}>
+          {reiter.length > 1 && (
+            <div class="radar-reiter" role="tablist" aria-label="Kategorie">
+              {reiter.map((t, i) => (
+                <button type="button" role="tab" id={`radar-tab-${t.id}`} aria-controls={`radar-${t.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{t.label}</button>
+              ))}
+            </div>
+          )}
+          {reiter.map((t, i) => (
+            <div class="radar-panel" id={`radar-${t.id}`} role="tabpanel" aria-labelledby={reiter.length > 1 ? `radar-tab-${t.id}` : undefined} aria-label={reiter.length > 1 ? undefined : t.label} hidden={i !== 0}>
               <ol class="radar-liste">
-                {liste.map((e) => (
+                {(nutzung.kategorien[t.id] ?? []).map((e) => (
                   <li>
                     <span class="radar-rang">{e.rang}</span>
                     <span class="radar-name"><strong>{e.modell}</strong><small>{e.anbieter}</small></span>
-                    <span class="radar-balken" aria-hidden="true"><span class={`b${Math.round(Math.max(10, ((e.score - min) / (max - min)) * 100) / 10) * 10}`}></span></span>
-                    <span class="radar-score">{e.score}</span>
                   </li>
                 ))}
               </ol>
-              </div>
-            );
-          })}
+            </div>
+          ))}
           <p class="radar-quelle">
-            Quelle: <a href={r.arena.quelle} rel="noopener" target="_blank">LMArena<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a>, Datenstand {datum(r.arena.stand)}.
-            {alter != null && alter > 60 && <> <strong>Die Quelle wurde seit {alter} Tagen nicht aktualisiert;</strong> neuere Modelle fehlen möglicherweise.</>}
+            Quelle: <a href={nutzung.quelle} rel="noopener" target="_blank">OpenRouter Rankings<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a>, Stand {datum(nutzung.stand)}, täglich aktualisiert.
           </p>
         </div>
-
-        {r.neu && r.neu.modelle.length > 0 && (
-          <div class="radar-karte">
-            <h3>Neu verfügbar</h3>
-            <ul class="radar-neu">
-              {r.neu.modelle.map((m) => (
-                <li>
-                  <strong>{m.name}</strong>
-                  <small>{m.anbieter} · {datum(m.datum)}{m.kontext ? ` · ${kontext(m.kontext)}` : ''}</small>
-                </li>
-              ))}
-            </ul>
-            <p class="radar-quelle">Quelle: <a href={r.neu.quelle} rel="noopener" target="_blank">OpenRouter<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a>, öffentliche Modellliste.</p>
-          </div>
-        )}
-
-        <div class="radar-karte radar-tipp">
-          <h3>Was heisst das für die Bauleitung?</h3>
-          <ul>
-            <li>Für Offertprüfung und Protokolle reichen die führenden Modelle aller grossen Anbieter. Wichtiger als der Rang sind Datenschutz und eine vom Arbeitgeber freigegebene Lösung.</li>
-            <li>Für lange Dokumente zählt das Kontextfenster: Wie viele Seiten verarbeitet das Modell auf einmal?</li>
-            <li>Für Berechnungen nie dem Modell vertrauen, sondern rechnen lassen: Tabellen hier im KI-Labor prüfen oder ein Werkzeug verwenden.</li>
-          </ul>
+      ) : (
+        <div class="radar-karte" data-radar-leer>
+          <h3>Rangliste wird aktualisiert</h3>
+          <p class="radar-quelle">Die Rangliste wird bei jedem täglichen Neuaufbau der Webseite frisch geladen. Ist die Quelle nicht erreichbar, zeigen wir lieber nichts als veraltete Zahlen. Die aktuelle Rangliste finden Sie direkt bei <a href="https://openrouter.ai/rankings" rel="noopener" target="_blank">OpenRouter<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a>.</p>
         </div>
+      )}
+
+      {neu && (
+        <div class="radar-karte">
+          <h3>Neu verfügbar</h3>
+          <ul class="radar-neu">
+            {neu.modelle.map((m) => (
+              <li>
+                <strong>{m.name}</strong>
+                <small>{m.anbieter} · {datum(m.datum)}{m.kontext ? ` · ${kontext(m.kontext)}` : ''}</small>
+              </li>
+            ))}
+          </ul>
+          <p class="radar-quelle">Quelle: <a href={neu.quelle} rel="noopener" target="_blank">OpenRouter<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a>, öffentliche Modellliste.</p>
+        </div>
+      )}
+
+      <div class="radar-karte radar-tipp">
+        <h3>Was heisst das für die Bauleitung?</h3>
+        <ul>
+          <li>Für Offertprüfung und Protokolle reichen die führenden Modelle aller grossen Anbieter. Wichtiger als der Rang sind Datenschutz und eine vom Arbeitgeber freigegebene Lösung.</li>
+          <li>Für lange Dokumente zählt das Kontextfenster: Wie viele Seiten verarbeitet das Modell auf einmal?</li>
+          <li>Für Berechnungen nie dem Modell vertrauen, sondern rechnen lassen: Tabellen hier im KI-Labor prüfen oder ein Werkzeug verwenden.</li>
+        </ul>
       </div>
     </div>
-  </section>
-)}
+  </div>
+</section>
 
 <script>
   for (const karte of document.querySelectorAll<HTMLElement>('[data-radar]')) {
@@ -128,17 +129,11 @@ const kontext = (n: number | null) => (n ? `${Math.round(n / 1000).toLocaleStrin
   .radar-reiter button:focus-visible { outline: 2px solid var(--eis); outline-offset: 2px; }
   .radar-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
   .radar-panel[hidden] { display: none; }
-  .radar-liste li { display: grid; grid-template-columns: 28px minmax(0, 1.3fr) minmax(60px, 1fr) 48px; gap: 10px; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--linie); }
+  .radar-liste li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--linie); }
   .radar-rang { font: 600 0.85rem var(--f-mono); color: var(--eis); text-align: right; }
   .radar-name { display: grid; min-width: 0; }
   .radar-name strong { font-weight: 600; font-size: 0.95rem; overflow-wrap: anywhere; }
   .radar-name small, .radar-neu small { color: var(--text-ruhig); font-size: 0.8rem; }
-  .radar-balken { height: 8px; border-radius: 4px; background: var(--nacht); overflow: hidden; }
-  .radar-balken span { display: block; height: 100%; background: linear-gradient(90deg, var(--eis), var(--signal)); border-radius: 4px; }
-  .radar-balken .b10 { width: 10%; } .radar-balken .b20 { width: 20%; } .radar-balken .b30 { width: 30%; }
-  .radar-balken .b40 { width: 40%; } .radar-balken .b50 { width: 50%; } .radar-balken .b60 { width: 60%; }
-  .radar-balken .b70 { width: 70%; } .radar-balken .b80 { width: 80%; } .radar-balken .b90 { width: 90%; } .radar-balken .b100 { width: 100%; }
-  .radar-score { font: 500 0.82rem var(--f-mono); color: var(--text-ruhig); text-align: right; font-variant-numeric: tabular-nums; }
   .radar-neu { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
   .radar-neu li { display: grid; }
   .radar-tipp ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; color: var(--text-ruhig); font-size: 0.95rem; }

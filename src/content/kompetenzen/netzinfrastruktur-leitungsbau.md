@@ -44,6 +44,8 @@ Damit Daten aus dem Internet auf Smartphone, Laptop oder Fernseher ankommen, bra
   </figcaption>
 </figure>
 
+<div data-quiz-teaser-platz></div>
+
 ## Was ich einbringe
 
 - **Schnittstellen beurteilen.** Kostenaufteilungen, Zuständigkeiten und Auflagen gehören vor den Baubeginn, nicht in den Nachtrag.

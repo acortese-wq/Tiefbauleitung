@@ -1,0 +1,25 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import NetzbauQuiz from '../components/NetzbauQuiz.astro';
+import NetzinfrastrukturLeitungsbau from '../components/illustrationen/NetzinfrastrukturLeitungsbau.astro';
+import { quizFragen } from '../data/quiz-fragen';
+---
+<Basis title="Netzbau-Quiz" description="Netzbau-Quiz für Bauherrschaften, Ingenieurbüros, Bauleitende und Lernende: vier Stufen von Anfänger bis BHV, Spezialbereich Kosten, Ausmass und Regie, mit Erklärungen, KI-Potenzial und Zertifikat.">
+  <Seitenkopf
+    titel="Netzbau-Quiz"
+    lead="Von der Glasfaser-Grundlage bis zur Bauherrenvertretung: vier Stufen, Rechenaufgaben zu Kosten, Ausmass und Regie, und zu jeder Antwort eine Erklärung aus der Praxis."
+    krumen={[{ name: 'Kompetenzen', href: '/kompetenzen/' }, { name: 'Netzbau', href: '/kompetenzen/netzinfrastruktur-leitungsbau/' }, { name: 'Netzbau-Quiz' }]}
+  >
+    <NetzinfrastrukturLeitungsbau slot="bild" />
+  </Seitenkopf>
+  <NetzbauQuiz />
+  <section class="abschnitt" aria-labelledby="ueber-quiz">
+    <div class="wrap prosa">
+      <h2 id="ueber-quiz">Über dieses Quiz</h2>
+      <p>{quizFragen.length} Fachfragen in vier Stufen, dazu ein Rechengenerator, der zu Kosten, Ausmass und Regie immer neue Aufgaben mit fiktiven Zahlen stellt. Die Fragen geben allgemeines Fachwissen aus über 30 Jahren Tiefbau und Netzbau wieder, nicht die internen Vorgaben eines Netzbetreibers oder Arbeitgebers.</p>
+      <p>Zu jeder Antwort zeigt das Quiz, wo KI in diesem Fachgebiet heute konkret hilft. Mehr dazu im <a href="/ki-labor/">KI-Labor</a> und auf der Seite <a href="/kompetenzen/netzinfrastruktur-leitungsbau/">Netzbau, Glasfaser und Leitungsbau</a>.</p>
+      <p>Normbezüge ohne Gewähr; massgebend sind die jeweils gültigen Fassungen. Das Quiz speichert nichts auf einem Server. Ihre Bestwerte bleiben nur in Ihrem Browser und lassen sich jederzeit löschen.</p>
+    </div>
+  </section>
+</Basis>

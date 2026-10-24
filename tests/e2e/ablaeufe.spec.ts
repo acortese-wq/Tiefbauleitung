@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 test('Navigation führt zu allen Hauptseiten', async ({ page, isMobile }) => {
   await page.goto('/');
@@ -437,4 +438,110 @@ test('Fallstudien und Referenzen nennen keine Protokolle oder Sitzungen', async 
     const text = (await page.locator('main').innerText()).toLowerCase();
     for (const wort of ['protokoll', 'sitzung', 'rapport', 'jour fixe', 'pendenz']) expect(text, `«${wort}» auf ${pfad}`).not.toContain(wort);
   }
+});
+
+// Netzbau-Quiz: beantwortet eine Runde; mit «richtig» anhand des Fragenpools (Rechenaufgaben stehen nicht im Pool)
+async function spieleRunde(page: Page, richtig: boolean, hooks: { vorPruefen?: (i: number) => Promise<void>; nachPruefen?: (i: number) => Promise<void> } = {}) {
+  const pool: { frage: string; antworten: { text: string; richtig: boolean }[] }[] = JSON.parse((await page.locator('[data-quiz-pool]').textContent()) ?? '[]');
+  for (let i = 0; i < 10; i++) {
+    await expect(page.locator('[data-stand]')).toHaveText(`Frage ${i + 1} von 10`);
+    const fragetext = await page.locator('[data-fragetext]').textContent();
+    const f = pool.find((x) => x.frage === fragetext);
+    const antworten = page.locator('.qz-antwort');
+    if (richtig && f) {
+      for (const a of await antworten.all()) {
+        const text = await a.locator('.qz-text').textContent();
+        if (f.antworten.find((x) => x.text === text)?.richtig) await a.click();
+      }
+    } else await antworten.first().click();
+    await hooks.vorPruefen?.(i);
+    await page.getByRole('button', { name: 'Antwort prüfen' }).click();
+    await expect(page.locator('[data-rueckmeldung]')).toBeVisible();
+    await hooks.nachPruefen?.(i);
+    await page.locator('[data-weiter]').click();
+  }
+}
+
+test('Netzbau-Quiz: Runde mit Fortschritt, Erklärung, KI-Potenzial, Ergebnis, Bestwert und Zertifikat', async ({ page }) => {
+  await page.goto('/netzbau-quiz/');
+  await page.locator('.qz-karte', { hasText: 'BHV' }).click();
+  await page.getByRole('button', { name: /Quiz starten/ }).click();
+  await expect(page.locator('[data-stufe-anzeige]')).toContainText('BHV');
+  const axeFrage = await new AxeBuilder({ page }).include('[data-quiz]').withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+  expect(axeFrage.violations.map((v) => v.id)).toEqual([]);
+  await spieleRunde(page, true, {
+    nachPruefen: async (i) => {
+      if (i !== 0) return;
+      await expect(page.locator('.qz-ki')).toContainText('KI-Potenzial');
+      await expect(page.locator('[data-rm-erklaerung]')).not.toBeEmpty();
+      await expect(page.locator('[data-pruefen]')).toBeHidden();
+      expect(await page.locator('[data-fortschritt]').evaluate((e) => (e as HTMLProgressElement).value)).toBe(1);
+    },
+  });
+  await expect(page.locator('[data-erg-titel]')).toContainText('von 10 richtig');
+  await expect(page.locator('[data-kategorien] li').first()).toBeVisible();
+  const axeErgebnis = await new AxeBuilder({ page }).include('[data-quiz]').withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+  expect(axeErgebnis.violations.map((v) => v.id)).toEqual([]);
+
+  // Bestwert lokal gespeichert und nach dem Neuladen sichtbar
+  expect(JSON.parse((await page.evaluate(() => localStorage.getItem('netzbau-quiz-bestwerte'))) ?? '[]')).toHaveLength(1);
+  // Zertifikat: alle Fachfragen richtig, höchstens die eine Rechenaufgabe falsch, also mindestens 90 %
+  await expect(page.locator('[data-zert-ok]')).toBeVisible();
+  await page.evaluate(() => { window.print = () => document.body.setAttribute('data-gedruckt', 'ja'); });
+  await page.fill('[data-zert-name]', 'Test Person');
+  await page.getByRole('button', { name: 'Zertifikat als PDF' }).click();
+  await expect(page.locator('body')).toHaveAttribute('data-gedruckt', 'ja');
+  await expect(page.locator('body')).toHaveClass(/druck-zertifikat/);
+  await expect(page.locator('[data-zt-name]')).toHaveText('Test Person');
+  await expect(page.locator('[data-zt-text]')).toContainText('bestanden');
+  await expect(page.locator('.qz-zertifikat')).toContainText('Keine offizielle Qualifikation');
+  await page.reload();
+  await expect(page.locator('[data-bestwerte] tbody tr')).toHaveCount(1);
+});
+
+test('Netzbau-Quiz: Zeitmodus zählt herunter und wertet abgelaufene Fragen als falsch', async ({ page }) => {
+  await page.clock.install();
+  await page.goto('/netzbau-quiz/');
+  await page.locator('.qz-karte', { hasText: 'Zeitmodus' }).click();
+  await page.getByRole('button', { name: /Quiz starten/ }).click();
+  await expect(page.locator('[data-timer]')).toBeVisible();
+  const start = Number((await page.locator('[data-timer-text]').textContent())?.replace(/\D/g, ''));
+  expect(start).toBeGreaterThanOrEqual(45);
+  await page.clock.runFor(10_000);
+  expect(Number((await page.locator('[data-timer-text]').textContent())?.replace(/\D/g, ''))).toBeLessThan(start);
+  await page.clock.runFor(120_000);
+  await expect(page.locator('[data-rm-titel]')).toHaveText('Die Zeit ist abgelaufen.');
+  await expect(page.locator('[data-punkte]')).toHaveText('0');
+});
+
+test('Netzbau-Quiz: Spezialbereich stellt Kosten-, Ausmass- und Regieaufgaben mit Rechengenerator', async ({ page }) => {
+  await page.goto('/netzbau-quiz/');
+  await page.locator('.qz-karte', { hasText: 'Spezialbereich Kosten' }).click();
+  await page.getByRole('button', { name: /Quiz starten/ }).click();
+  let rechenaufgaben = 0;
+  await spieleRunde(page, false, {
+    vorPruefen: async () => {
+      const meta = (await page.locator('[data-meta]').textContent()) ?? '';
+      expect(meta).toContain('Kosten, Ausmass und Regie');
+      if (meta.includes('Rechenaufgabe')) rechenaufgaben++;
+    },
+  });
+  expect(rechenaufgaben).toBeGreaterThanOrEqual(4);
+});
+
+test('Probierfrage aus dem Netzbau-Quiz auf Startseite und Kompetenz Netzbau', async ({ page }) => {
+  for (const pfad of ['/', '/kompetenzen/netzinfrastruktur-leitungsbau/']) {
+    await page.goto(pfad);
+    const block = page.locator('[data-quiz-teaser]');
+    await expect(block.locator('.qt-antwort').first()).toBeVisible();
+    await block.locator('.qt-antwort').first().click();
+    await expect(block.locator('[data-qt-urteil]')).toHaveText(/^(Richtig\.|Nicht ganz\.)/);
+    await expect(block.getByRole('link', { name: /Quiz/ })).toHaveAttribute('href', /netzbau-quiz/);
+  }
+  // Auf der Kompetenzseite steht die Probierfrage direkt nach der Netz-Übersicht
+  expect(await page.evaluate(() => {
+    const grafik = document.querySelector('#netz-uebersicht');
+    const block = document.querySelector('[data-quiz-teaser]');
+    return !!grafik && !!block && !!(grafik.compareDocumentPosition(block) & Node.DOCUMENT_POSITION_FOLLOWING) && !!block.closest('.prosa');
+  })).toBe(true);
 });

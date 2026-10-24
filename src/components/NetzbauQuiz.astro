@@ -1,0 +1,692 @@
+---
+// Netzbau-Quiz: Start, Fragen, Ergebnis und Zertifikat. Alles läuft im Browser; nur die Bestwerte werden lokal im Browser gespeichert.
+import QuizSchema from './QuizSchema.astro';
+import { quizFragen } from '../data/quiz-fragen';
+import { STUFEN, FRAGEN_PRO_RUNDE, BESTANDEN_AB, type Schema } from '../lib/quiz';
+
+const anzahl = (stufe: string) => quizFragen.filter((f) => f.stufe === stufe).length;
+const schemas: Schema[] = ['ftth', 'graben', 'schacht', 'muffe', 'hausanschluss'];
+// Daten als JSON-Block: wird nicht ausgeführt, «<» maskiert
+const daten = JSON.stringify(quizFragen).replace(/</g, '\\u003c');
+---
+<section class="abschnitt quiz" aria-labelledby="quiz-titel" data-quiz>
+  <div class="wrap">
+    <noscript><p class="qz-hinweis">Das Quiz braucht JavaScript. Ohne JavaScript bleibt die Seite lesbar, das Quiz selbst startet aber nicht.</p></noscript>
+
+    <!-- Start -->
+    <div class="qz-ansicht" data-ansicht="start">
+      <div class="abschnitt-kopf">
+        <p class="label label-eis">Netzbau-Quiz</p>
+        <h2 id="quiz-titel">Wie gut kennen Sie den Netzbau?</h2>
+        <p>{FRAGEN_PRO_RUNDE} Fragen pro Runde, mit Erklärung und KI-Potenzial zu jeder Antwort. Ab {BESTANDEN_AB} % gibt es ein Zertifikat zum Ausdrucken.</p>
+      </div>
+      <form class="qz-start" data-startform>
+        <fieldset class="qz-wahl">
+          <legend>1. Stufe wählen</legend>
+          <div class="qz-karten qz-karten-4">
+            {STUFEN.map((s, i) => (
+              <label class="qz-karte">
+                <input type="radio" name="stufe" value={s.id} checked={i === 0} />
+                <span class="qz-karte-titel">{s.titel}</span>
+                <span class="qz-karte-text">{s.text}</span>
+                <span class="qz-karte-meta">{anzahl(s.id)} Fachfragen · Rechenaufgaben</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <fieldset class="qz-wahl">
+          <legend>2. Bereich</legend>
+          <div class="qz-karten qz-karten-2">
+            <label class="qz-karte">
+              <input type="radio" name="bereich" value="alle" checked />
+              <span class="qz-karte-titel">Alle Fachgebiete</span>
+              <span class="qz-karte-text">Netzaufbau, Graben, Schächte, Recht, Werkleitungen, Vergabe, Messtechnik, Sicherheit, Kosten</span>
+            </label>
+            <label class="qz-karte">
+              <input type="radio" name="bereich" value="kosten" />
+              <span class="qz-karte-titel">Spezialbereich Kosten</span>
+              <span class="qz-karte-text">Kostenprüfung, Ausmassprüfung und Regiekontrolle, mit Rechenaufgaben aus dem Generator</span>
+            </label>
+          </div>
+        </fieldset>
+        <fieldset class="qz-wahl">
+          <legend>3. Modus</legend>
+          <div class="qz-karten qz-karten-2">
+            <label class="qz-karte">
+              <input type="radio" name="modus" value="lernen" checked />
+              <span class="qz-karte-titel">Lernmodus</span>
+              <span class="qz-karte-text">Ohne Zeitlimit. In Ruhe lesen, überlegen und die Erklärungen verstehen.</span>
+            </label>
+            <label class="qz-karte">
+              <input type="radio" name="modus" value="zeit" />
+              <span class="qz-karte-titel">Zeitmodus</span>
+              <span class="qz-karte-text">Zeitlimit pro Frage, je nach Stufe 45 bis 90 Sekunden. Schnelle richtige Antworten geben bis 50 Bonuspunkte.</span>
+            </label>
+          </div>
+        </fieldset>
+        <button class="btn" type="submit">Quiz starten <span class="pfeil" aria-hidden="true">→</span></button>
+      </form>
+
+      <section class="qz-bestwerte" aria-labelledby="bestwerte-titel" data-bestwerte hidden>
+        <h3 id="bestwerte-titel">Ihre Bestwerte auf diesem Gerät</h3>
+        <div class="qz-tabelle" data-bestwerte-tabelle></div>
+        <button class="qz-link-knopf" type="button" data-bestwerte-loeschen>Bestwerte löschen</button>
+      </section>
+    </div>
+
+    <!-- Frage -->
+    <div class="qz-ansicht qz-spiel" data-ansicht="frage" hidden>
+      <div class="qz-kopf">
+        <p class="qz-stand"><span data-stand>Frage 1 von 10</span><span class="qz-stufe" data-stufe-anzeige></span></p>
+        <p class="qz-punkte" aria-live="off"><span class="label">Punkte</span> <strong data-punkte>0</strong></p>
+        <p class="qz-serie" data-serie hidden></p>
+        <progress class="qz-fortschritt" data-fortschritt max="10" value="0" aria-label="Fortschritt"></progress>
+      </div>
+      <div class="qz-timer" data-timer hidden>
+        <progress data-timer-balken max="60" value="60" aria-label="Verbleibende Zeit"></progress>
+        <span data-timer-text>60 s</span>
+      </div>
+      <p class="visually-hidden" aria-live="polite" data-ansage></p>
+
+      <form class="qz-frage" data-frageform novalidate>
+        <p class="qz-meta" data-meta></p>
+        <h2 class="qz-fragetext" id="qz-fragetext" tabindex="-1" data-fragetext></h2>
+        <p class="qz-typhinweis" data-typhinweis hidden>Mehrere Antworten sind richtig. Wählen Sie alle zutreffenden.</p>
+        <div class="qz-bild" data-bild hidden></div>
+        <fieldset aria-labelledby="qz-fragetext">
+          <div class="qz-antworten" data-antworten></div>
+        </fieldset>
+        <p class="qz-fehler" data-fehler hidden>Bitte zuerst eine Antwort wählen.</p>
+        <button class="btn" type="submit" data-pruefen>Antwort prüfen</button>
+      </form>
+
+      <div class="qz-rueckmeldung" data-rueckmeldung hidden>
+        <h3 tabindex="-1" data-rm-titel></h3>
+        <p class="qz-rm-loesung" data-rm-loesung hidden></p>
+        <p data-rm-erklaerung></p>
+        <p class="qz-quelle" data-rm-quelle hidden></p>
+        <aside class="qz-ki" aria-label="KI-Potenzial">
+          <p class="label label-eis">KI-Potenzial</p>
+          <p data-rm-ki></p>
+          <a data-rm-ki-link hidden>Passendes Werkzeug ansehen <span class="pfeil" aria-hidden="true">→</span></a>
+        </aside>
+        <button class="btn" type="button" data-weiter>Nächste Frage <span class="pfeil" aria-hidden="true">→</span></button>
+      </div>
+    </div>
+
+    <!-- Ergebnis -->
+    <div class="qz-ansicht qz-ergebnis" data-ansicht="ergebnis" hidden>
+      <div class="qz-ergebnis-kopf">
+        <svg class="qz-ring" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="52" class="qz-ring-grund" />
+          <circle cx="60" cy="60" r="52" class="qz-ring-wert" pathLength="100" stroke-dasharray="0 100" data-ring />
+          <text x="60" y="68" text-anchor="middle" data-ring-text>0 %</text>
+        </svg>
+        <div>
+          <p class="label label-eis" data-erg-label>Ergebnis</p>
+          <h2 tabindex="-1" data-erg-titel>0 von 10 richtig</h2>
+          <p class="qz-erg-punkte"><strong data-erg-punkte>0</strong> Punkte <span data-erg-neu hidden class="qz-badge">Neuer Bestwert</span></p>
+          <p data-erg-urteil></p>
+        </div>
+      </div>
+
+      <div class="qz-erg-raster">
+        <section aria-labelledby="kat-titel">
+          <h3 id="kat-titel">Nach Kategorie</h3>
+          <ul class="qz-kategorien" data-kategorien></ul>
+        </section>
+        <section class="qz-zert-box" aria-labelledby="zert-titel">
+          <h3 id="zert-titel">Zertifikat</h3>
+          <div data-zert-ok hidden>
+            <p>Bestanden. Ihr Zertifikat können Sie als PDF speichern oder drucken.</p>
+            <label class="qz-feld">
+              <span>Name auf dem Zertifikat (optional, wird nicht gespeichert)</span>
+              <input type="text" name="name" autocomplete="name" maxlength="60" data-zert-name />
+            </label>
+            <button class="btn" type="button" data-zert-drucken>Zertifikat als PDF</button>
+            <p class="qz-hinweis-klein">Im Druckdialog «Als PDF speichern» wählen.</p>
+          </div>
+          <p data-zert-nein hidden>Ab {BESTANDEN_AB} % richtigen Antworten gibt es ein Zertifikat. Eine neue Runde stellt andere Fragen zusammen.</p>
+        </section>
+      </div>
+
+      <details class="qz-durchsicht">
+        <summary>Alle Fragen dieser Runde durchsehen</summary>
+        <ol data-durchsicht></ol>
+      </details>
+
+      <div class="btn-reihe">
+        <button class="btn" type="button" data-nochmals>Neue Runde <span class="pfeil" aria-hidden="true">→</span></button>
+        <button class="btn btn-ghost" type="button" data-zurueck>Stufe oder Modus wechseln</button>
+      </div>
+    </div>
+
+    <!-- Zertifikat: nur im Druck sichtbar -->
+    <div class="qz-zertifikat" data-zertifikat aria-hidden="true">
+      <div class="zt-rahmen">
+        <img src="/logo-hell.svg" alt="" width="64" height="64" class="zt-logo" />
+        <p class="zt-label">Zertifikat</p>
+        <p class="zt-titel">Netzbau-Quiz</p>
+        <p class="zt-stufe" data-zt-stufe></p>
+        <p class="zt-name" data-zt-name></p>
+        <p class="zt-text" data-zt-text></p>
+        <p class="zt-kategorien" data-zt-kategorien></p>
+        <div class="zt-fuss">
+          <span data-zt-datum></span>
+          <span data-zt-kennung></span>
+        </div>
+        <p class="zt-hinweis">Selbsttest auf tiefbauleitung.com, erstellt von Alessandro Cortese, Bauingenieur. Keine offizielle Qualifikation oder Zertifizierung.</p>
+      </div>
+    </div>
+  </div>
+
+  {schemas.map((s) => <template data-schema={s}><QuizSchema name={s} /></template>)}
+  <script type="application/json" data-quiz-pool set:html={daten}></script>
+</section>
+
+<script>
+  import {
+    STUFEN, KATEGORIEN, KI_POTENZIAL, auswerten, istRichtig, punkte, waehleRunde, zahl, zeitlimit, zufallsgenerator,
+    type Bereich, type Frage, type Stufe,
+  } from '../lib/quiz';
+
+  interface Bestwert { datum: string; stufe: Stufe; bereich: Bereich; modus: 'lernen' | 'zeit'; punkte: number; prozent: number }
+  interface Ergebnis { frage: Frage; richtig: boolean; punkte: number; gewaehlt: number[] }
+  const SPEICHER = 'netzbau-quiz-bestwerte';
+  const BUCHSTABEN = 'ABCDE';
+
+  const w = document.querySelector<HTMLElement>('[data-quiz]');
+  if (w) starte(w);
+
+  function starte(w: HTMLElement) {
+    const q = <T extends Element = HTMLElement>(s: string) => w.querySelector<T>(s)!;
+    const pool: Frage[] = JSON.parse(q('[data-quiz-pool]').textContent ?? '[]');
+    const stufeTitel = (s: Stufe) => STUFEN.find((x) => x.id === s)?.titel ?? s;
+    const bereichTitel = (b: Bereich) => (b === 'kosten' ? 'Spezialbereich Kosten, Ausmass und Regie' : 'Alle Fachgebiete');
+
+    let stufe: Stufe = 'anfaenger';
+    let bereich: Bereich = 'alle';
+    let modus: 'lernen' | 'zeit' = 'lernen';
+    let runde: Frage[] = [];
+    let index = 0;
+    let ergebnisse: Ergebnis[] = [];
+    let total = 0;
+    let serie = 0;
+    let besteSerie = 0;
+    let timer = 0;
+    let fristStart = 0;
+    let frist = 0;
+
+    const zeige = (name: string) => {
+      for (const a of w.querySelectorAll<HTMLElement>('[data-ansicht]')) a.hidden = a.dataset.ansicht !== name;
+      w.scrollIntoView({ block: 'start' });
+    };
+
+    // Bestwerte: nur lokal im Browser, Fehler (z. B. privates Fenster) werden still ignoriert
+    const lese = (): Bestwert[] => {
+      try { return JSON.parse(localStorage.getItem(SPEICHER) ?? '[]'); } catch { return []; }
+    };
+    const schreibe = (liste: Bestwert[]) => {
+      try { localStorage.setItem(SPEICHER, JSON.stringify(liste)); } catch { /* nicht verfügbar */ }
+    };
+    const zeigeBestwerte = () => {
+      const liste = lese().slice(0, 5);
+      const box = q('[data-bestwerte]');
+      box.hidden = liste.length === 0;
+      const tabelle = document.createElement('table');
+      tabelle.innerHTML = '<thead><tr><th scope="col">Datum</th><th scope="col">Stufe</th><th scope="col">Bereich</th><th scope="col">Modus</th><th scope="col">Punkte</th><th scope="col">Richtig</th></tr></thead><tbody></tbody>';
+      for (const b of liste) {
+        const tr = tabelle.tBodies[0].insertRow();
+        for (const wert of [new Date(b.datum).toLocaleDateString('de-CH'), stufeTitel(b.stufe), b.bereich === 'kosten' ? 'Kosten' : 'Alle', b.modus === 'zeit' ? 'Zeit' : 'Lernen', zahl(b.punkte, 0), `${b.prozent} %`]) tr.insertCell().textContent = wert;
+      }
+      q('[data-bestwerte-tabelle]').replaceChildren(tabelle);
+    };
+    q('[data-bestwerte-loeschen]').addEventListener('click', () => {
+      if (!confirm('Alle gespeicherten Bestwerte auf diesem Gerät löschen?')) return;
+      try { localStorage.removeItem(SPEICHER); } catch { /* nicht verfügbar */ }
+      zeigeBestwerte();
+    });
+    zeigeBestwerte();
+
+    // Start
+    q<HTMLFormElement>('[data-startform]').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(e.currentTarget as HTMLFormElement);
+      stufe = d.get('stufe') as Stufe;
+      bereich = d.get('bereich') as Bereich;
+      modus = d.get('modus') as 'lernen' | 'zeit';
+      neueRunde();
+    });
+
+    function neueRunde() {
+      runde = waehleRunde(pool, stufe, bereich, zufallsgenerator((Date.now() ^ (Math.random() * 2 ** 31)) >>> 0));
+      index = 0;
+      ergebnisse = [];
+      total = 0;
+      serie = 0;
+      besteSerie = 0;
+      q('[data-punkte]').textContent = '0';
+      q('[data-stufe-anzeige]').textContent = `${stufeTitel(stufe)} · ${bereich === 'kosten' ? 'Spezialbereich Kosten' : 'Alle Fachgebiete'}${modus === 'zeit' ? ' · Zeitmodus' : ''}`;
+      zeige('frage');
+      zeigeFrage();
+    }
+
+    function zeigeFrage() {
+      const f = runde[index];
+      if (index > 0) q('.qz-spiel').scrollIntoView({ block: 'start' });
+      q('[data-stand]').textContent = `Frage ${index + 1} von ${runde.length}`;
+      const balken = q<HTMLProgressElement>('[data-fortschritt]');
+      balken.max = runde.length;
+      balken.value = index;
+      q('[data-meta]').textContent = [KATEGORIEN[f.kategorie], f.generiert ? 'Rechenaufgabe' : '', f.typ === 'wahr-falsch' ? 'Wahr oder falsch?' : ''].filter(Boolean).join(' · ');
+      q('[data-fragetext]').textContent = f.frage;
+      q('[data-typhinweis]').hidden = f.typ !== 'mehrfach';
+      const bild = q('[data-bild]');
+      bild.replaceChildren();
+      bild.hidden = !f.bild;
+      if (f.bild) {
+        const vorlage = w.querySelector<HTMLTemplateElement>(`template[data-schema="${f.bild}"]`);
+        if (vorlage) bild.append(vorlage.content.cloneNode(true));
+      }
+      const liste = q('[data-antworten]');
+      liste.replaceChildren(...f.antworten.map((a, i) => {
+        const label = document.createElement('label');
+        label.className = 'qz-antwort';
+        const input = document.createElement('input');
+        input.type = f.typ === 'mehrfach' ? 'checkbox' : 'radio';
+        input.name = 'antwort';
+        input.value = String(i);
+        const b = document.createElement('span');
+        b.className = 'qz-buchstabe';
+        b.setAttribute('aria-hidden', 'true');
+        // Bei Bildfragen Ziffern, damit sie nicht mit den Buchstaben im Schema verwechselt werden
+        b.textContent = f.typ === 'wahr-falsch' ? (i === 0 ? '✓' : '✗') : f.bild ? String(i + 1) : BUCHSTABEN[i];
+        const t = document.createElement('span');
+        t.className = 'qz-text';
+        t.textContent = a.text;
+        const z = document.createElement('span');
+        z.className = 'qz-zeichen';
+        label.append(input, b, t, z);
+        return label;
+      }));
+      q('[data-fehler]').hidden = true;
+      q('[data-pruefen]').hidden = false;
+      q('[data-rueckmeldung]').hidden = true;
+      q('[data-fragetext]').focus({ preventScroll: true });
+      if (modus === 'zeit') starteTimer(zeitlimit(f));
+    }
+
+    function starteTimer(sekunden: number) {
+      const box = q('[data-timer]');
+      const balken = q<HTMLProgressElement>('[data-timer-balken]');
+      const text = q('[data-timer-text]');
+      box.hidden = false;
+      box.classList.remove('knapp');
+      balken.max = sekunden;
+      frist = sekunden;
+      fristStart = performance.now();
+      let angesagt = false;
+      const tick = () => {
+        const rest = Math.max(0, frist - (performance.now() - fristStart) / 1000);
+        balken.value = rest;
+        text.textContent = `${Math.ceil(rest)} s`;
+        if (rest <= 10 && !angesagt) {
+          angesagt = true;
+          box.classList.add('knapp');
+          q('[data-ansage]').textContent = 'Noch 10 Sekunden.';
+        }
+        if (rest <= 0) werteAus(true);
+      };
+      tick();
+      timer = window.setInterval(tick, 250);
+    }
+    const stoppeTimer = () => {
+      window.clearInterval(timer);
+      timer = 0;
+      return Math.max(0, frist - (performance.now() - fristStart) / 1000);
+    };
+
+    q<HTMLFormElement>('[data-frageform]').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!w.querySelector('[data-antworten] input:checked')) {
+        q('[data-fehler]').hidden = false;
+        return;
+      }
+      werteAus(false);
+    });
+
+    function werteAus(zeitAbgelaufen: boolean) {
+      if (!q('[data-rueckmeldung]').hidden) return;
+      const rest = modus === 'zeit' ? stoppeTimer() : undefined;
+      const f = runde[index];
+      const inputs = Array.from(w.querySelectorAll<HTMLInputElement>('[data-antworten] input'));
+      const gewaehlt = inputs.filter((i) => i.checked).map((i) => Number(i.value));
+      const richtig = !zeitAbgelaufen && istRichtig(f, gewaehlt);
+      const p = punkte(richtig, rest === undefined ? undefined : rest / frist);
+      total += p;
+      serie = richtig ? serie + 1 : 0;
+      besteSerie = Math.max(besteSerie, serie);
+      ergebnisse.push({ frage: f, richtig, punkte: p, gewaehlt });
+
+      inputs.forEach((input, i) => {
+        input.disabled = true;
+        const label = input.closest('label')!;
+        const zeichen = label.querySelector('.qz-zeichen')!;
+        if (f.antworten[i].richtig) {
+          label.classList.add('richtig');
+          zeichen.innerHTML = '<span aria-hidden="true">✓</span><span class="visually-hidden">richtige Antwort</span>';
+        } else if (input.checked) {
+          label.classList.add('falsch');
+          zeichen.innerHTML = '<span aria-hidden="true">✗</span><span class="visually-hidden">falsch gewählt</span>';
+        }
+      });
+
+      const punkteFeld = q('[data-punkte]');
+      punkteFeld.textContent = zahl(total, 0);
+      if (p) {
+        punkteFeld.classList.remove('plus');
+        void punkteFeld.offsetWidth;
+        punkteFeld.classList.add('plus');
+      }
+      const s = q('[data-serie]');
+      s.hidden = serie < 2;
+      s.textContent = `${serie} richtig in Folge`;
+      q<HTMLProgressElement>('[data-fortschritt]').value = index + 1;
+
+      const titel = q('[data-rm-titel]');
+      titel.textContent = richtig ? `Richtig. +${p} Punkte` : zeitAbgelaufen ? 'Die Zeit ist abgelaufen.' : 'Leider nicht richtig.';
+      q('[data-rueckmeldung]').classList.toggle('ist-richtig', richtig);
+      const loesung = q('[data-rm-loesung]');
+      loesung.hidden = richtig;
+      loesung.textContent = `Richtig ${f.antworten.filter((a) => a.richtig).length > 1 ? 'sind' : 'ist'}: ${f.antworten.filter((a) => a.richtig).map((a) => a.text).join(' · ')}`;
+      q('[data-rm-erklaerung]').textContent = f.erklaerung;
+      const quelle = q('[data-rm-quelle]');
+      quelle.hidden = !f.quelle;
+      quelle.textContent = f.quelle ? `Grundlage: ${f.quelle}` : '';
+      const ki = KI_POTENZIAL[f.kategorie];
+      q('[data-rm-ki]').textContent = f.ki ?? ki.text;
+      const link = q<HTMLAnchorElement>('[data-rm-ki-link]');
+      link.hidden = !ki.href || Boolean(f.ki);
+      if (ki.href) link.href = ki.href;
+      q('[data-weiter]').firstChild!.textContent = index + 1 < runde.length ? 'Nächste Frage ' : 'Zum Ergebnis ';
+      q('[data-pruefen]').hidden = true;
+      q('[data-fehler]').hidden = true;
+      q('[data-timer]').hidden = true;
+      q('[data-rueckmeldung]').hidden = false;
+      titel.focus();
+    }
+
+    q('[data-weiter]').addEventListener('click', () => {
+      index += 1;
+      if (index < runde.length) zeigeFrage();
+      else zeigeErgebnis();
+    });
+
+    function zeigeErgebnis() {
+      const a = auswerten(ergebnisse);
+      q('[data-ring]').setAttribute('stroke-dasharray', `${a.prozent} 100`);
+      q('[data-ring-text]').textContent = `${a.prozent} %`;
+      q('[data-erg-label]').textContent = `${stufeTitel(stufe)} · ${bereichTitel(bereich)}${modus === 'zeit' ? ' · Zeitmodus' : ''}`;
+      q('[data-erg-titel]').textContent = `${a.richtig} von ${a.gesamt} richtig`;
+      q('[data-erg-punkte]').textContent = zahl(total, 0);
+      q('[data-erg-urteil]').textContent = `${a.urteil}${besteSerie >= 3 ? ` Längste Serie: ${besteSerie} richtig in Folge.` : ''}`;
+
+      const kat = q('[data-kategorien]');
+      kat.replaceChildren(...a.jeKategorie.map((k) => {
+        const li = document.createElement('li');
+        const name = document.createElement('span');
+        name.textContent = k.titel;
+        const punkteReihe = document.createElement('span');
+        punkteReihe.className = 'qz-punkte-reihe';
+        punkteReihe.setAttribute('aria-hidden', 'true');
+        for (let i = 0; i < k.gesamt; i++) {
+          const p = document.createElement('i');
+          if (i < k.richtig) p.className = 'voll';
+          punkteReihe.append(p);
+        }
+        const wert = document.createElement('span');
+        wert.className = 'qz-kat-wert';
+        wert.textContent = `${k.richtig} von ${k.gesamt}`;
+        li.append(name, punkteReihe, wert);
+        return li;
+      }));
+
+      // Bestwerte
+      const liste = lese();
+      const eintrag: Bestwert = { datum: new Date().toISOString(), stufe, bereich, modus, punkte: total, prozent: a.prozent };
+      const neu = liste.length === 0 || total > Math.max(...liste.map((b) => b.punkte));
+      schreibe([...liste, eintrag].sort((x, y) => y.punkte - x.punkte).slice(0, 10));
+      q('[data-erg-neu]').hidden = !neu || total === 0;
+      zeigeBestwerte();
+
+      q('[data-zert-ok]').hidden = !a.bestanden;
+      q('[data-zert-nein]').hidden = a.bestanden;
+      fuelleZertifikat(a);
+
+      const durchsicht = q('[data-durchsicht]');
+      durchsicht.replaceChildren(...ergebnisse.map((e) => {
+        const li = document.createElement('li');
+        li.className = e.richtig ? 'richtig' : 'falsch';
+        const f = document.createElement('p');
+        f.className = 'qz-ds-frage';
+        f.textContent = `${e.richtig ? '✓' : '✗'} ${e.frage.frage}`;
+        const r = document.createElement('p');
+        r.textContent = `Richtig: ${e.frage.antworten.filter((x) => x.richtig).map((x) => x.text).join(' · ')}`;
+        const x = document.createElement('p');
+        x.className = 'qz-ds-erklaerung';
+        x.textContent = e.frage.erklaerung;
+        li.append(f, r, x);
+        return li;
+      }));
+
+      zeige('ergebnis');
+      q('[data-erg-titel]').focus({ preventScroll: true });
+    }
+
+    function fuelleZertifikat(a: ReturnType<typeof auswerten>) {
+      const heute = new Date();
+      q('[data-zt-stufe]').textContent = `Stufe ${stufeTitel(stufe)} · ${bereichTitel(bereich)}${modus === 'zeit' ? ' · Zeitmodus' : ''}`;
+      q('[data-zt-text]').textContent = `hat das Netzbau-Quiz mit ${a.richtig} von ${a.gesamt} richtigen Antworten (${a.prozent} %) und ${zahl(total, 0)} Punkten bestanden.`;
+      q('[data-zt-kategorien]').textContent = a.jeKategorie.map((k) => `${k.titel}: ${k.richtig}/${k.gesamt}`).join(' · ');
+      q('[data-zt-datum]').textContent = heute.toLocaleDateString('de-CH', { day: 'numeric', month: 'long', year: 'numeric' });
+      const kennung = `NBQ-${heute.toISOString().slice(0, 10).replace(/-/g, '')}-${Math.floor(Math.random() * 0xffff).toString(16).toUpperCase().padStart(4, '0')}`;
+      q('[data-zt-kennung]').textContent = `Kennung ${kennung}`;
+    }
+
+    q('[data-zert-drucken]').addEventListener('click', () => {
+      const name = q<HTMLInputElement>('[data-zert-name]').value.trim();
+      const feld = q('[data-zt-name]');
+      feld.textContent = name;
+      feld.classList.toggle('leer', !name);
+      document.body.classList.add('druck-zertifikat');
+      window.print();
+    });
+    window.addEventListener('afterprint', () => document.body.classList.remove('druck-zertifikat'));
+
+    q('[data-nochmals]').addEventListener('click', neueRunde);
+    q('[data-zurueck]').addEventListener('click', () => {
+      zeige('start');
+      q<HTMLInputElement>(`[data-startform] input[name="stufe"][value="${stufe}"]`).focus();
+    });
+  }
+</script>
+
+<style is:global>
+  /* Global, weil Antworten, Kategorien und Durchsicht per Skript entstehen; alle Klassen beginnen mit qz- oder zt- */
+  .quiz { padding-top: clamp(32px, 5vw, 56px); }
+  /* «hidden» muss auch gegen display-Regeln der Komponenten gewinnen */
+  .quiz [hidden] { display: none !important; }
+  .qz-hinweis { color: var(--signal); }
+  .qz-start { display: grid; gap: 26px; }
+  .qz-wahl { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .qz-wahl legend { font: 600 1.15rem var(--f-display); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+  .qz-karten { display: grid; gap: 12px; }
+  .qz-karten-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .qz-karten-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .qz-karte {
+    position: relative; display: grid; gap: 6px; align-content: start; cursor: pointer;
+    border: 1px solid var(--linie-hell); border-radius: var(--radius); background: var(--tiefe); padding: 16px 16px 16px 48px;
+    transition: border-color .2s, background .2s;
+  }
+  .qz-karte input { position: absolute; left: 16px; top: 18px; width: 18px; height: 18px; accent-color: var(--eis); margin: 0; }
+  .qz-karte:hover { border-color: var(--eis); }
+  .qz-karte:has(input:checked) { border-color: var(--eis); background: var(--eis-flaeche); box-shadow: inset 0 0 0 1px var(--eis); }
+  .qz-karte:has(input:focus-visible) { outline: 2px solid var(--signal); outline-offset: 3px; }
+  .qz-karte-titel { font: 600 1.25rem var(--f-display); text-transform: uppercase; letter-spacing: 0.03em; }
+  .qz-karte-text { color: var(--text-ruhig); font-size: max(0.95rem, var(--min-karte)); line-height: 1.45; }
+  .qz-karte-meta { font: 0.75rem var(--f-mono); color: var(--eis); }
+  .qz-start .btn { justify-self: start; }
+
+  .qz-bestwerte { margin-top: 40px; border-top: 1px solid var(--linie); padding-top: 24px; }
+  .qz-bestwerte h3 { font-size: var(--s-1); margin-bottom: 12px; }
+  .qz-tabelle { overflow-x: auto; }
+  .qz-tabelle table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+  .qz-tabelle th, .qz-tabelle td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--linie); white-space: nowrap; }
+  .qz-tabelle th { font: 500 0.75rem var(--f-mono); text-transform: uppercase; color: var(--text-ruhig); }
+  .qz-tabelle td:nth-child(5) { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .qz-link-knopf { margin-top: 10px; min-height: 44px; background: none; border: 0; color: var(--text-ruhig); text-decoration: underline; font: inherit; padding: 0; }
+  .qz-link-knopf:hover { color: var(--eis); }
+
+  /* Spiel */
+  .qz-spiel { max-width: 860px; }
+  .qz-kopf { display: grid; grid-template-columns: 1fr auto auto; align-items: baseline; gap: 4px 20px; margin-bottom: 12px; }
+  .qz-stand { font: 600 1.05rem var(--f-mono); display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .qz-stufe { color: var(--text-ruhig); font-weight: 400; font-size: 0.85rem; }
+  .qz-punkte strong { font: 600 1.6rem var(--f-display); color: var(--eis); font-variant-numeric: tabular-nums; display: inline-block; }
+  .qz-serie { font: 500 0.85rem var(--f-mono); color: var(--signal); }
+  .quiz progress { appearance: none; -webkit-appearance: none; width: 100%; height: 6px; border: 0; border-radius: 3px; background: var(--panel); overflow: hidden; }
+  .quiz progress::-webkit-progress-bar { background: var(--panel); }
+  .quiz progress::-webkit-progress-value { background: var(--eis); transition: width .3s ease-out; }
+  .quiz progress::-moz-progress-bar { background: var(--eis); }
+  .qz-fortschritt { grid-column: 1 / -1; }
+  .qz-timer { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; margin-bottom: 16px; font: 600 0.95rem var(--f-mono); }
+  .qz-timer progress::-webkit-progress-value { background: var(--signal); transition: none; }
+  .qz-timer progress::-moz-progress-bar { background: var(--signal); }
+  .qz-timer.knapp { color: var(--signal); }
+
+  .qz-frage, .qz-rueckmeldung { border: 1px solid var(--linie-hell); border-radius: 12px; background: var(--tiefe); padding: clamp(18px, 3vw, 32px); }
+  .qz-frage { display: grid; gap: 14px; }
+  .qz-frage fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  .qz-meta { font: 500 0.8rem var(--f-mono); color: var(--eis); text-transform: uppercase; letter-spacing: 0.06em; }
+  .qz-fragetext { font: 600 clamp(1.35rem, 2.6vw, 1.85rem)/1.25 var(--f-display); outline: none; }
+  .qz-typhinweis { color: var(--signal); font-size: 0.95rem; }
+  .qz-bild { border: 1px solid var(--linie); border-radius: var(--radius); background: var(--nacht); padding: 8px; display: grid; justify-items: center; }
+  .qz-antworten { display: grid; gap: 10px; }
+  .qz-antwort {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; min-height: 56px; cursor: pointer;
+    border: 1px solid var(--linie-hell); border-radius: var(--radius); background: var(--panel); padding: 10px 14px;
+    transition: border-color .15s, background .15s, scale .1s;
+  }
+  .qz-antwort input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .qz-antwort:hover { border-color: var(--eis); }
+  .qz-antwort:active { scale: .99; }
+  .qz-antwort:has(input:checked) { border-color: var(--eis); background: var(--eis-flaeche); }
+  .qz-antwort:has(input:focus-visible) { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .qz-antwort:has(input:disabled) { cursor: default; }
+  .qz-buchstabe {
+    display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
+    border: 1.5px solid var(--linie-hell); font: 600 0.95rem var(--f-mono); color: var(--text-ruhig);
+  }
+  .qz-antwort:has(input[type='checkbox']) .qz-buchstabe { border-radius: 6px; }
+  .qz-antwort:has(input:checked) .qz-buchstabe { background: var(--eis); border-color: var(--eis); color: var(--nacht); }
+  .qz-text { line-height: 1.4; }
+  .qz-zeichen { font: 700 1.2rem var(--f-mono); }
+  .qz-antwort.richtig { border-color: var(--eis); background: var(--eis-flaeche); box-shadow: inset 4px 0 0 var(--eis); }
+  .qz-antwort.richtig .qz-zeichen { color: var(--eis); }
+  .qz-antwort.falsch { border-color: var(--signal); background: rgb(242 166 90 / 0.1); box-shadow: inset 4px 0 0 var(--signal); }
+  .qz-antwort.falsch .qz-zeichen { color: var(--signal); }
+  .qz-antwort.falsch .qz-buchstabe { background: var(--signal); border-color: var(--signal); color: var(--nacht); }
+  .qz-fehler { color: var(--signal); font-weight: 600; }
+  .qz-frage .btn { justify-self: start; }
+
+  .qz-rueckmeldung { margin-top: 16px; display: grid; gap: 12px; border-left: 4px solid var(--signal); }
+  .qz-rueckmeldung.ist-richtig { border-left-color: var(--eis); }
+  .qz-rueckmeldung h3 { font-size: var(--s-2); outline: none; }
+  .qz-rueckmeldung.ist-richtig h3 { color: var(--eis); }
+  .qz-rueckmeldung:not(.ist-richtig) h3 { color: var(--signal); }
+  .qz-rm-loesung { font-weight: 600; }
+  .qz-quelle { font: 0.85rem var(--f-mono); color: var(--text-ruhig); }
+  .qz-ki { border: 1px dashed var(--linie-hell); border-radius: var(--radius); padding: 12px 14px; display: grid; gap: 6px; background: var(--nacht); }
+  .qz-ki p:not(.label) { color: var(--text-ruhig); font-size: max(0.95rem, var(--min-karte)); }
+  .qz-ki a { font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; justify-self: start; }
+  .qz-rueckmeldung .btn { justify-self: start; }
+
+  /* Ergebnis */
+  .qz-ergebnis { display: grid; gap: 28px; }
+  .qz-ergebnis-kopf { display: grid; grid-template-columns: 160px 1fr; gap: 28px; align-items: center; }
+  .qz-ergebnis-kopf h2 { font-size: var(--s-3); outline: none; margin: 6px 0; }
+  .qz-ring { width: 160px; height: 160px; }
+  .qz-ring circle { fill: none; stroke-width: 10; }
+  .qz-ring-grund { stroke: var(--panel); }
+  .qz-ring-wert { stroke: var(--eis); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 60px 60px; }
+  .qz-ring text { fill: var(--text); font: 600 26px var(--f-display); }
+  .qz-erg-punkte { font-size: 1.15rem; }
+  .qz-erg-punkte strong { font: 600 1.8rem var(--f-display); color: var(--eis); font-variant-numeric: tabular-nums; }
+  .qz-badge { display: inline-block; margin-left: 8px; font: 600 0.75rem var(--f-mono); text-transform: uppercase; color: var(--nacht); background: var(--signal); padding: 3px 8px; border-radius: 999px; vertical-align: middle; }
+  .qz-erg-raster { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
+  .qz-erg-raster h3 { font-size: var(--s-1); margin-bottom: 12px; }
+  .qz-kategorien { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .qz-kategorien li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--linie); }
+  .qz-punkte-reihe { display: flex; gap: 4px; }
+  .qz-punkte-reihe i { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--signal); }
+  .qz-punkte-reihe i.voll { background: var(--eis); border-color: var(--eis); }
+  .qz-kat-wert { font: 500 0.85rem var(--f-mono); color: var(--text-ruhig); white-space: nowrap; }
+  .qz-zert-box { border: 1px solid var(--linie-hell); border-radius: 12px; background: var(--tiefe); padding: 20px; display: grid; gap: 12px; align-content: start; }
+  .qz-zert-box > div { display: grid; gap: 12px; }
+  .qz-feld { display: grid; gap: 6px; }
+  .qz-feld span { font: 500 0.8rem var(--f-mono); color: var(--text-ruhig); }
+  .qz-feld input { font: inherit; min-height: 44px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--linie-hell); background: var(--nacht); color: var(--text); }
+  .qz-zert-box .btn { justify-self: start; }
+  .qz-hinweis-klein { font-size: max(0.85rem, var(--min-hilfe)); color: var(--text-ruhig); }
+  .qz-durchsicht { border-top: 1px solid var(--linie); padding-top: 12px; }
+  .qz-durchsicht summary { min-height: 44px; display: flex; align-items: center; font-weight: 600; color: var(--eis); }
+  .qz-durchsicht ol { margin: 8px 0 0; padding-left: 1.4em; display: grid; gap: 14px; }
+  .qz-durchsicht li { display: grid; gap: 4px; }
+  .qz-ds-frage { font-weight: 600; }
+  .qz-durchsicht li.falsch .qz-ds-frage { color: var(--signal); }
+  .qz-ds-erklaerung { color: var(--text-ruhig); font-size: max(0.95rem, var(--min-karte)); }
+
+  .qz-zertifikat { display: none; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .qz-punkte strong.plus { animation: qz-plus .5s cubic-bezier(.2,.7,.2,1); }
+    @keyframes qz-plus { 40% { scale: 1.25; color: var(--signal); } }
+    .qz-rueckmeldung:not([hidden]) { animation: qz-ein .3s ease-out; }
+    @keyframes qz-ein { from { opacity: 0; translate: 0 8px; } }
+    .qz-ring-wert { transition: stroke-dasharray .9s cubic-bezier(.2,.7,.2,1); }
+  }
+
+  @media (max-width: 900px) {
+    .qz-karten-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .qz-erg-raster { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .qz-karten-4, .qz-karten-2 { grid-template-columns: 1fr; }
+    .qz-ergebnis-kopf { grid-template-columns: 1fr; }
+    .qz-ring { width: 120px; height: 120px; }
+    .qz-kopf { grid-template-columns: 1fr auto; }
+    .qz-serie { grid-column: 1 / -1; }
+  }
+
+  /* Druck: nur das Zertifikat, hell, A4 quer */
+  @media print {
+    @page { size: A4 landscape; margin: 12mm; }
+    :root { color-scheme: light; }
+    body.druck-zertifikat { background: #fff !important; }
+    body.druck-zertifikat header, body.druck-zertifikat footer, body.druck-zertifikat .skip-link,
+    body.druck-zertifikat main > :not(.quiz), body.druck-zertifikat .qz-ansicht { display: none !important; }
+    body.druck-zertifikat .quiz { padding: 0 !important; border: 0 !important; }
+    body.druck-zertifikat .qz-zertifikat { display: block !important; color: #0e1821; }
+    .zt-rahmen { border: 3px double #0e1821; padding: 14mm 18mm; min-height: 160mm; display: grid; align-content: center; justify-items: center; text-align: center; gap: 4mm; font-family: var(--f-text); }
+    .zt-logo { width: 22mm; height: 22mm; }
+    .zt-label { font: 600 11pt var(--f-mono); letter-spacing: 0.3em; text-transform: uppercase; color: #0a62a3; }
+    .zt-titel { font: 600 34pt var(--f-display); text-transform: uppercase; letter-spacing: 0.04em; }
+    .zt-stufe { font: 500 12pt var(--f-mono); color: #475866; }
+    .zt-name { font: 600 24pt var(--f-display); min-width: 120mm; border-bottom: 1px solid #0e1821; padding-bottom: 2mm; margin-top: 6mm; }
+    .zt-name.leer { min-height: 12mm; }
+    .zt-text { font-size: 13pt; max-width: 200mm; }
+    .zt-kategorien { font-size: 9pt; color: #475866; max-width: 220mm; }
+    .zt-fuss { display: flex; gap: 20mm; font: 10pt var(--f-mono); margin-top: 6mm; }
+    .zt-hinweis { font-size: 8.5pt; color: #475866; margin-top: 4mm; }
+  }
+</style>

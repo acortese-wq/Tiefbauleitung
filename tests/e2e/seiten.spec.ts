@@ -28,6 +28,7 @@ const SEITEN = [
   '/ki-labor/werkbank/',
   '/ki-labor/nutzenrechner/',
   '/ki-labor/radar/',
+  '/netzbau-quiz/',
 ];
 
 function sammleFehler(page: Page) {

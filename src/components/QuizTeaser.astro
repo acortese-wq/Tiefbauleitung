@@ -1,0 +1,109 @@
+---
+// Eingebettete Probierfrage aus dem Netzbau-Quiz. Ohne JavaScript bleibt ein Link zum Quiz.
+// Auf Seiten mit Markdown-Inhalt verschiebt das Skript den Block an die Stelle [data-quiz-teaser-platz].
+import { quizFragen } from '../data/quiz-fragen';
+import { KATEGORIEN, STUFEN } from '../lib/quiz';
+
+const id = `qt-${Math.random().toString(36).slice(2, 7)}`;
+// Kurze Fragen ohne Bild und ohne Mehrfachauswahl aus den ersten beiden Stufen
+const auswahl = quizFragen
+  .filter((f) => !f.bild && f.typ !== 'mehrfach' && (f.stufe === 'anfaenger' || f.stufe === 'praktiker') && f.frage.length <= 150)
+  .map((f) => ({
+    meta: `Netzbau-Quiz · ${STUFEN.find((s) => s.id === f.stufe)?.titel} · ${KATEGORIEN[f.kategorie]}`,
+    frage: f.frage,
+    antworten: f.antworten,
+    erklaerung: f.erklaerung,
+    wahrFalsch: f.typ === 'wahr-falsch',
+  }));
+const daten = JSON.stringify(auswahl).replace(/</g, '\\u003c');
+---
+<aside class="quiz-teaser" aria-labelledby={`${id}-frage`} data-quiz-teaser>
+  <p class="label label-eis" data-qt-meta>Netzbau-Quiz</p>
+  <p class="qt-frage" id={`${id}-frage`} data-qt-frage>Wie gut kennen Sie den Netzbau? Vier Stufen vom Anfänger bis zur Bauherrenvertretung, mit Erklärungen und Zertifikat.</p>
+  <div class="qt-antworten" role="group" aria-labelledby={`${id}-frage`} data-qt-antworten></div>
+  <div class="qt-rueckmeldung" data-qt-rueckmeldung hidden>
+    <p class="qt-urteil" tabindex="-1" data-qt-urteil></p>
+    <p data-qt-erklaerung></p>
+  </div>
+  <a class="qt-link" href="/netzbau-quiz/" data-qt-link>Zum Netzbau-Quiz <span class="pfeil" aria-hidden="true">→</span></a>
+  <script type="application/json" data-qt-daten set:html={daten}></script>
+</aside>
+
+<script>
+  interface Probe { meta: string; frage: string; antworten: { text: string; richtig: boolean }[]; erklaerung: string; wahrFalsch: boolean }
+
+  const bloecke = Array.from(document.querySelectorAll<HTMLElement>('[data-quiz-teaser]'));
+  const platz = document.querySelector('[data-quiz-teaser-platz]');
+  if (platz && bloecke[0]) platz.replaceWith(bloecke[0]);
+  const benutzt = new Set<number>();
+
+  for (const block of bloecke) {
+    const q = (s: string) => block.querySelector<HTMLElement>(s)!;
+    const liste: Probe[] = JSON.parse(q('[data-qt-daten]').textContent ?? '[]');
+    if (!liste.length) continue;
+    let nr = Math.floor(Math.random() * liste.length);
+    while (benutzt.has(nr) && benutzt.size < liste.length) nr = (nr + 1) % liste.length;
+    benutzt.add(nr);
+    const p = liste[nr];
+    // Antworten mischen, Wahr/Falsch bleibt in fester Reihenfolge
+    const antworten = p.wahrFalsch ? p.antworten : [...p.antworten].sort(() => Math.random() - 0.5);
+
+    q('[data-qt-meta]').textContent = p.meta;
+    q('[data-qt-frage]').textContent = p.frage;
+    const knoepfe = antworten.map((a) => {
+      const k = document.createElement('button');
+      k.type = 'button';
+      k.className = 'qt-antwort';
+      k.textContent = a.text;
+      k.addEventListener('click', () => {
+        for (const [i, andere] of knoepfe.entries()) {
+          andere.disabled = true;
+          if (antworten[i].richtig) andere.classList.add('richtig');
+        }
+        if (!a.richtig) k.classList.add('falsch');
+        k.setAttribute('aria-pressed', 'true');
+        const richtige = antworten.find((x) => x.richtig)!.text;
+        q('[data-qt-urteil]').textContent = a.richtig ? 'Richtig.' : `Nicht ganz. Richtig ist: ${richtige}`;
+        q('[data-qt-erklaerung]').textContent = p.erklaerung;
+        block.classList.toggle('ist-richtig', a.richtig);
+        q('[data-qt-rueckmeldung]').hidden = false;
+        q('[data-qt-link]').firstChild!.textContent = 'Noch neun Fragen? Zum ganzen Quiz ';
+        q('[data-qt-urteil]').focus();
+      });
+      return k;
+    });
+    q('[data-qt-antworten]').replaceChildren(...knoepfe);
+  }
+</script>
+
+<style is:global>
+  /* Global, weil die Antwortknöpfe per Skript entstehen */
+  .quiz-teaser {
+    display: grid; gap: 12px; margin-top: 28px; max-width: 760px;
+    border: 1px solid var(--linie-hell); border-left: 4px solid var(--signal); border-radius: 12px;
+    background: var(--tiefe); padding: clamp(18px, 3vw, 26px);
+  }
+  .quiz-teaser [hidden] { display: none !important; }
+  .quiz-teaser .label { margin: 0; }
+  .qt-frage { font: 600 clamp(1.2rem, 2.2vw, 1.5rem)/1.3 var(--f-display); margin: 0; max-width: none; }
+  .qt-antworten { display: grid; gap: 8px; }
+  .qt-antworten:empty { display: none; }
+  .qt-antwort {
+    text-align: left; font: inherit; color: var(--text); min-height: 48px; padding: 10px 14px; cursor: pointer;
+    border: 1px solid var(--linie-hell); border-radius: var(--radius); background: var(--panel);
+    transition: border-color .15s, background .15s, scale .1s;
+  }
+  .qt-antwort:hover:not(:disabled) { border-color: var(--eis); }
+  .qt-antwort:active:not(:disabled) { scale: .99; }
+  .qt-antwort:disabled { cursor: default; opacity: 1; }
+  .qt-antwort.richtig { border-color: var(--eis); background: var(--eis-flaeche); box-shadow: inset 4px 0 0 var(--eis); }
+  .qt-antwort.richtig::after { content: ' ✓'; color: var(--eis); font-weight: 700; }
+  .qt-antwort.falsch { border-color: var(--signal); background: rgb(242 166 90 / 0.1); box-shadow: inset 4px 0 0 var(--signal); }
+  .qt-antwort.falsch::after { content: ' ✗'; color: var(--signal); font-weight: 700; }
+  .qt-rueckmeldung { display: grid; gap: 6px; }
+  .qt-rueckmeldung p { margin: 0; color: var(--text-ruhig); }
+  .qt-urteil { font-weight: 700; color: var(--signal) !important; outline: none; }
+  .quiz-teaser.ist-richtig .qt-urteil { color: var(--eis) !important; }
+  .qt-link { justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 600; text-decoration: none; }
+  .prosa .quiz-teaser { margin-block: 1.6em; }
+</style>

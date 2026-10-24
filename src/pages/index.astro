@@ -1,5 +1,6 @@
 ---
 import Kernaussage from '../components/Kernaussage.astro';
+import QuizTeaser from '../components/QuizTeaser.astro';
 import { getCollection } from 'astro:content';
 import Basis from '../layouts/Basis.astro';
 import Leitmotiv from '../components/Leitmotiv.astro';
@@ -235,6 +236,7 @@ const zitat = zeugnisse[1];
           <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/">Netzbau, Glasfaser und Leitungsbau im Detail <span class="pfeil" aria-hidden="true">→</span></a>
           <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/#netz-uebersicht">Grafik: Vom Rechenzentrum bis ins Wohnzimmer <span class="pfeil" aria-hidden="true">→</span></a>
         </div>
+        <QuizTeaser />
       </div>
     </div>
   </section>

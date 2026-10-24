@@ -13,6 +13,7 @@ import TiefbauInfrastruktur from '../../components/illustrationen/TiefbauInfrast
 import NetzinfrastrukturLeitungsbau from '../../components/illustrationen/NetzinfrastrukturLeitungsbau.astro';
 import DigitalisierungProzesse from '../../components/illustrationen/DigitalisierungProzesse.astro';
 import KiAgenten from '../../components/illustrationen/KiAgenten.astro';
+import QuizTeaser from '../../components/QuizTeaser.astro';
 
 // Planzeichnung im Seitenkopf, solange kein Kopfbild (bild im Frontmatter) gesetzt ist
 const zeichnungen: Record<string, typeof TiefbauInfrastruktur> = {
@@ -63,6 +64,7 @@ const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
       <article class="prosa" data-pagefind-body data-lesefortschritt>
         <Content />
       </article>
+      {kompetenz.id === 'netzinfrastruktur-leitungsbau' && <QuizTeaser />}
     </div>
   </section>
 

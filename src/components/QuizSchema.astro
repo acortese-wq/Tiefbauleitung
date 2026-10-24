@@ -1,0 +1,155 @@
+---
+// Schemas im Planstil für die Bildfragen des Netzbau-Quiz. Buchstaben statt Beschriftung, damit die Frage nicht verraten wird.
+// Die Beschreibung für Screenreader nennt Lage und Form der markierten Teile, aber nicht ihre Namen.
+import '../styles/plan.css';
+import type { Schema } from '../lib/quiz';
+
+interface Props {
+  name: Schema;
+}
+const { name } = Astro.props;
+
+const marke = (x: number, y: number, b: string) => ({ x, y, b });
+const titel: Record<Schema, string> = {
+  ftth: 'Schema eines FTTH-Netzes von der Zentrale bis in die Wohnung',
+  graben: 'Querschnitt eines Leitungsgrabens',
+  schacht: 'Schnitt durch einen Kabelschacht',
+  muffe: 'Schnitt durch eine Spleissmuffe',
+  hausanschluss: 'Schnitt durch einen Hausanschluss',
+};
+const beschreibung: Record<Schema, string> = {
+  ftth: 'A: Gebäude links, von dem das Kabel ausgeht. B: Schacht im Boden mit einem kleinen Gehäuse darin, auf halbem Weg. C: Kasten im Untergeschoss des Wohnhauses, wo das Kabel ins Gebäude kommt. D: senkrechte Leitung im Haus nach oben. E: kleine Dose in der Wohnung im Obergeschoss.',
+  graben: 'A: oberste Schicht an der Strassenoberfläche. B: dünnes Band etwa in halber Tiefe des Grabens. C: Block mit sechs Rohren unten im Graben. D: Boden des Grabens.',
+  schacht: 'A: Abdeckung oben auf Strassenhöhe. B: Rohre, die links durch die Wand in den Schacht führen. C: aufgerollte Kabelschlaufen an der rechten Wand. D: längliches Gehäuse oben an der linken Wand.',
+  muffe: 'A: Röhrchen links, durch die Kabel ins Gehäuse führen. B: Stapel flacher Einschübe in der Mitte. C: Faserschlaufen rechts. D: die äussere Hülle.',
+  hausanschluss: 'A: Schacht links im Strassenbereich. B: Rohr, das vom Schacht zum Haus führt. C: Stelle, an der das Rohr durch die Kellerwand geht. D: Kasten innen im Untergeschoss.',
+};
+const marken: Record<Schema, { x: number; y: number; b: string }[]> = {
+  ftth: [marke(65, 76, 'A'), marke(250, 158, 'B'), marke(318, 270, 'C'), marke(452, 168, 'D'), marke(492, 76, 'E')],
+  graben: [marke(110, 62, 'A'), marke(420, 150, 'B'), marke(420, 226, 'C'), marke(110, 270, 'D')],
+  schacht: [marke(260, 28, 'A'), marke(70, 206, 'B'), marke(450, 160, 'C'), marke(70, 118, 'D')],
+  muffe: [marke(52, 62, 'A'), marke(240, 40, 'B'), marke(372, 262, 'C'), marke(476, 150, 'D')],
+  hausanschluss: [marke(75, 112, 'A'), marke(200, 268, 'B'), marke(286, 96, 'C'), marke(466, 140, 'D')],
+};
+const id = `qs-${name}`;
+---
+<svg class="pz qs" viewBox="0 0 520 300" role="img" aria-labelledby={`${id}-t ${id}-d`}>
+  <title id={`${id}-t`}>{titel[name]}</title>
+  <desc id={`${id}-d`}>{beschreibung[name]}</desc>
+  <defs>
+    <pattern id={`${id}-boden`} width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="10" class="pz-schraffur" />
+    </pattern>
+  </defs>
+
+  {name === 'ftth' && (
+    <g>
+      <rect x="0" y="200" width="520" height="100" fill={`url(#${id}-boden)`} />
+      <line x1="0" y1="200" x2="520" y2="200" class="pz-terrain" />
+      <rect x="22" y="110" width="86" height="90" class="pz-flaeche" />
+      <path d="M22 110 h86" class="pz-kontur" />
+      <rect x="40" y="128" width="14" height="14" class="pz-kontur-hell" /><rect x="76" y="128" width="14" height="14" class="pz-kontur-hell" />
+      <rect x="226" y="206" width="48" height="40" class="pz-beton" />
+      <rect x="238" y="220" width="24" height="12" rx="5" class="pz-eis-flaeche" />
+      <rect x="356" y="96" width="148" height="154" class="pz-flaeche" />
+      <path d="M346 100 L430 46 L514 100" class="pz-kontur" />
+      <line x1="356" y1="150" x2="504" y2="150" class="pz-kontur-hell" />
+      <rect x="370" y="216" width="28" height="22" class="pz-eis-flaeche" />
+      <rect x="468" y="118" width="20" height="16" class="pz-eis-flaeche" />
+      <path d="M108 190 L120 230 H238" class="pz-eis" />
+      <path d="M262 226 H340 L370 227" class="pz-eis" />
+      <path d="M398 226 H436 V126 H468" class="pz-eis" />
+      <line x1="65" y1="94" x2="65" y2="110" class="qs-linie" />
+      <line x1="250" y1="176" x2="250" y2="206" class="qs-linie" />
+      <line x1="336" y1="262" x2="370" y2="232" class="qs-linie" />
+      <line x1="452" y1="186" x2="438" y2="190" class="qs-linie" />
+      <line x1="486" y1="92" x2="480" y2="118" class="qs-linie" />
+    </g>
+  )}
+
+  {name === 'graben' && (
+    <g>
+      <path d="M0 80 H180 V280 H340 V80 H520 V300 H0 Z" fill={`url(#${id}-boden)`} />
+      <rect x="0" y="60" width="180" height="20" class="pz-beton" /><rect x="340" y="60" width="180" height="20" class="pz-beton" />
+      <rect x="180" y="60" width="160" height="20" class="pz-flaeche" />
+      <path d="M180 80 V280 H340 V80" class="pz-kontur" />
+      <line x1="196" y1="150" x2="324" y2="150" class="pz-eis" />
+      <rect x="208" y="196" width="104" height="62" class="pz-beton" />
+      {[0, 1, 2].flatMap((c) => [0, 1].map((r) => <circle cx={228 + c * 32} cy={213 + r * 28} r="10" class="pz-eis-fein qs-rohr" />))}
+      <line x1="128" y1="66" x2="186" y2="70" class="qs-linie" />
+      <line x1="402" y1="150" x2="326" y2="150" class="qs-linie" />
+      <line x1="402" y1="226" x2="314" y2="226" class="qs-linie" />
+      <line x1="128" y1="272" x2="182" y2="279" class="qs-linie" />
+    </g>
+  )}
+
+  {name === 'schacht' && (
+    <g>
+      <path d="M0 70 H146 V270 H374 V70 H520 V300 H0 Z" fill={`url(#${id}-boden)`} />
+      <line x1="0" y1="70" x2="520" y2="70" class="pz-terrain" />
+      <path d="M146 70 V270 H374 V70" class="pz-beton qs-wand" />
+      <rect x="206" y="58" width="108" height="14" class="pz-flaeche" />
+      <path d="M0 196 H146 M0 216 H146 M0 236 H146" class="pz-kontur-hell" />
+      <path d="M146 206 H230 M146 226 H200" class="pz-eis" />
+      <rect x="166" y="108" width="96" height="26" rx="10" class="pz-eis-flaeche" />
+      <path d="M230 206 C 300 206, 300 150, 340 150" class="pz-eis" />
+      <ellipse cx="338" cy="160" rx="24" ry="38" class="pz-eis-fein" /><ellipse cx="344" cy="160" rx="24" ry="38" class="pz-eis-fein" /><ellipse cx="350" cy="160" rx="24" ry="38" class="pz-eis-fein" />
+      <line x1="260" y1="46" x2="260" y2="58" class="qs-linie" />
+      <line x1="88" y1="206" x2="146" y2="206" class="qs-linie" />
+      <line x1="432" y1="160" x2="376" y2="160" class="qs-linie" />
+      <line x1="88" y1="118" x2="166" y2="120" class="qs-linie" />
+    </g>
+  )}
+
+  {name === 'muffe' && (
+    <g>
+      <rect x="112" y="88" width="316" height="124" rx="40" class="pz-flaeche qs-gehaeuse" />
+      <path d="M40 120 H116 M40 150 H116 M40 180 H116" class="pz-eis" />
+      <rect x="96" y="112" width="22" height="76" class="pz-beton" />
+      {[0, 1, 2, 3, 4].map((i) => <rect x="176" y={110 + i * 17} width="128" height="11" rx="2" class="pz-beton qs-kassette" />)}
+      <path d="M118 150 H176" class="pz-eis-fein" />
+      <ellipse cx="362" cy="150" rx="34" ry="30" class="pz-eis-fein" /><ellipse cx="368" cy="150" rx="34" ry="30" class="pz-eis-fein" /><ellipse cx="374" cy="150" rx="34" ry="30" class="pz-eis-fein" />
+      <path d="M304 140 C 320 140, 324 130, 332 128" class="pz-eis-fein" />
+      <line x1="58" y1="78" x2="78" y2="118" class="qs-linie" />
+      <line x1="240" y1="58" x2="240" y2="108" class="qs-linie" />
+      <line x1="372" y1="244" x2="372" y2="182" class="qs-linie" />
+      <line x1="458" y1="150" x2="428" y2="150" class="qs-linie" />
+    </g>
+  )}
+
+  {name === 'hausanschluss' && (
+    <g>
+      <path d="M0 150 H330 V270 H0 Z" fill={`url(#${id}-boden)`} />
+      <line x1="0" y1="150" x2="330" y2="150" class="pz-terrain" />
+      <rect x="44" y="150" width="62" height="70" class="pz-beton" />
+      <path d="M106 200 C 180 200, 240 210, 330 208" class="pz-eis qs-rohr-dick" />
+      <rect x="330" y="40" width="180" height="230" class="pz-flaeche" />
+      <path d="M330 40 V270" class="pz-kontur qs-wand" />
+      <line x1="330" y1="150" x2="510" y2="150" class="pz-kontur-hell" />
+      <rect x="322" y="198" width="18" height="20" class="pz-eis-flaeche" />
+      <path d="M340 208 H380 V196" class="pz-eis" />
+      <rect x="370" y="172" width="44" height="26" class="pz-eis-flaeche" />
+      <line x1="75" y1="130" x2="75" y2="150" class="qs-linie" />
+      <line x1="200" y1="250" x2="210" y2="206" class="qs-linie" />
+      <line x1="298" y1="112" x2="328" y2="198" class="qs-linie" />
+      <line x1="450" y1="152" x2="414" y2="176" class="qs-linie" />
+    </g>
+  )}
+
+  {marken[name].map((m) => (
+    <g class="qs-marke" aria-hidden="true">
+      <circle cx={m.x} cy={m.y} r="17" />
+      <text x={m.x} y={m.y + 7} text-anchor="middle">{m.b}</text>
+    </g>
+  ))}
+</svg>
+
+<style>
+  .qs { width: 100%; height: auto; max-width: 560px; }
+  .qs-linie { stroke: var(--text-ruhig); stroke-width: 1.2; }
+  .qs-marke circle { fill: var(--nacht); stroke: var(--signal); stroke-width: 2.5; }
+  .qs-marke text { fill: var(--signal); font: 700 20px var(--f-mono); }
+  .qs-rohr { fill: var(--nacht); stroke-opacity: 1; }
+  .qs-rohr-dick { stroke-width: 6; stroke-opacity: .85; }
+  .qs-kassette { stroke: var(--eis); }
+</style>

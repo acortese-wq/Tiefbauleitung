@@ -228,7 +228,10 @@ const zitat = zeugnisse[1];
             <div><dt>{b.titel}</dt><dd>{b.text}</dd></div>
           ))}
         </dl>
-        <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/">Netzbau, Glasfaser und Leitungsbau im Detail →</a>
+        <div class="beitrag-links">
+          <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/">Netzbau, Glasfaser und Leitungsbau im Detail →</a>
+          <a class="beitrag-link" href="/kompetenzen/netzinfrastruktur-leitungsbau/#netz-uebersicht">Grafik: Vom Rechenzentrum bis ins Wohnzimmer →</a>
+        </div>
       </div>
     </div>
   </section>
@@ -380,6 +383,7 @@ const zitat = zeugnisse[1];
   .beitrag-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 32px; margin: 0; }
   .beitrag-liste dt { font-weight: 600; color: var(--text); margin-bottom: 4px; }
   .beitrag-liste dd { margin: 0; color: var(--text-ruhig); }
+  .beitrag-links { display: flex; flex-wrap: wrap; gap: 0 28px; }
   .beitrag-link { display: inline-block; margin-top: 20px; font-weight: 600; text-decoration: none; }
   .beitrag-link:hover { text-decoration: underline; }
   .bildband-start { padding-block: clamp(8px, 2vw, 24px) 0; }

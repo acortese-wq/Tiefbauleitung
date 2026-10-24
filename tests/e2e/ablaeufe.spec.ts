@@ -344,3 +344,13 @@ test('Nutzenrechner rechnet in Franken und bietet Druck an', async ({ page }) =>
   await expect(r.getByRole('button', { name: /Drucken/ })).toBeVisible();
   await expect(r).not.toContainText('Erstgespräch');
 });
+
+test('Kompetenz Netzbau zeigt die Übersichtsgrafik mit Legende und KI-Kennzeichnung', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /Grafik: Vom Rechenzentrum bis ins Wohnzimmer/ }).click();
+  await expect(page).toHaveURL(/netzinfrastruktur-leitungsbau\/#netz-uebersicht$/);
+  const fig = page.locator('#netz-uebersicht');
+  await expect(fig.locator('img')).toHaveAttribute('alt', /acht Schritten/);
+  await expect(fig).toContainText('Hier arbeite ich');
+  await expect(fig).toContainText('KI-generierte Illustration');
+});

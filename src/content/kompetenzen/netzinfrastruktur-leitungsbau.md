@@ -27,6 +27,23 @@ Typische Fragen im Alltag:
 
 **Im Werkleitungsbau (2006–2013).** Bei Ingenieurbüros in Ilanz und Chur habe ich Wasserversorgungen, Siedlungsentwässerungen und Quartiererschliessungen projektiert und als Bauleiter umgesetzt.
 
+## Vom Rechenzentrum bis ins Wohnzimmer
+
+Damit Daten aus dem Internet auf Smartphone, Laptop oder Fernseher ankommen, braucht es eine ganze Kette: vom Rechenzentrum über das Glasfaser-Kernnetz und die Netzknoten bis zum regionalen Netz, zum Hausanschluss und zum Router in der Wohnung.
+
+<figure class="figur-breit" id="netz-uebersicht">
+  <a href="/bilder/kompetenzen/netz-uebersicht.jpg" class="figur-zoom">
+    <picture>
+      <source type="image/webp" srcset="/bilder/kompetenzen/netz-uebersicht-1000.webp 1000w, /bilder/kompetenzen/netz-uebersicht-1983.webp 1983w" sizes="(min-width: 1180px) 1128px, calc(100vw - 32px)" />
+      <img src="/bilder/kompetenzen/netz-uebersicht.jpg" width="1983" height="793" loading="lazy" decoding="async" alt="Infografik «Vom Internet bis ins Wohnzimmer – so kommen Daten zu Ihnen» in acht Schritten vor einer Schweizer Berglandschaft: 1 Rechenzentrum und Internet, 2 Glasfaser-Kernnetz, 3 Netzknoten, 4 regionales Netz und Hausanschluss mit offenem Leitungsgraben und orangen Kabelschutzrohren im Strassenraum, 5 Router im Zuhause, 6 WLAN in der Wohnung, 7 Mobilfunk und 5G, 8 Fernsehen über Internet, Kabel oder Satellit." />
+    </picture>
+  </a>
+  <figcaption>
+    <strong>Hier arbeite ich: ④ Regionales Netz und Hausanschluss.</strong> Der Graben im Strassenraum, die Rohranlage, das Leitungsgesuch beim Strasseneigentümer und die Wiederherstellung von Belag und Strasse. Genau an dieser Stelle treffen Netzbetreiber, Strasseneigentümer und Werkeigentümer aufeinander.
+    <span class="figur-hinweis">KI-generierte Illustration · <a href="/bilder/kompetenzen/netz-uebersicht.jpg">Grafik in voller Grösse öffnen</a></span>
+  </figcaption>
+</figure>
+
 ## Was ich einbringe
 
 - **Schnittstellen beurteilen.** Kostenaufteilungen, Zuständigkeiten und Auflagen gehören vor den Baubeginn, nicht in den Nachtrag.

@@ -183,24 +183,33 @@ const zitatNetzbau = zeugnis('interessen');
 
   <Kernaussage />
 
-  <section class="bildband-start" aria-label="Vom Leitungsgraben zum Rechenzentrum">
+  <section class="bildband-start" aria-label="Vom Rechenzentrum bis ins Wohnzimmer">
     <div class="wrap">
-      <figure class="weg-bild">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="/bilder/startseite/graben-rechenzentrum-800.webp 800w, /bilder/startseite/graben-rechenzentrum-1400.webp 1400w"
-            sizes="(min-width: 1160px) 1128px, calc(100vw - 32px)"
-          />
-          <img
-            src="/bilder/startseite/graben-rechenzentrum.jpg"
-            alt="Zweigeteiltes Bild: links ein offener Leitungsgraben mit Rohrbündel, Bagger und Rohrlager vor Bergkulisse, rechts dieselbe Leitung unter einer Strasse bis zu einem Rechenzentrum mit Serverschränken."
-            width="1400" height="764" loading="lazy" decoding="async"
-          />
-        </picture>
+      <figure class="weg-bild weg-video" data-weg-video>
+        <div class="video-rahmen">
+          <video
+            controls
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster="/video/rechenzentrum-wohnzimmer-poster.webp"
+            width="1280"
+            height="720"
+            aria-describedby="weg-video-text"
+            data-video
+          >
+            <source src="/video/rechenzentrum-wohnzimmer.webm" type="video/webm" />
+            <source src="/video/rechenzentrum-wohnzimmer.mp4" type="video/mp4" />
+          </video>
+          <button type="button" class="video-knopf" data-video-knopf hidden>
+            <span class="video-symbol" aria-hidden="true"></span>
+            <span class="visually-hidden" data-video-label>Video abspielen</span>
+          </button>
+        </div>
         <figcaption>
-          <span><strong>Vom Graben zum Rechenzentrum.</strong> Digitalisierung und KI beginnen im Boden: ohne sauber gebaute Infrastruktur keine Daten, keine Netze, keine Agenten.</span>
-          <small>KI-generierte Illustration</small>
+          <span id="weg-video-text"><strong>Vom Rechenzentrum bis ins Wohnzimmer.</strong> Ein Lichtimpuls läuft vom Rechenzentrum über das Glasfasernetz durch die Bergtäler, unter der Strasse durch das Rohr und über den Hausanschluss bis zum Router. Mein Arbeitsfeld liegt dazwischen: im Graben und beim Hausanschluss.</span>
+          <small>KI-generiertes Video, ohne Ton</small>
         </figcaption>
       </figure>
     </div>
@@ -420,6 +429,38 @@ const zitatNetzbau = zeugnis('interessen');
   }
 </script>
 
+<script>
+  // Video im Bildband: spielt stumm, sobald es sichtbar ist, und hält an, wenn es aus dem Bild scrollt.
+  // Bei «Bewegung reduzieren» oder Datensparmodus startet es nur auf Knopfdruck. Ohne JavaScript bleiben die Browser-Bedienelemente.
+  const figur = document.querySelector<HTMLElement>('[data-weg-video]');
+  const video = figur?.querySelector<HTMLVideoElement>('[data-video]');
+  const knopf = figur?.querySelector<HTMLButtonElement>('[data-video-knopf]');
+  if (figur && video && knopf) {
+    const netz = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    let angehalten = matchMedia('(prefers-reduced-motion: reduce)').matches || netz?.saveData === true;
+    const label = knopf.querySelector<HTMLElement>('[data-video-label]')!;
+    const zeige = () => {
+      knopf.classList.toggle('spielt', !video.paused);
+      label.textContent = video.paused ? 'Video abspielen' : 'Video anhalten';
+    };
+    const spiele = () => { video.play().catch(() => {}).finally(zeige); };
+    video.controls = false;
+    knopf.hidden = false;
+    video.addEventListener('play', zeige);
+    video.addEventListener('pause', zeige);
+    knopf.addEventListener('click', () => {
+      angehalten = !video.paused;
+      if (angehalten) video.pause();
+      else spiele();
+    });
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !angehalten) spiele();
+      else if (!e.isIntersecting && !video.paused) video.pause();
+    }, { threshold: 0.4 }).observe(video);
+    zeige();
+  }
+</script>
+
 <style>
   .held { position: relative; overflow: hidden; border-bottom: 1px solid var(--linie); }
   .held::before {
@@ -464,8 +505,15 @@ const zitatNetzbau = zeugnis('interessen');
   .beitrag-link:hover { text-decoration: underline; }
   .bildband-start { padding-block: clamp(8px, 2vw, 24px) 0; }
   .weg-bild { margin: 0; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; background: var(--tiefe); }
-  .weg-bild picture { display: block; aspect-ratio: 1400 / 764; background: var(--panel); }
-  .weg-bild img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .video-rahmen { position: relative; aspect-ratio: 16 / 9; background: var(--nacht); }
+  .video-rahmen video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .video-knopf {
+    position: absolute; right: 12px; bottom: 12px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+    display: grid; place-items: center; border: 1px solid var(--linie-hell); background: rgb(10 15 20 / 0.72); color: var(--text);
+  }
+  .video-knopf:hover { border-color: var(--eis); color: var(--eis); }
+  .video-symbol::before { content: '▶'; font-size: 0.95rem; margin-left: 2px; }
+  .video-knopf.spielt .video-symbol::before { content: '❚❚'; font-size: 0.75rem; margin-left: 0; letter-spacing: -1px; }
   .weg-bild figcaption {
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 24px;
     padding: 14px 18px 16px; color: var(--text-ruhig); font-size: 0.98rem;

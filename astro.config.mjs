@@ -89,7 +89,7 @@ function markdownBilder() {
  */
 function unterordnerLinks(unterordner, seite) {
   const ohne = unterordner.replace(/^\//, '');
-  const intern = new RegExp(`((?:href|src|action)=")/(?!/|${ohne}/)`, 'g');
+  const intern = new RegExp(`((?:href|src|action|poster)=")/(?!/|${ohne}/)`, 'g');
   // srcset kann mehrere Adressen enthalten («a.webp 800w, b.webp 1600w»): jede einzeln ergänzen
   const srcset = /srcset="([^"]*)"/g;
   const eintrag = new RegExp(`(^|,\\s*)/(?!/|${ohne}/)`, 'g');

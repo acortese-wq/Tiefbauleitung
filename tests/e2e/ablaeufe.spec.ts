@@ -153,13 +153,12 @@ test('Kompetenzbereiche der Startseite zeigen dekorative Zeichnungen', async ({ 
   }
 });
 
-test('Startseite zeigt das Bild «Vom Graben zum Rechenzentrum» mit KI-Kennzeichnung', async ({ page }) => {
+test('Startseite zeigt das Bildband «Vom Rechenzentrum bis ins Wohnzimmer» als beschriebenes Video', async ({ page }) => {
   await page.goto('/');
-  const bild = page.locator('.weg-bild');
-  await bild.scrollIntoViewIfNeeded();
-  await expect(bild.locator('img')).toHaveAttribute('alt', /Leitungsgraben/);
-  await expect.poll(() => bild.locator('img').evaluate((i: HTMLImageElement) => i.naturalWidth)).toBeGreaterThan(0);
-  await expect(bild.locator('figcaption')).toContainText('KI-generierte Illustration');
+  const band = page.getByRole('region', { name: 'Vom Rechenzentrum bis ins Wohnzimmer' });
+  await expect(band.locator('video')).toHaveAttribute('aria-describedby', 'weg-video-text');
+  await expect(band.locator('#weg-video-text')).toContainText('Hausanschluss');
+  await expect(band.locator('img')).toHaveCount(0);
 });
 
 test('Werkzeugkasten zeigt freigegebene Werkzeuge mit Urheberangabe', async ({ page }) => {
@@ -593,4 +592,33 @@ test('Profil zeigt Zitate aus dem Schlusszeugnis 2025, ohne Geburtsdatum und ohn
     const text = await page.locator('body').innerText();
     for (const privat of ['1977', 'Hartmann', 'Kaufmann']) expect(text, `${privat} auf ${pfad}`).not.toContain(privat);
   }
+});
+
+test('Video auf der Startseite: Standbild, Kennzeichnung, startet sichtbar und lässt sich anhalten', async ({ page }) => {
+  await page.goto('/');
+  const figur = page.locator('[data-weg-video]');
+  const video = figur.locator('video');
+  await expect(video).toHaveAttribute('poster', /rechenzentrum-wohnzimmer-poster\.webp$/);
+  await expect(video.locator('source[type="video/webm"]')).toHaveCount(1);
+  await expect(figur.locator('figcaption')).toContainText('KI-generiertes Video');
+  expect(await video.evaluate((v: HTMLVideoElement) => v.muted && v.loop && !v.controls)).toBe(true);
+  await video.scrollIntoViewIfNeeded();
+  await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused), { timeout: 10_000 }).toBe(true);
+  const knopf = figur.getByRole('button', { name: 'Video anhalten' });
+  await knopf.click();
+  await expect(figur.getByRole('button', { name: 'Video abspielen' })).toBeVisible();
+  expect(await video.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+});
+
+test('Video auf der Startseite startet bei «Bewegung reduzieren» nicht von selbst', async ({ browser }) => {
+  const kontext = await browser.newContext({ reducedMotion: 'reduce' });
+  const page = await kontext.newPage();
+  await page.goto('/');
+  const video = page.locator('[data-weg-video] video');
+  await video.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(800);
+  expect(await video.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+  await page.locator('[data-weg-video]').getByRole('button', { name: 'Video abspielen' }).click();
+  await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused), { timeout: 10_000 }).toBe(true);
+  await kontext.close();
 });

@@ -26,19 +26,30 @@ Die Prompts unten bleiben für diesen späteren Schritt gültig.
 
 ## Umgesetzt: KI-Video «Vom Rechenzentrum bis ins Wohnzimmer» (Startseite, ab 25. Oktober 2026)
 
-KI-Video von Alessandro Cortese (erstellt mit Grok, 15 s), ersetzt das Bild «Vom Graben zum Rechenzentrum» im Bildband
-direkt nach dem Einstieg. Ablauf: Rechenzentrum und Netz als Plan, Alpental mit Viadukt, Röntgenblick in den Graben,
-Hausanschluss und Keller, Wohnzimmer mit Router, zurück in den Plan (Loop).
+KI-Video von Alessandro Cortese (erstellt mit Grok, 15 s), direkt nach dem Einstieg der Startseite. Zweite Fassung
+nach einem fachlich geschärften Prompt (eine durchgehende Kamerafahrt, Zeitplan pro Station). Ablauf:
+Glasfaserverteiler mit gelben Patchkabeln und grünen APC-Steckern, Kabelkeller, Dorfstrasse mit Viadukt und
+Röntgenblick in den Graben, Kabelschacht mit geöffneten Muffen und Spleisskassetten, Hausanschlusskasten mit
+Steigrohr, Arvenstube mit Glasfaserdose, Patchkabel und Router.
 
-- **Dateien:** `public/video/rechenzentrum-wohnzimmer.webm` (VP9, 1.9 MB) und `.mp4` (H.264, 2.4 MB), je 1280 × 720,
-  ohne Ton, leichte Entrauschung, zwei Durchgänge; Standbild `rechenzentrum-wohnzimmer-poster.webp` (Bild bei 0.5 s).
-  Original 23.7 MB nicht im Repository.
+- **Dateien:** `public/video/rechenzentrum-wohnzimmer-v2.webm` (VP9, 1.9 MB) und `-v2.mp4` (H.264, 2.4 MB), je
+  1280 × 720, ohne Ton, leichte Entrauschung, zwei Durchgänge; Standbild `rechenzentrum-wohnzimmer-v2-poster.webp`
+  (Glasfaserverteiler bei 1 s). Neuer Dateiname, weil Videos 30 Tage im Browser zwischengespeichert werden.
+  Original 16.7 MB nicht im Repository.
 - **Verhalten:** lädt erst, wenn es sichtbar wird, spielt stumm in Schleife, hält ausserhalb des Bildes an, eigener
   Knopf zum Anhalten (WCAG 2.2.2). Bei «Bewegung reduzieren» und Datensparmodus nur auf Knopfdruck.
 - **Kennzeichnung:** «KI-generiertes Video, ohne Ton» in der Legende, Beschreibung des Ablaufs im Text.
-- **Fachlich zu beachten:** Im Röntgenblick liegt das Warnband unter statt über den Rohren, der Graben wirkt in
-  zwei Sekunden wie ein Felstunnel, bei den Netzknoten stehen kleine KI-Pseudobeschriftungen. Für eine spätere
-  Fassung die Szene 6–10 s neu erzeugen (Warnband über dem Rohrblock, orange Rohre, Sandbett).
+- **Gegenüber der ersten Fassung behoben:** orange statt weisse Rohre, kein Felstunnel mehr, keine
+  Pseudobeschriftungen im Netzplan, Licht läuft über Glasfaserdose und Patchkabel in den Router.
+- **Fachlich zu beachten (2. Fassung):**
+  - Kabelkeller (3–4 s): Stahltür mit Bullauge wie ein Schott, der Impuls zieht kurz frei durch die Luft.
+  - Graben (5–8 s): kein Warnband sichtbar, stattdessen ein Brett quer über den Rohren; Rohre liegen teils auf
+    Kies statt ganz im Sandbett, dazu quer liegende Rohrstücke; Belagsschichten nur als Glasplatte angedeutet;
+    der Impuls läuft streckenweise auf statt im Rohr.
+  - Kabelschacht (8–11 s): Spleisskassetten liegen am Boden, der Impuls läuft als Strahl durch die Luft zu einem
+    Fenster in der Schachtwand, das es real nicht gibt.
+  - Wohnzimmer (13–15 s): die Glasfaserdose sieht aus wie eine Steckdose.
+  - Für eine dritte Fassung den Graben (5–8 s) und den Schacht (8–11 s) gezielt neu erzeugen.
 
 ## Früher: KI-Bild «Vom Graben zum Rechenzentrum» (Startseite, bis 25. Oktober 2026)
 

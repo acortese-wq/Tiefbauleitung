@@ -598,7 +598,7 @@ test('Video auf der Startseite: Standbild, Kennzeichnung, startet sichtbar und l
   await page.goto('/');
   const figur = page.locator('[data-weg-video]');
   const video = figur.locator('video');
-  await expect(video).toHaveAttribute('poster', /rechenzentrum-wohnzimmer-poster\.webp$/);
+  await expect(video).toHaveAttribute('poster', /rechenzentrum-wohnzimmer-v2-poster\.webp$/);
   await expect(video.locator('source[type="video/webm"]')).toHaveCount(1);
   await expect(figur.locator('figcaption')).toContainText('KI-generiertes Video');
   expect(await video.evaluate((v: HTMLVideoElement) => v.muted && v.loop && !v.controls)).toBe(true);

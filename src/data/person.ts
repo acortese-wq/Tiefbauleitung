@@ -19,7 +19,7 @@ export const person = {
 export const kennzahlen = [
   { wert: '30+', label: 'Jahre im Tiefbau', quelle: 'Lehre als Tiefbauzeichner ab 1994' },
   { wert: '17', label: 'Jahre beim Tiefbauamt Graubünden', quelle: '2000–2005 und 2013–2025' },
-  { wert: '2', label: 'Seiten im Netzbau', quelle: 'Strasseneigentümer 2021–2025 · Netzbetreiber seit 2025' },
+  { wert: '2', label: 'Seiten im Netzbau', quelle: 'Strasseneigentümer 2013–2025 · Netzbetreiber seit 2025' },
 ];
 
 export type Station = {
@@ -52,6 +52,7 @@ export const werdegang: Station[] = [
     titel: 'Leiter Projektierung / Bau',
     organisation: 'Tiefbauamt Graubünden, Bezirk 1 Chur',
     punkte: [
+      'Aufgrund guter Leistungen aus der Bauleitung befördert',
       'Fachliche und personelle Führung des Teams Projektierung und Bau mit vier Bauleitern',
       'Neu- und Ausbau von Verbindungsstrassen inkl. Mehrjahresplanung, baulicher Unterhalt der Kantonsstrassen',
       'Verantwortung für das Submissionswesen und Auftragsmanagement im Bezirk',
@@ -66,7 +67,8 @@ export const werdegang: Station[] = [
     organisation: 'Tiefbauamt Graubünden, Bezirk 1 Chur',
     punkte: [
       'Örtliche Bauleitung von Strassen-, Brücken- und Instandsetzungsprojekten',
-      'Qualitätssicherung, Materialprüfungen und Koordination der Unternehmer',
+      'Koordination der Werkeigentümer: Kabelschutzrohre, Kabelblöcke und Leitungen in Strassen und Brücken',
+      'Qualitätssicherung, Materialprüfungen, Termine und Budget, Koordination aller Unternehmer',
       'Submissionsunterlagen, Offertprüfung, Kostenvoranschläge, Ausmass und Abrechnung',
     ],
   },
@@ -141,29 +143,78 @@ export const nebenamt = {
   seit: 'Juni 2000',
 };
 
-// Wörtliche Auszüge aus Arbeitszeugnissen. Nur Organisation und Jahr, keine Namen.
-export const zeugnisse = [
+// Wörtliche Auszüge aus Arbeitszeugnissen. Nur Organisation und Jahr, keine Namen, kein Geburtsdatum.
+// Die Zeugnisse selbst werden nicht veröffentlicht («auf Anfrage»).
+export interface Zeugnis {
+  id: string;
+  text: string;
+  quelle: string;
+  art: string;
+}
+
+export const zeugnisse: Zeugnis[] = [
   {
-    text: 'Zusammengefasst erbringt Alessandro Cortese jederzeit gute Leistungen und erledigt die Aufgaben stets zu unserer vollsten Zufriedenheit.',
-    quelle: 'Tiefbauamt Graubünden, Bezirk 1 Chur',
+    id: 'vollkommen',
+    text: 'Alessandro Cortese verfügt über grosse Berufserfahrung und beherrschte seinen Arbeitsbereich in jeder Weise umfassend, sicher und vollkommen.',
+    quelle: 'Tiefbauamt Graubünden',
+    art: 'Schlusszeugnis 2025',
+  },
+  {
+    id: 'interessen',
+    text: 'Er blieb auch in schwierigen Situationen sachlich und kooperativ. Darüber hinaus versuchte er Lösungen zu finden, welche möglichst die Interessen aller Beteiligten berücksichtigten.',
+    quelle: 'Tiefbauamt Graubünden',
+    art: 'Schlusszeugnis 2025',
+  },
+  {
+    id: 'zufriedenheit',
+    text: 'Zusammengefasst erbrachte Alessandro Cortese jederzeit gute Leistungen und erledigte seine Aufgaben stets zu unserer vollsten Zufriedenheit.',
+    quelle: 'Tiefbauamt Graubünden',
+    art: 'Schlusszeugnis 2025',
+  },
+  {
+    id: 'befoerderung',
+    text: 'Aufgrund seiner guten Leistungen wurde Alessandro Cortese am 1. Oktober 2021 zum Leiter Projektierung/Bau beim Tiefbauamt Graubünden, Bezirk 1 Chur, befördert.',
+    quelle: 'Tiefbauamt Graubünden',
     art: 'Zwischenzeugnis 2022',
   },
   {
-    text: 'Er bleibt auch in schwierigen Situationen sachlich und kooperativ. Darüber hinaus versucht er Lösungen zu finden, welche möglichst die Interessen aller Beteiligten berücksichtigen.',
-    quelle: 'Tiefbauamt Graubünden, Bezirk 1 Chur',
-    art: 'Zwischenzeugnis 2022',
+    id: 'vernetzen',
+    text: 'Neues konnte er mit vorhandenem Wissen vernetzen, da er Aufgaben rasch erfasste.',
+    quelle: 'Tiefbauamt Graubünden',
+    art: 'Schlusszeugnis 2025',
   },
   {
+    id: 'wissen',
+    text: 'Mit grossem Engagement gab er sein Wissen und Informationen gut verständlich an sein Team und seine Vorgesetzten weiter.',
+    quelle: 'Tiefbauamt Graubünden',
+    art: 'Schlusszeugnis 2025',
+  },
+  {
+    id: 'austritt',
+    text: 'Alessandro Cortese verlässt uns heute auf eigenen Wunsch. Wir bedauern seinen Austritt sehr.',
+    quelle: 'Tiefbauamt Graubünden',
+    art: 'Schlusszeugnis 2025',
+  },
+  {
+    id: 'cwz',
     text: 'Wir würden Alessandro Cortese jederzeit wieder bei der CWZ AG herzlich willkommen heissen!',
     quelle: 'Casutt Wyrsch Zwicky AG',
     art: 'Arbeitszeugnis 2013',
   },
   {
+    id: 'straub',
     text: 'Seine Arbeitsweise ist sehr gewissenhaft, pflichtbewusst, genau und führte zu sehr guten Leistungen.',
     quelle: 'Straub AG',
     art: 'Arbeitszeugnis 2008',
   },
 ];
+
+/** Zitat nach ID, damit Seiten nicht von der Reihenfolge abhängen */
+export function zeugnis(id: string): Zeugnis {
+  const z = zeugnisse.find((x) => x.id === id);
+  if (!z) throw new Error(`Zeugnis «${id}» fehlt`);
+  return z;
+}
 
 export const fachgebietLabels: Record<string, string> = {
   kunstbauten: 'Kunstbauten',

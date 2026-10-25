@@ -193,7 +193,11 @@ test('Fallstudie Trennungskompass nennt Gruppenarbeit, Bewertung und Grenzen, oh
 test('Startseite zeigt Netzbau aus beiden Perspektiven und den Nutzen für Auftraggeber', async ({ page }) => {
   await page.goto('/');
   const netzbau = page.locator('section.netzbau');
-  await expect(netzbau.locator('.perspektive')).toHaveCount(3);
+  await expect(netzbau.locator('.perspektive')).toHaveCount(4);
+  await expect(netzbau.locator('.perspektive', { hasText: '2013–2021' })).toContainText('Werkeigentümer');
+  await expect(netzbau.locator('.perspektive', { hasText: '2013–2021' }).getByRole('link', { name: 'Sassal' })).toHaveAttribute('href', '/projekte/plessurbruecke-sassal/');
+  await expect(netzbau.locator('.zitat')).toContainText('Interessen aller Beteiligten');
+  await expect(netzbau.locator('.zitat')).toContainText('Schlusszeugnis 2025');
   await expect(netzbau).toContainText('Netzbetreiber');
   await expect(netzbau).toContainText('Strasseneigentümer');
   await expect(netzbau).toContainText('Was Auftraggeber davon haben');
@@ -570,5 +574,20 @@ test('Grafiken öffnen sich vergrössert und lassen sich mit ×, Esc und Klick d
     await expect(dialog).toBeVisible();
     await page.mouse.click(5, (page.viewportSize()?.height ?? 600) - 5);
     await expect(dialog).toBeHidden();
+  }
+});
+
+test('Profil zeigt Zitate aus dem Schlusszeugnis 2025, ohne Geburtsdatum und ohne Namen der Unterzeichnenden', async ({ page }) => {
+  await page.goto('/profil/');
+  const zeugnisse = page.locator('section[aria-labelledby="zeugnis-titel"]');
+  await expect(zeugnisse.locator('.zeugnis-gross')).toContainText('umfassend, sicher und vollkommen');
+  await expect(zeugnisse.locator('.zeugnis-gross')).toContainText('Schlusszeugnis 2025');
+  await expect(zeugnisse).toContainText('Wir bedauern seinen Austritt sehr');
+  await expect(zeugnisse).toContainText('zum Leiter Projektierung/Bau');
+  await expect(page.locator('.zeitachse')).toContainText('Aufgrund guter Leistungen aus der Bauleitung befördert');
+  for (const pfad of ['/', '/profil/', '/kompetenzen/netzinfrastruktur-leitungsbau/']) {
+    await page.goto(pfad);
+    const text = await page.locator('body').innerText();
+    for (const privat of ['1977', 'Hartmann', 'Kaufmann']) expect(text, `${privat} auf ${pfad}`).not.toContain(privat);
   }
 });

@@ -13,7 +13,7 @@ der identische lokale Build.
 | seit April 2025 | Bauherrenvertreter Tiefbau / Access Project Manager im Glasfaserausbau (FTTH), Ostschweiz: Projektsteuerung, Bauüberwachung mit GU, Vergabe-, Vertrags- und Nachtragsmanagement, Kostencontrolling, Abrechnungsprüfung, Kostenaufteilung mit Werkeigentümern | Lebenslauf, LinkedIn |
 | 2021–2025 | Leitungsgesuche zusammen mit dem Bezirkschef bearbeitet und beurteilt (Strasseneigentümer) | Lebenslauf |
 | 2006–2013 | Projekt- und Bauleitung Wasserversorgungen, Siedlungsentwässerungen, Quartiererschliessungen (8 Referenzen) | Lebenslauf, Zeugnisse |
-| eigene Werkzeuge | Füllrate-Rechner, Schachtassistent 4.6, DLV-Entschädigungsrechner, NPK_WISP_TB-KoPa | Angabe A. Cortese |
+| eigene Werkzeuge | Tiefbaukooperations-Agent, Offertkontrolle für Team und Partner, Schachtassistent 4.6, NPK_WISP_TB-KoPa (Füllrate- und DLV-Rechner am 25.10.2026 entfernt) | Angabe A. Cortese |
 
 **Nicht belegt** und deshalb nicht behauptet: Schadenfälle und Haftungsklärungen, Netzplanung, Bewilligungsverfahren
 über Leitungsgesuche hinaus, Kennzahlen aus dem Glasfaserausbau.

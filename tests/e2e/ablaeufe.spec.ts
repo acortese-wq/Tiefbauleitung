@@ -168,6 +168,9 @@ test('Werkzeugkasten zeigt freigegebene Werkzeuge mit Urheberangabe', async ({ p
   await expect(karten).toHaveCount(11);
   await expect(page.locator('#werkzeugkasten')).toContainText('Urheber: Alessandro Cortese');
   await expect(page.locator('#werkzeugkasten')).toContainText('Stärkste Arbeit im Kurs');
+  await expect(page.locator('#werkzeugkasten')).toContainText('Tiefbaukooperations-Agent');
+  await expect(page.locator('#werkzeugkasten')).toContainText('Offertkontrolle für Team und Partner');
+  await expect(page.locator('#werkzeugkasten')).not.toContainText(/Füllrate|DLV/);
   await page.goto('/kompetenzen/ki-agenten/');
   await expect(page.locator('.werkzeugkasten')).toContainText('Schachtassistent');
 });

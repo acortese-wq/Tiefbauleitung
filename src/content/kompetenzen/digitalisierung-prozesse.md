@@ -9,7 +9,7 @@ grundlagen: [Excel, HTML, NPK-Strukturen, SIA 103, SIA 118]
 
 ## Herausforderungen
 
-Im Tiefbau wiederholen sich viele Arbeitsschritte: Offerten vergleichen, Honorare plausibilisieren, Füllraten von Rohranlagen berechnen, Abschlussunterlagen kontrollieren. Diese Arbeit ist wichtig, aber zeitraubend und fehleranfällig, wenn sie jedes Mal von Hand erfolgt.
+Im Tiefbau wiederholen sich viele Arbeitsschritte: Offerten vergleichen, Honorare plausibilisieren, Bauvorhaben mit anderen Werken abstimmen, Abschlussunterlagen kontrollieren. Diese Arbeit ist wichtig, aber zeitraubend und fehleranfällig, wenn sie jedes Mal von Hand erfolgt.
 
 Standardsoftware deckt solche Spezialfälle oft nicht ab. Gleichzeitig scheitern viele Digitalisierungsprojekte daran, dass sie an der Praxis vorbei entwickelt werden.
 
@@ -28,8 +28,8 @@ Schnellere und einheitlichere Prüfungen, weniger Übertragungsfehler und Fachwi
 Die folgenden Werkzeuge habe ich selbst entwickelt. Werkzeuge aus dem beruflichen Umfeld beschreibe ich hier bewusst nur allgemein.
 
 - Strukturierte Offertprüfung mit Hervorhebung auffälliger Positionen
+- Einheitliche Offertkontrolle für das eigene Team und Partner
 - Kostenschätzung für Tiefbauvorhaben in frühen Projektphasen
 - Plausibilisierung von Ingenieurhonoraren nach SIA 103
-- Berechnung von Füllraten in Rohranlagen
-- Mehrsprachige Rechner und Assistenten (Deutsch, Italienisch, Französisch)
+- KI-Agent für Tiefbaukooperationen mit anderen Werkeigentümern und Gemeinden
 - Schachtassistent, Version 4.6, mehrsprachig. Urheber: Alessandro Cortese

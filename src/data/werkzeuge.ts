@@ -40,6 +40,12 @@ export const werkzeuge: Werkzeug[] = [
     kompetenzen: ['digitalisierung-prozesse', 'netzinfrastruktur-leitungsbau'],
   },
   {
+    name: 'Offertkontrolle für Team und Partner',
+    gruppe: 'Offerte, Kosten, Abrechnung',
+    zweck: 'Macht die Kontrolle von Offerten im eigenen Team und mit Partnern einheitlich und nachvollziehbar.',
+    kompetenzen: ['digitalisierung-prozesse', 'netzinfrastruktur-leitungsbau'],
+  },
+  {
     name: 'Prüf-Agent Projektabschluss',
     gruppe: 'Offerte, Kosten, Abrechnung',
     zweck: 'KI-Agent, der Unterlagen für den Projektabschluss gegen Vertrag und Ausmass prüft und Abweichungen mit Fundstelle meldet.',
@@ -53,23 +59,16 @@ export const werkzeuge: Werkzeug[] = [
     kompetenzen: ['digitalisierung-prozesse', 'tiefbau-infrastruktur'],
   },
   {
-    name: 'Füllrate-Rechner',
-    gruppe: 'Fachrechner',
-    zweck: 'Berechnet Füllraten von Rohranlagen.',
-    kompetenzen: ['digitalisierung-prozesse', 'netzinfrastruktur-leitungsbau'],
-  },
-  {
-    name: 'DLV-Entschädigungsrechner',
-    gruppe: 'Fachrechner',
-    zweck: 'Berechnet Entschädigungen nach DLV.',
-    zusatz: 'Deutsch, Italienisch, Französisch',
-    kompetenzen: ['netzinfrastruktur-leitungsbau', 'digitalisierung-prozesse'],
-  },
-  {
     name: 'Initialaufwand EBBE / Altlasten',
     gruppe: 'Fachrechner',
     zweck: 'Berechnet den Honoraraufwand für die Initialisierung von EBBE- und Altlasten-Projekten, auch wenn das Projekt danach nicht ausgeführt wird.',
     kompetenzen: ['tiefbau-infrastruktur', 'digitalisierung-prozesse'],
+  },
+  {
+    name: 'Tiefbaukooperations-Agent',
+    gruppe: 'Assistenten und Chatbots',
+    zweck: 'KI-Agent für Tiefbaukooperationen: unterstützt die Abstimmung gemeinsamer Bauvorhaben mit anderen Werkeigentümern und Gemeinden.',
+    kompetenzen: ['ki-agenten', 'netzinfrastruktur-leitungsbau'],
   },
   {
     name: 'Schachtassistent',

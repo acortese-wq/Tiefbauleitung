@@ -103,9 +103,9 @@ Ich unterscheide klar zwischen dem, was es gibt, und dem, was Idee ist.
 
 **Eigenentwicklungen, vorhanden**
 
-- **Füllrate-Rechner:** berechnet Füllraten von Rohranlagen
+- **Tiefbaukooperations-Agent:** KI-Agent für die Abstimmung gemeinsamer Bauvorhaben mit anderen Werkeigentümern und Gemeinden
+- **Offertkontrolle für Team und Partner:** einheitliche, nachvollziehbare Kontrolle von Offerten
 - **Schachtassistent** (Version 4.6, mehrsprachig, Urheber: Alessandro Cortese): digitaler Assistent rund um Schächte
-- **DLV-Entschädigungsrechner:** dreisprachig
 - **NPK_WISP_TB-KoPa:** Excel-Werkzeug auf Basis der NPK-Struktur für Tiefbauarbeiten im Netzbau
 
 **Konzept**

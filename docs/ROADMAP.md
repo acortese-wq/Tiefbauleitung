@@ -19,7 +19,7 @@
 - Freigabe des Arbeitgebers für Webseite, Werkzeugkasten und Fachbeiträge? (Werkzeugkasten am 17.10.2026 durch
   Alessandro Cortese freigegeben: Name und neutraler Zweck, ohne Preisanalyse Kanton; Werkzeuge aus dem
   Arbeitsumfeld wie OffertIQ, NPK-KoPa, Prüf-Agent, juristischer Chatbot vorsorglich mit Arbeitgeber klären)
-- Zweckbeschreibungen im Werkzeugkasten prüfen (Schachtassistent, DLV-Rechner, NPK_WISP_TB-KoPa)
+- Zweckbeschreibungen im Werkzeugkasten prüfen (Schachtassistent, Tiefbaukooperations-Agent, Offertkontrolle für Team und Partner, NPK_WISP_TB-KoPa)
 - Stimmen die ergänzten Normenbezüge (SIA 205, 262, 269, 405, VSS)?
 - App-Name «Rechnen mit Pokémon» beibehalten oder für die Webseite umbenennen?
 - Schachtassistent: Darf er mit Namen und Urheberschaft genannt werden, obwohl er im beruflichen Umfeld eingesetzt wird?

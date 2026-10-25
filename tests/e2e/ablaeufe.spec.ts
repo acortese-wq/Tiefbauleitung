@@ -622,3 +622,64 @@ test('Video auf der Startseite startet bei «Bewegung reduzieren» nicht von sel
   await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused), { timeout: 10_000 }).toBe(true);
   await kontext.close();
 });
+
+test('Gesetzesprüfung: Beispiel liefert Fundstellen nach Ebene, Fristen, Quellen und Prompt', async ({ page }) => {
+  await page.goto('/ki-labor/');
+  await page.getByRole('link', { name: /Gesetzesprüfung/ }).click();
+  await expect(page).toHaveURL(/\/ki-labor\/gesetzespruefung\/$/);
+  const gp = page.locator('[data-gesetz]');
+  await expect(gp.locator('[data-kanton]')).toHaveValue('GR');
+  await gp.getByRole('button', { name: 'Beispiel einsetzen' }).click();
+  await expect(gp.locator('.gp-dok')).toHaveCount(1);
+  await expect(gp.locator('.gp-dok select')).toHaveValue('gemeinde');
+
+  const gemeinde = gp.locator('.gp-ebene[data-ebene="gemeinde"]');
+  await expect(gemeinde.locator('.gp-fund header strong', { hasText: 'Art. 3 Bewilligungspflicht' })).toHaveCount(1);
+  await expect(gemeinde.locator('.gp-fund mark').first()).toBeVisible();
+  await expect(gp.locator('.gp-ebene[data-ebene="bund"]')).toContainText('Kein Bundesrecht eingefügt');
+  await expect(gp.locator('.gp-ebene[data-ebene="bund"] a')).toHaveAttribute('href', /fedlex\.admin\.ch/);
+  await expect(gp.locator('.gp-ebene[data-ebene="kanton"] a').first()).toHaveAttribute('href', 'https://www.gr-lex.gr.ch');
+  await expect(gp.locator('.gp-fristen')).toContainText('während fünf Jahren');
+
+  const prompt = gp.locator('[data-prompt]');
+  await expect(prompt).toContainText('Gemeinde Musterdorf, Kanton Graubünden, Schweiz');
+  await expect(prompt).toContainText('Art. 3 Bewilligungspflicht');
+  await expect(prompt.locator('mark')).toHaveCount(0);
+  const axe = await new AxeBuilder({ page }).include('[data-gesetz]').withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+  expect(axe.violations.map((v) => v.id)).toEqual([]);
+
+  await gp.getByRole('button', { name: /neuer Belag/ }).click();
+  await expect(gemeinde.locator('.gp-fund header strong').first()).toHaveText('Art. 6 Aufbruchsperre');
+  await gp.locator('.gp-dok select').selectOption('kanton');
+  await expect(gp.locator('.gp-ebene[data-ebene="kanton"] .gp-fund').first()).toBeVisible();
+  await gp.getByRole('button', { name: 'Entfernen: Beispielreglement (fiktiv)' }).click();
+  await expect(gp.locator('.gp-dok')).toHaveCount(0);
+  await expect(gp.locator('[data-leer]')).toBeVisible();
+});
+
+test('Gesetzesprüfung liest eine PDF im Browser und ordnet sie dem Bund zu', async ({ page, context }) => {
+  const druck = await context.newPage();
+  await druck.setContent(`<!doctype html><html lang="de"><body style="font-family: sans-serif">
+    <p>Bundesgesetz über Musterleitungen (Musterleitungsgesetz, MLG)</p>
+    <p>vom 1. Juni 2020 (Stand am 1. Januar 2026)</p>
+    <p>Die Bundesversammlung der Schweizerischen Eidgenossenschaft beschliesst:</p>
+    <p>Art. 1 Zweck</p><p>1 Dieses Gesetz regelt fiktive Musterleitungen.</p>
+    <p>Art. 2 Benützung von Boden im Gemeingebrauch</p>
+    <p>1 Die Eigentümer von Strassen müssen Leitungen dulden.</p>
+    <p>2 Die Bewilligung ist innert 60 Tagen zu erteilen.</p>
+  </body></html>`);
+  const pdf = await druck.pdf({ format: 'A4' });
+  await druck.close();
+
+  await page.goto('/ki-labor/gesetzespruefung/');
+  const gp = page.locator('[data-gesetz]');
+  await gp.locator('[data-frage]').fill('Muss die Gemeinde Leitungen in der Strasse bewilligen, und innert welcher Frist?');
+  await gp.locator('[data-datei]').setInputFiles({ name: 'musterleitungsgesetz.pdf', mimeType: 'application/pdf', buffer: pdf });
+  await expect(gp.locator('[data-status]')).toContainText('erkannt als Bundesrecht', { timeout: 20_000 });
+  await expect(gp.locator('.gp-dok')).toContainText('2 Artikel');
+  await expect(gp.locator('.gp-dok')).toContainText('Stand 1. Januar 2026');
+  const bund = gp.locator('.gp-ebene[data-ebene="bund"]');
+  await expect(bund.locator('.gp-fund header strong').first()).toHaveText('Art. 2 Benützung von Boden im Gemeingebrauch');
+  await expect(gp.locator('.gp-fristen')).toContainText('innert 60 Tagen');
+  await expect(gp.locator('[data-prompt]')).toContainText('Bundesrecht: Bundesgesetz über Musterleitungen');
+});

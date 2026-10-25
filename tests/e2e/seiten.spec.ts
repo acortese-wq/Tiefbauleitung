@@ -26,6 +26,7 @@ const SEITEN = [
   '/seitenuebersicht/',
   '/ki-labor/',
   '/ki-labor/werkbank/',
+  '/ki-labor/gesetzespruefung/',
   '/ki-labor/nutzenrechner/',
   '/ki-labor/radar/',
   '/netzbau-quiz/',

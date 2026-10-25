@@ -1,0 +1,45 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Gesetzespruefung from '../../components/Gesetzespruefung.astro';
+---
+<Basis
+  title="Gesetzesprüfung: Fundstellen nach Bund, Kanton und Gemeinde"
+  description="Fragen zu Gesetz, Verordnung oder Reglement stellen, PDF einfügen und die passenden Artikel finden, gegliedert nach Bund, Kanton und Gemeinde. Läuft im Browser, die PDF wird nicht hochgeladen."
+>
+  <Seitenkopf
+    titel="Gesetzesprüfung"
+    lead="Frage stellen, Gesetz als PDF einfügen, Fundstellen erhalten: gegliedert nach Bund, Kanton und Gemeinde, mit Fristen, Vorrang und einem fertigen Prompt für Ihre KI. Die PDF wird in Ihrem Browser gelesen und nicht hochgeladen."
+    krumen={[{ name: 'KI-Labor', href: '/ki-labor/' }, { name: 'Gesetzesprüfung' }]}
+  />
+
+  <section class="abschnitt" aria-label="Werkzeug Gesetzesprüfung">
+    <div class="wrap wrap-breit">
+      <Gesetzespruefung />
+    </div>
+  </section>
+
+  <section class="abschnitt" aria-labelledby="gp-ablauf-titel">
+    <div class="wrap">
+      <div class="abschnitt-kopf">
+        <p class="label">So arbeitet das Werkzeug</p>
+        <h2 id="gp-ablauf-titel">Erst die Fundstelle, dann die Antwort</h2>
+        <p>Wie in meinen eigenen Assistenten gilt: Keine Aussage ohne Artikel, Fehlendes wird als OFFEN ausgewiesen, die Fachperson entscheidet.</p>
+      </div>
+      <ol class="gp-schritte">
+        <li><strong>Lesen.</strong> Die PDF wird im Browser in Text umgewandelt und in Artikel oder Paragrafen zerlegt. Titel, Nummer, Datum und Stand des Erlasses werden erkannt.</li>
+        <li><strong>Einordnen.</strong> Jeder Erlass wird Bund, Kanton oder Gemeinde zugeordnet. Die Zuordnung lässt sich von Hand korrigieren.</li>
+        <li><strong>Finden.</strong> Die Frage wird in Fachbegriffe zerlegt, verwandte Begriffe aus dem Bau- und Verwaltungsrecht kommen dazu. Die besten Artikel erscheinen je Ebene, Fristen werden herausgezogen.</li>
+        <li><strong>Antworten.</strong> Der Prompt enthält Frage, Ort, Normenhierarchie und die gefundenen Artikel. Die KI muss jede Aussage mit Artikel und Absatz belegen.</li>
+      </ol>
+      <p class="gp-grenze"><strong>Grenzen:</strong> Keine Rechtsberatung. Die Suche findet Begriffe, nicht den Sinn. Massgebend ist immer die amtliche Fassung in der offiziellen Sammlung. Gescannte PDFs ohne Textebene lassen sich nicht lesen.</p>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .gp-schritte { margin: 0; padding-left: 1.3em; display: grid; gap: 10px; max-width: 75ch; color: var(--text-ruhig); }
+  .gp-schritte strong { color: var(--text); }
+  .gp-grenze { margin-top: 20px; color: var(--text-ruhig); max-width: 75ch; }
+  .gp-grenze strong { color: var(--signal); }
+</style>

@@ -147,7 +147,8 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations,
   build: { inlineStylesheets: 'never' },
-  vite: { build: { assetsInlineLimit: 0 } },
+  // Module-Worker (pdf.js in der Gesetzesprüfung) als .js ausgeben, damit jeder Server den richtigen MIME-Typ sendet
+  vite: { build: { assetsInlineLimit: 0 }, worker: { format: 'es' } },
   security: {
     checkOrigin: true,
     csp: {

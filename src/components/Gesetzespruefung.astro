@@ -1,0 +1,588 @@
+---
+// Gesetzesprüfung: Frage stellen, Erlasse als PDF oder Text einfügen, Fundstellen nach Bund, Kanton und Gemeinde.
+// PDF-Text liest pdf.js im Browser (Worker), nichts verlässt das Gerät. Logik in src/lib/gesetz.ts.
+import { BEISPIELFRAGEN, KANTONE, gesetzPrompt } from '../lib/gesetz';
+
+// Ohne JavaScript zeigt die Prompt-Spalte die Vorlage mit den fehlenden Angaben
+const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
+---
+<div class="gp" data-gesetz>
+  <p class="hinweis gp-ohne-js" data-ohne-js>Die Gesetzesprüfung braucht JavaScript, weil die PDF direkt in Ihrem Browser gelesen wird.</p>
+
+  <div class="gp-spalten">
+    <section class="gp-spalte gp-eingabe" aria-labelledby="gp-eingabe-titel">
+      <div class="gp-kopf"><span class="gp-nr" aria-hidden="true">1</span><h2 id="gp-eingabe-titel">Frage und Erlasse</h2></div>
+
+      <label class="gp-feld">
+        <span class="gp-label">Ihre Frage <span class="gp-pflicht" title="Pflichtangabe">*</span></span>
+        <textarea rows="4" data-frage placeholder="z. B. Braucht es für Grabarbeiten im Strassengebiet eine Bewilligung?" spellcheck="true"></textarea>
+      </label>
+      <div class="gp-beispielfragen" data-nur-js hidden>
+        <p class="gp-label">Beispielfragen</p>
+        <ul>
+          {BEISPIELFRAGEN.map((f) => <li><button type="button" class="gp-chip" data-beispielfrage={f}>{f}</button></li>)}
+        </ul>
+      </div>
+
+      <div class="gp-ort">
+        <label class="gp-feld">
+          <span class="gp-label">Kanton</span>
+          <select data-kanton>
+            {KANTONE.map((k) => <option value={k.kurz} selected={k.kurz === 'GR'}>{k.name}</option>)}
+          </select>
+        </label>
+        <label class="gp-feld">
+          <span class="gp-label">Gemeinde</span>
+          <input type="text" data-gemeinde placeholder="z. B. Chur" autocomplete="address-level2" />
+        </label>
+      </div>
+
+      <label class="gp-ablage" data-ablage>
+        <input type="file" accept="application/pdf,.pdf" multiple data-datei class="visually-hidden" />
+        <span class="gp-ablage-symbol" aria-hidden="true">PDF</span>
+        <span class="gp-ablage-text"><strong>PDF auswählen</strong> oder hierher ziehen</span>
+        <small>Gesetz, Verordnung, Reglement oder Merkblatt. Mehrere Dateien möglich, je höchstens 30 MB. Die Datei bleibt auf Ihrem Gerät.</small>
+      </label>
+
+      <details class="gp-text">
+        <summary>Text statt PDF einfügen</summary>
+        <label class="gp-feld">
+          <span class="gp-label">Gesetzestext, z. B. aus Fedlex kopiert</span>
+          <textarea rows="6" data-text spellcheck="false"></textarea>
+        </label>
+        <button type="button" class="btn btn-ghost" data-text-uebernehmen>Text übernehmen</button>
+      </details>
+
+      <p class="gp-status" role="status" aria-live="polite" data-status></p>
+      <ul class="gp-doks" data-doks aria-label="Eingefügte Erlasse"></ul>
+
+      <div class="gp-knoepfe" data-nur-js hidden>
+        <button type="button" class="btn btn-ghost" data-beispiel>Beispiel einsetzen</button>
+        <button type="button" class="btn btn-ghost" data-leeren>Leeren</button>
+      </div>
+    </section>
+
+    <section class="gp-spalte gp-resultat" aria-labelledby="gp-resultat-titel">
+      <div class="gp-kopf">
+        <span class="gp-nr" aria-hidden="true">2</span><h2 id="gp-resultat-titel">Fundstellen</h2>
+        <span class="gp-tag">Bund · Kanton · Gemeinde</span>
+      </div>
+      <p class="gp-leer" data-leer>Frage eingeben und ein Gesetz als PDF einfügen, oder <strong>Beispiel einsetzen</strong>. Die passenden Artikel erscheinen hier, gegliedert nach Bund, Kanton und Gemeinde, mit Fristen und offiziellen Quellen.</p>
+      <div data-ergebnis aria-live="polite"></div>
+    </section>
+
+    <section class="gp-spalte gp-prompt" aria-labelledby="gp-prompt-titel">
+      <div class="gp-kopf">
+        <span class="gp-nr" aria-hidden="true">3</span><h2 id="gp-prompt-titel">Prompt für Ihre KI</h2>
+        <span class="gp-zeichen" data-zeichen></span>
+      </div>
+      <label class="gp-feld">
+        <span class="gp-label">Angehängter Gesetzestext</span>
+        <select data-umfang>
+          <option value="fund" selected>Nur Fundstellen (empfohlen)</option>
+          <option value="ganz">Ganze Erlasse, bis 24’000 Zeichen</option>
+        </select>
+      </label>
+      <pre tabindex="0" aria-label="Prompt für die Gesetzesprüfung" data-prompt>{vorschau}</pre>
+      <div class="gp-knoepfe">
+        <button type="button" class="btn" data-kopieren hidden>Prompt kopieren</button>
+        <span class="gp-kopier-status" role="status" aria-live="polite" data-kopier-status></span>
+      </div>
+      <p class="gp-klein">In Copilot, ChatGPT oder Claude einfügen. Die KI antwortet nur gestützt auf die angehängten Artikel und zitiert jede Aussage. Vertrauliche Unterlagen nur in freigegebene KI-Dienste geben.</p>
+    </section>
+  </div>
+</div>
+
+<script>
+  import {
+    BEISPIEL_FRAGE, BEISPIEL_REGLEMENT, EBENEN, erlassName, erstelleDokument, fristen, gesetzPrompt, kantonName, quellen, suche,
+    type Bereich, type Dokument, type Ebene, type Fundstelle,
+  } from '../lib/gesetz';
+
+  const MAX_MB = 30;
+  const wurzel = document.querySelector<HTMLElement>('[data-gesetz]');
+  if (wurzel) starte(wurzel);
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, klasse?: string, text?: string): HTMLElementTagNameMap[K] {
+    const e = document.createElement(tag);
+    if (klasse) e.className = klasse;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  function markiert(text: string, bereiche: Bereich[]): DocumentFragment {
+    const f = document.createDocumentFragment();
+    let pos = 0;
+    for (const b of bereiche) {
+      if (b.start > pos) f.append(text.slice(pos, b.start));
+      f.append(el('mark', undefined, text.slice(b.start, b.ende)));
+      pos = b.ende;
+    }
+    f.append(text.slice(pos));
+    return f;
+  }
+
+  /** Textbausteine von pdf.js zu Zeilen zusammensetzen. Hochgestellte Absatznummern bleiben auf der Zeile. */
+  function zeilenAus(items: unknown[]): string {
+    let text = '';
+    let zeile = '';
+    let y: number | null = null;
+    let hoehe = 0;
+    for (const it of items as { str?: string; transform?: number[]; height?: number; hasEOL?: boolean }[]) {
+      if (typeof it.str !== 'string') continue;
+      const iy = it.transform?.[5] ?? 0;
+      const ih = Math.abs(it.height ?? it.transform?.[3] ?? 10);
+      if (y !== null && Math.abs(iy - y) > Math.max(2, 0.6 * Math.max(hoehe, ih)) && zeile.trim()) {
+        text += `${zeile}\n`;
+        zeile = '';
+      }
+      zeile += it.str;
+      y = iy;
+      hoehe = ih;
+      if (it.hasEOL) {
+        text += `${zeile}\n`;
+        zeile = '';
+      }
+    }
+    return text + zeile;
+  }
+
+  async function lesePdf(datei: File, fortschritt: (seite: number, von: number) => void): Promise<string[]> {
+    const [pdfjs, { default: PdfWorker }] = await Promise.all([import('pdfjs-dist'), import('pdfjs-dist/build/pdf.worker.min.mjs?worker')]);
+    if (!pdfjs.GlobalWorkerOptions.workerPort) pdfjs.GlobalWorkerOptions.workerPort = new PdfWorker();
+    const daten = new Uint8Array(await datei.arrayBuffer());
+    const aufgabe = pdfjs.getDocument({ data: daten, disableFontFace: true, useSystemFonts: false });
+    const seiten: string[] = [];
+    try {
+      const doc = await aufgabe.promise;
+      for (let i = 1; i <= doc.numPages; i++) {
+        fortschritt(i, doc.numPages);
+        const seite = await doc.getPage(i);
+        seiten.push(zeilenAus((await seite.getTextContent()).items));
+        seite.cleanup();
+      }
+    } finally {
+      await aufgabe.destroy();
+    }
+    return seiten;
+  }
+
+  function starte(w: HTMLElement) {
+    const q = <T extends Element>(s: string) => w.querySelector<T>(s)!;
+    const frage = q<HTMLTextAreaElement>('[data-frage]');
+    const kanton = q<HTMLSelectElement>('[data-kanton]');
+    const gemeinde = q<HTMLInputElement>('[data-gemeinde]');
+    const datei = q<HTMLInputElement>('[data-datei]');
+    const ablage = q<HTMLElement>('[data-ablage]');
+    const textDetails = q<HTMLDetailsElement>('.gp-text');
+    const textFeld = q<HTMLTextAreaElement>('[data-text]');
+    const liste = q<HTMLUListElement>('[data-doks]');
+    const status = q<HTMLElement>('[data-status]');
+    const ergebnis = q<HTMLElement>('[data-ergebnis]');
+    const leer = q<HTMLElement>('[data-leer]');
+    const umfang = q<HTMLSelectElement>('[data-umfang]');
+    const pre = q<HTMLElement>('[data-prompt]');
+    const zeichen = q<HTMLElement>('[data-zeichen]');
+    const knopfKopieren = q<HTMLButtonElement>('[data-kopieren]');
+    const kopierStatus = q<HTMLElement>('[data-kopier-status]');
+
+    w.querySelector('[data-ohne-js]')?.remove();
+    w.querySelectorAll<HTMLElement>('[data-nur-js]').forEach((e) => (e.hidden = false));
+
+    let dokumente: Dokument[] = [];
+    let fund: Fundstelle[] = [];
+    let zaehler = 0;
+    let warte: number | undefined;
+
+    const melde = (text: string) => (status.textContent = text);
+
+    function zeigeDokumente() {
+      liste.replaceChildren();
+      for (const d of dokumente) {
+        const li = el('li', 'gp-dok');
+        const info = el('div', 'gp-dok-text');
+        info.append(el('strong', undefined, d.erlass.titel));
+        const artikel = d.artikel.filter((a) => a.nr && !a.nr.startsWith('Seite ')).length;
+        const meta = [d.name, d.seiten > 1 ? `${d.seiten} Seiten` : '', artikel ? `${artikel} Artikel` : 'ohne Artikelnummern, Suche je Seite', d.erlass.nummer ?? '', `Stand ${d.erlass.stand ?? 'unbekannt'}`];
+        info.append(el('span', undefined, meta.filter(Boolean).join(' · ')));
+        if (d.zeichen < 40 * d.seiten) info.append(el('span', 'gp-warnung', 'Kaum Text gefunden. Ist es ein Scan? Bitte eine durchsuchbare PDF verwenden, z. B. aus der offiziellen Sammlung.'));
+
+        const wahl = el('label', 'gp-dok-ebene');
+        wahl.append(el('span', undefined, d.erlass.sicher ? 'Ebene' : 'Ebene prüfen'));
+        const sel = el('select');
+        for (const e of EBENEN) {
+          const o = el('option', undefined, e.label);
+          o.value = e.id;
+          o.selected = e.id === d.ebene;
+          sel.append(o);
+        }
+        sel.addEventListener('change', () => {
+          d.ebene = sel.value as Ebene;
+          aktualisiere();
+        });
+        wahl.append(sel);
+
+        const weg = el('button', 'gp-entfernen', '×');
+        weg.type = 'button';
+        weg.setAttribute('aria-label', `Entfernen: ${d.name}`);
+        weg.addEventListener('click', () => {
+          dokumente = dokumente.filter((x) => x !== d);
+          zeigeDokumente();
+          aktualisiere();
+          melde(`${d.name} entfernt.`);
+        });
+        li.append(info, wahl, weg);
+        liste.append(li);
+      }
+    }
+
+    function fundKarte(f: Fundstelle): HTMLElement {
+      const k = el('article', 'gp-fund');
+      const kopf = el('header');
+      kopf.append(el('strong', undefined, `${f.artikel.nr}${f.artikel.titel ? ` ${f.artikel.titel}` : ''}`));
+      kopf.append(el('span', 'gp-quelle', `${erlassName(f.dok)} · S. ${f.artikel.seite}`));
+      const auszug = el('p', 'gp-auszug');
+      auszug.append(markiert(f.auszug, f.markiert));
+      k.append(kopf, auszug);
+      if (f.artikel.text && f.artikel.text !== f.auszug) {
+        const det = el('details');
+        det.append(el('summary', undefined, 'Ganzer Artikel'), el('p', 'gp-volltext', f.artikel.text));
+        k.append(det);
+      }
+      return k;
+    }
+
+    function zeigeErgebnis() {
+      ergebnis.replaceChildren();
+      const hatFrage = frage.value.trim().length > 0;
+      const bereit = dokumente.length > 0 && hatFrage;
+      leer.hidden = bereit;
+      if (!bereit) return;
+
+      const kz = el('dl', 'gp-kennzahlen');
+      const artikel = dokumente.reduce((s, d) => s + d.artikel.filter((a) => a.nr).length, 0);
+      for (const [t, v] of [['Erlasse', dokumente.length], ['Abschnitte', artikel], ['Fundstellen', fund.length]] as const) {
+        const d = el('div');
+        d.append(el('dt', undefined, t), el('dd', undefined, v.toLocaleString('de-CH')));
+        kz.append(d);
+      }
+      ergebnis.append(kz);
+
+      for (const e of EBENEN) {
+        const sek = el('section', 'gp-ebene');
+        sek.dataset.ebene = e.id;
+        const doks = dokumente.filter((d) => d.ebene === e.id);
+        const fe = fund.filter((f) => f.dok.ebene === e.id);
+        const h = el('h3');
+        h.append(el('span', 'gp-ebene-name', e.label), el('span', 'gp-ebene-recht', e.recht));
+        if (fe.length) h.append(el('span', 'gp-anzahl', String(fe.length)));
+        sek.append(h);
+        if (!doks.length) {
+          sek.append(el('p', 'gp-fehlt', `Kein ${e.id === 'bund' ? e.recht : e.recht.charAt(0).toLowerCase() + e.recht.slice(1)} eingefügt. Hier zu finden:`));
+          const ul = el('ul', 'gp-quellen');
+          for (const qu of quellen(e.id, kanton.value, gemeinde.value.trim())) {
+            const li = el('li');
+            if (qu.href) {
+              const a = el('a', undefined, qu.label);
+              a.href = qu.href;
+              a.rel = 'noopener';
+              a.target = '_blank';
+              li.append(a);
+            } else li.textContent = qu.label;
+            ul.append(li);
+          }
+          sek.append(ul);
+        } else if (!fe.length) {
+          sek.append(el('p', 'gp-fehlt', `Keine Fundstelle zur Frage in: ${doks.map(erlassName).join(', ')}. Andere Begriffe versuchen.`));
+        } else {
+          // Die drei besten Fundstellen offen, weitere aufklappbar
+          for (const f of fe.slice(0, 3)) sek.append(fundKarte(f));
+          if (fe.length > 3) {
+            const mehr = el('details', 'gp-mehr');
+            mehr.append(el('summary', undefined, `${fe.length - 3} weitere Fundstelle${fe.length - 3 > 1 ? 'n' : ''}`));
+            for (const f of fe.slice(3)) mehr.append(fundKarte(f));
+            sek.append(mehr);
+          }
+        }
+        ergebnis.append(sek);
+      }
+
+      const fr = fristen(fund);
+      if (fr.length) {
+        const sek = el('section', 'gp-fristen');
+        sek.append(el('h3', undefined, 'Fristen in den Fundstellen'));
+        const ul = el('ul');
+        for (const x of fr) {
+          const li = el('li');
+          li.append(el('strong', undefined, x.frist), ` – ${x.satz} `, el('span', 'gp-quelle', x.fundstelle));
+          ul.append(li);
+        }
+        sek.append(ul);
+        ergebnis.append(sek);
+      }
+
+      const hinweise: string[] = [];
+      if (new Set(fund.map((f) => f.dok.ebene)).size > 1) hinweise.push('Bei Widersprüchen geht Bundesrecht vor (Art. 49 BV), kantonales Recht geht kommunalem Recht vor.');
+      const ohneStand = dokumente.filter((d) => !d.erlass.stand).map(erlassName);
+      if (ohneStand.length) hinweise.push(`Stand unbekannt bei ${ohneStand.join(', ')}. Mit der offiziellen Sammlung abgleichen.`);
+      for (const d of dokumente) {
+        if (d.erlass.kanton && d.erlass.kanton !== kanton.value) hinweise.push(`${erlassName(d)} gehört zum Kanton ${kantonName(d.erlass.kanton)}, gewählt ist ${kantonName(kanton.value)}.`);
+      }
+      hinweise.push('Die Suche findet Begriffe, nicht den Sinn. Fehlt ein Treffer, heisst das nicht, dass nichts geregelt ist.');
+      const box = el('div', 'gp-hinweise');
+      box.append(el('h3', undefined, 'Hinweise'));
+      const ul = el('ul');
+      for (const h of hinweise) ul.append(el('li', undefined, h));
+      box.append(ul);
+      ergebnis.append(box);
+    }
+
+    function zeigePrompt() {
+      const text = gesetzPrompt({
+        frage: frage.value,
+        kanton: kanton.value,
+        gemeinde: gemeinde.value,
+        dokumente,
+        fundstellen: fund,
+        ganz: umfang.value === 'ganz',
+      });
+      pre.replaceChildren();
+      for (const teil of text.split(/(\[FEHLT: [^\]]+\])/)) {
+        if (!teil) continue;
+        if (teil.startsWith('[FEHLT: ')) pre.append(el('mark', undefined, teil));
+        else pre.append(teil);
+      }
+      zeichen.textContent = `${text.length.toLocaleString('de-CH')} Zeichen`;
+      return text;
+    }
+
+    function aktualisiere() {
+      fund = suche(dokumente, frage.value, 8);
+      zeigeErgebnis();
+      zeigePrompt();
+    }
+    const spaeter = () => {
+      clearTimeout(warte);
+      warte = window.setTimeout(aktualisiere, 150);
+    };
+
+    function fuegeHinzu(name: string, seiten: string[]) {
+      const d = erstelleDokument(`d${++zaehler}`, name, seiten);
+      dokumente.push(d);
+      zeigeDokumente();
+      aktualisiere();
+      return d;
+    }
+
+    async function ladeDateien(dateien: FileList | File[]) {
+      for (const f of Array.from(dateien)) {
+        if (!/\.pdf$/i.test(f.name) && f.type !== 'application/pdf') {
+          melde(`${f.name} ist keine PDF.`);
+          continue;
+        }
+        if (f.size > MAX_MB * 1024 * 1024) {
+          melde(`${f.name} ist grösser als ${MAX_MB} MB.`);
+          continue;
+        }
+        try {
+          melde(`${f.name} wird gelesen …`);
+          const seiten = await lesePdf(f, (s, n) => melde(`${f.name}: Seite ${s} von ${n}`));
+          const d = fuegeHinzu(f.name, seiten);
+          const ebene = EBENEN.find((e) => e.id === d.ebene)!;
+          melde(`${f.name} gelesen: ${d.erlass.titel}, erkannt als ${ebene.recht}${d.erlass.sicher ? '' : ' (bitte prüfen)'}.`);
+        } catch (e) {
+          const name = (e as { name?: string }).name;
+          melde(name === 'PasswordException' ? `${f.name} ist passwortgeschützt und kann nicht gelesen werden.` : `${f.name} konnte nicht gelesen werden.`);
+        }
+      }
+      datei.value = '';
+    }
+
+    frage.addEventListener('input', spaeter);
+    kanton.addEventListener('change', aktualisiere);
+    gemeinde.addEventListener('input', spaeter);
+    umfang.addEventListener('change', zeigePrompt);
+    datei.addEventListener('change', () => datei.files && ladeDateien(datei.files));
+
+    ablage.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      ablage.classList.add('aktiv');
+    });
+    ablage.addEventListener('dragleave', () => ablage.classList.remove('aktiv'));
+    ablage.addEventListener('drop', (e) => {
+      e.preventDefault();
+      ablage.classList.remove('aktiv');
+      if (e.dataTransfer?.files.length) ladeDateien(e.dataTransfer.files);
+    });
+
+    q<HTMLButtonElement>('[data-text-uebernehmen]').addEventListener('click', () => {
+      const t = textFeld.value.trim();
+      if (!t) {
+        melde('Bitte zuerst Text einfügen.');
+        textFeld.focus();
+        return;
+      }
+      const d = fuegeHinzu(`Eingefügter Text ${zaehler + 1}`, [t]);
+      textFeld.value = '';
+      textDetails.open = false;
+      melde(`Text übernommen: ${d.erlass.titel}.`);
+    });
+
+    w.querySelectorAll<HTMLButtonElement>('[data-beispielfrage]').forEach((b) =>
+      b.addEventListener('click', () => {
+        frage.value = b.dataset.beispielfrage ?? '';
+        aktualisiere();
+      }),
+    );
+
+    q<HTMLButtonElement>('[data-beispiel]').addEventListener('click', () => {
+      dokumente = dokumente.filter((d) => d.name !== 'Beispielreglement (fiktiv)');
+      frage.value = BEISPIEL_FRAGE;
+      if (!gemeinde.value.trim()) gemeinde.value = 'Musterdorf';
+      fuegeHinzu('Beispielreglement (fiktiv)', [BEISPIEL_REGLEMENT]);
+      melde('Beispiel eingesetzt: fiktives Reglement einer Gemeinde, nur zum Ausprobieren.');
+    });
+
+    q<HTMLButtonElement>('[data-leeren]').addEventListener('click', () => {
+      dokumente = [];
+      frage.value = '';
+      gemeinde.value = '';
+      textFeld.value = '';
+      zeigeDokumente();
+      aktualisiere();
+      melde('Alles geleert.');
+    });
+
+    if (navigator.clipboard) {
+      knopfKopieren.hidden = false;
+      knopfKopieren.addEventListener('click', async () => {
+        const text = zeigePrompt();
+        const offen = (text.match(/\[FEHLT: /g) ?? []).length;
+        try {
+          await navigator.clipboard.writeText(text);
+          kopierStatus.textContent = offen ? `Kopiert – ${offen} Angabe${offen > 1 ? 'n fehlen' : ' fehlt'} noch.` : 'Kopiert.';
+        } catch {
+          kopierStatus.textContent = 'Kopieren nicht möglich, bitte Text markieren.';
+        }
+        setTimeout(() => (kopierStatus.textContent = ''), 3500);
+      });
+    }
+
+    aktualisiere();
+  }
+</script>
+
+<style is:global>
+  .gp-ohne-js { margin-bottom: 16px; }
+  .gp [hidden] { display: none !important; }
+  .gp-spalten { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+  .gp-spalte { border: 1px solid var(--linie); border-radius: 10px; background: var(--tiefe); padding: clamp(14px, 2vw, 20px); min-width: 0; }
+  .gp-kopf { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .gp-kopf h2 { font-size: 1.15rem; margin: 0; }
+  .gp-nr { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--eis); color: var(--eis); font: 600 0.8rem var(--f-mono); flex: none; }
+  .gp-tag, .gp-zeichen { margin-left: auto; font: 500 0.75rem var(--f-mono); color: var(--eis); }
+  .gp-zeichen { color: var(--text-ruhig); }
+
+  .gp-feld { display: grid; gap: 4px; margin-bottom: 12px; }
+  .gp-label { font: 500 0.8rem var(--f-mono); color: var(--text-ruhig); }
+  .gp-pflicht { color: var(--signal); }
+  .gp-feld :is(input, textarea, select) {
+    font: inherit; font-size: 0.93rem; min-height: 44px; padding: 8px 10px; border-radius: 8px; width: 100%;
+    border: 1px solid var(--linie-hell); background: var(--nacht); color: var(--text);
+  }
+  .gp-feld textarea { resize: vertical; line-height: 1.45; }
+  .gp-feld :is(input, textarea, select):focus-visible { outline: 2px solid var(--eis); outline-offset: 1px; }
+  .gp-feld ::placeholder { color: var(--text-ruhig); opacity: 0.75; }
+  .gp-ort { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+
+  .gp-beispielfragen { margin: -2px 0 14px; }
+  .gp-beispielfragen ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; }
+  .gp-chip {
+    width: 100%; text-align: left; font: inherit; font-size: 0.86rem; line-height: 1.35; color: var(--text); cursor: pointer;
+    min-height: 44px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--linie); background: var(--nacht);
+  }
+  .gp-chip:hover, .gp-chip:focus-visible { border-color: var(--eis); }
+  .gp-chip:focus-visible { outline: 2px solid var(--eis); outline-offset: 1px; }
+
+  .gp-ablage {
+    display: grid; justify-items: center; gap: 6px; text-align: center; cursor: pointer; margin: 4px 0 12px;
+    padding: 20px 14px; border: 2px dashed var(--linie-hell); border-radius: 10px; background: var(--nacht);
+    transition: border-color 0.15s, background-color 0.15s;
+  }
+  .gp-ablage:hover, .gp-ablage.aktiv { border-color: var(--eis); background: rgba(143, 211, 255, 0.06); }
+  .gp-ablage:focus-within { outline: 2px solid var(--eis); outline-offset: 2px; }
+  .gp-ablage-symbol { font: 600 0.75rem var(--f-mono); color: var(--nacht); background: var(--signal); border-radius: 4px; padding: 6px 8px; letter-spacing: 0.06em; }
+  .gp-ablage-text strong { color: var(--eis); }
+  .gp-ablage small { color: var(--text-ruhig); font-size: max(0.8rem, var(--min-hilfe)); max-width: 40ch; }
+
+  .gp-text { margin-bottom: 12px; }
+  .gp-text summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; color: var(--eis); }
+  .gp-text[open] summary { margin-bottom: 6px; }
+
+  .gp-status { min-height: 1.4em; font: 500 0.82rem/1.4 var(--f-mono); color: var(--eis); margin: 0 0 8px; }
+  .gp-doks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .gp-dok { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--linie); border-radius: 8px; background: var(--nacht); }
+  .gp-dok-text { display: grid; gap: 2px; min-width: 0; }
+  .gp-dok-text strong { font-size: 0.92rem; overflow-wrap: anywhere; }
+  .gp-dok-text span { font-size: 0.78rem; color: var(--text-ruhig); overflow-wrap: anywhere; }
+  .gp-dok-text .gp-warnung { color: var(--signal); }
+  .gp-dok-ebene { display: grid; gap: 2px; font: 500 0.72rem var(--f-mono); color: var(--text-ruhig); }
+  .gp-dok-ebene select { font: inherit; font-size: 0.85rem; min-height: 40px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--linie-hell); background: var(--tiefe); color: var(--text); }
+  .gp-entfernen { width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--linie); background: transparent; color: var(--text-ruhig); font-size: 1.3rem; cursor: pointer; }
+  .gp-entfernen:hover, .gp-entfernen:focus-visible { color: var(--signal); border-color: var(--signal); }
+  .gp-knoepfe { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+
+  .gp-leer { color: var(--text-ruhig); font-size: max(0.93rem, var(--min-hilfe)); }
+  .gp-kennzahlen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 14px; }
+  .gp-kennzahlen div { border: 1px solid var(--linie); border-radius: 8px; padding: 8px 10px; background: var(--nacht); }
+  .gp-kennzahlen dt { font: 500 0.72rem var(--f-mono); color: var(--text-ruhig); text-transform: uppercase; letter-spacing: 0.04em; }
+  .gp-kennzahlen dd { margin: 2px 0 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .gp-ebene { border-left: 3px solid var(--linie-hell); padding: 2px 0 2px 12px; margin-top: 16px; }
+  .gp-ebene[data-ebene='bund'] { border-color: #ff7b72; }
+  .gp-ebene[data-ebene='kanton'] { border-color: var(--signal); }
+  .gp-ebene[data-ebene='gemeinde'] { border-color: var(--eis); }
+  .gp-ebene h3 { display: flex; align-items: baseline; gap: 8px; font-size: 1.05rem; margin: 0 0 8px; }
+  .gp-ebene-recht { font: 500 0.75rem var(--f-mono); color: var(--text-ruhig); text-transform: uppercase; letter-spacing: 0.04em; }
+  .gp-anzahl { margin-left: auto; font: 600 0.75rem var(--f-mono); color: var(--nacht); background: var(--eis); border-radius: 10px; padding: 1px 8px; }
+  .gp-fehlt { color: var(--text-ruhig); font-size: 0.88rem; }
+  .gp-quellen { margin: 4px 0 0; padding-left: 1.1em; font-size: 0.88rem; display: grid; gap: 4px; }
+  .gp-quellen a { display: inline-block; padding-block: 6px; margin-block: -6px; }
+
+  .gp-fund { border: 1px solid var(--linie); border-radius: 8px; background: var(--nacht); padding: 10px 12px; margin-top: 8px; }
+  .gp-fund header { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; justify-content: space-between; }
+  .gp-fund header strong { font-size: 0.95rem; }
+  .gp-quelle { font: 500 0.72rem var(--f-mono); color: var(--text-ruhig); }
+  .gp-auszug { margin: 6px 0 0; font-size: 0.9rem; line-height: 1.5; color: var(--text); }
+  .gp mark { background: rgba(242, 166, 90, 0.2); color: var(--signal); border-radius: 3px; padding: 0 2px; }
+  .gp-mehr { margin-top: 8px; }
+  .gp-mehr > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; color: var(--eis); font-size: 0.9rem; }
+  .gp-fund details { margin-top: 6px; }
+  .gp-fund summary { cursor: pointer; font-size: 0.82rem; color: var(--eis); min-height: 32px; display: flex; align-items: center; }
+  .gp-volltext { white-space: pre-line; font-size: 0.86rem; color: var(--text-ruhig); margin: 4px 0 0; }
+
+  .gp-fristen, .gp-hinweise { margin-top: 18px; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--linie); background: var(--nacht); }
+  .gp-fristen h3, .gp-hinweise h3 { font-size: 0.98rem; margin: 0 0 6px; }
+  .gp-fristen ul, .gp-hinweise ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; font-size: 0.86rem; color: var(--text-ruhig); }
+  .gp-fristen strong { color: var(--signal); }
+
+  .gp-prompt pre {
+    margin: 0; max-height: 560px; overflow: auto; white-space: pre-wrap; word-break: break-word;
+    padding: 12px 14px; border-radius: 8px; border: 1px solid var(--linie); background: var(--nacht);
+    font: 0.78rem/1.55 var(--f-mono); color: var(--text);
+  }
+  .gp-prompt pre:focus-visible { outline: 2px solid var(--eis); outline-offset: 2px; }
+  .gp-kopier-status { font: 500 0.82rem var(--f-mono); color: var(--eis); }
+  .gp-klein { margin-top: 12px; font-size: max(0.84rem, var(--min-hilfe)); color: var(--text-ruhig); }
+
+  @media (max-width: 1180px) {
+    .gp-spalten { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+    .gp-prompt { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .gp-spalten { grid-template-columns: 1fr; }
+    .gp-ort { grid-template-columns: 1fr; }
+    .gp-dok { grid-template-columns: minmax(0, 1fr) auto; }
+    .gp-dok-text { grid-column: 1 / -1; }
+  }
+</style>

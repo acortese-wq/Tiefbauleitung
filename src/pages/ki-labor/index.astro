@@ -16,6 +16,12 @@ const bereiche = [
     tag: 'rechnet LV, Offerten, Ausmass',
   },
   {
+    href: '/ki-labor/gesetzespruefung/',
+    titel: 'Gesetzesprüfung',
+    text: 'Frage stellen, Gesetz, Verordnung oder Reglement als PDF einfügen und die passenden Artikel erhalten: gegliedert nach Bund, Kanton und Gemeinde, mit Fristen und einem Prompt mit Quellenpflicht.',
+    tag: 'PDF · Bund · Kanton · Gemeinde',
+  },
+  {
     href: '/ki-labor/nutzenrechner/',
     titel: 'Nutzenrechner',
     text: 'Was wiederkehrende Handarbeit kostet und wann sich eine Automatisierung zurückzahlt: FTE-Methode und Simple Payback in Franken, druckbar als Business Case.',
@@ -31,11 +37,11 @@ const bereiche = [
 ---
 <Basis
   title="KI-Labor: KI in der Bauleitung ausprobieren"
-  description="Prompt-Werkbank, Nutzenrechner und KI-Radar für Tiefbau und Netzbau. Alles läuft im Browser, ohne Konto und ohne Datenübermittlung."
+  description="Prompt-Werkbank, Gesetzesprüfung, Nutzenrechner und KI-Radar für Tiefbau und Netzbau. Alles läuft im Browser, ohne Konto und ohne Datenübermittlung."
 >
   <Seitenkopf
     titel="KI-Labor"
-    lead="KI in der Bauleitung zum Ausprobieren: Prompts für den Alltag, ein Rechner für den Business Case und ein Blick auf die aktuellen Sprachmodelle. Alles läuft in Ihrem Browser, ohne Konto und ohne Datenübermittlung."
+    lead="KI in der Bauleitung zum Ausprobieren: Prompts für den Alltag, Fundstellen in Gesetzen, ein Rechner für den Business Case und ein Blick auf die aktuellen Sprachmodelle. Alles läuft in Ihrem Browser, ohne Konto und ohne Datenübermittlung."
     krumen={[{ name: 'KI-Labor' }]}
   />
 
@@ -45,7 +51,7 @@ const bereiche = [
   <section class="abschnitt" aria-labelledby="bereiche-titel">
     <div class="wrap">
       <h2 id="bereiche-titel" class="visually-hidden">Bereiche des KI-Labors</h2>
-      <div class="raster-3">
+      <div class="raster-2">
         {bereiche.map((b) => (
           <a class="karte labor-karte" href={b.href}>
             <span class="chip">{b.tag}</span>

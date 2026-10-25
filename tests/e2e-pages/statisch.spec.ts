@@ -6,7 +6,7 @@ const SEITEN = [
   './', 'profil/', 'kompetenzen/', 'kompetenzen/tiefbau-infrastruktur/', 'kompetenzen/netzinfrastruktur-leitungsbau/',
   'kompetenzen/digitalisierung-prozesse/', 'kompetenzen/ki-agenten/', 'projekte/', 'projekte/bm-trainer/',
   'projekte/rechnen-mit-pokemon/', 'projekte/konzept-pruefagent-abrechnung/', 'projekte/trennungskompass/', 'projekte/jenins-ortsdurchfahrt/', 'projekte/nasstobel-lehnenbruecke/', 'projekte/plessurbruecke-litziruety/', 'projekte/rheinbruecke-flaesch-kolksicherung/', 'wissen/', 'suche/', 'kontakt/',
-  'impressum/', 'datenschutz/',
+  'impressum/', 'datenschutz/', 'ki-labor/gesetzespruefung/',
 ];
 const BASIS = '/Tiefbauleitung/';
 
@@ -70,4 +70,19 @@ test('robots.txt erlaubt Indexierung und nennt die Sitemap', async ({ request })
   expect(sitemap).toContain('https://acortese-wq.github.io/Tiefbauleitung/profil/');
   expect(sitemap).not.toMatch(/github\.io\/(?!Tiefbauleitung)/);
   expect((await request.get('.nojekyll')).status()).toBe(200);
+});
+
+test('Gesetzesprüfung lädt pdf.js aus dem Unterordner und liest eine PDF', async ({ page, context }) => {
+  const druck = await context.newPage();
+  await druck.setContent('<p>Reglement über Grabarbeiten der Gemeinde Testdorf</p><p>Die Gemeindeversammlung beschliesst:</p><p>Art. 1 Bewilligung</p><p>Grabarbeiten brauchen eine Bewilligung.</p>');
+  const pdf = await druck.pdf({ format: 'A4' });
+  await druck.close();
+  const fehler: string[] = [];
+  page.on('pageerror', (e) => fehler.push(e.message));
+  await page.goto('ki-labor/gesetzespruefung/');
+  await page.locator('[data-frage]').fill('Braucht es für Grabarbeiten eine Bewilligung?');
+  await page.locator('[data-datei]').setInputFiles({ name: 'reglement.pdf', mimeType: 'application/pdf', buffer: pdf });
+  await expect(page.locator('[data-status]')).toContainText('erkannt als Kommunales Recht', { timeout: 20_000 });
+  await expect(page.locator('.gp-ebene[data-ebene="gemeinde"] .gp-fund header strong')).toHaveText('Art. 1 Bewilligung');
+  expect(fehler).toEqual([]);
 });

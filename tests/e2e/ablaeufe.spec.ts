@@ -693,3 +693,12 @@ test('Jahreswerte 2021–2025 mit Link zum Strassenbauprogramm auf Profil und St
     await expect(link).toHaveAttribute('target', '_blank');
   }
 });
+
+test('Profil: Station Leiter Projektierung / Bau mit Bauherrenvertretung, Führung und Pikett als Einsatzleiter', async ({ page }) => {
+  await page.goto('/profil/');
+  const station = page.locator('.zeitachse > li', { has: page.getByRole('heading', { name: 'Leiter Projektierung / Bau' }) });
+  await expect(station.locator('ul > li')).toHaveCount(11);
+  for (const text of ['vier Bauleitern', 'Fach-, Kosten-, Qualitäts-, Termin- und Sicherheitsvorgaben', 'Neu- und Ausbauprojekten auf Verbindungsstrassen', 'Unterstützung des Bezirkschefs', 'Pikettdienst als Einsatzleiter']) {
+    await expect(station).toContainText(text);
+  }
+});

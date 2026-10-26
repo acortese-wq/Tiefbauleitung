@@ -396,18 +396,18 @@ test('Kennzahlen zählen hoch und enden beim Wert aus dem HTML', async ({ page }
   await page.goto('/');
   const werte = page.locator('[data-zaehlen]');
   await page.locator('.kennzahlen').evaluate((e) => e.scrollIntoView({ block: 'center', behavior: 'instant' }));
-  await expect(werte).toHaveText(['30+', '17', '2'], { timeout: 5000 });
+  await expect(werte).toHaveText(['30+', '25', '17', '2'], { timeout: 5000 });
   // Beim Drucken stehen die Endwerte sofort da
   await page.goto('/');
   await page.evaluate(() => dispatchEvent(new Event('beforeprint')));
-  expect(await werte.allTextContents()).toEqual(['30+', '17', '2']);
+  expect(await werte.allTextContents()).toEqual(['30+', '25', '17', '2']);
 });
 
 test('Mit reduzierter Bewegung: Kennzahlen sofort, keine Seitenübergänge, kein Lesefortschritt', async ({ browser }) => {
   const kontext = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await kontext.newPage();
   await page.goto('/');
-  expect(await page.locator('[data-zaehlen]').allTextContents()).toEqual(['30+', '17', '2']);
+  expect(await page.locator('[data-zaehlen]').allTextContents()).toEqual(['30+', '25', '17', '2']);
   expect(await page.locator('.kopf').evaluate((e) => getComputedStyle(e).viewTransitionName)).toBe('none');
   await page.goto('/projekte/plessurbruecke-sassal/');
   expect(await page.locator('.kopf').evaluate((e) => getComputedStyle(e, '::after').content)).toBe('none');

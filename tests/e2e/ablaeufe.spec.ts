@@ -683,3 +683,13 @@ test('Gesetzesprüfung liest eine PDF im Browser und ordnet sie dem Bund zu', as
   await expect(gp.locator('.gp-fristen')).toContainText('innert 60 Tagen');
   await expect(gp.locator('[data-prompt]')).toContainText('Bundesrecht: Bundesgesetz über Musterleitungen');
 });
+
+test('Jahreswerte 2021–2025 mit Link zum Strassenbauprogramm auf Profil und Startseite', async ({ page }) => {
+  for (const pfad of ['/profil/', '/']) {
+    await page.goto(pfad);
+    await expect(page.getByText(/rund 25 Mio\. CHF pro Jahr: 12 Mio\. baulicher Unterhalt/).first()).toBeVisible();
+    const link = page.getByRole('link', { name: /Strassenbauprogramm 2021–2024/ }).first();
+    await expect(link).toHaveAttribute('href', /^https:\/\/www\.gr\.ch\/.*bericht_strassenbauprogramm_2021-2024\.pdf$/);
+    await expect(link).toHaveAttribute('target', '_blank');
+  }
+});

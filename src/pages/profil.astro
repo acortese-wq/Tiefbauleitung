@@ -122,6 +122,7 @@ const werte = [
               <h3>{s.titel}</h3>
               <p class="org">{s.organisation}</p>
               <ul>{s.punkte.map((p) => <li>{p}</li>)}</ul>
+              {s.quelle && <p class="station-quelle">Grundlage: <a href={s.quelle.href} rel="noopener" target="_blank">{s.quelle.label}<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></p>}
             </div>
           </li>
         ))}
@@ -227,6 +228,8 @@ const werte = [
   .org { color: var(--text-ruhig); font-weight: 600; margin-top: 4px; }
   .zeitachse ul { margin: 10px 0 0; padding-left: 1.1em; color: var(--text-ruhig); display: grid; gap: 4px; max-width: 70ch; }
   .zeitachse ul li::marker { color: var(--eis); }
+  .station-quelle { margin-top: 8px; font-size: max(0.88rem, var(--min-hilfe)); color: var(--text-ruhig); }
+  .station-quelle a { display: inline-block; padding-block: 8px; margin-block: -8px; }
   .nebenamt { margin-top: 36px; max-width: 620px; }
   .liste-titel { font-size: 1.4rem; margin: 0 0 10px; }
   .berufsprofil { border-top: 1px solid var(--linie); }

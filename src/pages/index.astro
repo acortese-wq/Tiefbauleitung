@@ -12,7 +12,7 @@ import DigitalisierungProzesse from '../components/illustrationen/Digitalisierun
 import KiAgenten from '../components/illustrationen/KiAgenten.astro';
 import NetzinfrastrukturLeitungsbau from '../components/illustrationen/NetzinfrastrukturLeitungsbau.astro';
 import { werkzeuge } from '../data/werkzeuge';
-import { person, kennzahlen, zeugnis } from '../data/person';
+import { person, kennzahlen, zeugnis, strassenbauprogramm } from '../data/person';
 import { sichtbareArtikel, sichtbareProjekte } from '../lib/content';
 import { personJsonLd } from '../lib/seo';
 
@@ -73,10 +73,12 @@ const perspektiven = [
     ort: 'Leiter Projektierung und Bau, Tiefbauamt Graubünden, Bezirk 1 Chur',
     punkte: [
       'Aus der Bauleitung befördert: Führung des Teams Projektierung und Bau mit vier Bauleitern',
+      'Budgetierung und Mehrjahresplanung für rund 25 Mio. CHF pro Jahr: 12 Mio. baulicher Unterhalt, 13 Mio. Investitionen',
       'Leitungsgesuche zusammen mit dem Bezirkschef bearbeitet und beurteilt',
-      'Neu- und Ausbau von Verbindungsstrassen, baulicher Unterhalt der Kantonsstrassen',
-      'Submissionswesen und Prüfung von Schlussabrechnungen',
+      'Neu- und Ausbau von Verbindungsstrassen, baulicher Unterhalt der Kantonsstrassen, kleiner baulicher Unterhalt an Nationalstrassen',
+      'Gesamtes Submissionswesen des Bezirks, Landerwerb und Prüfung von Schlussabrechnungen',
     ],
+    quelle: strassenbauprogramm,
   },
   {
     zeit: '2013–2021',
@@ -252,6 +254,9 @@ const zitatNetzbau = zeugnis('interessen');
             <h3>{p.titel}</h3>
             <p class="perspektive-ort">{p.ort}</p>
             <ul>{p.punkte.map((x) => <li>{x}</li>)}</ul>
+            {p.quelle && (
+              <p class="perspektive-links"><span>Grundlage:</span> <a href={p.quelle.href} rel="noopener" target="_blank">{p.quelle.label}<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></p>
+            )}
             {p.links && (
               <p class="perspektive-links"><span>Fallstudien:</span> {p.links.map((l, i) => <Fragment>{i > 0 && ' · '}<a href={l.href}>{l.name}</a></Fragment>)}</p>
             )}

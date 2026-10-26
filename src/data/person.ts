@@ -28,6 +28,16 @@ export type Station = {
   titel: string;
   organisation: string;
   punkte: string[];
+  /** Öffentliche Grundlage zu einer Angabe, z. B. Programm oder Bericht */
+  quelle?: { label: string; href: string };
+};
+
+// Jahreswerte Bezirk 1 Chur (Angabe A. Cortese), Rahmen im öffentlichen Strassenbauprogramm des Kantons.
+// Finanz- und Verfügungsbefugnisse lagen gemäss Stellenbeschreibung 2022 beim Bezirk: deshalb «Budgetierung,
+// Mehrjahresplanung und Kostensteuerung», nicht «Budgetverantwortung mit Finanzkompetenz».
+export const strassenbauprogramm = {
+  label: 'Strassenbauprogramm 2021–2024 des Kantons Graubünden (PDF)',
+  href: 'https://www.gr.ch/DE/institutionen/verwaltung/diem/tba/dokumentation/DokumentationDokumente/bericht_strassenbauprogramm_2021-2024.pdf',
 };
 
 export const werdegang: Station[] = [
@@ -54,11 +64,14 @@ export const werdegang: Station[] = [
     punkte: [
       'Aufgrund guter Leistungen aus der Bauleitung befördert',
       'Fachliche und personelle Führung des Teams Projektierung und Bau mit vier Bauleitern',
-      'Neu- und Ausbau von Verbindungsstrassen inkl. Mehrjahresplanung, baulicher Unterhalt der Kantonsstrassen',
-      'Verantwortung für das Submissionswesen und Auftragsmanagement im Bezirk',
+      'Budgetierung, Mehrjahresplanung und Kostensteuerung für rund 25 Mio. CHF pro Jahr: 12 Mio. baulicher Unterhalt und 13 Mio. Investitionen gemäss Strassenbauprogramm',
+      'Neu- und Ausbau von Verbindungsstrassen, baulicher Unterhalt der Kantonsstrassen sowie kleiner baulicher Unterhalt an Nationalstrassen',
+      'Verantwortung für das gesamte Submissionswesen und Auftragsmanagement im Bezirk',
+      'Landerwerbsverhandlungen mit Grundeigentümern',
       'Prüfung der Schlussabrechnungen (Ausmass, Nachtragspreise, Teuerung)',
       'Pikett- und Lawinendienst',
     ],
+    quelle: strassenbauprogramm,
   },
   {
     von: 'März 2013',

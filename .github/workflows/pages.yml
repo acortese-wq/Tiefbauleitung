@@ -25,7 +25,8 @@ concurrency:
 
 jobs:
   bauen-und-testen:
-    runs-on: ubuntu-latest
+    # Fest auf 24.04: ubuntu-latest ist seit November 2026 Ubuntu 26.04, das Playwright 1.56 noch nicht unterstützt
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4

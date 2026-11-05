@@ -9,3 +9,7 @@ playwright-report/
 coverage/
 .DS_Store
 .pages-test/
+
+# Python-Zwischendateien (Skill-Skripte)
+__pycache__/
+*.pyc

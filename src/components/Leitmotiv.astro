@@ -64,22 +64,21 @@ const kanten = [
       <line x1="160" y1="170" x2="160" y2="392" class="lm-masslinie" />
       <line x1="153" y1="170" x2="167" y2="170" class="lm-masslinie" />
       <line x1="153" y1="392" x2="167" y2="392" class="lm-masslinie" />
-      <text x="96" y="286" class="lm-text">−1.20 m</text>
+      <text x="150" y="286" text-anchor="end" class="lm-text">−1.20 m</text>
       <text x="446" y="200" class="lm-text">Hausanschluss</text>
       <line x1="330" y1="176" x2="440" y2="232" class="lm-hinweislinie" />
-      <text x="444" y="236" class="lm-text">Belag · Fundation</text>
+      <text x="444" y="228" class="lm-text">Belag<tspan x="444" dy="1.15em">Fundation</tspan></text>
       <line x1="298" y1="292" x2="440" y2="292" class="lm-hinweislinie" />
       <text x="444" y="296" class="lm-text">Warnband</text>
       <line x1="302" y1="372" x2="440" y2="372" class="lm-hinweislinie" />
-      <text x="444" y="368" class="lm-text">Rohrblock</text>
-      <text x="444" y="382" class="lm-text lm-klein">6 × Ø 120</text>
-      <text x="200" y="414" class="lm-text lm-klein">Querprofil Leitungsgraben, schematisch</text>
+      <text x="444" y="368" class="lm-text">Rohrblock<tspan x="444" dy="1.15em">6 × Ø 120</tspan></text>
+      <text x="260" y="416" text-anchor="middle" class="lm-text">Querprofil Leitungsgraben, schematisch</text>
     </g>
   </svg>
 </figure>
 
 <style>
-  .leitmotiv { margin: 0; }
+  .leitmotiv { margin: 0; container: leitmotiv / inline-size; }
   .leitmotiv svg { width: 100%; height: auto; display: block; overflow: visible; }
   .lm-schraffur { stroke: var(--linie); stroke-width: 1; }
   .lm-korn { fill: var(--linie-hell); }
@@ -103,7 +102,15 @@ const kanten = [
   @media (max-width: 560px) { .lm-text, .lm-hinweislinie { display: none; } }
   .lm-text { fill: var(--text-ruhig); font-family: var(--f-mono); font-size: 11px; }
   .lm-text-eis { fill: var(--eis); }
-  .lm-klein { font-size: 9.5px; }
+  /* Beschriftung erscheint mindestens 12 px gross: je schmaler die Zeichnung (Breite 560), desto grösser die Schrift in
+     Zeichnungseinheiten. Zu schmal für lesbare Beschriftung: ausblenden, die Beschreibung für Screenreader bleibt. */
+  @container leitmotiv (width < 611px) { .lm-text { font-size: 12px; } }
+  @container leitmotiv (width < 560px) { .lm-text { font-size: 13px; } }
+  @container leitmotiv (width < 517px) { .lm-text { font-size: 14px; } }
+  @container leitmotiv (width < 480px) { .lm-text { font-size: 15px; } }
+  @container leitmotiv (width < 448px) { .lm-text { font-size: 16px; } }
+  @container leitmotiv (width < 420px) { .lm-text { font-size: 17px; } }
+  @container leitmotiv (width < 396px) { .lm-text, .lm-hinweislinie { display: none; } }
 
   @media (prefers-reduced-motion: no-preference) {
     .lm-faser { stroke-dasharray: 520; stroke-dashoffset: 520; animation: lm-zeichnen 2.2s cubic-bezier(.4,0,.2,1) .6s forwards; }

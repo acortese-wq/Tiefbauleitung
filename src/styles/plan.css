@@ -36,6 +36,15 @@
 /* Kompakte Fassung ohne Beschriftung */
 .pz-kompakt .pz-text, .pz-kompakt .pz-hinweislinie { display: none; }
 
+/* Beschriftung nur, wo sie mindestens 12 px gross erscheint: Zeichnung 600 × 400, Schrift 11 px (Faktor 1.09) bzw. 9.5 px
+   (Faktor 1.26). Container ist das Kopfbild im Seitenkopf. Die Beschreibung für Screenreader (title/desc) bleibt. */
+@container kopfbild (width < 655px) or (height < 437px) {
+  .pz-text, .pz-hinweislinie { display: none; }
+}
+@container kopfbild (width < 758px) or (height < 506px) {
+  .pz-klein { display: none; }
+}
+
 /* Schmale Handys: Beschriftung wäre kleiner als 7 px und nicht lesbar. Die Beschreibung für Screenreader (title/desc) bleibt. */
 @media (max-width: 560px) {
   .pz-text, .pz-hinweislinie { display: none; }

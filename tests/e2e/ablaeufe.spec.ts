@@ -702,3 +702,75 @@ test('Profil: Station Leiter Projektierung / Bau mit Bauherrenvertretung, Führu
     await expect(station).toContainText(text);
   }
 });
+
+test('UI-Prüfung: Gesetzesprüfung sagt eine kurze Zusammenfassung an und fragt vor dem Leeren nach', async ({ page }) => {
+  await page.goto('/ki-labor/gesetzespruefung/');
+  const gp = page.locator('[data-gesetz]');
+  await expect(gp.locator('[data-ergebnis]')).not.toHaveAttribute('aria-live', /.+/);
+  await expect(gp.locator('.gp-beispielfragen')).toBeVisible();
+  await gp.getByRole('button', { name: 'Beispiel einsetzen' }).click();
+  await expect(gp.locator('[data-ansage]')).toHaveText(/^\d+ Fundstellen: \d+ Gemeinde$/);
+  page.once('dialog', (d) => d.dismiss());
+  await gp.getByRole('button', { name: 'Leeren' }).click();
+  await expect(gp.locator('.gp-dok')).toHaveCount(1);
+  page.once('dialog', (d) => { expect(d.message()).toContain('eingefügten Erlass'); d.accept(); });
+  await gp.getByRole('button', { name: 'Leeren' }).click();
+  await expect(gp.locator('.gp-dok')).toHaveCount(0);
+  await expect(gp.locator('[data-ansage]')).toHaveText('');
+});
+
+test('UI-Prüfung: Werkbank sagt das Prüfergebnis kurz an statt den ganzen Bereich', async ({ page }) => {
+  await page.goto('/ki-labor/werkbank/#lv-plausibilitaet');
+  const wb = page.locator('#lv-plausibilitaet');
+  await expect(wb.locator('[data-pruefung]')).not.toHaveAttribute('aria-live', /.+/);
+  await wb.getByRole('button', { name: 'Beispiel einsetzen' }).click();
+  await expect(wb.locator('[data-pruef-ansage]')).toHaveText(/^Prüfung: .*\d+ Fehler.*\.$/);
+});
+
+test('UI-Prüfung: Klickflächen der Textlinks mindestens 44 px hoch', async ({ page }) => {
+  for (const [pfad, auswahl] of [['/projekte/', '.ref-fallstudie'], ['/', '.bildband figcaption a:not(small a)'], ['/ki-labor/', '.feld-link']] as const) {
+    await page.goto(pfad);
+    const link = page.locator(auswahl).first();
+    await link.scrollIntoViewIfNeeded();
+    // Die Klickfläche reicht unsichtbar 11 px über und unter den Text hinaus (::after)
+    const treffer = await link.evaluate((e) => {
+      const r = e.getBoundingClientRect();
+      const x = r.left + r.width / 2;
+      return [r.top - 10, r.bottom + 10].map((y) => document.elementFromPoint(x, y)?.closest('a') === e);
+    });
+    expect(treffer, pfad).toEqual([true, true]);
+  }
+});
+
+test('UI-Prüfung: Schriften vorgeladen, kein Layoutsprung beim Laden der Werkzeugseiten', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'Messung auf Desktop-Breite');
+  const warnungen: string[] = [];
+  page.on('console', (m) => { if (/preloaded using link preload but not used/.test(m.text())) warnungen.push(m.text()); });
+  await page.addInitScript(() => {
+    (window as unknown as { cls: number }).cls = 0;
+    new PerformanceObserver((l) => {
+      for (const e of l.getEntries() as (PerformanceEntry & { value: number; hadRecentInput: boolean })[]) if (!e.hadRecentInput) (window as unknown as { cls: number }).cls += e.value;
+    }).observe({ type: 'layout-shift', buffered: true });
+  });
+  for (const pfad of ['/ki-labor/gesetzespruefung/', '/ki-labor/werkbank/', '/ki-labor/nutzenrechner/', '/']) {
+    await page.goto(pfad, { waitUntil: 'networkidle' });
+    await expect(page.locator('link[rel="preload"][as="font"]')).toHaveCount(2);
+    expect(await page.evaluate(() => (window as unknown as { cls: number }).cls), pfad).toBeLessThan(0.1);
+  }
+  expect(warnungen).toEqual([]);
+});
+
+test('UI-Prüfung: Beschriftung im Leitmotiv erscheint mindestens 12 px gross', async ({ browser }) => {
+  for (const width of [1440, 1024, 768]) {
+    const kontext = await browser.newContext({ viewport: { width, height: 900 } });
+    const page = await kontext.newPage();
+    await page.goto('/');
+    const groessen = await page.locator('.leitmotiv svg').evaluate((s: SVGSVGElement) => {
+      const k = s.getBoundingClientRect().width / s.viewBox.baseVal.width;
+      return [...s.querySelectorAll('text')].filter((t) => getComputedStyle(t).display !== 'none').map((t) => parseFloat(getComputedStyle(t).fontSize) * k);
+    });
+    expect(groessen.length, `${width}`).toBeGreaterThan(0);
+    expect(Math.min(...groessen), `${width}`).toBeGreaterThanOrEqual(11.95);
+    await kontext.close();
+  }
+});

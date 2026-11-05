@@ -53,6 +53,8 @@ const illustration = !bild && Astro.slots.has('bild');
   }
   .mit-bild { display: flex; flex-direction: column-reverse; }
   .mit-bild .kopf-bild { margin: 24px 16px 0; aspect-ratio: 16 / 9; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; }
+  /* Container für die Planbeschriftung (plan.css blendet sie aus, wo sie kleiner als 12 px würde) */
+  .kopf-illustration { container: kopfbild / size; }
   .mit-bild .kopf-illustration { aspect-ratio: 3 / 2; border: 0; border-radius: 0; overflow: visible; }
   @media (min-width: 900px) {
     .mit-bild { display: block; }

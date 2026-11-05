@@ -81,7 +81,9 @@ const ranglisten = [
   .radar-name small, .radar-neu small { color: var(--text-ruhig); font-size: 0.8rem; }
   .radar-neu { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
   .radar-neu li { display: grid; gap: 2px; }
-  .radar-neu a { text-decoration: none; }
+  /* Unsichtbar vergrösserte Klickfläche (44 px hoch), der Fokusrahmen bleibt eng am Text */
+  .radar-neu a { text-decoration: none; position: relative; }
+  .radar-neu a::after { content: ''; position: absolute; inset: -9px -6px; }
   .radar-neu a:hover strong { text-decoration: underline; }
   .radar-tipp ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; color: var(--text-ruhig); font-size: max(0.95rem, var(--min-karte)); }
   .radar-quelle { margin-top: 12px; font-size: max(0.82rem, var(--min-hilfe)); color: var(--text-ruhig); }

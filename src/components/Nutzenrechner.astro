@@ -257,9 +257,11 @@ const fmt = (v: number, e: string) => (e === 'CHF' || e.startsWith('CHF/') ? `${
 
   /* Schieberegler mit Massstab */
   .rk-regler input[type='range'] {
-    -webkit-appearance: none; appearance: none; width: 100%; height: 32px; margin-top: 12px; background: transparent; cursor: pointer;
+    -webkit-appearance: none; appearance: none; width: 100%; height: 32px; margin-top: 12px; background: transparent; cursor: pointer; touch-action: manipulation;
     --anteil: 50%;
   }
+  /* Touch: ganze Reglerzeile 44 px hoch greifbar */
+  @media (pointer: coarse) { .rk-regler input[type='range'] { height: 44px; margin-top: 6px; } }
   .rk-regler input[type='range']::-webkit-slider-runnable-track {
     height: 14px; border: 1.5px solid currentColor; border-radius: 2px;
     background:

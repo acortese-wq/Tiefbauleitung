@@ -7,7 +7,7 @@ import { BEISPIELFRAGEN, KANTONE, gesetzPrompt } from '../lib/gesetz';
 const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
 ---
 <div class="gp" data-gesetz>
-  <p class="hinweis gp-ohne-js" data-ohne-js>Die Gesetzesprüfung braucht JavaScript, weil die PDF direkt in Ihrem Browser gelesen wird.</p>
+  <noscript><p class="hinweis gp-ohne-js">Die Gesetzesprüfung braucht JavaScript, weil die PDF direkt in Ihrem Browser gelesen wird.</p></noscript>
 
   <div class="gp-spalten">
     <section class="gp-spalte gp-eingabe" aria-labelledby="gp-eingabe-titel">
@@ -17,7 +17,7 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
         <span class="gp-label">Ihre Frage <span class="gp-pflicht" title="Pflichtangabe">*</span></span>
         <textarea rows="4" data-frage placeholder="z. B. Braucht es für Grabarbeiten im Strassengebiet eine Bewilligung?" spellcheck="true"></textarea>
       </label>
-      <div class="gp-beispielfragen" data-nur-js hidden>
+      <div class="gp-beispielfragen">
         <p class="gp-label">Beispielfragen</p>
         <ul>
           {BEISPIELFRAGEN.map((f) => <li><button type="button" class="gp-chip" data-beispielfrage={f}>{f}</button></li>)}
@@ -56,7 +56,7 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
       <p class="gp-status" role="status" aria-live="polite" data-status></p>
       <ul class="gp-doks" data-doks aria-label="Eingefügte Erlasse"></ul>
 
-      <div class="gp-knoepfe" data-nur-js hidden>
+      <div class="gp-knoepfe">
         <button type="button" class="btn btn-ghost" data-beispiel>Beispiel einsetzen</button>
         <button type="button" class="btn btn-ghost" data-leeren>Leeren</button>
       </div>
@@ -68,7 +68,8 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
         <span class="gp-tag">Bund · Kanton · Gemeinde</span>
       </div>
       <p class="gp-leer" data-leer>Frage eingeben und ein Gesetz als PDF einfügen, oder <strong>Beispiel einsetzen</strong>. Die passenden Artikel erscheinen hier, gegliedert nach Bund, Kanton und Gemeinde, mit Fristen und offiziellen Quellen.</p>
-      <div data-ergebnis aria-live="polite"></div>
+      <div data-ergebnis></div>
+      <p class="visually-hidden" role="status" data-ansage></p>
     </section>
 
     <section class="gp-spalte gp-prompt" aria-labelledby="gp-prompt-titel">
@@ -185,14 +186,13 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
     const zeichen = q<HTMLElement>('[data-zeichen]');
     const knopfKopieren = q<HTMLButtonElement>('[data-kopieren]');
     const kopierStatus = q<HTMLElement>('[data-kopier-status]');
-
-    w.querySelector('[data-ohne-js]')?.remove();
-    w.querySelectorAll<HTMLElement>('[data-nur-js]').forEach((e) => (e.hidden = false));
+    const ansage = q<HTMLElement>('[data-ansage]');
 
     let dokumente: Dokument[] = [];
     let fund: Fundstelle[] = [];
     let zaehler = 0;
     let warte: number | undefined;
+    let letzteAnsage = '';
 
     const melde = (text: string) => (status.textContent = text);
 
@@ -356,10 +356,23 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
       return text;
     }
 
+    // Screenreader hören eine kurze Zusammenfassung statt des ganzen Ergebnisbereichs, und nur bei einer Änderung
+    function sageAn() {
+      let text = '';
+      if (dokumente.length && frage.value.trim()) {
+        const teile = EBENEN.map((e) => [e.label, fund.filter((f) => f.dok.ebene === e.id).length] as const).filter(([, n]) => n).map(([l, n]) => `${n} ${l}`);
+        text = fund.length ? `${fund.length} Fundstelle${fund.length === 1 ? '' : 'n'}: ${teile.join(', ')}` : 'Keine Fundstelle zur Frage gefunden.';
+      }
+      if (text === letzteAnsage) return;
+      letzteAnsage = text;
+      ansage.textContent = text;
+    }
+
     function aktualisiere() {
       fund = suche(dokumente, frage.value, 8);
       zeigeErgebnis();
       zeigePrompt();
+      sageAn();
     }
     const spaeter = () => {
       clearTimeout(warte);
@@ -444,6 +457,7 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
     });
 
     q<HTMLButtonElement>('[data-leeren]').addEventListener('click', () => {
+      if (dokumente.length && !confirm(`Frage und ${dokumente.length === 1 ? 'den eingefügten Erlass' : `alle ${dokumente.length} eingefügten Erlasse`} entfernen?`)) return;
       dokumente = [];
       frage.value = '';
       gemeinde.value = '';

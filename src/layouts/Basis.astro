@@ -12,6 +12,9 @@ import Footer from '../components/Footer.astro';
 import Bildzoom from '../components/Bildzoom.astro';
 import { jsonFuerScript } from '../lib/seo';
 import { person } from '../data/person';
+// Text- und Titelschrift vorladen: ohne Vorladen bricht der Einleitungstext nach dem Schriftwechsel neu um (Layoutsprung)
+import schriftText from '@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url';
+import schriftTitel from '@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -34,6 +37,8 @@ const ogBild = new URL(bild, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{seitenTitel}</title>
     <meta name="description" content={description} />
+    <link rel="preload" href={schriftText} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={schriftTitel} as="font" type="font/woff2" crossorigin />
     <link rel="canonical" href={canonical.href} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#0a0f14" />

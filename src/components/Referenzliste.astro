@@ -69,7 +69,9 @@ const gebiete = ['kunstbauten', 'strasse', 'bahn', 'wasser', 'netz'].filter((g) 
 <style>
   .ref-ort { font-weight: 400; color: var(--text-ruhig); }
   .ref-kurz { display: block; margin-top: 4px; color: var(--text-ruhig); font-size: 0.92rem; max-width: 62ch; }
-  .ref-fallstudie { display: inline-block; margin-top: 4px; font-weight: 600; font-size: 0.92rem; text-decoration: none; }
+  /* Unsichtbar vergrösserte Klickfläche (44 px hoch), der Fokusrahmen bleibt eng am Text */
+  .ref-fallstudie { position: relative; display: inline-block; margin-top: 4px; font-weight: 600; font-size: 0.92rem; text-decoration: none; }
+  .ref-fallstudie::after { content: ''; position: absolute; inset: -11px -6px; }
   .ref-fallstudie:hover { text-decoration: underline; }
   .ref-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   .ref-filter[hidden] { display: none; }

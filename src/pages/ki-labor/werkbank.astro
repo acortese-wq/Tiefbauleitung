@@ -29,7 +29,7 @@ const vorschau = (id: string) => {
         <p>Jede Vorlage folgt denselben Regeln wie meine eigenen Assistenten: Quellen markieren, nichts erfinden, Fehlendes als OFFEN ausweisen, bei Risiko an die Fachperson eskalieren, Selbstcheck vor der Antwort.</p>
       </div>
 
-      <nav class="wahl" aria-label="Vorlagen" data-wahl hidden>
+      <nav class="wahl" aria-label="Vorlagen" data-wahl>
         {kategorien.map((k) => (
           <div class="wahl-gruppe">
             <p class="label">{kategorieLabels[k]}</p>
@@ -113,7 +113,7 @@ const vorschau = (id: string) => {
                 {p.schnellpruefung && <span class="wb-tag">Schnellprüfung im Browser</span>}
               </div>
               {p.schnellpruefung ? (
-                <div class="wb-pruefung" data-pruefung aria-live="polite">
+                <div class="wb-pruefung" data-pruefung>
                   <p class="wb-leer">Tabelle links einfügen oder <strong>Beispiel einsetzen</strong>. Die Prüfung rechnet sofort: Rechenfehler, fehlende Angaben, Einheiten, Doppelpositionen, Kostentreiber{p.id === 'offertvergleich' ? ', Ausreisser und Spekulationsverdacht' : p.id === 'ausmass' ? ', Mehr- und Minderkosten' : ''}.</p>
                 </div>
               ) : (
@@ -122,6 +122,7 @@ const vorschau = (id: string) => {
                   <ul>{p.beispielResultat?.map((z) => <li set:html={z.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />)}</ul>
                 </div>
               )}
+              {p.schnellpruefung && <p class="visually-hidden" role="status" data-pruef-ansage></p>}
               <p class="wb-pruefen"><strong>Selbst prüfen:</strong> {p.pruefen}</p>
             </div>
           </div>
@@ -166,6 +167,7 @@ const vorschau = (id: string) => {
     const zeichen = wb.querySelector<HTMLElement>('[data-zeichen]');
     const fortschritt = wb.querySelector<HTMLElement>('[data-fortschritt]');
     const pruefung = wb.querySelector<HTMLElement>('[data-pruefung]');
+    const pruefAnsage = wb.querySelector<HTMLElement>('[data-pruef-ansage]');
     const status = wb.querySelector<HTMLElement>('[data-status]');
     const knopfKopieren = wb.querySelector<HTMLButtonElement>('[data-kopieren]');
     const knopfBeispiel = wb.querySelector<HTMLButtonElement>('[data-beispiel]');
@@ -203,7 +205,13 @@ const vorschau = (id: string) => {
         fortschritt.textContent = fehlt.length ? `${pflicht.length - fehlt.length} von ${pflicht.length} Pflichtangaben` : 'vollständig ✓';
         fortschritt.classList.toggle('ok', !fehlt.length);
       }
-      if (pruefung) zeichnePruefung(pruefung, pruefe(String(w.tabelle ?? '')));
+      if (pruefung) {
+        const r = pruefe(String(w.tabelle ?? ''));
+        zeichnePruefung(pruefung, r);
+        // Kurze Ansage statt den ganzen Prüfbereich vorzulesen, nur wenn sich das Ergebnis ändert
+        const text = ansageFuer(r);
+        if (pruefAnsage && pruefAnsage.textContent !== text) pruefAnsage.textContent = text;
+      }
       return text;
     };
 
@@ -247,6 +255,16 @@ const vorschau = (id: string) => {
       });
     }
     aktualisiere();
+  }
+
+  function ansageFuer(r: Pruefergebnis): string {
+    if (r.art === 'leer') return '';
+    const zahl = (stufe: string) => r.befunde.filter((b) => b.stufe === stufe).length;
+    const f = zahl('fehler');
+    const w = zahl('warnung');
+    const h = zahl('hinweis');
+    const teile = [f ? `${f} Fehler` : '', w ? `${w} Warnung${w > 1 ? 'en' : ''}` : '', h ? `${h} Hinweis${h > 1 ? 'e' : ''}` : ''].filter(Boolean);
+    return `Prüfung: ${teile.length ? teile.join(', ') : 'keine Auffälligkeiten'}.`;
   }
 
   function zeichnePruefung(ziel: HTMLElement, r: Pruefergebnis) {
@@ -355,7 +373,7 @@ const vorschau = (id: string) => {
   .wb-feld input::placeholder, .wb-feld textarea::placeholder { color: var(--text-ruhig); opacity: 0.75; }
   .wb-feld :is(input, textarea, select):focus-visible { outline: 2px solid var(--eis); outline-offset: 1px; }
   .wb-feld fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 4px; }
-  .wb-check { display: flex !important; grid-template-columns: none; align-items: center; gap: 8px; min-height: 36px; font-size: 0.92rem; cursor: pointer; }
+  .wb-check { display: flex !important; grid-template-columns: none; align-items: center; gap: 8px; min-height: 44px; font-size: 0.92rem; cursor: pointer; }
   .wb-check input { width: 18px; height: 18px; accent-color: var(--eis); flex: none; }
   .wb-knoepfe { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
 

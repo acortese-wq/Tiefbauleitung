@@ -2,15 +2,12 @@
 import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import { alleKompetenzen } from '../../lib/content';
-import { breadcrumbJsonLd } from '../../lib/seo';
 
 const kompetenzen = await alleKompetenzen();
-const site = Astro.site!;
 ---
 <Basis
   title="Kompetenzen"
   description="Vier Kompetenzfelder: Netzbau, Glasfaser und Leitungsbau, Tiefbau und Infrastruktur, Digitalisierung technischer Prozesse sowie KI-Agenten."
-  jsonLd={[breadcrumbJsonLd([{ name: 'Start', url: site.href }, { name: 'Kompetenzen', url: new URL('/kompetenzen/', site).href }])]}
 >
   <Seitenkopf
     titel="Kompetenzen"

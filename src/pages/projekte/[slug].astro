@@ -4,7 +4,6 @@ import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import ProjektKarte from '../../components/ProjektKarte.astro';
 import { sichtbareProjekte, projektArtLabel } from '../../lib/content';
-import { breadcrumbJsonLd } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const projekte = await sichtbareProjekte();
@@ -17,17 +16,11 @@ const { Content } = await render(projekt);
 const d = projekt.data;
 const kompetenzen = (await getCollection('kompetenzen')).filter((k) => d.kompetenzen.includes(k.id));
 const weitere = alle.filter((p) => p.id !== projekt.id).slice(0, 3);
-const site = Astro.site!;
 ---
 <Basis
   title={d.title}
   description={d.kurz}
   bild={d.bild ? `${d.bild}.jpg` : undefined}
-  jsonLd={[breadcrumbJsonLd([
-    { name: 'Start', url: site.href },
-    { name: 'Projekte', url: new URL('/projekte/', site).href },
-    { name: d.title, url: new URL(`/projekte/${projekt.id}/`, site).href },
-  ])]}
 >
   <Seitenkopf titel={d.title} lead={d.kurz} krumen={[{ name: 'Projekte', href: '/projekte/' }, { name: d.title }]}>
     <span class={`badge badge-${d.art}`}>{projektArtLabel[d.art]}</span>

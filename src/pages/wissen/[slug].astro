@@ -45,7 +45,7 @@ const verwandt = alle
     ]),
   ]}
 >
-  <Seitenkopf titel={d.title} lead={d.description} krumen={[{ name: 'Wissen', href: '/wissen/' }, { name: d.kategorie, href: `/wissen/kategorie/${slugify(d.kategorie)}/` }]}>
+  <Seitenkopf titel={d.title} lead={d.description} krumen={[{ name: 'Wissen', href: '/wissen/' }, { name: d.kategorie, href: `/wissen/kategorie/${slugify(d.kategorie)}/` }]} strukturiert={false}>
     <p class="artikel-meta">
       <a href={`/wissen/kategorie/${slugify(d.kategorie)}/`}>{d.kategorie}</a> ·
       <time datetime={d.datum.toISOString().slice(0, 10)}>{formatDatum(d.datum)}</time> ·

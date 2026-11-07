@@ -5,7 +5,6 @@
 <dialog class="bildzoom" aria-label="Grafik vergrössert" data-bildzoom>
   <div class="bildzoom-leiste">
     <span class="bildzoom-tipp">Zum Lesen seitlich wischen</span>
-    <a class="bildzoom-original" data-bildzoom-original target="_blank" rel="noopener">In neuem Tab öffnen<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a>
     <button type="button" class="bildzoom-zu" data-bildzoom-zu aria-label="Vergrösserung schliessen">×</button>
   </div>
   <div class="bildzoom-flaeche">
@@ -17,7 +16,16 @@
   const dialog = document.querySelector<HTMLDialogElement>('[data-bildzoom]');
   if (dialog && typeof dialog.showModal === 'function') {
     const bild = dialog.querySelector<HTMLImageElement>('[data-bildzoom-bild]')!;
-    const original = dialog.querySelector<HTMLAnchorElement>('[data-bildzoom-original]')!;
+    // Link zum Original erst hier erzeugen: ein Link ohne Ziel im HTML ist für Suchmaschinen nicht crawlbar
+    const original = document.createElement('a');
+    original.className = 'bildzoom-original';
+    original.target = '_blank';
+    original.rel = 'noopener';
+    const hinweis = document.createElement('span');
+    hinweis.className = 'visually-hidden';
+    hinweis.textContent = ' (öffnet in neuem Fenster)';
+    original.append('In neuem Tab öffnen', hinweis);
+    dialog.querySelector('[data-bildzoom-zu]')!.before(original);
     let ausloeser: HTMLElement | null = null;
 
     document.addEventListener('click', (e) => {

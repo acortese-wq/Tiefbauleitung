@@ -8,7 +8,6 @@ import ProjektKarte from '../../components/ProjektKarte.astro';
 import Werkzeugkasten from '../../components/Werkzeugkasten.astro';
 import { werkzeuge } from '../../data/werkzeuge';
 import { alleKompetenzen, sichtbareProjekte } from '../../lib/content';
-import { breadcrumbJsonLd } from '../../lib/seo';
 import TiefbauInfrastruktur from '../../components/illustrationen/TiefbauInfrastruktur.astro';
 import NetzinfrastrukturLeitungsbau from '../../components/illustrationen/NetzinfrastrukturLeitungsbau.astro';
 import DigitalisierungProzesse from '../../components/illustrationen/DigitalisierungProzesse.astro';
@@ -36,17 +35,10 @@ const projekte = (await sichtbareProjekte()).filter((p) => p.data.kompetenzen.in
 const weitere = alle.filter((k) => k.id !== kompetenz.id);
 const Zeichnung = zeichnungen[kompetenz.id];
 const hatWerkzeuge = werkzeuge.some((w) => w.kompetenzen.includes(kompetenz.id));
-const site = Astro.site!;
-const url = new URL(`/kompetenzen/${kompetenz.id}/`, site).href;
 ---
 <Basis
   title={d.title}
   description={d.kurz}
-  jsonLd={[breadcrumbJsonLd([
-    { name: 'Start', url: site.href },
-    { name: 'Kompetenzen', url: new URL('/kompetenzen/', site).href },
-    { name: d.title, url },
-  ])]}
 >
   <Seitenkopf
     titel={d.title}

@@ -1,4 +1,6 @@
 ---
+import { breadcrumbJsonLd, jsonFuerScript, seitenUrl } from '../lib/seo';
+
 interface Props {
   titel: string;
   lead?: string;
@@ -6,12 +8,23 @@ interface Props {
   krumen?: { name: string; href?: string }[];
   /** Optionales Kopfbild aus public/bilder/<ordner>/ (Dateien von npm run bilder). */
   bild?: { ordner: string; name: string; alt: string; hinweis?: string };
+  /** Brotkrumen zusätzlich als strukturierte Daten (BreadcrumbList) ausgeben */
+  strukturiert?: boolean;
 }
-const { titel, lead, pos, krumen = [], bild } = Astro.props;
+const { titel, lead, pos, krumen = [], bild, strukturiert = true } = Astro.props;
+// Eine Quelle für sichtbare und strukturierte Brotkrumen; das letzte Glied ohne Link ist die aktuelle Seite
+const krumenLd =
+  strukturiert && krumen.length && Astro.site
+    ? breadcrumbJsonLd([
+        { name: 'Start', url: seitenUrl('/', Astro.site) },
+        ...krumen.map((k) => ({ name: k.name, url: k.href ? seitenUrl(k.href, Astro.site!) : new URL(Astro.url.pathname, Astro.site).href })),
+      ])
+    : undefined;
 const pfad = bild && `/bilder/${bild.ordner}/${bild.name}`;
 // Ohne Bilddatei kann eine Zeichnung (SVG) über den Slot «bild» übergeben werden.
 const illustration = !bild && Astro.slots.has('bild');
 ---
+{krumenLd && <script type="application/ld+json" is:inline set:html={jsonFuerScript(krumenLd)} />}
 <section class:list={['seitenkopf', { 'mit-bild': bild || illustration }]}>
   {illustration && (
     <div class="kopf-bild kopf-illustration"><slot name="bild" /></div>

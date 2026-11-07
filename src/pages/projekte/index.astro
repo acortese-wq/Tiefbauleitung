@@ -8,16 +8,13 @@ import Referenzbilder from '../../components/Referenzbilder.astro';
 import Werkzeugkasten from '../../components/Werkzeugkasten.astro';
 import { werkzeuge } from '../../data/werkzeuge';
 import { sichtbareProjekte } from '../../lib/content';
-import { breadcrumbJsonLd } from '../../lib/seo';
 
 const projekte = await sichtbareProjekte();
 const anzahl = (await getCollection('referenzen')).length;
-const site = Astro.site!;
 ---
 <Basis
   title="Projekte und Fallstudien"
   description={`Fallstudien, ${werkzeuge.length} selbst entwickelte Werkzeuge für Offerte, Kosten und Abrechnung sowie ${anzahl} belegte Referenzprojekte aus dem Tiefbau.`}
-  jsonLd={[breadcrumbJsonLd([{ name: 'Start', url: site.href }, { name: 'Projekte', url: new URL('/projekte/', site).href }])]}
 >
   <Seitenkopf
     titel="Projekte"

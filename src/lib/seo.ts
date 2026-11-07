@@ -48,6 +48,26 @@ export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
   };
 }
 
+/** Absolute Adresse einer Seite, mit Unterordner (GitHub Pages: /Tiefbauleitung). */
+export function seitenUrl(pfad: string, site: URL): string {
+  const basis = (import.meta.env.BASE_URL ?? '/').replace(/\/$/, '');
+  return new URL(`${basis}${pfad.startsWith('/') ? pfad : `/${pfad}`}`, site).href;
+}
+
+/**
+ * Meta-Beschreibung für Suchmaschinen: höchstens 160 Zeichen, sonst kürzt Google mitten im Wort.
+ * Gekürzt wird am letzten Satzende ab 60 % der Länge, sonst an einer Wortgrenze mit «…».
+ */
+export function metaBeschreibung(text: string, max = 160): string {
+  const t = text.replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const kopf = t.slice(0, max);
+  const satz = Math.max(kopf.lastIndexOf('. '), kopf.lastIndexOf('! '), kopf.lastIndexOf('? '), kopf.endsWith('.') ? max - 1 : -1);
+  if (satz >= max * 0.6) return t.slice(0, satz + 1);
+  const wort = t.slice(0, max - 1).lastIndexOf(' ');
+  return `${t.slice(0, wort > 0 ? wort : max - 2).replace(/[\s,;:–-]+$/, '')} …`;
+}
+
 /** JSON sicher in ein <script>-Element einbetten. */
 export function jsonFuerScript(data: unknown): string {
   return JSON.stringify(data).replace(/</g, '\\u003c');

@@ -3,18 +3,15 @@ import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import ArtikelKarte from '../../components/ArtikelKarte.astro';
 import { sichtbareArtikel, slugify } from '../../lib/content';
-import { breadcrumbJsonLd } from '../../lib/seo';
 import { KATEGORIEN } from '../../content.config';
 
 const artikel = await sichtbareArtikel();
 const kategorien = KATEGORIEN.filter((k) => artikel.some((a) => a.data.kategorie === k));
 const schlagwoerter = [...new Set(artikel.flatMap((a) => a.data.schlagwoerter))].sort((a, b) => a.localeCompare(b, 'de'));
-const site = Astro.site!;
 ---
 <Basis
   title="Wissen und Fachbeiträge"
   description="Fachbeiträge zu KI im Bauwesen, KI-Agenten im technischen Projektumfeld, Netzinfrastruktur, Tiefbau und verantwortungsvoller Digitalisierung."
-  jsonLd={[breadcrumbJsonLd([{ name: 'Start', url: site.href }, { name: 'Wissen', url: new URL('/wissen/', site).href }])]}
 >
   <Seitenkopf
     titel="Wissen"

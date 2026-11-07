@@ -10,7 +10,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Bildzoom from '../components/Bildzoom.astro';
-import { jsonFuerScript } from '../lib/seo';
+import { jsonFuerScript, metaBeschreibung } from '../lib/seo';
 import { person } from '../data/person';
 // Text- und Titelschrift vorladen: ohne Vorladen bricht der Einleitungstext nach dem Schriftwechsel neu um (Layoutsprung)
 import schriftText from '@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url';
@@ -28,6 +28,7 @@ interface Props {
 const { title, description, typ = 'website', jsonLd = [], noindex = false, bild = '/og-bild.png' } = Astro.props;
 const seitenTitel = title === person.name ? `${person.name} – Tiefbau, Netzinfrastruktur und KI` : `${title} | ${person.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const beschreibung = metaBeschreibung(description);
 const ogBild = new URL(bild, Astro.site);
 ---
 <!doctype html>
@@ -36,7 +37,7 @@ const ogBild = new URL(bild, Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{seitenTitel}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={beschreibung} />
     <link rel="preload" href={schriftText} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={schriftTitel} as="font" type="font/woff2" crossorigin />
     <link rel="canonical" href={canonical.href} />
@@ -51,7 +52,7 @@ const ogBild = new URL(bild, Astro.site);
     <meta property="og:locale" content="de_CH" />
     <meta property="og:site_name" content={person.name} />
     <meta property="og:title" content={seitenTitel} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={beschreibung} />
     <meta property="og:url" content={canonical.href} />
     <meta property="og:image" content={ogBild.href} />
     <meta property="og:image:width" content="1200" />

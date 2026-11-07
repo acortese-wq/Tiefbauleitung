@@ -255,7 +255,7 @@ const zitatNetzbau = zeugnis('interessen');
             <p class="perspektive-ort">{p.ort}</p>
             <ul>{p.punkte.map((x) => <li>{x}</li>)}</ul>
             {p.quelle && (
-              <p class="perspektive-links"><span>Grundlage:</span> <a href={p.quelle.href} rel="noopener" target="_blank">{p.quelle.label}<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></p>
+              <p class="perspektive-links"><span>Rahmen:</span> <a href={p.quelle.href} rel="noopener" target="_blank">{p.quelle.label}<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></p>
             )}
             {p.links && (
               <p class="perspektive-links"><span>Fallstudien:</span> {p.links.map((l, i) => <Fragment>{i > 0 && ' · '}<a href={l.href}>{l.name}</a></Fragment>)}</p>

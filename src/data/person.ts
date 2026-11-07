@@ -34,6 +34,8 @@ export type Station = {
 };
 
 // Jahreswerte Bezirk 1 Chur (Angabe A. Cortese), Rahmen im öffentlichen Strassenbauprogramm des Kantons.
+// Hinweis: Anhang 8 des Programms 2021–2024 weist für Bezirk 1 im baulichen Unterhalt 10.2–10.5 Mio. Fr./Jahr aus
+// (Planung 2020); die 12 Mio. sind die Angabe aus der Praxis. Link deshalb als «Rahmen», nicht als Beleg der Zahl.
 // Finanz- und Verfügungsbefugnisse lagen gemäss Stellenbeschreibung 2022 beim Bezirk: deshalb «Budgetierung,
 // Mehrjahresplanung und Kostensteuerung», nicht «Budgetverantwortung mit Finanzkompetenz».
 export const strassenbauprogramm = {
@@ -66,7 +68,7 @@ export const werdegang: Station[] = [
       'Aufgrund guter Leistungen aus der Bauleitung befördert',
       'Fachliche und personelle Führung des Teams Projektierung und Bau mit vier Bauleitern',
       'Bauherrenvertretung zur Sicherstellung der Einhaltung der Fach-, Kosten-, Qualitäts-, Termin- und Sicherheitsvorgaben',
-      'Budgetierung, Mehrjahresplanung und Kostensteuerung für rund 25 Mio. CHF pro Jahr: 12 Mio. baulicher Unterhalt und 13 Mio. Investitionen gemäss Strassenbauprogramm',
+      'Budgetierung, Mehrjahresplanung und Kostensteuerung für rund 25 Mio. CHF pro Jahr: 12 Mio. baulicher Unterhalt und 13 Mio. Investitionen im Rahmen des kantonalen Strassenbauprogramms',
       'Projektierung und Realisierung des baulichen Unterhalts der Kantonsstrassen im Bezirk, dazu kleiner baulicher Unterhalt an Nationalstrassen',
       'Projektierung und Realisierung von Neu- und Ausbauprojekten auf Verbindungsstrassen im Bezirk',
       'Verantwortung für das gesamte Submissionswesen und Auftragsmanagement im Bezirk',

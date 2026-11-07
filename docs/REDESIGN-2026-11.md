@@ -159,7 +159,28 @@ Höhe der Startseite: Desktop rund 840 px kürzer, Handy rund 2’200 px kürzer
 | Testablauf | `npm run test:varianten` meldete Fehler nicht weiter (Rückgabewert des anschliessenden Builds); korrigiert, damit `test:alle` bei jedem roten Test scheitert | umgesetzt, geprüft |
 | CI auf Ubuntu 24.04 | **Bleibt.** 24.04 ist LTS mit Standard-Support bis 2029 und reproduzierbar; ein Playwright-Update nur für Ubuntu 26.04 bringt keinen Nutzen, aber Risiko für die lokale Testumgebung. Die Festlegung fällt weg, sobald Dependabot ein Playwright-Update vorschlägt, das 26.04 unterstützt | entschieden |
 | Volle E2E-Suite in der CI | **Nicht ergänzt.** Die CI prüft Unit-Tests sowie die Pages- und Swizzonic-Suiten (inkl. Barrierefreiheit aller Seiten); die volle Suite mit Zeit- und Layoutmessungen läuft lokal vor jedem Push. In der CI würde sie die Veröffentlichung bei langsamen Runnern unnötig blockieren | entschieden |
-| Live-Prüfung | Live-Seiten sind aus dieser Umgebung gesperrt (Netzwerkregel); Prüfung nur mit Freigabe der beiden Adressen möglich | offen |
+| Live-Prüfung | Nach Freigabe von tiefbauleitung.com, acortese-wq.github.io und www.gr.ch in der Umgebung geprüft: Inhalte und Funktionen live, alle Sicherheits-Header gesetzt, gzip aktiv (Startseite 36 KiB), robots.txt erlaubt Indexierung | umgesetzt, geprüft |
 
 Tests nach dem Nachtrag: 73 Unit-Tests, 301 E2E-Tests (3 gerätespezifisch übersprungen), 10 Variantentests (neu: Absenden
 gesperrt), 56 GitHub-Pages-Tests, 42 Swizzonic-Tests, alle bestanden.
+
+### Live-Messung tiefbauleitung.com (Lighthouse 13.5, Handy, simuliertes 4G)
+
+| Seite | Performance | Barrierefreiheit | Best Practices | SEO | FCP | LCP | CLS | TBT |
+|---|---|---|---|---|---|---|---|---|
+| Start | 99 | 100 | 100 | 100 | 1,3 s | 1,8 s | 0 | 20 ms |
+| Projekte | 99 | 100 | 100 | 100 | 1,1 s | 1,7 s | 0,057 | 20 ms |
+| Profil | 100 | 100 | 100 | 100 | 1,1 s | 1,1 s | 0,021 | 0 ms |
+| Gesetzesprüfung | 100 | 100 | 100 | 100 | 1,1 s | 1,2 s | 0,041 | 0 ms |
+
+Die verbliebenen kleinen Verschiebungen stammten live vom Wechsel der Ersatzschrift auf die Webschrift (Lighthouse:
+«Web font loaded»). Behoben mit massgleichen Ersatzschriften (`size-adjust`, `ascent-override`, `descent-override`,
+aus den Schriftdateien berechnet). Nachmessung mit echter Netzdrosselung (DevTools): Projekte 0,045 → 0,
+Gesetzesprüfung 0,041 → 0,001, Start und Profil 0.
+
+### Hinweis zu den Jahreswerten
+
+Anhang 8 des Strassenbauprogramms 2021–2024 weist für Bezirk 1 im baulichen Unterhalt der Kantonsstrassen
+10,2 bis 10,5 Mio. Fr. pro Jahr aus (Planung von 2020). Die Seite nennt 12 Mio. (Angabe aus der Praxis). Damit der Link
+nicht als Beleg genau dieser Zahl gelesen wird, heisst er jetzt «Rahmen» statt «Grundlage». Zu klären durch
+A. Cortese: Quelle der 12 und 13 Mio. (z. B. tatsächliche Budgets, inklusive Nationalstrassen).

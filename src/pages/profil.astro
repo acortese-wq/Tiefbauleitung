@@ -122,7 +122,7 @@ const werte = [
               <h3>{s.titel}</h3>
               <p class="org">{s.organisation}</p>
               <ul>{s.punkte.map((p) => <li>{p}</li>)}</ul>
-              {s.quelle && <p class="station-quelle">Grundlage: <a href={s.quelle.href} rel="noopener" target="_blank">{s.quelle.label}<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></p>}
+              {s.quelle && <p class="station-quelle">Rahmen: <a href={s.quelle.href} rel="noopener" target="_blank">{s.quelle.label}<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></p>}
             </div>
           </li>
         ))}

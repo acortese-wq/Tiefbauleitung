@@ -5,6 +5,25 @@
   Strukturelemente (Pos.-Nummern, Koten, Masslinien) stammen aus der Planungspraxis.
 */
 
+/* Ersatzschriften mit angeglichenen Massen: Bis die Webschrift geladen ist, nimmt der Text gleich viel Platz ein,
+   der Wechsel verschiebt nichts (Layoutverschiebung). Werte aus den Schriftdateien berechnet (Durchschnittsbreite
+   deutscher Fliesstext, hhea-Masse), Bezug Arial bzw. das massgleiche Liberation Sans. */
+@font-face {
+  font-family: 'Source Sans 3 Ersatz'; font-weight: 100 500;
+  src: local('Arial'), local('ArialMT'), local('Helvetica'), local('Liberation Sans');
+  size-adjust: 93.26%; ascent-override: 109.8%; descent-override: 42.89%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Source Sans 3 Ersatz'; font-weight: 600 900;
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Helvetica Bold'), local('Liberation Sans Bold');
+  size-adjust: 89.82%; ascent-override: 114%; descent-override: 44.53%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Barlow Condensed Ersatz'; font-weight: 100 900;
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Helvetica Bold'), local('Liberation Sans Bold');
+  size-adjust: 74.12%; ascent-override: 134.91%; descent-override: 26.98%; line-gap-override: 0%;
+}
+
 :root {
   /* Farben – dunkle Basis */
   --nacht: #0a0f14;
@@ -27,8 +46,8 @@
   --papier-akzent: #0a62a3;
 
   /* Typografie */
-  --f-display: 'Barlow Condensed', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
-  --f-text: 'Source Sans 3', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --f-display: 'Barlow Condensed', 'Barlow Condensed Ersatz', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+  --f-text: 'Source Sans 3', 'Source Sans 3 Ersatz', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
   /* Mindestgrössen auf dem Handy: Kartentexte 16 px, Hilfs- und Quellentexte 15 px (Desktop unverändert) */

@@ -237,9 +237,9 @@ const werte = [
   .bp-text { display: grid; gap: 14px; }
   .bp-text p { margin: 0; color: var(--text-ruhig); font-size: 1.06rem; line-height: 1.65; }
   .bp-text p:first-child { color: var(--text); font-size: var(--s-1); line-height: 1.5; }
-  .bp-schwerpunkte { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .bp-schwerpunkte { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--raum-3); }
   .bp-schwerpunkte a {
-    position: relative; display: grid; gap: 4px; align-content: start; height: 100%; padding: 12px 34px 12px 14px; min-height: 44px;
+    position: relative; display: grid; gap: 4px; align-content: start; height: 100%; padding: var(--raum-3) var(--raum-6) var(--raum-3) var(--raum-3); min-height: 44px;
     border: 1px solid var(--linie-hell); border-radius: var(--radius); background: var(--tiefe);
     color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s;
   }

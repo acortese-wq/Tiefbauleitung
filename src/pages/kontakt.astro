@@ -128,7 +128,7 @@ const fehlerIds = Object.keys(fehler);
 
             <div class="feld">
               <label for="feld-anliegen">Anliegen <span aria-hidden="true">*</span></label>
-              <select id="feld-anliegen" name="anliegen" required aria-invalid={fehler.anliegen ? 'true' : undefined} aria-describedby={fehler.anliegen ? 'f-anliegen' : undefined}>
+              <select class="eingabe" id="feld-anliegen" name="anliegen" required aria-invalid={fehler.anliegen ? 'true' : undefined} aria-describedby={fehler.anliegen ? 'f-anliegen' : undefined}>
                 <option value="">Bitte wählen</option>
                 {ANLIEGEN.map((a) => <option value={a} selected={werte.anliegen === a}>{a}</option>)}
               </select>
@@ -136,22 +136,22 @@ const fehlerIds = Object.keys(fehler);
             </div>
             <div class="feld">
               <label for="feld-name">Name <span aria-hidden="true">*</span></label>
-              <input id="feld-name" name="name" type="text" required maxlength="100" autocomplete="name" value={werte.name} aria-invalid={fehler.name ? 'true' : undefined} aria-describedby={fehler.name ? 'f-name' : undefined} />
+              <input class="eingabe" id="feld-name" name="name" type="text" required maxlength="100" autocomplete="name" value={werte.name} aria-invalid={fehler.name ? 'true' : undefined} aria-describedby={fehler.name ? 'f-name' : undefined} />
               {fehler.name && <p class="feld-fehler" id="f-name">{fehler.name}</p>}
             </div>
             <div class="feld">
               <label for="feld-email">Geschäftliche E-Mail <span aria-hidden="true">*</span></label>
-              <input id="feld-email" name="email" type="email" required maxlength="200" autocomplete="email" value={werte.email} aria-invalid={fehler.email ? 'true' : undefined} aria-describedby={fehler.email ? 'f-email' : undefined} />
+              <input class="eingabe" id="feld-email" name="email" type="email" required maxlength="200" autocomplete="email" value={werte.email} aria-invalid={fehler.email ? 'true' : undefined} aria-describedby={fehler.email ? 'f-email' : undefined} />
               {fehler.email && <p class="feld-fehler" id="f-email">{fehler.email}</p>}
             </div>
             <div class="feld">
               <label for="feld-firma">Unternehmen <span class="optional">(optional)</span></label>
-              <input id="feld-firma" name="firma" type="text" maxlength="120" autocomplete="organization" value={werte.firma} aria-invalid={fehler.firma ? 'true' : undefined} />
+              <input class="eingabe" id="feld-firma" name="firma" type="text" maxlength="120" autocomplete="organization" value={werte.firma} aria-invalid={fehler.firma ? 'true' : undefined} />
               {fehler.firma && <p class="feld-fehler">{fehler.firma}</p>}
             </div>
             <div class="feld">
               <label for="feld-nachricht">Nachricht <span aria-hidden="true">*</span></label>
-              <textarea id="feld-nachricht" name="nachricht" required minlength="20" maxlength="4000" rows="7" aria-invalid={fehler.nachricht ? 'true' : undefined} aria-describedby={fehler.nachricht ? 'f-nachricht' : undefined}>{werte.nachricht}</textarea>
+              <textarea class="eingabe" id="feld-nachricht" name="nachricht" required minlength="20" maxlength="4000" rows="7" aria-invalid={fehler.nachricht ? 'true' : undefined} aria-describedby={fehler.nachricht ? 'f-nachricht' : undefined}>{werte.nachricht}</textarea>
               {fehler.nachricht && <p class="feld-fehler" id="f-nachricht">{fehler.nachricht}</p>}
             </div>
             <div class="feld feld-check">
@@ -161,7 +161,7 @@ const fehlerIds = Object.keys(fehler);
               </label>
               {fehler.einwilligung && <p class="feld-fehler">{fehler.einwilligung}</p>}
             </div>
-            <button class="btn" type="submit">Nachricht senden</button>
+            <button class="btn" type="submit" data-senden>Nachricht senden</button>
             <p class="pflicht">* Pflichtfeld</p>
           </form>
         ) : zustand !== 'gesendet' && (
@@ -179,6 +179,25 @@ const fehlerIds = Object.keys(fehler);
   </section>
 </Basis>
 
+<script>
+  // Doppeltes Absenden verhindern: Knopf zeigt «wird gesendet» und ist gesperrt, bis die Antwort kommt.
+  // Beim Zurückblättern (bfcache) wieder freigeben.
+  const knopf = document.querySelector<HTMLButtonElement>('[data-senden]');
+  if (knopf) {
+    const text = knopf.textContent;
+    knopf.form?.addEventListener('submit', () => {
+      knopf.setAttribute('aria-busy', 'true');
+      knopf.textContent = 'Nachricht wird gesendet …';
+      knopf.disabled = true;
+    });
+    window.addEventListener('pageshow', () => {
+      knopf.removeAttribute('aria-busy');
+      knopf.textContent = text;
+      knopf.disabled = false;
+    });
+  }
+</script>
+
 <style>
   .kontakt-abschnitt { border-top: 0; padding-top: 8px; }
   .kontakt-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 24px; align-items: start; }
@@ -188,25 +207,17 @@ const fehlerIds = Object.keys(fehler);
   .kontakt-fakten div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--linie); }
   .kontakt-fakten dt { font-family: var(--f-mono); font-size: 0.75rem; color: var(--text-ruhig); padding-top: 2px; }
   .kontakt-fakten dd { margin: 0; }
-  .formular { display: grid; gap: 18px; padding: 24px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); }
-  .feld { display: grid; gap: 6px; }
+  .formular { display: grid; gap: var(--raum-4); padding: var(--raum-5); border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); }
+  .feld { display: grid; gap: var(--raum-2); }
   .feld label { font-weight: 600; }
   .optional { font-weight: 400; color: var(--text-ruhig); }
-  .feld input, .feld select, .feld textarea {
-    font: inherit; color: var(--text); background: var(--nacht); border: 1px solid var(--linie-hell);
-    border-radius: var(--radius); padding: 10px 12px; min-height: 46px; width: 100%;
-  }
-  .feld textarea { resize: vertical; }
-  .feld input:focus, .feld select:focus, .feld textarea:focus { border-color: var(--eis); outline: 2px solid var(--eis); outline-offset: 1px; }
-  .feld [aria-invalid='true'] { border-color: #ff9b8f; }
-  .feld-fehler { color: #ffb3a9; font-size: 0.92rem; }
   .feld-check { grid-template-columns: 22px minmax(0, 1fr); align-items: start; column-gap: 10px; }
   .feld-check input { width: 20px; height: 20px; min-height: 0; margin-top: 3px; accent-color: var(--eis); }
   .feld-check label { font-weight: 400; color: var(--text-ruhig); }
   .feld-check .feld-fehler { grid-column: 2; }
   .honig { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
   .pflicht { font-size: 0.85rem; color: var(--text-ruhig); }
-  .meldung { padding: 18px 20px; border-radius: var(--radius); margin-bottom: 18px; display: grid; gap: 8px; }
+  .meldung { padding: var(--raum-4) var(--raum-5); border-radius: var(--radius); margin-bottom: var(--raum-4); display: grid; gap: var(--raum-2); }
   .meldung h2 { font-size: 1.4rem; }
   .meldung-ok { border: 1px solid #8fe0a8; background: rgb(143 224 168 / 0.08); }
   .meldung-fehler { border: 1px solid #ff9b8f; background: rgb(255 155 143 / 0.08); }

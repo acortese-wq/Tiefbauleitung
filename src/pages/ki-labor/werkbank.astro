@@ -75,13 +75,13 @@ const vorschau = (id: string) => {
                       <label>
                         <span class="wb-label">{f.label}{f.pflicht && <span class="wb-pflicht" title="Pflichtangabe"> *</span>}</span>
                         {f.typ === 'select' ? (
-                          <select name={f.name}>
+                          <select class="eingabe" name={f.name}>
                             {f.optionen?.map((o) => <option value={o.wert} selected={o.wert === f.vorgabe}>{o.label}</option>)}
                           </select>
                         ) : f.typ === 'text' ? (
-                          <input type="text" name={f.name} placeholder={f.beispiel} autocomplete="off" required={f.pflicht} />
+                          <input class="eingabe" type="text" name={f.name} placeholder={f.beispiel} autocomplete="off" required={f.pflicht} />
                         ) : (
-                          <textarea name={f.name} rows={f.typ === 'tabelle' ? 7 : 4} placeholder={f.typ === 'tabelle' ? 'Pos → Text → Menge → Einheit → EP → Betrag' : f.beispiel} spellcheck={f.typ !== 'tabelle'} required={f.pflicht}></textarea>
+                          <textarea class="eingabe" name={f.name} rows={f.typ === 'tabelle' ? 7 : 4} placeholder={f.typ === 'tabelle' ? 'Pos → Text → Menge → Einheit → EP → Betrag' : f.beispiel} spellcheck={f.typ !== 'tabelle'} required={f.pflicht}></textarea>
                         )}
                         {f.hilfe && <small>{f.hilfe}</small>}
                       </label>
@@ -350,7 +350,7 @@ const vorschau = (id: string) => {
   .wb-kopf h3 { font-size: var(--s-2); margin-top: 4px; }
   .wb-kopf p:not(.label) { color: var(--text-ruhig); margin-top: 6px; max-width: 68ch; }
   .wb-spalten { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; margin-top: 20px; align-items: start; }
-  .wb-spalte { border: 1px solid var(--linie); border-radius: 10px; background: var(--nacht); padding: 14px; min-width: 0; }
+  .wb-spalte { border: 1px solid var(--linie); border-radius: 10px; background: var(--nacht); padding: 14px; min-width: 0; --eingabe-flaeche: var(--tiefe); }
   .wb-spaltenkopf { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
   .wb-spaltenkopf h4 { font-size: 1.05rem; margin: 0; }
   .wb-nr { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--eis); color: var(--eis); font: 600 0.8rem var(--f-mono); }
@@ -364,14 +364,7 @@ const vorschau = (id: string) => {
   .wb-label, .wb-feld legend { font: 500 0.8rem var(--f-mono); color: var(--text-ruhig); }
   .wb-pflicht { color: var(--signal); }
   .wb-feld small { font-size: 0.8rem; color: var(--text-ruhig); }
-  .wb-feld input[type='text'], .wb-feld textarea, .wb-feld select {
-    font: inherit; font-size: 0.93rem; min-height: 44px; padding: 8px 10px; border-radius: 8px; width: 100%;
-    border: 1px solid var(--linie-hell); background: var(--tiefe); color: var(--text);
-  }
-  .wb-feld textarea { resize: vertical; line-height: 1.45; }
   .typ-tabelle textarea { font: 0.8rem/1.45 var(--f-mono); white-space: pre; overflow-x: auto; }
-  .wb-feld input::placeholder, .wb-feld textarea::placeholder { color: var(--text-ruhig); opacity: 0.75; }
-  .wb-feld :is(input, textarea, select):focus-visible { outline: 2px solid var(--eis); outline-offset: 1px; }
   .wb-feld fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 4px; }
   .wb-check { display: flex !important; grid-template-columns: none; align-items: center; gap: 8px; min-height: 44px; font-size: 0.92rem; cursor: pointer; }
   .wb-check input { width: 18px; height: 18px; accent-color: var(--eis); flex: none; }

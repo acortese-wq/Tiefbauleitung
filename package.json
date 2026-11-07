@@ -18,7 +18,7 @@
     "check": "astro check",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "test:varianten": "PUBLIC_CONTACT_FORM=true SHOW_DRAFTS=true astro build && pagefind --site dist/client && playwright test -c playwright.varianten.config.ts; npm run build:fast",
+    "test:varianten": "PUBLIC_CONTACT_FORM=true SHOW_DRAFTS=true astro build && pagefind --site dist/client && playwright test -c playwright.varianten.config.ts; status=$?; npm run build:fast && exit $status",
     "test:alle": "npm run test && npm run build && npm run test:e2e && npm run test:varianten",
     "audit": "npm audit",
     "build:pages": "DEPLOY_ZIEL=github-pages astro build && pagefind --site dist && touch dist/.nojekyll",

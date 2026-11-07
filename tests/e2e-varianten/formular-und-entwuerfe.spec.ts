@@ -85,3 +85,18 @@ test('Mit sichtbaren Beiträgen erscheint «Wissen» in Navigation und Startseit
   await expect(page.getByRole('navigation', { name: 'Hauptnavigation' }).getByRole('link', { name: 'Wissen' })).toBeAttached();
   await expect(page.locator('#wissen-titel')).toBeVisible();
 });
+
+test('Absenden: Knopf zeigt «wird gesendet» und ist gegen doppeltes Absenden gesperrt', async ({ page }) => {
+  await page.goto('/kontakt/');
+  // Alle Felder nutzen die gemeinsame Feldkomponente
+  await expect(page.locator('form.formular .eingabe')).toHaveCount(5);
+  // Seitenwechsel im Test unterdrücken, damit der Zustand des Knopfs direkt nach dem Absenden lesbar bleibt;
+  // die Seite reagiert trotzdem auf das submit-Ereignis.
+  await page.evaluate(() => window.addEventListener('submit', (e) => e.preventDefault(), { capture: true }));
+  await page.getByLabel(/^Name/).fill('Maria Muster');
+  await page.getByRole('button', { name: 'Nachricht senden' }).click();
+  const knopf = page.locator('[data-senden]');
+  await expect(knopf).toHaveAttribute('aria-busy', 'true');
+  await expect(knopf).toBeDisabled();
+  await expect(knopf).toHaveText('Nachricht wird gesendet …');
+});

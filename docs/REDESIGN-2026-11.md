@@ -147,3 +147,19 @@ Höhe der Startseite: Desktop rund 840 px kürzer, Handy rund 2’200 px kürzer
   Feldkomponente lohnt sich bei der nächsten grösseren Formularänderung.
 - Werkzeugkasten auf dem Handy (11 Karten untereinander) ist lang; eine kompaktere Darstellung wäre der nächste Schritt.
 - Ubuntu 24.04 in der CI ist eine Übergangslösung bis zu einem Playwright-Update.
+
+## 5. Nachtrag: offene Punkte abgearbeitet
+
+| Punkt | Entscheid und Umsetzung | Status |
+|---|---|---|
+| Kartenabstände | Projekt-, Kompetenz-, Perspektiven-, Werkzeug-, Radar-, Such-, Formular- und Profilkarten sowie Raster auf `--raum-*` umgestellt (24 px Innenabstand, 16 px Raster, 12 px kleine Lücken) | umgesetzt, getestet |
+| Gemeinsame Feldkomponente | `.eingabe` in `global.css`; Kontakt, Werkbank, Gesetzesprüfung, Suche, Quiz-Zertifikat und Nutzenrechner nutzen sie, die doppelten Feldstile in sechs Komponenten sind entfernt. Bildvergleich vorher/nachher: gleiche Gestaltung, Schrift einheitlich 16 px | umgesetzt, getestet |
+| Werkzeugkasten auf dem Handy | Kennzeichen «Eigenentwicklung» entfällt im Werkzeugkasten (die Überschrift sagt es bereits), nur Unterscheidendes bleibt (Gruppe auf Kompetenzseiten, «Privat», Auszeichnung); Karten auf dem Handy mit 16 statt 24 px Innenabstand | umgesetzt, getestet |
+| Button-Zustände im Einsatz | Kontaktformular: «Nachricht wird gesendet …», gesperrt gegen doppeltes Absenden, nach Zurückblättern wieder frei. Gesetzesprüfung: Beispiel und Leeren gesperrt, solange eine PDF gelesen wird | umgesetzt, getestet |
+| Testablauf | `npm run test:varianten` meldete Fehler nicht weiter (Rückgabewert des anschliessenden Builds); korrigiert, damit `test:alle` bei jedem roten Test scheitert | umgesetzt, geprüft |
+| CI auf Ubuntu 24.04 | **Bleibt.** 24.04 ist LTS mit Standard-Support bis 2029 und reproduzierbar; ein Playwright-Update nur für Ubuntu 26.04 bringt keinen Nutzen, aber Risiko für die lokale Testumgebung. Die Festlegung fällt weg, sobald Dependabot ein Playwright-Update vorschlägt, das 26.04 unterstützt | entschieden |
+| Volle E2E-Suite in der CI | **Nicht ergänzt.** Die CI prüft Unit-Tests sowie die Pages- und Swizzonic-Suiten (inkl. Barrierefreiheit aller Seiten); die volle Suite mit Zeit- und Layoutmessungen läuft lokal vor jedem Push. In der CI würde sie die Veröffentlichung bei langsamen Runnern unnötig blockieren | entschieden |
+| Live-Prüfung | Live-Seiten sind aus dieser Umgebung gesperrt (Netzwerkregel); Prüfung nur mit Freigabe der beiden Adressen möglich | offen |
+
+Tests nach dem Nachtrag: 73 Unit-Tests, 301 E2E-Tests (3 gerätespezifisch übersprungen), 10 Variantentests (neu: Absenden
+gesperrt), 56 GitHub-Pages-Tests, 42 Swizzonic-Tests, alle bestanden.

@@ -15,7 +15,7 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
 
       <label class="gp-feld">
         <span class="gp-label">Ihre Frage <span class="gp-pflicht" title="Pflichtangabe">*</span></span>
-        <textarea rows="4" data-frage placeholder="z. B. Braucht es für Grabarbeiten im Strassengebiet eine Bewilligung?" spellcheck="true"></textarea>
+        <textarea class="eingabe" rows="4" data-frage placeholder="z. B. Braucht es für Grabarbeiten im Strassengebiet eine Bewilligung?" spellcheck="true"></textarea>
       </label>
       <div class="gp-beispielfragen">
         <p class="gp-label">Beispielfragen</p>
@@ -27,13 +27,13 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
       <div class="gp-ort">
         <label class="gp-feld">
           <span class="gp-label">Kanton</span>
-          <select data-kanton>
+          <select class="eingabe" data-kanton>
             {KANTONE.map((k) => <option value={k.kurz} selected={k.kurz === 'GR'}>{k.name}</option>)}
           </select>
         </label>
         <label class="gp-feld">
           <span class="gp-label">Gemeinde</span>
-          <input type="text" data-gemeinde placeholder="z. B. Chur" autocomplete="address-level2" />
+          <input class="eingabe" type="text" data-gemeinde placeholder="z. B. Chur" autocomplete="address-level2" />
         </label>
       </div>
 
@@ -48,7 +48,7 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
         <summary>Text statt PDF einfügen</summary>
         <label class="gp-feld">
           <span class="gp-label">Gesetzestext, z. B. aus Fedlex kopiert</span>
-          <textarea rows="6" data-text spellcheck="false"></textarea>
+          <textarea class="eingabe" rows="6" data-text spellcheck="false"></textarea>
         </label>
         <button type="button" class="btn btn-ghost" data-text-uebernehmen>Text übernehmen</button>
       </details>
@@ -79,7 +79,7 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
       </div>
       <label class="gp-feld">
         <span class="gp-label">Angehängter Gesetzestext</span>
-        <select data-umfang>
+        <select class="eingabe" data-umfang>
           <option value="fund" selected>Nur Fundstellen (empfohlen)</option>
           <option value="ganz">Ganze Erlasse, bis 24’000 Zeichen</option>
         </select>
@@ -395,6 +395,8 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
       liest = an;
       ablage.setAttribute('aria-busy', String(an));
       datei.disabled = an;
+      // Beispiel und Leeren würden die laufende Übernahme durcheinanderbringen
+      w.querySelectorAll<HTMLButtonElement>('[data-beispiel], [data-leeren]').forEach((b) => (b.disabled = an));
       if (!an) ablageText.innerHTML = ablageStandard;
     };
 
@@ -527,13 +529,6 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
   .gp-feld { display: grid; gap: 4px; margin-bottom: 12px; }
   .gp-label { font: 500 0.8rem var(--f-mono); color: var(--text-ruhig); }
   .gp-pflicht { color: var(--signal); }
-  .gp-feld :is(input, textarea, select) {
-    font: inherit; font-size: 0.93rem; min-height: 44px; padding: 8px 10px; border-radius: 8px; width: 100%;
-    border: 1px solid var(--linie-hell); background: var(--nacht); color: var(--text);
-  }
-  .gp-feld textarea { resize: vertical; line-height: 1.45; }
-  .gp-feld :is(input, textarea, select):focus-visible { outline: 2px solid var(--eis); outline-offset: 1px; }
-  .gp-feld ::placeholder { color: var(--text-ruhig); opacity: 0.75; }
   .gp-ort { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
 
   .gp-beispielfragen { margin: -2px 0 14px; }

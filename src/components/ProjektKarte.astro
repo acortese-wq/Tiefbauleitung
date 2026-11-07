@@ -66,10 +66,10 @@ const d = projekt.data;
 </a>
 
 <style>
-  .projekt-karte { padding: 0 0 24px; overflow: hidden; }
-  .projekt-karte > :not(.projekt-bild) { margin-inline: 24px; }
-  .projekt-bild { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--panel); border-bottom: 1px solid var(--linie); margin-bottom: 8px; }
-  .projekt-bild img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .5s; }
+  .projekt-karte { padding: 0 0 var(--raum-5); overflow: hidden; }
+  .projekt-karte > :not(.projekt-bild) { margin-inline: var(--raum-5); }
+  .projekt-bild { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--panel); border-bottom: 1px solid var(--linie); margin-bottom: var(--raum-2); }
+  .projekt-bild img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform var(--dauer-lang) var(--kurve); }
   a.projekt-karte:hover .projekt-bild img { transform: scale(1.03); }
   .projekt-fakten { margin-block: 4px 2px; display: grid; gap: 6px; font-size: max(0.9rem, var(--min-karte)); }
   .projekt-fakten div { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px; }
@@ -78,7 +78,7 @@ const d = projekt.data;
   :global(.band-hell) .projekt-fakten dt { color: var(--papier-ruhig); }
   .projekt-bild-schema { display: grid; place-items: center; }
   .projekt-bild-schema svg { width: 90%; }
-  .projekt-bild-zeichnung { padding: 12px 18px; }
+  .projekt-bild-zeichnung { padding: var(--raum-3) var(--raum-4); }
   .projekt-bild-zeichnung :global(svg) { width: 100%; height: 100%; }
   .ps-doc { fill: none; stroke: var(--text-ruhig); stroke-width: 1.4; }
   .ps-zeile { stroke: var(--linie-hell); stroke-width: 2; stroke-linecap: round; }

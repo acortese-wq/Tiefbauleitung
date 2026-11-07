@@ -27,11 +27,11 @@ Zeilenlänge: Fliesstext höchstens 68 Zeichen (`main p`, `.prosa`). Zeilenhöhe
 
 | Komponente | Klassen | Zustände |
 |---|---|---|
-| Button | `.btn`, `.btn-ghost`, `.btn-klein` | Hover (hellere Fläche), Fokus (Signalrahmen), Gedrückt (`scale .97`), Deaktiviert (`:disabled` oder `aria-disabled`, 45 % Deckkraft), Lädt (`aria-busy="true"`, drehender Ring). Mindesthöhe 48 px, klein 40 px, auf Touch 44 px. Pro Bereich eine Primärhandlung. |
+| Button | `.btn`, `.btn-ghost`, `.btn-klein` | Hover (hellere Fläche), Fokus (Signalrahmen), Gedrückt (`scale .97`), Deaktiviert (`:disabled` oder `aria-disabled`, 45 % Deckkraft), Lädt (`aria-busy="true"`, drehender Ring). Mindesthöhe 48 px, klein 40 px, auf Touch 44 px. Pro Bereich eine Primärhandlung. Eingesetzt: Kontaktformular (lädt und gesperrt beim Absenden), Gesetzesprüfung (Beispiel und Leeren gesperrt, solange eine PDF gelesen wird). |
 | Karte | `.karte`, als Link `a.karte` | Hover hebt um 2 px an und zeigt `--schatten-2`, Gedrückt setzt zurück, Fokus mit Rahmen in Eisblau |
 | Chip / Badge | `.chip`, `.chips`, `.badge-*` | Chip als Link mit Hover-Rahmen; Badges kennzeichnen Projektart mit Text |
 | Hinweis | `.hinweis` (Warnung), `.hinweis-info`, `.hinweis-erfolg`, `.hinweis-fehler` | Art steht immer auch im Text, z. B. `<strong>Fehler:</strong>` |
-| Eingabefeld | Komponenten-Klassen (`.gp-feld`, `.wb-feld`, `.feld` …) | global ergänzt: Hover-Rahmen, Fehler (`aria-invalid="true"`, roter Rahmen plus Fehlertext mit `aria-describedby`), Deaktiviert (50 %). Auf Handys mindestens 16 px Schrift (kein Zoom). |
+| Eingabefeld | `.eingabe` an `input`, `select`, `textarea`; Fläche über `--eingabe-flaeche` (Standard `--nacht`, in dunklen Spalten `--tiefe`); Fehlertext `.feld-fehler` | 16 px Schrift, 44 px hoch, Hover-Rahmen, Fokus in Eisblau, Fehler (`aria-invalid="true"`, roter Rahmen plus Fehlertext mit `aria-describedby`), Deaktiviert (50 %). Beschriftungen bleiben komponentenspezifisch (Formular fett, Werkzeuge in Mono). |
 | Navigation | Kopfzeile `.nav-gross`, Menü `.nav-klein` | aktive Seite `aria-current="page"` mit Eisfläche; «Kontakt» als einzige Schaltfläche; Menü unter 960 px, schliesst mit Esc, Klick daneben und Linkwahl |
 | Brotkrumen | `Seitenkopf` mit `krumen` | sichtbar und als BreadcrumbList aus derselben Quelle |
 | Dialog | Bildzoom | schliesst mit ×, Esc, Klick daneben; Fokus kehrt zum Auslöser zurück |

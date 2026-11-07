@@ -141,7 +141,7 @@ const daten = JSON.stringify(quizFragen).replace(/</g, '\\u003c');
             <p>Bestanden. Ihr Zertifikat können Sie als PDF speichern oder drucken.</p>
             <label class="qz-feld">
               <span>Name auf dem Zertifikat (optional, wird nicht gespeichert)</span>
-              <input type="text" name="name" autocomplete="name" maxlength="60" data-zert-name />
+              <input class="eingabe" type="text" name="name" autocomplete="name" maxlength="60" data-zert-name />
             </label>
             <button class="btn" type="button" data-zert-drucken>Zertifikat als PDF</button>
             <p class="qz-hinweis-klein">Im Druckdialog «Als PDF speichern» wählen.</p>
@@ -635,7 +635,6 @@ const daten = JSON.stringify(quizFragen).replace(/</g, '\\u003c');
   .qz-zert-box > div { display: grid; gap: 12px; }
   .qz-feld { display: grid; gap: 6px; }
   .qz-feld span { font: 500 0.8rem var(--f-mono); color: var(--text-ruhig); }
-  .qz-feld input { font: inherit; min-height: 44px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--linie-hell); background: var(--nacht); color: var(--text); }
   .qz-zert-box .btn { justify-self: start; }
   .qz-hinweis-klein { font-size: max(0.85rem, var(--min-hilfe)); color: var(--text-ruhig); }
   .qz-durchsicht { border-top: 1px solid var(--linie); padding-top: 12px; }

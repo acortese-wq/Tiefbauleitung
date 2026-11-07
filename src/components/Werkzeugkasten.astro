@@ -21,11 +21,14 @@ const Kopf = kompetenz ? 'h3' : 'h4';
         <ul class="wk-liste">
           {g.liste.map((w) => (
             <li class="karte wk-karte">
-              <span class="wk-meta">
-                <span class="label">{kompetenz ? w.gruppe : 'Eigenentwicklung'}</span>
-                {w.privat && <span class="badge badge-persoenlich">Privat</span>}
-                {w.auszeichnung && <span class="badge badge-auszeichnung">{w.auszeichnung}</span>}
-              </span>
+              {/* Im ganzen Werkzeugkasten sagt die Überschrift schon «eigene Werkzeuge»: Kennzeichen nur, wo es etwas unterscheidet */}
+              {(kompetenz || w.privat || w.auszeichnung) && (
+                <span class="wk-meta">
+                  {kompetenz && <span class="label">{w.gruppe}</span>}
+                  {w.privat && <span class="badge badge-persoenlich">Privat</span>}
+                  {w.auszeichnung && <span class="badge badge-auszeichnung">{w.auszeichnung}</span>}
+                </span>
+              )}
               <Kopf class="wk-name">{w.name}</Kopf>
               <p>{w.zweck}</p>
               {w.zusatz && <p class="wk-zusatz">{w.zusatz}</p>}
@@ -39,15 +42,17 @@ const Kopf = kompetenz ? 'h3' : 'h4';
 )}
 
 <style>
-  .werkzeugkasten { display: grid; gap: 32px; }
-  .wk-gruppe-titel { font-size: 1.4rem; margin-bottom: 14px; }
-  .wk-liste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
-  .wk-karte { padding: 20px 22px; display: flex; flex-direction: column; gap: 8px; }
-  .wk-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .werkzeugkasten { display: grid; gap: var(--raum-6); }
+  .wk-gruppe-titel { font-size: 1.4rem; margin-bottom: var(--raum-3); }
+  .wk-liste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--raum-3); }
+  .wk-karte { padding: var(--raum-5); display: flex; flex-direction: column; gap: var(--raum-2); }
+  /* Handy: kompakter, damit elf Werkzeuge nicht zu einer langen Kartenstrecke werden */
+  @media (max-width: 640px) { .wk-karte { padding: var(--raum-4); gap: var(--raum-1); } .wk-liste { gap: var(--raum-2); } }
+  .wk-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--raum-2); }
   .wk-name { font: 600 1.25rem var(--f-display); letter-spacing: 0.01em; margin: 0; }
   .wk-karte p { margin: 0; color: var(--text-ruhig); font-size: max(0.95rem, var(--min-karte)); }
   .wk-zusatz { font-family: var(--f-mono); font-size: 0.75rem !important; color: var(--eis) !important; }
   .badge-auszeichnung { color: var(--signal); }
-  .wk-link { margin-top: auto; padding-top: 4px; font-weight: 600; text-decoration: none; }
+  .wk-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: auto; font-weight: 600; text-decoration: none; }
   .wk-link:hover { text-decoration: underline; }
 </style>

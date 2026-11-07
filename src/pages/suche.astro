@@ -9,7 +9,7 @@ import Seitenkopf from '../components/Seitenkopf.astro';
       <form class="such-form" role="search" action="/suche/" method="get" data-suche>
         <label for="suchbegriff" class="label">Suchbegriff</label>
         <div class="such-zeile">
-          <input id="suchbegriff" name="q" type="search" autocomplete="off" minlength="2" maxlength="80" placeholder="z. B. Abrechnung, FTTH, KI-Agent" />
+          <input class="eingabe" id="suchbegriff" name="q" type="search" autocomplete="off" minlength="2" maxlength="80" placeholder="z. B. Abrechnung, FTTH, KI-Agent" />
           <button class="btn" type="submit">Suchen</button>
         </div>
       </form>
@@ -104,14 +104,10 @@ import Seitenkopf from '../components/Seitenkopf.astro';
   .such-abschnitt { border-top: 0; padding-top: 8px; }
   .such-form { display: grid; gap: 8px; max-width: 720px; }
   .such-zeile { display: flex; gap: 10px; flex-wrap: wrap; }
-  .such-zeile input {
-    flex: 1 1 260px; min-height: 48px; padding: 10px 14px; border-radius: var(--radius); font: inherit;
-    background: var(--tiefe); color: var(--text); border: 1px solid var(--linie-hell);
-  }
-  .such-zeile input:focus { border-color: var(--eis); outline: 2px solid var(--eis); outline-offset: 1px; }
+  .such-zeile .eingabe { flex: 1 1 260px; width: auto; min-height: 48px; --eingabe-flaeche: var(--tiefe); }
   .such-status { margin-top: 18px; font-family: var(--f-mono); font-size: 0.82rem; color: var(--text-ruhig); }
-  .such-ergebnisse { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; max-width: 760px; }
-  .such-ergebnisse :global(li) { padding: 16px 18px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); }
+  .such-ergebnisse { list-style: none; margin: var(--raum-4) 0 0; padding: 0; display: grid; gap: var(--raum-3); max-width: 760px; }
+  .such-ergebnisse :global(li) { padding: var(--raum-4) var(--raum-5); border: 1px solid var(--linie); border-radius: var(--radius); background: var(--tiefe); }
   .such-ergebnisse :global(a) { font: 600 1.3rem var(--f-display); text-decoration: none; }
   .such-ergebnisse :global(p) { color: var(--text-ruhig); margin-top: 6px; }
   .such-ergebnisse :global(mark) { background: var(--eis-flaeche); color: var(--eis-stark); padding: 0 2px; }

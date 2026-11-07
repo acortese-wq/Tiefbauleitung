@@ -543,6 +543,8 @@ const zitatNetzbau = zeugnis('interessen');
   .wk-teaser h3 { font-size: 1.5rem; margin-bottom: 6px; }
   .wk-teaser p { margin: 0; color: var(--text-ruhig); max-width: 70ch; }
   .wk-namen { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  /* Lange Werkzeugnamen auf sehr schmalen Handys umbrechen statt über den Rand zu ragen */
+  .wk-namen .chip { white-space: normal; max-width: 100%; }
   .wk-teaser-link { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; justify-self: start; }
   .wk-teaser-link:hover { text-decoration: underline; }
   .foto-reihe :global(.bildband) { margin-bottom: 0; }

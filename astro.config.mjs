@@ -146,7 +146,8 @@ export default defineConfig({
   adapter: statisch ? undefined : node({ mode: 'standalone', bodySizeLimit: 32 * 1024 }),
   trailingSlash: 'ignore',
   integrations,
-  build: { inlineStylesheets: 'never' },
+  // CSS direkt in die Seite: keine blockierenden Anfragen vor dem ersten Bild. Astro trägt die Prüfsummen in die CSP ein.
+  build: { inlineStylesheets: 'always' },
   // Module-Worker (pdf.js in der Gesetzesprüfung) als .js ausgeben, damit jeder Server den richtigen MIME-Typ sendet
   vite: { build: { assetsInlineLimit: 0 }, worker: { format: 'es' } },
   security: {

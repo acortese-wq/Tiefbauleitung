@@ -245,15 +245,16 @@ const werte = [
   }
   .bp-schwerpunkte a:hover { border-color: var(--eis); transform: translateY(-1px); }
   .bp-schwerpunkte a:focus-visible { outline: 2px solid var(--eis); outline-offset: 2px; }
-  .bp-schwerpunkte strong { font-weight: 600; font-size: 0.98rem; line-height: 1.3; }
+  .bp-schwerpunkte strong { font-weight: 600; font-size: 0.98rem; line-height: 1.3; hyphens: auto; overflow-wrap: break-word; }
   .bp-schwerpunkte span { color: var(--text-ruhig); font-size: 0.86rem; line-height: 1.4; }
   .bp-schwerpunkte .bp-pfeil { position: absolute; right: 12px; top: 12px; color: var(--eis); font-family: var(--f-mono); font-size: 1rem; }
-  @media (max-width: 520px) { .bp-schwerpunkte { grid-template-columns: 1fr 1fr; } .bp-schwerpunkte span:not(.bp-pfeil) { font-size: 0.8rem; } }
+  @media (max-width: 520px) { .bp-schwerpunkte { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bp-schwerpunkte span:not(.bp-pfeil) { font-size: 0.8rem; } }
   @media (prefers-reduced-motion: reduce) { .bp-schwerpunkte a { transition: none; } .bp-schwerpunkte a:hover { transform: none; } }
   .bp-arbeitsweise { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
   .bp-arbeitsweise li { position: relative; padding-left: 22px; color: var(--text); }
   .bp-arbeitsweise li::before { content: ''; position: absolute; left: 2px; top: 0.6em; width: 10px; height: 2px; background: var(--eis); }
-  @media (max-width: 860px) { .bp-raster { grid-template-columns: 1fr; } }
+  /* minmax(0, …): lange Wörter in den Kacheln dürfen das Raster nicht über den Bildschirm hinaus dehnen */
+  @media (max-width: 860px) { .bp-raster { grid-template-columns: minmax(0, 1fr); } }
   .liste-titel:not(:first-child) { margin-top: 28px; }
   .tabelle { margin: 0; border-top: 1px solid var(--papier-linie); }
   .tabelle div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--papier-linie); }

@@ -103,10 +103,13 @@ test('Ohne veröffentlichte Beiträge verlinkt die Startseite keinen leeren Wiss
 test('Startseite nennt Zielgruppen und zeigt Fotos der Referenzobjekte', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.held-zielgruppe')).toContainText('Bauherren');
+  // Startseite: eine Reihe mit vier Fotos, Fotonachweis einmal unter dem Bildband; alle Fotos auf der Projektseite
   const fotos = page.locator('.foto-reihe figure');
-  expect(await fotos.count()).toBeGreaterThan(0);
+  await expect(fotos).toHaveCount(4);
   await expect(fotos.first().locator('img')).toHaveAttribute('alt', /.+/);
-  await expect(fotos.first().locator('figcaption')).toContainText('Foto:');
+  await expect(page.locator('.foto-reihe .bildband-nachweis')).toHaveText('Fotos: Alessandro Cortese');
+  await page.goto('/projekte/');
+  expect(await page.locator('.bildband figure').count()).toBeGreaterThan(4);
 });
 
 test('Referenzliste ist chronologisch, neueste zuerst', async ({ page }) => {
@@ -625,7 +628,7 @@ test('Video auf der Startseite startet bei «Bewegung reduzieren» nicht von sel
 
 test('Gesetzesprüfung: Beispiel liefert Fundstellen nach Ebene, Fristen, Quellen und Prompt', async ({ page }) => {
   await page.goto('/ki-labor/');
-  await page.getByRole('link', { name: /Gesetzesprüfung/ }).click();
+  await page.locator('main').getByRole('link', { name: /Gesetzesprüfung/ }).click();
   await expect(page).toHaveURL(/\/ki-labor\/gesetzespruefung\/$/);
   const gp = page.locator('[data-gesetz]');
   await expect(gp.locator('[data-kanton]')).toHaveValue('GR');
@@ -773,4 +776,66 @@ test('UI-Prüfung: Beschriftung im Leitmotiv erscheint mindestens 12 px gross', 
     expect(Math.min(...groessen), `${width}`).toBeGreaterThanOrEqual(11.95);
     await kontext.close();
   }
+});
+
+test('Redesign: Kontakt als Schaltfläche in der Kopfzeile, Fusszeile mit drei beschrifteten Spalten', async ({ page, isMobile }) => {
+  await page.goto('/');
+  if (!isMobile) {
+    const cta = page.locator('.nav-gross .nav-cta a.btn');
+    await expect(cta).toHaveText('Kontakt');
+    await cta.click();
+    await expect(page).toHaveURL(/\/kontakt\/$/);
+    await expect(page.locator('.nav-gross .nav-cta a.btn')).toHaveAttribute('aria-current', 'page');
+  } else {
+    await expect(page.locator('.nav-klein summary svg.menue-symbol')).toHaveCount(1);
+  }
+  const fuss = page.locator('footer nav[aria-label="Fusszeile"]');
+  await expect(fuss.locator('.fuss-titel')).toHaveText(['Seiten', 'Ausprobieren', 'Rechtliches']);
+  await expect(fuss.getByRole('link', { name: 'Netzbau-Quiz' })).toHaveAttribute('href', '/netzbau-quiz/');
+});
+
+test('Redesign: kein seitliches Scrollen auf 320 px und iPad', async ({ browser }) => {
+  for (const viewport of [{ width: 320, height: 640 }, { width: 834, height: 1112 }]) {
+    const kontext = await browser.newContext({ viewport });
+    const page = await kontext.newPage();
+    for (const pfad of ['/', '/profil/', '/projekte/', '/kompetenzen/netzinfrastruktur-leitungsbau/', '/ki-labor/gesetzespruefung/', '/kontakt/']) {
+      await page.goto(pfad);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), `${viewport.width} ${pfad}`).toBeLessThanOrEqual(0);
+    }
+    await kontext.close();
+  }
+});
+
+test('Redesign: Meta-Beschreibung höchstens 160 Zeichen und Brotkrumen als strukturierte Daten', async ({ page }) => {
+  for (const pfad of ['/projekte/lehnenbruecke-ricaldei/', '/netzbau-quiz/', '/ki-labor/gesetzespruefung/']) {
+    await page.goto(pfad);
+    const beschreibung = await page.locator('meta[name="description"]').getAttribute('content');
+    expect(beschreibung!.length, pfad).toBeLessThanOrEqual(160);
+    const daten = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const krumen = daten.map((d) => JSON.parse(d)).filter((d) => d['@type'] === 'BreadcrumbList');
+    expect(krumen, pfad).toHaveLength(1);
+    expect(krumen[0].itemListElement[0].name).toBe('Start');
+  }
+});
+
+test('Redesign: PDF-Ablage zeigt während des Lesens «lädt» und ist gesperrt', async ({ page, context }) => {
+  const druck = await context.newPage();
+  await druck.setContent('<p>Reglement der Gemeinde Testdorf</p><p>Die Gemeindeversammlung beschliesst:</p><p>Art. 1 Bewilligung</p><p>Grabarbeiten brauchen eine Bewilligung.</p>');
+  const pdf = await druck.pdf({ format: 'A4' });
+  await druck.close();
+  await page.goto('/ki-labor/gesetzespruefung/');
+  const ablage = page.locator('[data-ablage]');
+  // Zustand während des Lesens festhalten (das Lesen ist lokal sehr schnell)
+  await page.evaluate(() => {
+    const a = document.querySelector('[data-ablage]')!;
+    (window as unknown as { zustaende: string[] }).zustaende = [];
+    new MutationObserver(() => (window as unknown as { zustaende: string[] }).zustaende.push(`${a.getAttribute('aria-busy')}|${(a.querySelector('input') as HTMLInputElement).disabled}`))
+      .observe(a, { attributes: true, subtree: true, attributeFilter: ['aria-busy', 'disabled'] });
+  });
+  await page.locator('[data-datei]').setInputFiles({ name: 'reglement.pdf', mimeType: 'application/pdf', buffer: pdf });
+  await expect(page.locator('[data-status]')).toContainText('erkannt als', { timeout: 20_000 });
+  const zustaende = await page.evaluate(() => (window as unknown as { zustaende: string[] }).zustaende);
+  expect(zustaende).toContain('true|true');
+  await expect(ablage).toHaveAttribute('aria-busy', 'false');
+  await expect(page.locator('[data-datei]')).toBeEnabled();
 });

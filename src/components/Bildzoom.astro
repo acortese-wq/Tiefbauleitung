@@ -16,16 +16,21 @@
   const dialog = document.querySelector<HTMLDialogElement>('[data-bildzoom]');
   if (dialog && typeof dialog.showModal === 'function') {
     const bild = dialog.querySelector<HTMLImageElement>('[data-bildzoom-bild]')!;
-    // Link zum Original erst hier erzeugen: ein Link ohne Ziel im HTML ist für Suchmaschinen nicht crawlbar
-    const original = document.createElement('a');
-    original.className = 'bildzoom-original';
-    original.target = '_blank';
-    original.rel = 'noopener';
-    const hinweis = document.createElement('span');
-    hinweis.className = 'visually-hidden';
-    hinweis.textContent = ' (öffnet in neuem Fenster)';
-    original.append('In neuem Tab öffnen', hinweis);
-    dialog.querySelector('[data-bildzoom-zu]')!.before(original);
+    // Link zum Original erst beim ersten Öffnen erzeugen: ein Link ohne Ziel ist für Suchmaschinen nicht crawlbar
+    let original: HTMLAnchorElement | undefined;
+    const originalLink = () => {
+      if (original) return original;
+      original = document.createElement('a');
+      original.className = 'bildzoom-original';
+      original.target = '_blank';
+      original.rel = 'noopener';
+      const hinweis = document.createElement('span');
+      hinweis.className = 'visually-hidden';
+      hinweis.textContent = ' (öffnet in neuem Fenster)';
+      original.append('In neuem Tab öffnen', hinweis);
+      dialog.querySelector('[data-bildzoom-zu]')!.before(original);
+      return original;
+    };
     let ausloeser: HTMLElement | null = null;
 
     document.addEventListener('click', (e) => {
@@ -36,7 +41,7 @@
       const vorschau = link.querySelector('img') ?? link.closest('figure')?.querySelector('img');
       bild.src = link.href;
       bild.alt = vorschau?.alt ?? '';
-      original.href = link.href;
+      originalLink().href = link.href;
       ausloeser = link;
       dialog.showModal();
     });

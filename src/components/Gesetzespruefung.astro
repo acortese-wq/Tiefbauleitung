@@ -387,7 +387,32 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
       return d;
     }
 
+    // Während des Lesens: Ablage gesperrt und als «lädt» markiert, Text zeigt den Fortschritt
+    const ablageText = ablage.querySelector<HTMLElement>('.gp-ablage-text')!;
+    const ablageStandard = ablageText.innerHTML;
+    let liest = false;
+    const sperren = (an: boolean) => {
+      liest = an;
+      ablage.setAttribute('aria-busy', String(an));
+      datei.disabled = an;
+      if (!an) ablageText.innerHTML = ablageStandard;
+    };
+
     async function ladeDateien(dateien: FileList | File[]) {
+      if (liest) {
+        melde('Es wird noch gelesen, bitte warten.');
+        return;
+      }
+      sperren(true);
+      try {
+        await ladeAlle(dateien);
+      } finally {
+        sperren(false);
+        datei.value = '';
+      }
+    }
+
+    async function ladeAlle(dateien: FileList | File[]) {
       for (const f of Array.from(dateien)) {
         if (!/\.pdf$/i.test(f.name) && f.type !== 'application/pdf') {
           melde(`${f.name} ist keine PDF.`);
@@ -399,7 +424,10 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
         }
         try {
           melde(`${f.name} wird gelesen …`);
-          const seiten = await lesePdf(f, (s, n) => melde(`${f.name}: Seite ${s} von ${n}`));
+          const seiten = await lesePdf(f, (s, n) => {
+            melde(`${f.name}: Seite ${s} von ${n}`);
+            ablageText.textContent = `Wird gelesen: Seite ${s} von ${n}`;
+          });
           const d = fuegeHinzu(f.name, seiten);
           const ebene = EBENEN.find((e) => e.id === d.ebene)!;
           melde(`${f.name} gelesen: ${d.erlass.titel}, erkannt als ${ebene.recht}${d.erlass.sicher ? '' : ' (bitte prüfen)'}.`);
@@ -408,7 +436,6 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
           melde(name === 'PasswordException' ? `${f.name} ist passwortgeschützt und kann nicht gelesen werden.` : `${f.name} konnte nicht gelesen werden.`);
         }
       }
-      datei.value = '';
     }
 
     frage.addEventListener('input', spaeter);
@@ -525,6 +552,9 @@ const vorschau = gesetzPrompt({ frage: '', dokumente: [], fundstellen: [] });
   }
   .gp-ablage:hover, .gp-ablage.aktiv { border-color: var(--eis); background: rgba(143, 211, 255, 0.06); }
   .gp-ablage:focus-within { outline: 2px solid var(--eis); outline-offset: 2px; }
+  .gp-ablage[aria-busy='true'] { cursor: progress; border-style: solid; border-color: var(--eis); }
+  .gp-ablage[aria-busy='true'] .gp-ablage-symbol { animation: gp-puls 1.2s ease-in-out infinite; }
+  @keyframes gp-puls { 50% { opacity: 0.45; } }
   .gp-ablage-symbol { font: 600 0.75rem var(--f-mono); color: var(--nacht); background: var(--signal); border-radius: 4px; padding: 6px 8px; letter-spacing: 0.06em; }
   .gp-ablage-text strong { color: var(--eis); }
   .gp-ablage small { color: var(--text-ruhig); font-size: max(0.8rem, var(--min-hilfe)); max-width: 40ch; }

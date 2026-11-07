@@ -9,22 +9,36 @@ const jahr = new Date().getFullYear();
     <div class="fuss-marke">
       <p class="fuss-name">{person.name}</p>
       <p class="fuss-text">{person.beruf} · {person.rolle} · {person.ort}, {person.region}</p>
+      <a class="btn btn-ghost btn-klein fuss-linkedin" href={person.linkedin} rel="noopener me" target="_blank">LinkedIn<span class="visually-hidden"> (öffnet in neuem Fenster)</span> <span class="pfeil" aria-hidden="true">→</span></a>
     </div>
-    <nav aria-label="Fusszeile">
-      <ul>
-        <li><a href="/profil/">Profil</a></li>
-        <li><a href="/kompetenzen/">Kompetenzen</a></li>
-        <li><a href="/projekte/">Projekte</a></li>
-        <li><a href="/ki-labor/">KI-Labor</a></li>
-        {wissen && <li><a href="/wissen/">Wissen</a></li>}
-        <li><a href="/kontakt/">Kontakt</a></li>
-      </ul>
-      <ul>
-        <li><a href="/impressum/">Impressum</a></li>
-        <li><a href="/datenschutz/">Datenschutz</a></li>
-        <li><a href="/seitenuebersicht/">Seitenübersicht</a></li>
-        <li><a href={person.linkedin} rel="noopener me" target="_blank">LinkedIn<span class="visually-hidden"> (öffnet in neuem Fenster)</span></a></li>
-      </ul>
+    <nav class="fuss-nav" aria-label="Fusszeile">
+      <div>
+        <p class="fuss-titel" id="fuss-seiten">Seiten</p>
+        <ul aria-labelledby="fuss-seiten">
+          <li><a href="/profil/">Profil</a></li>
+          <li><a href="/kompetenzen/">Kompetenzen</a></li>
+          <li><a href="/projekte/">Projekte</a></li>
+          {wissen && <li><a href="/wissen/">Wissen</a></li>}
+          <li><a href="/kontakt/">Kontakt</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="fuss-titel" id="fuss-werkzeuge">Ausprobieren</p>
+        <ul aria-labelledby="fuss-werkzeuge">
+          <li><a href="/ki-labor/">KI-Labor</a></li>
+          <li><a href="/ki-labor/gesetzespruefung/">Gesetzesprüfung</a></li>
+          <li><a href="/ki-labor/werkbank/">Prompt-Werkbank</a></li>
+          <li><a href="/netzbau-quiz/">Netzbau-Quiz</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="fuss-titel" id="fuss-recht">Rechtliches</p>
+        <ul aria-labelledby="fuss-recht">
+          <li><a href="/impressum/">Impressum</a></li>
+          <li><a href="/datenschutz/">Datenschutz</a></li>
+          <li><a href="/seitenuebersicht/">Seitenübersicht</a></li>
+        </ul>
+      </div>
     </nav>
   </div>
   <div class="wrap fuss-unten">
@@ -35,16 +49,20 @@ const jahr = new Date().getFullYear();
 
 <style>
   .fuss { border-top: 1px solid var(--linie); background: var(--tiefe); padding-bottom: env(safe-area-inset-bottom, 0px); }
-  .fuss-raster { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; padding-block: 48px 32px; }
+  .fuss-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: var(--raum-6); padding-block: var(--raum-7) var(--raum-6); }
   .fuss-name { font: 600 1.4rem var(--f-display); text-transform: uppercase; letter-spacing: 0.03em; }
-  .fuss-text { color: var(--text-ruhig); margin-top: 6px; max-width: 40ch; }
-  .fuss nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .fuss ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-  .fuss a { color: var(--text-ruhig); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
-  .fuss a:hover { color: var(--eis); }
+  .fuss-text { color: var(--text-ruhig); margin-top: var(--raum-2); max-width: 40ch; }
+  .fuss-linkedin { margin-top: var(--raum-4); }
+  .fuss-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--raum-5); }
+  .fuss-titel { font: 500 0.75rem var(--f-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: var(--raum-2); }
+  .fuss ul { list-style: none; margin: 0; padding: 0; display: grid; }
+  .fuss-nav a { color: var(--text-ruhig); text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; transition: color var(--dauer) var(--kurve); }
+  @media (pointer: coarse) { .fuss-nav a { min-height: 44px; } }
+  .fuss-nav a:hover { color: var(--eis); }
   .fuss-unten {
     display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 18px 28px;
     border-top: 1px solid var(--linie); font-family: var(--f-mono); font-size: 0.75rem; color: var(--text-ruhig);
   }
-  @media (max-width: 720px) { .fuss-raster { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) { .fuss-raster { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 520px) { .fuss-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fuss-nav > div:last-child { grid-column: 1 / -1; } }
 </style>

@@ -44,6 +44,41 @@
   --max: 1160px;
   --text-max: 68ch;
 
+  /* Statusfarben, je mit Text oder Symbol einsetzen (nie Farbe allein) */
+  --erfolg: #7ee2a8;
+  --fehler: #ff7b72;
+  --warnung: var(--signal);
+  --info: var(--eis);
+
+  /* Abstände im 4-px-Raster: 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 */
+  --raum-1: 4px;
+  --raum-2: 8px;
+  --raum-3: 12px;
+  --raum-4: 16px;
+  --raum-5: 24px;
+  --raum-6: 32px;
+  --raum-7: 48px;
+  --raum-8: 64px;
+  --raum-9: 96px;
+
+  /* Radien und Ebenen */
+  --radius-klein: 4px;
+  --radius-gross: 10px;
+  --radius-rund: 999px;
+  --schatten-1: 0 1px 2px rgb(0 0 0 / 0.35);
+  --schatten-2: 0 10px 28px -10px rgb(0 0 0 / 0.55);
+  --schatten-3: 0 18px 40px -12px rgb(0 0 0 / 0.6);
+
+  /* Bewegung: kurz für Rückmeldung, mittel für Zustände, lang für Einblendungen */
+  --dauer-kurz: 120ms;
+  --dauer: 200ms;
+  --dauer-lang: 320ms;
+  --kurve: cubic-bezier(.2, .7, .2, 1);
+
+  /* Fokus */
+  --fokus-farbe: var(--signal);
+  --fokus-abstand: 3px;
+
   color-scheme: dark;
 }
 
@@ -70,7 +105,7 @@ p { margin: 0; }
 main p { max-width: 68ch; }
 a { color: var(--eis); text-underline-offset: 3px; text-decoration-thickness: 1px; }
 a:hover { color: var(--eis-stark); }
-:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 2px; }
+:focus-visible { outline: 2px solid var(--fokus-farbe); outline-offset: var(--fokus-abstand); border-radius: 2px; }
 /* Datumsfelder: Chrome setzt den Fokus in Teilfelder und Kalendersymbol, «:focus-visible» greift dort nicht */
 input[type='date']:focus-within { outline: 2px solid var(--signal); outline-offset: 3px; }
 button, select, summary, input[type='checkbox'], input[type='radio'], input[type='range'],
@@ -79,6 +114,15 @@ label:has(> input[type='checkbox']), label:has(> input[type='radio']) { cursor: 
 @media screen and (max-width: 640px), screen and (pointer: coarse) {
   input:not([type='checkbox'], [type='radio'], [type='range']), select, textarea { font-size: 16px !important; }
 }
+/* Eingabefelder: einheitliche Zustände für Hover, Fehler und deaktiviert. Grundaussehen legen die Komponenten fest. */
+:is(input:not([type='checkbox'], [type='radio'], [type='range'], [type='file'], [type='submit'], [type='button']), select, textarea) {
+  transition: border-color var(--dauer) var(--kurve), background-color var(--dauer) var(--kurve);
+}
+:is(input:not([type='checkbox'], [type='radio'], [type='range'], [type='file'], [type='submit'], [type='button']), select, textarea):hover:not(:disabled, :focus, [aria-invalid='true']) {
+  border-color: var(--text-ruhig);
+}
+:is(input, select, textarea)[aria-invalid='true'] { border-color: var(--fehler); }
+:is(input:not([type='checkbox'], [type='radio']), select, textarea):disabled { opacity: 0.5; cursor: not-allowed; }
 
 .skip-link {
   position: absolute; left: 12px; top: -60px; z-index: 100;
@@ -106,20 +150,34 @@ label:has(> input[type='checkbox']), label:has(> input[type='radio']) { cursor: 
 .label-eis { color: var(--eis); }
 
 .btn {
-  display: inline-flex; align-items: center; gap: 10px; min-height: 48px;
-  padding: 12px 22px; border-radius: var(--radius); border: 1px solid var(--eis);
-  background: var(--eis); color: var(--nacht); font: 600 1rem var(--f-text);
-  text-decoration: none; cursor: pointer; transition: background .2s, color .2s, transform .2s, scale .1s;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px;
+  padding: var(--raum-3) var(--raum-5); border-radius: var(--radius); border: 1px solid var(--eis);
+  background: var(--eis); color: var(--nacht); font: 600 1rem var(--f-text); line-height: 1.25;
+  text-decoration: none; cursor: pointer;
+  transition: background-color var(--dauer) var(--kurve), border-color var(--dauer) var(--kurve), color var(--dauer) var(--kurve), scale var(--dauer-kurz) ease-out;
 }
-.btn:hover { background: var(--eis-stark); color: var(--nacht); }
+.btn:hover { background: var(--eis-stark); border-color: var(--eis-stark); color: var(--nacht); }
 .btn-ghost { background: transparent; color: var(--text); border-color: var(--linie-hell); }
 .btn-ghost:hover { background: var(--panel); color: var(--text); border-color: var(--eis); }
+/* Kleine Variante (Kopfzeile, Werkzeugleisten); auf Touch-Geräten weiterhin 44 px hoch */
+.btn-klein { min-height: 40px; padding: var(--raum-2) var(--raum-4); font-size: 0.92rem; }
+@media (pointer: coarse) { .btn-klein { min-height: 44px; } }
+/* Deaktiviert und «lädt»: sichtbar ausgegraut bzw. mit drehendem Ring, keine Hover-Reaktion */
+.btn:disabled, .btn[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; scale: 1; }
+.btn:disabled:hover, .btn[aria-disabled='true']:hover { background: var(--eis); border-color: var(--eis); }
+.btn-ghost:disabled:hover, .btn-ghost[aria-disabled='true']:hover { background: transparent; border-color: var(--linie-hell); }
+.btn[aria-busy='true'] { cursor: progress; }
+.btn[aria-busy='true']::before {
+  content: ''; width: 1em; height: 1em; border-radius: 50%; flex: none;
+  border: 2px solid currentColor; border-right-color: transparent; animation: drehen .8s linear infinite;
+}
+@keyframes drehen { to { rotate: 1turn; } }
 .btn .pfeil { font-family: var(--f-mono); }
-.btn-reihe { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn-reihe { display: flex; flex-wrap: wrap; gap: var(--raum-3); }
 
 /* Abschnitte */
 .abschnitt { padding-block: clamp(56px, 8vw, 104px); border-top: 1px solid var(--linie); }
-.abschnitt-kopf { display: grid; gap: 10px; margin-bottom: clamp(28px, 4vw, 48px); max-width: 760px; }
+.abschnitt-kopf { display: grid; gap: var(--raum-3); margin-bottom: clamp(var(--raum-6), 4vw, var(--raum-7)); max-width: 760px; }
 .abschnitt-kopf h2 { font-size: var(--s-3); }
 .abschnitt-kopf p { color: var(--text-ruhig); font-size: var(--s-1); line-height: 1.5; }
 .pos { font-family: var(--f-mono); font-size: 0.75rem; color: var(--eis); letter-spacing: 0.08em; }
@@ -136,35 +194,37 @@ label:has(> input[type='checkbox']), label:has(> input[type='radio']) { cursor: 
 
 /* Karten */
 .karte {
-  display: grid; gap: 10px; align-content: start; padding: 24px; border-radius: var(--radius);
-  background: var(--tiefe); border: 1px solid var(--linie); transition: border-color .25s, transform .25s;
+  display: grid; gap: var(--raum-3); align-content: start; padding: var(--raum-5); border-radius: var(--radius);
+  background: var(--tiefe); border: 1px solid var(--linie);
+  transition: border-color var(--dauer) var(--kurve), transform var(--dauer) var(--kurve), box-shadow var(--dauer) var(--kurve);
   color: inherit; text-decoration: none; position: relative;
 }
-a.karte:hover { border-color: var(--eis); transform: translateY(-2px); }
+a.karte:hover { border-color: var(--eis); transform: translateY(-2px); box-shadow: var(--schatten-2); }
+a.karte:active { transform: translateY(0); box-shadow: none; }
 .karte h3 { font-size: 1.5rem; }
 .karte p { color: var(--text-ruhig); font-size: 1rem; line-height: 1.55; }
 .karte .meta { font-family: var(--f-mono); font-size: 0.75rem; color: var(--text-ruhig); }
 .karte .mehr { font-family: var(--f-mono); font-size: 0.8rem; color: var(--eis); margin-top: auto; }
 .band-hell .karte .mehr { color: var(--papier-akzent); }
 
-.raster-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.raster-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.raster-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.raster-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--raum-4); }
+.raster-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--raum-4); }
+.raster-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--raum-4); }
 @media (max-width: 960px) { .raster-3, .raster-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .raster-2, .raster-3, .raster-4 { grid-template-columns: 1fr; } }
 @media screen and (max-width: 640px) { :root { --min-karte: 16px; --min-hilfe: 15px; } }
 
 .chip {
-  display: inline-block; font-family: var(--f-mono); font-size: 0.75rem; padding: 4px 9px;
-  border: 1px solid var(--linie-hell); border-radius: 3px; color: var(--text); background: var(--panel);
-  white-space: nowrap; text-decoration: none;
+  display: inline-block; font-family: var(--f-mono); font-size: 0.75rem; padding: var(--raum-1) var(--raum-2);
+  border: 1px solid var(--linie-hell); border-radius: var(--radius-klein); color: var(--text); background: var(--panel);
+  white-space: nowrap; text-decoration: none; transition: border-color var(--dauer) var(--kurve);
 }
 a.chip:hover { border-color: var(--eis); }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: var(--raum-2); }
 
 .badge {
   display: inline-flex; align-items: center; gap: 6px; font-family: var(--f-mono); font-size: 0.75rem;
-  text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 8px; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: 0.08em; padding: var(--raum-1) var(--raum-2); border-radius: var(--radius-klein);
   border: 1px solid currentColor; width: fit-content;
 }
 .badge-beruflich { color: var(--eis); }
@@ -227,10 +287,17 @@ a.chip:hover { border-color: var(--eis); }
 .brotkrumen a:hover { color: var(--eis); }
 
 .hinweis {
-  border: 1px dashed var(--signal); border-radius: var(--radius); padding: 14px 18px;
+  border: 1px dashed var(--signal); border-radius: var(--radius); padding: var(--raum-3) var(--raum-4);
   background: rgb(242 166 90 / 0.08); color: var(--text); font-size: 0.98rem;
 }
 .hinweis strong { color: var(--signal); }
+/* Varianten: Art immer auch im Text nennen (z. B. «Fehler:»), Farbe nur zur Unterstützung */
+.hinweis-info { border: 1px solid rgb(143 211 255 / 0.45); background: var(--eis-flaeche); }
+.hinweis-info strong { color: var(--info); }
+.hinweis-erfolg { border: 1px solid rgb(126 226 168 / 0.5); background: rgb(126 226 168 / 0.08); }
+.hinweis-erfolg strong { color: var(--erfolg); }
+.hinweis-fehler { border: 1px solid rgb(255 123 114 / 0.55); background: rgb(255 123 114 / 0.08); }
+.hinweis-fehler strong { color: var(--fehler); }
 .band-hell .hinweis { color: var(--papier-text); border-color: #9a4d00; background: #fff5ea; }
 .band-hell .hinweis strong { color: #9a4d00; }
 
@@ -289,7 +356,7 @@ a.karte:focus-visible { border-color: var(--eis); outline-offset: 4px; }
 }
 
 /* Feine Rückmeldungen: Pfeile rücken nach, Tasten geben beim Drücken nach */
-.pfeil { display: inline-block; transition: translate .2s ease-out; }
+.pfeil { display: inline-block; transition: translate var(--dauer) ease-out; }
 @media (hover: hover) { a:hover .pfeil { translate: 4px 0; } }
 a:focus-visible .pfeil { translate: 4px 0; }
 .btn:active, .ref-filter button:active { scale: .97; }

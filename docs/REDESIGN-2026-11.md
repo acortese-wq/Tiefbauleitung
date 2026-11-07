@@ -184,3 +184,7 @@ Anhang 8 des Strassenbauprogramms 2021–2024 weist für Bezirk 1 im baulichen U
 10,2 bis 10,5 Mio. Fr. pro Jahr aus (Planung von 2020). Die Seite nennt 12 Mio. (Angabe aus der Praxis). Damit der Link
 nicht als Beleg genau dieser Zahl gelesen wird, heisst er jetzt «Rahmen» statt «Grundlage». Zu klären durch
 A. Cortese: Quelle der 12 und 13 Mio. (z. B. tatsächliche Budgets, inklusive Nationalstrassen).
+
+**Entscheid A. Cortese (07.11.2026):** baulicher Unterhalt gemäss Bericht auf «rund 10.5 Mio.» geändert, Summe auf
+rund 23.5 Mio. CHF pro Jahr (Kennzahl, Werdegang, Netzbau-Karte). Die 13 Mio. Investitionen bleiben als Angabe aus der Praxis,
+der Bericht weist Investitionen nicht je Bezirk aus.

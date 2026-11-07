@@ -399,18 +399,18 @@ test('Kennzahlen zählen hoch und enden beim Wert aus dem HTML', async ({ page }
   await page.goto('/');
   const werte = page.locator('[data-zaehlen]');
   await page.locator('.kennzahlen').evaluate((e) => e.scrollIntoView({ block: 'center', behavior: 'instant' }));
-  await expect(werte).toHaveText(['30+', '25', '17', '2'], { timeout: 5000 });
+  await expect(werte).toHaveText(['30+', '23.5', '17', '2'], { timeout: 5000 });
   // Beim Drucken stehen die Endwerte sofort da
   await page.goto('/');
   await page.evaluate(() => dispatchEvent(new Event('beforeprint')));
-  expect(await werte.allTextContents()).toEqual(['30+', '25', '17', '2']);
+  expect(await werte.allTextContents()).toEqual(['30+', '23.5', '17', '2']);
 });
 
 test('Mit reduzierter Bewegung: Kennzahlen sofort, keine Seitenübergänge, kein Lesefortschritt', async ({ browser }) => {
   const kontext = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await kontext.newPage();
   await page.goto('/');
-  expect(await page.locator('[data-zaehlen]').allTextContents()).toEqual(['30+', '25', '17', '2']);
+  expect(await page.locator('[data-zaehlen]').allTextContents()).toEqual(['30+', '23.5', '17', '2']);
   expect(await page.locator('.kopf').evaluate((e) => getComputedStyle(e).viewTransitionName)).toBe('none');
   await page.goto('/projekte/plessurbruecke-sassal/');
   expect(await page.locator('.kopf').evaluate((e) => getComputedStyle(e, '::after').content)).toBe('none');
@@ -690,7 +690,7 @@ test('Gesetzesprüfung liest eine PDF im Browser und ordnet sie dem Bund zu', as
 test('Jahreswerte 2021–2025 mit Link zum Strassenbauprogramm auf Profil und Startseite', async ({ page }) => {
   for (const pfad of ['/profil/', '/']) {
     await page.goto(pfad);
-    await expect(page.getByText(/rund 25 Mio\. CHF pro Jahr: 12 Mio\. baulicher Unterhalt/).first()).toBeVisible();
+    await expect(page.getByText(/rund 23\.5 Mio\. CHF pro Jahr: rund 10\.5 Mio\. baulicher Unterhalt/).first()).toBeVisible();
     const link = page.getByRole('link', { name: /Strassenbauprogramm 2021–2024/ }).first();
     await expect(link).toHaveAttribute('href', /^https:\/\/www\.gr\.ch\/.*bericht_strassenbauprogramm_2021-2024\.pdf$/);
     await expect(link).toHaveAttribute('target', '_blank');

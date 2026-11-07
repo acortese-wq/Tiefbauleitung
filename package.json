@@ -42,7 +42,7 @@
     "@axe-core/playwright": "4.14.0",
     "@keystatic/astro": "6.0.0",
     "@keystatic/core": "0.6.9",
-    "@playwright/test": "1.56.1",
+    "@playwright/test": "1.64.1",
     "@types/nodemailer": "8.0.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
@@ -51,7 +51,7 @@
     "react-dom": "19.3.1",
     "sharp": "0.35.5",
     "typescript": "5.9.3",
-    "vitest": "5.0.5"
+    "vitest": "5.1.0"
   },
   "overrides": {
     "playwright-core": "1.56.1"
